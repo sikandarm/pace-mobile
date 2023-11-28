@@ -2,22 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CLIENT_ID</key>
-	<string>506411513942-8vv1jcmvqij5k1fjn78kvr70dpu6p712.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.506411513942-8vv1jcmvqij5k1fjn78kvr70dpu6p712</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAtaVD_vSodvbCeOV_81jaK60puXWtKNMs</string>
+	<string>AIzaSyD5LR66rhmJVOD5HjheYpoPdsXnPSm9760</string>
 	<key>GCM_SENDER_ID</key>
-	<string>506411513942</string>
+	<string>493159430521</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.paceMobileApp</string>
+	<string>com.example.paceApplication</string>
 	<key>PROJECT_ID</key>
-	<string>pace-d7fa0</string>
+	<string>pace-test-348c2</string>
 	<key>STORAGE_BUCKET</key>
-	<string>pace-d7fa0.appspot.com</string>
+	<string>pace-test-348c2.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:506411513942:ios:28e73af2ed2887c1f623f7</string>
+	<string>1:493159430521:ios:0681c97e3200247e9dd7a8</string>
 </dict>
 </plist>

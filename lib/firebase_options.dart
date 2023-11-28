@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -49,21 +46,30 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBeCoiAX_mckZTeDOPo073JSnvSgUDXn1o',
+    appId: '1:493159430521:web:01d0ab6783acb2c59dd7a8',
+    messagingSenderId: '493159430521',
+    projectId: 'pace-test-348c2',
+    authDomain: 'pace-test-348c2.firebaseapp.com',
+    storageBucket: 'pace-test-348c2.appspot.com',
+    measurementId: 'G-4F2LRNLN6M',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD6x7O6hND0cbbclNjhhqFhINyeSVMPqus',
-    appId: '1:506411513942:android:77163b586399b771f623f7',
-    messagingSenderId: '506411513942',
-    projectId: 'pace-d7fa0',
-    storageBucket: 'pace-d7fa0.appspot.com',
+    apiKey: 'AIzaSyCelUKVRS-gmdy2_vlrBftHTOgmnkSvxOk',
+    appId: '1:493159430521:android:69a02a1291ed4d4a9dd7a8',
+    messagingSenderId: '493159430521',
+    projectId: 'pace-test-348c2',
+    storageBucket: 'pace-test-348c2.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAtaVD_vSodvbCeOV_81jaK60puXWtKNMs',
-    appId: '1:506411513942:ios:28e73af2ed2887c1f623f7',
-    messagingSenderId: '506411513942',
-    projectId: 'pace-d7fa0',
-    storageBucket: 'pace-d7fa0.appspot.com',
-    iosClientId: '506411513942-8vv1jcmvqij5k1fjn78kvr70dpu6p712.apps.googleusercontent.com',
-    iosBundleId: 'com.example.paceMobileApp',
+    apiKey: 'AIzaSyD5LR66rhmJVOD5HjheYpoPdsXnPSm9760',
+    appId: '1:493159430521:ios:0681c97e3200247e9dd7a8',
+    messagingSenderId: '493159430521',
+    projectId: 'pace-test-348c2',
+    storageBucket: 'pace-test-348c2.appspot.com',
+    iosBundleId: 'com.example.paceApplication',
   );
 }

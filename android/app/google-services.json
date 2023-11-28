@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "506411513942",
-    "project_id": "pace-d7fa0",
-    "storage_bucket": "pace-d7fa0.appspot.com"
+    "project_number": "493159430521",
+    "project_id": "pace-test-348c2",
+    "storage_bucket": "pace-test-348c2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:506411513942:android:77163b586399b771f623f7",
+        "mobilesdk_app_id": "1:493159430521:android:69a02a1291ed4d4a9dd7a8",
         "android_client_info": {
-          "package_name": "com.a3.pace"
+          "package_name": "com.example.pace_application"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "506411513942-7oljoe9803jm0mk759qalt6jpofhq9mp.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD6x7O6hND0cbbclNjhhqFhINyeSVMPqus"
+          "current_key": "AIzaSyCelUKVRS-gmdy2_vlrBftHTOgmnkSvxOk"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "506411513942-7oljoe9803jm0mk759qalt6jpofhq9mp.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

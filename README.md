@@ -1,4 +1,4 @@
-# pace_mobile_app
+# pace_application
 
 A new Flutter project.
 

@@ -1,4 +1,5 @@
 import 'package:com_a3_pace/api/firebase_api.dart';
+import 'package:com_a3_pace/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +15,11 @@ import 'screens/splash.dart';
 import 'screens/welcome_screen.dart';
 
 
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseApi().initNotifications();
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
