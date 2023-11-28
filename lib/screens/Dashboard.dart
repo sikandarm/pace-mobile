@@ -1,3 +1,4 @@
+import 'package:com_a3_pace/screens/purchase_order.dart';
 import 'package:flutter/material.dart';
 
 import '../components/dashboard_card.dart';
@@ -113,6 +114,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: DashboardCard(
                       title: 'Jobs',
                       showList: blShowInventory,
+                      // showList: true,   just wrote to check if it's connected or not to something
+
                       subtitle: jobCount,
                       icon: 'assets/images/ic_briefcase.png',
                       gradient: const LinearGradient(
@@ -403,10 +406,26 @@ Widget _buildSideDrawer(BuildContext context) {
                         title: const Text('View Shared CAR'),
                         leading: const Icon(Icons.share),
                         onTap: () {
+                          Navigator.pop(context);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const SharedCARList(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    Visibility(
+                      visible: blShowSharedCAR,
+                      child: ListTile(
+                        title: const Text('Purchase Order'),
+                        leading: const Icon(Icons.inventory),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PurchaseOrder(),
                             ),
                           );
                         },

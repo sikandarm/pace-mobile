@@ -44,6 +44,7 @@ dependencies:
   path_provider: ^2.0.2
   fluttertoast: ^8.0.8
   custom_sliding_segmented_control: ^1.7.5
+  rename_app: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -66,20 +67,20 @@ flutter_app_name:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/icon.png"
+  image_path: "assets/images/app-new-logo_png.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   web:
     generate: true
-    image_path: "assets/images/icon.png"
+    image_path: "assets/images/app-new-logo_png.png"
     background_color: "#hexcode"
     theme_color: "#06A3F6"
   windows:
     generate: true
-    image_path: "assets/images/icon.png"
+    image_path: "assets/images/app-new-logo_png.png"
     icon_size: 48 # min:48, max:256, default: 48
   macos:
     generate: true
-    image_path: "assets/images/icon.png"
+    image_path: "assets/images/app-new-logo_png.png"
 
 # The following section is specific to Flutter packages.
 flutter:

@@ -278,8 +278,7 @@ class _InventoryListState extends State<InventoryList> {
                                                 isVisible: false),
                                         width: 0.5,
                                         borderRadius: BorderRadius.circular(10),
-                                        spacing: 0.5
-                                    ),
+                                        spacing: 0.5),
                                   ],
                                   plotAreaBorderWidth: 0.0,
                                   primaryXAxis: DateTimeAxis(
@@ -291,7 +290,6 @@ class _InventoryListState extends State<InventoryList> {
                                     intervalType: DateTimeIntervalType.months,
                                     rangePadding: ChartRangePadding.normal,
                                     axisLine: const AxisLine(width: 0),
-
                                   ),
                                   primaryYAxis: NumericAxis(
                                       borderWidth: 0.0,
@@ -612,6 +610,7 @@ class InventoryListItemWidget extends StatelessWidget {
                   ),
                 ],
               ),
+
               const SizedBox(height: 8.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

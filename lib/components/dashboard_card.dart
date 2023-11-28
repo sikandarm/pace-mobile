@@ -1,3 +1,4 @@
+import 'package:com_a3_pace/components/job_list_card.dart';
 import 'package:com_a3_pace/utils/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -35,6 +36,27 @@ class DashboardCard extends StatelessWidget {
             );
           } else {
             showToast("You do not have permission to see department list.");
+          }
+        }
+
+        if (title == "Jobs") {
+          if (showList) {
+            //   saveStringToSP("Select Rejected Reason", BL_REJECTED_REASON);
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => JobList(
+                  jobId: 1,
+                  status: 'priority',
+                  totalTasks: 12,
+                  completedTasks: 4,
+                  startDate: DateTime.now(),
+                ),
+              ),
+            );
+          } else {
+            showToast("You do not have permission to see job list.");
           }
         }
       },

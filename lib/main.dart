@@ -1,5 +1,6 @@
 import 'package:com_a3_pace/api/firebase_api.dart';
 import 'package:com_a3_pace/firebase_options.dart';
+import 'package:com_a3_pace/screens/purchase_order_detail_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -14,13 +15,10 @@ import 'screens/signup_screen.dart';
 import 'screens/splash.dart';
 import 'screens/welcome_screen.dart';
 
-
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await FirebaseApi().initNotifications();
+//  await FirebaseApi().initNotifications();
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     RemoteNotification? notification = message.notification;
@@ -60,6 +58,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
+      // home: SplashScreen(),
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),
@@ -70,6 +69,7 @@ class MyApp extends StatelessWidget {
         '/dashboard': (context) => const DashboardScreen(),
         '/notification': (context) => const NotificationsScreen(),
         '/welcomeScreen': (context) => const WelcomeScreen(),
+
         // '/testScreen': (context) => const TestScreen(),
       },
     );

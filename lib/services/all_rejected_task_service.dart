@@ -35,6 +35,9 @@ class Task {
 
 Future<List<Task>> fetchAllRejectedTasks() async {
   final response = await http.get(Uri.parse("$BASE_URL/task?status=rejected"));
+  // print('==================================================');
+  // print('rejected api response: ' + response.body.toString());
+  // print('==================================================');
 
   if (response.statusCode == 200) {
     final Map<String, dynamic> responseBody = json.decode(response.body);

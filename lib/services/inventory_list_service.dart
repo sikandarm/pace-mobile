@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:com_a3_pace/screens/purchase_order.dart';
+import 'package:com_a3_pace/services/purchase_order_list.dart';
 import 'package:http/http.dart' as http;
 
 import '../utils/constants.dart';
@@ -50,8 +52,7 @@ class InventoryListModel {
       this.lengthRemainingFoot,
       this.lengthRemainingInch,
       this.createdAt,
-      this.updatedAt
-      });
+      this.updatedAt});
 }
 
 Future<List<InventoryListModel>> fetchInventoryList() async {

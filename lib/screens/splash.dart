@@ -39,13 +39,28 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: const Color(0xFF06A3F6),
-        child: Center(
-          child: Image.asset(
-            'assets/images/ic_logo.png',
-            width: 280,
-            height: 165,
-          ),
+        // color: const Color(0xFF06A3F6),
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: Image.asset(
+                'assets/images/app-new-logo.jpg',
+                width: 280,
+                height: 165,
+              ),
+            ),
+            SizedBox(height: 30),
+            Text(
+              'Shop Floor Management',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            )
+          ],
         ),
       ),
     );
