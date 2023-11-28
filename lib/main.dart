@@ -13,6 +13,7 @@ import 'screens/signup_screen.dart';
 import 'screens/splash.dart';
 import 'screens/welcome_screen.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
