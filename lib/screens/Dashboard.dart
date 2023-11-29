@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../components/dashboard_card.dart';
 import '../components/job_list_card.dart';
 import '../services/job_service.dart';
+import '../services/purchase_order_items_list.dart';
 import '../utils/constants.dart';
 import 'InventoryList.dart';
 import 'ProfileScreen.dart';
@@ -97,6 +98,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // floatingActionButton: FloatingActionButton(onPressed: () async {
+      //   final items = await fetchPurchaseOrderItemsDataList();
+      //   print(items.length);
+      // }),
       key: scaffoldKey,
       drawer: _buildSideDrawer(context),
       appBar: _buildAppBar(context, scaffoldKey),
@@ -477,8 +482,8 @@ Widget _buildSideDrawer(BuildContext context) {
         ),
         Container(
           padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: const [
+          child: const Row(
+            children: [
               Text(
                 '\u00a9',
                 style: TextStyle(
@@ -532,10 +537,10 @@ Widget _buildDashboardCard(BuildContext context) {
                 colors: [Color(0xff06A3F6), Color(0xff06A3F6)],
               ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
-                children: const [
+                children: [
                   Padding(
                     padding: EdgeInsets.only(left: 20.0),
                     child: Icon(

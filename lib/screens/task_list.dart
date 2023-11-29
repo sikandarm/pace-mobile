@@ -1,4 +1,6 @@
+import 'package:com_a3_pace/services/get_all_sequences_by_job_id.dart';
 import 'package:com_a3_pace/utils/constants.dart';
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 
 import '../components/task_list_card.dart';
@@ -24,9 +26,18 @@ class _TaskListState extends State<TaskList> {
   late Future<List<Task>> _futureTask = Future.value([]);
   String _selectedValue = "all";
 
+  List<SequenceModel> sequencesList = [];
+
+  Future<void> callApiMethods() async {
+    print('widget.jobId:' + widget.jobId.toString());
+    sequencesList = await getAllSequncesByJobId(jobId: widget.jobId);
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
+    callApiMethods();
     _futureTask = fetchTasks(widget.jobId);
 
     checkPermissionAndUpdateBool("view_notifications", (localBool) {
@@ -72,6 +83,13 @@ class _TaskListState extends State<TaskList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: () async {
+        print('widget.jobId:' + widget.jobId.toString());
+        sequencesList = await getAllSequncesByJobId(jobId: widget.jobId);
+        //  print(response.toList()[0].job);
+
+        // print(sequencesList.first.sequenceName);
+      }),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -98,40 +116,72 @@ class _TaskListState extends State<TaskList> {
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 10.0),
+                padding: const EdgeInsets.only(right: 1.0),
                 child: Stack(
                   children: [
-                    InkWell(
-                      onTap: () {
-                        if (_blShowNotificationsList) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const NotificationsScreen()),
-                          );
-                        } else {
-                          showToast(
-                              "You do not have permission to see notifications.");
-                        }
+                    // InkWell(
+                    //   onTap: () {
+                    //     if (_blShowNotificationsList) {
+                    //       Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) =>
+                    //                 const NotificationsScreen()),
+                    //       );
+                    //     } else {
+                    //       showToast(
+                    //           "You do not have permission to see notifications.");
+                    //     }
+                    //   },
+                    //   child: Image.asset(
+                    //     "assets/images/ic_bell.png",
+                    //     width: 32,
+                    //     height: 32,
+                    //   ),
+                    // ),
+                    IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text(
+                                'Create a new sequence',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.deepPurple,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              //   content: Text('Create a new sequence'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    // Close the dialog
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Create'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
-                      child: Image.asset(
-                        "assets/images/ic_bell.png",
-                        width: 32,
-                        height: 32,
+                      icon: Icon(
+                        Icons.add_box_outlined,
                       ),
                     ),
-                    Positioned(
-                      top: 5,
-                      right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
+                    // Positioned(
+                    //   top: 5,
+                    //   right: 0,
+                    //   child: Container(
+                    //     padding: const EdgeInsets.all(5),
+                    //     decoration: BoxDecoration(
+                    //       color: Colors.red,
+                    //       borderRadius: BorderRadius.circular(12),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -162,6 +212,57 @@ class _TaskListState extends State<TaskList> {
             onDropdownChanged: _onDropdownChanged,
             selectedValue: _selectedValue,
           ),
+////////////////////////////////////////////////
+
+          for (int i = 0; i < sequencesList.length; i++) ...{
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 13),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(13.0),
+                  child: ExpandablePanel(
+                    theme: ExpandableThemeData(
+                      inkWellBorderRadius: BorderRadius.zero,
+                      useInkWell: false,
+                    ),
+                    header: Text(
+                      sequencesList[i].sequenceName!,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    collapsed: SizedBox(),
+                    expanded: Column(
+                      children: [
+                        Text(
+                          sequencesList[i].id.toString(),
+                        ),
+                        Text(
+                          sequencesList[i].job!,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            )
+          },
+
+          /////////////////////////////////////////////////////
+          SizedBox(height: 40),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.5),
+            child: Text(
+              "Independent Tasks",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 17,
+              ),
+            ),
+          ),
+          const SizedBox(height: 11),
+
           Expanded(
             child: FutureBuilder<List<Task>>(
               future: _futureTask,

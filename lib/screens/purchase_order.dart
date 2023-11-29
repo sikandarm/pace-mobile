@@ -157,7 +157,8 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
                                     purchaseOrder: purchaseOrdersList[index])));
                       },
                       child: purchaseOrderCard(
-                        companyName: purchaseOrdersList[index].company.name,
+                        companyName:
+                            purchaseOrdersList[index].company!.name.toString(),
                         poId: purchaseOrdersList[index].poNumber.toString(),
                         address: purchaseOrdersList[index].address.toString(),
                         orderDate:

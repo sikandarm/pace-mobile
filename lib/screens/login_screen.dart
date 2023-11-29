@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:com_a3_pace/screens/signup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -64,8 +65,14 @@ class _LoginScreenState extends State<LoginScreen> {
         "fcm_token": _fcmToken,
       });
 
-      print(loginRes.body);
+      // print('LOGIN RESPONSE=========================================');
+      // print(loginRes.body);
+
       Map<String, dynamic> jsonMap = jsonDecode(loginRes.body);
+      // print('login token:' + jsonMap['data']['token']);
+
+      final tokenBox = await Hive.openBox('tokenBox');
+      await tokenBox.put('token', jsonMap['data']['token']);
 
       if (loginRes.statusCode == 200) {
         // ignore: use_build_context_synchronously
@@ -186,6 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
+
                     const SizedBox(height: 10),
                     SizedBox(
                       width: double.maxFinite,

@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:com_a3_pace/api/firebase_api.dart';
 import 'package:com_a3_pace/firebase_options.dart';
 import 'package:com_a3_pace/screens/purchase_order_detail_screen.dart';
+import 'package:com_a3_pace/services/purchase_order_items_list.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import 'screens/Dashboard.dart';
 import 'screens/login_screen.dart';
@@ -15,11 +19,24 @@ import 'screens/signup_screen.dart';
 import 'screens/splash.dart';
 import 'screens/welcome_screen.dart';
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
+HttpOverrides global = MyHttpOverrides();
+
 void main() async {
+  HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 //  await FirebaseApi().initNotifications();
-
+  // SecurityContext.defaultContext.setAlpnProtocols(['h2'], true);
+  await Hive.initFlutter();
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
@@ -44,7 +61,6 @@ void main() async {
 // Required for handling messages in the background
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
