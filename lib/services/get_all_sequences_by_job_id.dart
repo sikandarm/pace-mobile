@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 
+import '../utils/constants.dart';
+
 class SequenceModel {
   final int? id;
   final String? sequenceName;
@@ -45,8 +47,9 @@ Future<List<SequenceModel>> getAllSequncesByJobId({required int jobId}) async {
   final token = tokenBox.get('token');
   // print('token in api:' + token);
   final response = await http.get(
+
       // body: {'status': 'Recieved'},
-      Uri.parse("http://192.168.1.2:3500/api/sequences/getsequence/$jobId"),
+      Uri.parse("$BASE_URL/sequences/getsequence/$jobId"),
       headers: {
         'Authorization': 'Bearer $token',
       });
@@ -54,6 +57,8 @@ Future<List<SequenceModel>> getAllSequncesByJobId({required int jobId}) async {
   // print(response.body);
   if (response.statusCode == 200) {
     Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+
+    print(response.body);
 
     final sequencesData = decodedResponse['data']['sequence'];
     // print(sequencesData);

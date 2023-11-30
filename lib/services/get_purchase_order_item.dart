@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 
+import '../utils/constants.dart';
+
 class PurchaseOrderItemModel {
   int? id;
   String? companyName;
@@ -92,8 +94,7 @@ Future<List<PurchaseOrderItems>> fetchPurchaseOrderItemsDetailListData(
   final token = tokenBox.get('token');
   // print('token in api:' + token);
   final response = await http.get(
-      Uri.parse(
-          "http://192.168.1.2:3500/api/purchaseorder/getpurchaseorderitems/$id"),
+      Uri.parse("$BASE_URL/purchaseorder/getpurchaseorderitems/$id"),
       headers: {
         'Authorization': 'Bearer $token',
       });
