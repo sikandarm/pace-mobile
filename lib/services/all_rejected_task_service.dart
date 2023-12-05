@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 
 import '../utils/constants.dart';
@@ -34,7 +35,14 @@ class Task {
 }
 
 Future<List<Task>> fetchAllRejectedTasks() async {
-  final response = await http.get(Uri.parse("$BASE_URL/task?status=rejected"));
+  final tokenBox = await Hive.openBox('tokenBox');
+
+  final token = tokenBox.get('token');
+
+  final response =
+      await http.get(Uri.parse("$BASE_URL/task?status=rejected"), headers: {
+    'Authorization': 'Bearer $token',
+  });
   // print('==================================================');
   // print('rejected api response: ' + response.body.toString());
   // print('==================================================');

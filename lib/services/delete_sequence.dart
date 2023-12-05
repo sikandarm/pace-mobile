@@ -1,12 +1,13 @@
+import 'package:com_a3_pace/utils/constants.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 
-Future<http.Response> deleteSequence({required int jobID}) async {
+Future<http.Response> deleteSequence({required int sequenceID}) async {
   final tokenBox = await Hive.openBox('tokenBox');
   final token = tokenBox.get('token');
   final response = await http.delete(
       Uri.parse(
-        'http://192.168.1.7:3500/api/sequences/deletesequence/$jobID',
+        '$BASE_URL/sequences/deletesequence/$sequenceID',
       ),
       headers: {
         'Authorization': 'Bearer $token',

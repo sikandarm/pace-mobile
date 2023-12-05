@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:com_a3_pace/utils/constants.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 
@@ -7,13 +10,15 @@ Future<bool> changePurchaseOrderStatusByID({required int id}) async {
   final tokenBox = await Hive.openBox('tokenBox');
   final token = tokenBox.get('token');
   // print('token in api:' + token);
-  final response = await http.post(
-      body: {'status': 'Recieved'},
-      Uri.parse("http://192.168.1.2:3500/api/purchaseorder/changestatus/$id"),
+  final response = await http.patch(
+      body: jsonEncode({'status': 'Received'}),
+      Uri.parse("$BASE_URL/purchaseorder/changestatus/$id"),
       headers: {
         'Authorization': 'Bearer $token',
+        'Content-type': 'application/json',
       });
 
+  print('Api Response:' + response.body);
   if (response.statusCode == 200) {
     return true;
   }

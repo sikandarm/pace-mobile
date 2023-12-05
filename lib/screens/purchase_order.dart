@@ -135,21 +135,69 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
           ],
         ),
 
-        child: isLoading
-            ? Center(child: CircularProgressIndicator())
-            : Padding(
+        // child: isLoading
+        //     ? Center(child: CircularProgressIndicator())
+        //     : Padding(
+        //         padding:
+        //             const EdgeInsets.symmetric(vertical: 19, horizontal: 19),
+        //         child: ListView.separated(
+        //           itemCount: purchaseOrdersList.length,
+        //           separatorBuilder: (context, index) {
+        //             return SizedBox(
+        //               height: 11,
+        //             );
+        //           },
+        //           itemBuilder: (context, index) {
+        //             return InkWell(
+        //               onTap: () {
+        //                 Navigator.push(
+        //                     context,
+        //                     MaterialPageRoute(
+        //                         builder: (context) => PurchaseOrderDetailScreen(
+        //                             purchaseOrder: purchaseOrdersList[index])));
+        //               },
+        //               child: purchaseOrderCard(
+        //                 companyName:
+        //                     purchaseOrdersList[index].company!.name.toString(),
+        //                 poId: purchaseOrdersList[index].poNumber.toString(),
+        //                 address: purchaseOrdersList[index].address.toString(),
+        //                 orderDate:
+        //                     purchaseOrdersList[index].orderDate.toString(),
+        //               ),
+        //             );
+        //           },
+        //         ),
+        //       ),
+        child: FutureBuilder<List<PurchaseOrders>>(
+          future: getAllPurchaseOrders(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text("${snapshot.error}"),
+              );
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return Center(
+                child: Text("No data found"),
+              );
+            } else {
+              return Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 19, horizontal: 19),
                 child: ListView.separated(
-                  itemCount: purchaseOrdersList.length,
+                  itemCount: snapshot.data!.length,
                   separatorBuilder: (context, index) {
                     return SizedBox(
                       height: 11,
                     );
                   },
                   itemBuilder: (context, index) {
+                    final item = snapshot.data![index];
                     return InkWell(
                       onTap: () {
+                        // Handle item tap
+
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -157,17 +205,17 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
                                     purchaseOrder: purchaseOrdersList[index])));
                       },
                       child: purchaseOrderCard(
-                        companyName:
-                            purchaseOrdersList[index].company!.name.toString(),
-                        poId: purchaseOrdersList[index].poNumber.toString(),
-                        address: purchaseOrdersList[index].address.toString(),
-                        orderDate:
-                            purchaseOrdersList[index].orderDate.toString(),
-                      ),
+                          companyName: item.company!.name.toString(),
+                          address: item.address.toString(),
+                          orderDate: item.orderDate.toString(),
+                          poId: item.poNumber.toString()),
                     );
                   },
                 ),
-              ),
+              );
+            }
+          },
+        ),
       ),
     );
   }

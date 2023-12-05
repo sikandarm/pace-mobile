@@ -38,30 +38,30 @@ class _TaskCardState extends State<TaskCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // widget.onSelected(widget.index);
-      },
-      onLongPressStart: (details) {
-        if (!_isDragging) {
-          setState(() {
-            _isChecked = true;
-            _dragOffset = details.localPosition.dx.clamp(0, 40);
-            _isDragging = true;
-          });
-        }
-      },
-      onLongPressMoveUpdate: (details) {
-        if (_isDragging) {
-          setState(() {
-            _dragOffset = details.localPosition.dx.clamp(0, 40);
-          });
-        }
-      },
-      onLongPressEnd: (_) {
-        setState(() {
-          _isDragging = false;
-        });
-      },
+      // onTap: () {
+      //   // widget.onSelected(widget.index);
+      // },
+      // onLongPressStart: (details) {
+      //   if (!_isDragging) {
+      //     setState(() {
+      //       _isChecked = true;
+      //       _dragOffset = details.localPosition.dx.clamp(0, 40);
+      //       _isDragging = true;
+      //     });
+      //   }
+      // },
+      // onLongPressMoveUpdate: (details) {
+      //   if (_isDragging) {
+      //     setState(() {
+      //       _dragOffset = details.localPosition.dx.clamp(0, 40);
+      //     });
+      //   }
+      // },
+      // onLongPressEnd: (_) {
+      //   setState(() {
+      //     _isDragging = false;
+      //   });
+      // },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12.0),
         child: Card(

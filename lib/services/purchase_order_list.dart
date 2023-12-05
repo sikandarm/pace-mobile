@@ -207,6 +207,11 @@ Future<List<PurchaseOrders>> getAllPurchaseOrders() async {
           purchaseOrderDataList.map((e) => PurchaseOrders.fromJson(e)).toList();
       purchaseOrdersList;
     }
+  } else {
+    final decodedResponseMessage =
+        jsonDecode(response.body) as Map<String, dynamic>;
+    final msg = decodedResponseMessage['message'];
+    throw msg;
   }
 
   // print('====================');

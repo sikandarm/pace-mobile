@@ -94,6 +94,17 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                             EdgeInsets.symmetric(vertical: 3, horizontal: 20),
                         child: Divider(),
                       ),
+
+                      ListTileItem(
+                        label: 'PO Number',
+                        value: widget.purchaseOrder.poNumber.toString(),
+                      ),
+                      const Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                        child: Divider(),
+                      ),
+
                       ListTileItem(
                         label: 'Address',
                         value: widget.purchaseOrder.address.toString(),
@@ -147,15 +158,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                       //   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 20),
                       //   child: Divider(),
                       // ),
-                      ListTileItem(
-                        label: 'PO Number',
-                        value: widget.purchaseOrder.poNumber.toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
+
                       ListTileItem(
                         label: 'Order Date',
                         // value: purchaseOrder.orderDate.toString(),
