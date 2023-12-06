@@ -13,5 +13,7 @@ Future<http.Response> deleteSequence({required int sequenceID}) async {
         'Authorization': 'Bearer $token',
       });
 
+  print('delete response:' + response.body);
+
   return response;
 }

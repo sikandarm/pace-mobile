@@ -225,6 +225,7 @@ class TaskDetailWidget extends StatelessWidget {
   Future<void> callUpdateTask(BuildContext context, int taskId, int jobId,
       DateTime startDate, String status) async {
     try {
+      print('in try');
       int? userId = await getIntFromSF('UserId');
 
       // ignore: unnecessary_null_comparison
@@ -238,6 +239,7 @@ class TaskDetailWidget extends StatelessWidget {
         String isoDate = startDate.toIso8601String();
         // String isoDate = utcDateTime.toIso8601String().substring(0, 23);
 
+        print('isoDate:' + isoDate);
         if (status == "to_inspect") {
           request.fields['completedAt'] = isoDate;
         }
@@ -245,7 +247,7 @@ class TaskDetailWidget extends StatelessWidget {
           request.fields['startedAt'] = isoDate;
         }
 
-        print(isoDate);
+        print('isoDate: $isoDate');
 
         var response = await request.send();
         var responseString = await response.stream.bytesToString();
@@ -274,7 +276,7 @@ class TaskDetailWidget extends StatelessWidget {
             .showSnackBar(const SnackBar(content: Text('User ID not found')));
       }
     } catch (e) {
-      print(e);
+      print('e: ' + e.toString());
     }
   }
 

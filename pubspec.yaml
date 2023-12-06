@@ -51,6 +51,7 @@ dependencies:
   expandable_datatable: ^0.0.7
   expandable: ^5.0.1
   flexible_expansion_list: ^0.0.2
+  dartz: ^0.10.1
 
 dev_dependencies:
   flutter_test:

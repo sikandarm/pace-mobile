@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:com_a3_pace/screens/task_list.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 
@@ -143,13 +145,19 @@ class IndependentTaskModel {
       description:
           map['description'] != null ? map['description'] as String : null,
       startedAt: map['startedAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['startedAt'] as int)
+          // ? DateTime.fromMillisecondsSinceEpoch(map['startedAt'] as int)
+          // : null,
+          ? DateTime.parse(map['startedAt'])
           : null,
       completedAt: map['completedAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['completedAt'] as int)
+          // ? DateTime.fromMillisecondsSinceEpoch(map['completedAt'] as int)
+          // : null,
+          ? DateTime.parse(map['completedAt'])
           : null,
       approvedAt: map['approvedAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['approvedAt'] as int)
+          // ? DateTime.fromMillisecondsSinceEpoch(map['approvedAt'] as int)
+          // : null,
+          ? DateTime.parse(map['approvedAt'])
           : null,
       approvedBy:
           map['approvedBy'] != null ? map['approvedBy'] as String : null,
@@ -264,12 +272,88 @@ Future<List<IndependentTaskModel>> getIndependentTasks(
     list = dataList.map((e) => IndependentTaskModel.fromMap(e)).toList();
 
     print('final list: ' + list.toString());
-  } else {
-    final decodedResponseMessage =
-        jsonDecode(response.body) as Map<String, dynamic>;
-    final msg = decodedResponseMessage['message'];
-    throw msg;
   }
+  // else {
+  //   final decodedResponseMessage =
+  //       jsonDecode(response.body) as Map<String, dynamic>;
+  //   final msg = decodedResponseMessage['message'];
+  //   throw msg;
+  // }
 
   return list;
 }
+
+// Stream<List<IndependentTaskModel>> get independentTasksStream =>
+//    independentTasksController.stream;
+
+// Stream<List<IndependentTaskModel>> getIndependentTasks(
+//     {required String jobID}) async* {
+
+//   try {
+//     List<IndependentTaskModel> list = [];
+
+//     final tokenBox = await Hive.openBox('tokenBox');
+//     final token = tokenBox.get('token');
+
+//     final response = await http.get(
+//       Uri.parse('$BASE_URL/sequencestask/indenpendent-task/$jobID'),
+//       headers: {
+//         'Authorization': 'Bearer $token',
+//       },
+//     );
+
+//     if (response.statusCode == 200) {
+//       final decodedResponse = jsonDecode(response.body) as Map<String, dynamic>;
+//       final dataList = decodedResponse['data'] as List<dynamic>;
+
+//       list = dataList.map((e) => IndependentTaskModel.fromMap(e)).toList();
+
+//       independentTasksController.add(list);
+//     } else {
+//       final decodedResponseMessage =
+//           jsonDecode(response.body) as Map<String, dynamic>;
+//       final msg = decodedResponseMessage['message'];
+//       independentTasksController.addError(msg);
+//     }
+//   } catch (error) {
+//     independentTasksController.addError(error.toString());
+//   }
+// }
+
+// StreamController<List<IndependentTaskModel>> independentTasksController =
+//     StreamController<List<IndependentTaskModel>>.broadcast();
+
+//Stream<List<IndependentTaskModel>> get independentTasksStream =>
+//   independentTasksController.stream;
+
+// Future<void> getIndependentTasks({required String jobID}) async {
+//   try {
+//     List<IndependentTaskModel> list = [];
+
+//     final tokenBox = await Hive.openBox('tokenBox');
+//     final token = tokenBox.get('token');
+
+//     final response = await http.get(
+//       Uri.parse('$BASE_URL/sequencestask/indenpendent-task/$jobID'),
+//       headers: {
+//         'Authorization': 'Bearer $token',
+//       },
+//     );
+
+//     if (response.statusCode == 200) {
+//       final decodedResponse = jsonDecode(response.body) as Map<String, dynamic>;
+//       final dataList = decodedResponse['data'] as List<dynamic>;
+
+//       list = dataList.map((e) => IndependentTaskModel.fromMap(e)).toList();
+
+//       independentTasksController.add(list);
+//     } else {
+//       final decodedResponseMessage =
+//           jsonDecode(response.body) as Map<String, dynamic>;
+//       final msg = decodedResponseMessage['message'];
+//       independentTasksController.addError(msg);
+//     }
+//   } catch (error) {
+//     independentTasksController.addError(error.toString());
+//   }
+// }

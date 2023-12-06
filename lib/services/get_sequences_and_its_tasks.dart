@@ -464,8 +464,10 @@ Future<List<SequenceModelNew>> getAllEmptySequences(
     return list.toList();
   }
 
-  return [];
+  return list.toList();
 }
+
+
 
 
 

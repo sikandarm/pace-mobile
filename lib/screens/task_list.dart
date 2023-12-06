@@ -39,7 +39,7 @@ class _TaskListState extends State<TaskList> {
 
   int _selectedTaskIndex = -1;
 
-  late Future<List<IndependentTaskModel>> _futureTask = Future.value([]);
+  List<IndependentTaskModel> _futureTask = [];
   String _selectedValue = "all";
 
   List<SequenceModelNew> sequencesList = [];
@@ -50,28 +50,31 @@ class _TaskListState extends State<TaskList> {
 
     final result = await getSequences(jobID: widget.jobId.toString());
 
-    for (var seq in result) {
-      sequencesList.add(
-        SequenceModelNew(
-          SequenceId: seq.SequenceId,
-          JobId: seq.JobId,
-          sequenceName: seq.sequenceName,
-          tasks: seq.tasks,
-        ),
-      );
-    }
+    // for (var seq in result) {
+    //   sequencesList.add(
+    //     SequenceModelNew(
+    //       SequenceId: seq.SequenceId,
+    //       JobId: seq.JobId,
+    //       sequenceName: seq.sequenceName,
+    //       tasks: seq.tasks,
+    //     ),
+    //   );
+    // }
 
     final result2 = await getAllEmptySequences(jobID: widget.jobId.toString());
 
-    for (var seq2 in result2) {
-      sequencesList.add(SequenceModelNew(
-        SequenceId: seq2.SequenceId,
-        JobId: seq2.JobId,
-        sequenceName: seq2.sequenceName,
-        tasks: seq2.tasks,
-      ));
-    }
+    // for (var seq2 in result2) {
+    //   sequencesList.add(SequenceModelNew(
+    //     SequenceId: seq2.SequenceId,
+    //     JobId: seq2.JobId,
+    //     sequenceName: seq2.sequenceName,
+    //     tasks: seq2.tasks,
+    //   ));
+    // }
 
+    final combinedList = result + result2;
+
+    sequencesList.addAll(combinedList);
     setState(() {});
   }
 
@@ -81,12 +84,21 @@ class _TaskListState extends State<TaskList> {
   void initState() {
     //  _expandableController = ExpandableController();
     super.initState();
+    callOtherApiMethod();
     callApiMethods();
 
-    _futureTask = getIndependentTasks(jobID: widget.jobId.toString());
     checkPermissionAndUpdateBool("view_notifications", (localBool) {
       _blShowNotificationsList = localBool;
     });
+  }
+
+  bool isLoading = false;
+  Future<void> callOtherApiMethod() async {
+    isLoading = true;
+    _futureTask = await getIndependentTasks(jobID: widget.jobId.toString());
+    _futureTask = getFilteredTasks(_futureTask);
+    isLoading = false;
+    setState(() {});
   }
 
   void checkPermissionAndUpdateBool(
@@ -157,8 +169,8 @@ class _TaskListState extends State<TaskList> {
                 child: Stack(
                   children: [
                     IconButton(
-                      onPressed: () {
-                        showDialog(
+                      onPressed: () async {
+                        final dialogResult = await showDialog<bool?>(
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
@@ -195,6 +207,7 @@ class _TaskListState extends State<TaskList> {
                               actions: [
                                 TextButton(
                                   onPressed: () async {
+                                    //  sequenceNameController.clear();
                                     ScaffoldMessenger.of(context)
                                         .clearSnackBars();
 
@@ -223,6 +236,7 @@ class _TaskListState extends State<TaskList> {
                                       );
                                     }
 
+                                    sequenceNameController.clear();
                                     Navigator.of(context).pop();
                                     await callApiMethods();
                                   },
@@ -232,6 +246,9 @@ class _TaskListState extends State<TaskList> {
                             );
                           },
                         );
+                        if (dialogResult != true) {
+                          sequenceNameController.clear();
+                        }
                       },
                       icon: const Icon(
                         Icons.add_box_outlined,
@@ -260,354 +277,468 @@ class _TaskListState extends State<TaskList> {
           )
         ],
       ),
-      body: Container(
-        //     height: MediaQuery.of(context).size.height,
-        //    width: MediaQuery.of(context).size.width,
-        child: ListView(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TaskListHeader(
-              onDropdownChanged: _onDropdownChanged,
-              selectedValue: _selectedValue,
-            ),
-            for (int i = 0; i < sequencesList.length; i++) ...{
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 13),
-                child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(7),
-                    child: ExpandablePanel(
-                      key: ValueKey(i),
-
-                      expanded: Column(
+      body: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Container(
+          //     height: MediaQuery.of(context).size.height,
+          //    width: MediaQuery.of(context).size.width,
+          child: ListView(
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TaskListHeader(
+                onDropdownChanged: _onDropdownChanged,
+                selectedValue: _selectedValue,
+              ),
+              for (int i = 0; i < sequencesList.length; i++) ...{
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 13),
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(7),
+                      child: ExpandablePanel(
                         key: ValueKey(i),
-                        children: [
-                          for (int j = 0;
-                              j < sequencesList[i].tasks.length;
-                              j++) ...{
-                            DragTarget(
-                              builder: (context, candidateData, rejectedData) {
-                                return Draggable<int>(
-                                  data: sequencesList[i].tasks[j]['id'],
-                                  feedback: Container(
-                                      //   height: 120,
-                                      width: MediaQuery.of(context).size.width,
-                                      child: TaskCard(
-                                        id: sequencesList[i].tasks[j]['id'],
-                                        taskName: sequencesList[i]
-                                            .tasks[j]['PmkNumber']
-                                            .toString(),
-                                        description: sequencesList[i]
-                                            .tasks[j]['description']
-                                            .toString(),
-                                        endDate: DateTime.now(),
-                                        startDate: DateTime.now(),
-                                        status: sequencesList[i]
-                                            .tasks[j]['status']
-                                            .toString(),
-                                        statusColor: Colors.transparent,
-                                        onSelected: (_) {},
-                                      )),
-                                  child: DragTarget<int>(
-                                    builder: (
-                                      BuildContext context,
-                                      List<dynamic> accepted,
-                                      List<dynamic> rejected,
-                                    ) {
-                                      return Container(
-                                          //    height: 120,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          child: TaskCard(
-                                            id: sequencesList[i].tasks[j]['id'],
-                                            taskName: sequencesList[i]
-                                                .tasks[j]['PmkNumber']
-                                                .toString(),
-                                            description: sequencesList[i]
-                                                .tasks[j]['description']
-                                                .toString(),
-                                            endDate: DateTime.now(),
-                                            startDate: DateTime.now(),
-                                            status: sequencesList[i]
-                                                .tasks[j]['status']
-                                                .toString(),
-                                            statusColor: Colors.transparent,
-                                            onSelected: (_) {},
-                                          ));
-                                    },
-                                    onAccept: (int data) async {
-                                      await updateSequenceTasks(
-                                        sequenceId: sequencesList[i].SequenceId,
-                                        task_id: data,
-                                      );
 
-                                      await callApiMethods();
-                                      //  _expandableController.toggle();
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
-                          }
-                        ],
-                      ),
-                      // controller: ExpandableController(),
-                      //      controller: _expandableController,
-                      theme: ExpandableThemeData(
-                        hasIcon:
-                            sequencesList[i].tasks.isNotEmpty ? true : false,
-                        inkWellBorderRadius: BorderRadius.zero,
-                        useInkWell: false,
-                        iconPlacement: ExpandablePanelIconPlacement.left,
-                        headerAlignment: ExpandablePanelHeaderAlignment.center,
-                      ),
-                      header: DragTarget<int>(
-                        builder: (
-                          BuildContext context,
-                          List<dynamic> accepted,
-                          List<dynamic> rejected,
-                        ) {
-                          return Container(
-                              child: ListTile(
-                            contentPadding: sequencesList[i].tasks.isNotEmpty
-                                ? EdgeInsets.all(-21)
-                                : EdgeInsets.only(left: 21),
-                            title: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  sequencesList[i].sequenceName.toString(),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            trailing: IconButton(
-                              onPressed: () async {
-                                await deleteSequence(
-                                    sequenceID: int.parse(sequencesList[i]
-                                        .SequenceId
-                                        .toString()));
+                        expanded: Column(
+                          key: ValueKey(i),
+                          children: [
+                            for (int j = 0;
+                                j < sequencesList[i].tasks.length;
+                                j++) ...{
+                              DragTarget(
+                                onAccept: (data) async {
+                                  await updateSequenceTasks(
+                                    sequenceId: sequencesList[i].SequenceId,
+                                    task_id: sequencesList[i].tasks[j]['id'],
+                                  );
 
-                                await callApiMethods();
-                              },
-                              icon: sequencesList[i].tasks.length < 1
-                                  ? Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
-                                      size: 20,
+                                  await callApiMethods();
+
+                                  await getIndependentTasks(
+                                      jobID: widget.jobId.toString());
+                                  setState(() {});
+                                },
+                                builder:
+                                    (context, candidateData, rejectedData) {
+                                  return Draggable<int>(
+                                    data: sequencesList[i].tasks[j]['id'],
+                                    feedback: Container(
+                                        //   height: 120,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: TaskCard(
+                                          id: sequencesList[i].tasks[j]['id'],
+                                          taskName: sequencesList[i]
+                                              .tasks[j]['PmkNumber']
+                                              .toString(),
+                                          description: sequencesList[i]
+                                              .tasks[j]['description']
+                                              .toString(),
+                                          endDate: DateTime.now(),
+                                          startDate: DateTime.now(),
+                                          status: sequencesList[i]
+                                              .tasks[j]['status']
+                                              .toString(),
+                                          statusColor: Colors.transparent,
+                                          onSelected: (_) {},
+                                        )),
+                                    child: DragTarget<int>(
+                                      builder: (
+                                        BuildContext context,
+                                        List<dynamic> accepted,
+                                        List<dynamic> rejected,
+                                      ) {
+                                        return Container(
+                                            //    height: 120,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: TaskCard(
+                                              id: sequencesList[i].tasks[j]
+                                                  ['id'],
+                                              taskName: sequencesList[i]
+                                                  .tasks[j]['PmkNumber']
+                                                  .toString(),
+                                              description: sequencesList[i]
+                                                  .tasks[j]['description']
+                                                  .toString(),
+                                              endDate: DateTime.now(),
+                                              startDate: DateTime.now(),
+                                              status: sequencesList[i]
+                                                  .tasks[j]['status']
+                                                  .toString(),
+                                              statusColor: Colors.transparent,
+                                              onSelected: (_) {},
+                                            ));
+                                      },
+                                      onAccept: (int data) async {
+                                        await updateSequenceTasks(
+                                          sequenceId:
+                                              sequencesList[i].SequenceId,
+                                          task_id: data,
+                                        );
+
+                                        await callApiMethods();
+                                        //  _expandableController.toggle();
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+                            }
+                          ],
+                        ),
+                        // controller: ExpandableController(),
+                        //      controller: _expandableController,
+                        theme: ExpandableThemeData(
+                          hasIcon:
+                              sequencesList[i].tasks.isNotEmpty ? true : false,
+                          inkWellBorderRadius: BorderRadius.zero,
+                          useInkWell: false,
+                          iconPlacement: ExpandablePanelIconPlacement.left,
+                          headerAlignment:
+                              ExpandablePanelHeaderAlignment.center,
+                        ),
+                        header: DragTarget<int>(
+                          builder: (
+                            BuildContext context,
+                            List<dynamic> accepted,
+                            List<dynamic> rejected,
+                          ) {
+                            return Container(
+                                child: ListTile(
+                              contentPadding: sequencesList[i].tasks.isNotEmpty
+                                  ? EdgeInsets.all(-21)
+                                  : EdgeInsets.only(left: 21),
+                              title: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    sequencesList[i].sequenceName.toString(),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              trailing: sequencesList[i].tasks.length < 1
+                                  ? IconButton(
+                                      onPressed: () async {
+                                        await deleteSequence(
+                                            sequenceID: int.parse(
+                                                sequencesList[i]
+                                                    .SequenceId
+                                                    .toString()));
+
+                                        await callApiMethods();
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                        size: 20,
+                                      ),
                                     )
                                   : SizedBox(),
-                            ),
-                          ));
-                        },
-                        onAccept: (int taskId) async {
-                          await updateSequenceTasks(
-                            sequenceId: sequencesList[i].SequenceId,
-                            task_id: taskId,
-                          );
-
-                          callApiMethods();
-                        },
-                      ),
-                      collapsed: const SizedBox(),
-                      //  builder: (context, collapsed, expanded) => expanded
-
-                      // expanded: Column(
-                      //   children: [
-                      //     for (int j = 0;
-                      //         j < sequencesList[i].tasks.length;
-                      //         j++) ...{
-                      //       DragTarget(
-                      //         builder:
-                      //             (context, candidateData, rejectedData) {
-                      //           return Draggable<int>(
-                      //             data: sequencesList[i].tasks[j]['id'],
-                      //             feedback: Container(
-                      //                 height: 120,
-                      //                 width:
-                      //                     MediaQuery.of(context).size.width,
-                      //                 child: TaskCard(
-                      //                   id: sequencesList[i].tasks[j]['id'],
-                      //                   taskName: sequencesList[i]
-                      //                       .tasks[j]['PmkNumber']
-                      //                       .toString(),
-                      //                   description: sequencesList[i]
-                      //                       .tasks[j]['description']
-                      //                       .toString(),
-                      //                   endDate: DateTime.now(),
-                      //                   startDate: DateTime.now(),
-                      //                   status: sequencesList[i]
-                      //                       .tasks[j]['status']
-                      //                       .toString(),
-                      //                   statusColor: Colors.transparent,
-                      //                   onSelected: (_) {},
-                      //                 )),
-                      //             child: DragTarget<int>(
-                      //               builder: (
-                      //                 BuildContext context,
-                      //                 List<dynamic> accepted,
-                      //                 List<dynamic> rejected,
-                      //               ) {
-                      //                 return Container(
-                      //                     height: 120,
-                      //                     width: MediaQuery.of(context)
-                      //                         .size
-                      //                         .width,
-                      //                     child: TaskCard(
-                      //                       id: sequencesList[i].tasks[j]
-                      //                           ['id'],
-                      //                       taskName: sequencesList[i]
-                      //                           .tasks[j]['PmkNumber']
-                      //                           .toString(),
-                      //                       description: sequencesList[i]
-                      //                           .tasks[j]['description']
-                      //                           .toString(),
-                      //                       endDate: DateTime.now(),
-                      //                       startDate: DateTime.now(),
-                      //                       status: sequencesList[i]
-                      //                           .tasks[j]['status']
-                      //                           .toString(),
-                      //                       statusColor: Colors.transparent,
-                      //                       onSelected: (_) {},
-                      //                     ));
-                      //               },
-                      //               onAccept: (int data) async {
-                      //                 await updateSequenceTasks(
-                      //                   sequenceId:
-                      //                       sequencesList[i].SequenceId,
-                      //                   task_id: data,
-                      //                 );
-
-                      //                 await callApiMethods();
-                      //               },
-                      //             ),
-                      //           );
-                      //         },
-                      //       ),
-                      //     }
-                      //   ],
-                      // ),
-                    ),
-                  ),
-                ),
-              )
-            },
-            const SizedBox(height: 40),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.5),
-              child: Text(
-                "Independent Tasks",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 17,
-                ),
-              ),
-            ),
-            const SizedBox(height: 11),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              //  height: MediaQuery.of(context).size.height,
-              child: FutureBuilder<List<IndependentTaskModel>>(
-                future: _futureTask,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Column(
-                      children: [
-                        SizedBox(height: 90),
-                        const Center(child: CircularProgressIndicator()),
-                      ],
-                    );
-                  } else if (snapshot.hasError) {
-                    print(snapshot.error);
-                    return Column(
-                      children: [
-                        SizedBox(height: 90),
-                        Center(
-                          child: Text("${snapshot.error}"),
-                        ),
-                      ],
-                    );
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(
-                      child: Text("No tasks found"),
-                    );
-                  } else {
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: getFilteredTasks(snapshot.data!).length,
-                      itemBuilder: (context, index) {
-                        final tasks = getFilteredTasks(snapshot.data!)[index];
-                        final statusColor =
-                            index % 2 == 0 ? Colors.green : Colors.red;
-
-                        return Draggable<int>(
-                          data: int.parse(tasks.id.toString()),
-                          feedback: Container(
-                            width: MediaQuery.of(context).size.width,
-                            //  height: 120,
-                            child: TaskCard(
-                                id: tasks.id!,
-                                taskName: tasks.pmkNumber!,
-                                description: tasks.description!,
-                                startDate: tasks.startedAt,
-                                endDate: tasks.completedAt,
-                                status: tasks.status!,
-                                statusColor: statusColor,
-                                onSelected: (index) {}),
-                          ),
-                          childWhenDragging: Container(
-                            width: MediaQuery.of(context).size.width,
-                            //  height: 120,
-                            child: TaskCard(
-                                id: tasks.id!,
-                                taskName: tasks.pmkNumber!,
-                                description: tasks.description!,
-                                startDate: tasks.startedAt,
-                                endDate: tasks.completedAt,
-                                status: tasks.status!,
-                                statusColor: statusColor,
-                                onSelected: (index) {}),
-                          ),
-                          child: TaskCard(
-                              id: tasks.id!,
-                              taskName: tasks.pmkNumber!,
-                              description: tasks.description!,
-                              startDate: tasks.startedAt,
-                              endDate: tasks.completedAt,
-                              status: tasks.status!,
-                              statusColor: statusColor,
-                              onSelected: (index) {}),
-                          onDragCompleted: () async {
-                            // Navigator.pop(context);
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) =>
-                            //             TaskList(jobId: widget.jobId)));
+                            ));
+                          },
+                          onAccept: (int taskId) async {
                             await updateSequenceTasks(
-                              sequenceId: sequencesList[index].SequenceId,
-                              task_id: tasks.id!,
+                              sequenceId: sequencesList[i].SequenceId,
+                              task_id: taskId,
                             );
 
-                            await callApiMethods();
-
-                            // setState(() {});
+                            callApiMethods();
                           },
-                        );
-                      },
-                    );
-                  }
-                },
+                        ),
+                        collapsed: const SizedBox(),
+                        //  builder: (context, collapsed, expanded) => expanded
+
+                        // expanded: Column(
+                        //   children: [
+                        //     for (int j = 0;
+                        //         j < sequencesList[i].tasks.length;
+                        //         j++) ...{
+                        //       DragTarget(
+                        //         builder:
+                        //             (context, candidateData, rejectedData) {
+                        //           return Draggable<int>(
+                        //             data: sequencesList[i].tasks[j]['id'],
+                        //             feedback: Container(
+                        //                 height: 120,
+                        //                 width:
+                        //                     MediaQuery.of(context).size.width,
+                        //                 child: TaskCard(
+                        //                   id: sequencesList[i].tasks[j]['id'],
+                        //                   taskName: sequencesList[i]
+                        //                       .tasks[j]['PmkNumber']
+                        //                       .toString(),
+                        //                   description: sequencesList[i]
+                        //                       .tasks[j]['description']
+                        //                       .toString(),
+                        //                   endDate: DateTime.now(),
+                        //                   startDate: DateTime.now(),
+                        //                   status: sequencesList[i]
+                        //                       .tasks[j]['status']
+                        //                       .toString(),
+                        //                   statusColor: Colors.transparent,
+                        //                   onSelected: (_) {},
+                        //                 )),
+                        //             child: DragTarget<int>(
+                        //               builder: (
+                        //                 BuildContext context,
+                        //                 List<dynamic> accepted,
+                        //                 List<dynamic> rejected,
+                        //               ) {
+                        //                 return Container(
+                        //                     height: 120,
+                        //                     width: MediaQuery.of(context)
+                        //                         .size
+                        //                         .width,
+                        //                     child: TaskCard(
+                        //                       id: sequencesList[i].tasks[j]
+                        //                           ['id'],
+                        //                       taskName: sequencesList[i]
+                        //                           .tasks[j]['PmkNumber']
+                        //                           .toString(),
+                        //                       description: sequencesList[i]
+                        //                           .tasks[j]['description']
+                        //                           .toString(),
+                        //                       endDate: DateTime.now(),
+                        //                       startDate: DateTime.now(),
+                        //                       status: sequencesList[i]
+                        //                           .tasks[j]['status']
+                        //                           .toString(),
+                        //                       statusColor: Colors.transparent,
+                        //                       onSelected: (_) {},
+                        //                     ));
+                        //               },
+                        //               onAccept: (int data) async {
+                        //                 await updateSequenceTasks(
+                        //                   sequenceId:
+                        //                       sequencesList[i].SequenceId,
+                        //                   task_id: data,
+                        //                 );
+
+                        //                 await callApiMethods();
+                        //               },
+                        //             ),
+                        //           );
+                        //         },
+                        //       ),
+                        //     }
+                        //   ],
+                        // ),
+                      ),
+                    ),
+                  ),
+                )
+              },
+              const SizedBox(height: 40),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.5),
+                child: Text(
+                  "Independent Tasks",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                  ),
+                ),
               ),
-            ),
-            SizedBox(
-              height: 25,
-            ),
-          ],
+              const SizedBox(height: 11),
+
+/////////////////////////////////////////aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+              isLoading
+                  ? Column(
+                      children: [
+                        SizedBox(height: 100),
+                        Center(child: CircularProgressIndicator()),
+                      ],
+                    )
+                  : !isLoading && _futureTask.isEmpty
+                      ? Column(
+                          children: [
+                            SizedBox(height: 100),
+                            Text('No independent tasks found'),
+                          ],
+                        )
+                      : Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: Column(
+                            children: [
+                              for (int i = 0; i < _futureTask.length; i++) ...{
+                                Draggable<int>(
+                                  data: int.parse(_futureTask[i].id.toString()),
+                                  feedback: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    //  height: 120,
+                                    child: TaskCard(
+                                        id: _futureTask[i].id!,
+                                        taskName: _futureTask[i].pmkNumber!,
+                                        description:
+                                            _futureTask[i].description!,
+                                        startDate: _futureTask[i].startedAt,
+                                        endDate: _futureTask[i].completedAt,
+                                        status: _futureTask[i].status!,
+                                        statusColor: Colors.transparent,
+                                        onSelected: (index) {}),
+                                  ),
+                                  childWhenDragging: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    //  height: 120,
+                                    child: TaskCard(
+                                        id: _futureTask[i].id!,
+                                        taskName: _futureTask[i].pmkNumber!,
+                                        description:
+                                            _futureTask[i].description!,
+                                        startDate: _futureTask[i].startedAt,
+                                        endDate: _futureTask[i].completedAt,
+                                        status: _futureTask[i].status!,
+                                        statusColor: Colors.transparent,
+                                        onSelected: (index) {}),
+                                  ),
+                                  child: TaskCard(
+                                      id: _futureTask[i].id!,
+                                      taskName: _futureTask[i].pmkNumber!,
+                                      description: _futureTask[i].description!,
+                                      startDate: _futureTask[i].startedAt,
+                                      endDate: _futureTask[i].completedAt,
+                                      status: _futureTask[i].status!,
+                                      statusColor: Colors.transparent,
+                                      onSelected: (index) {}),
+                                  onDragCompleted: () async {
+                                    //  final list = await getIndependentTasks(
+                                    //    jobID: widget.jobId.toString());
+                                    // _futureTask = getFilteredTasks(list);
+                                    await callOtherApiMethod();
+                                    await callOtherApiMethod();
+
+                                    //   setState(() {});
+                                    // Navigator.pop(context);
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) =>
+                                    //             TaskList(jobId: widget.jobId)));
+                                    // await updateSequenceTasks(
+                                    //   sequenceId: sequencesList[index].SequenceId,
+                                    //   task_id: tasks.id!,
+                                    // );
+
+                                    // await callApiMethods();
+
+                                    // setState(() {});
+                                  },
+                                ),
+                              }
+                            ],
+                          ),
+                        ),
+
+/////////////////////////////////////////bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+              // Container(
+              //   width: MediaQuery.of(context).size.width,
+              //   //  height: MediaQuery.of(context).size.height,
+              //   child: FutureBuilder<List<IndependentTaskModel>>(
+              //     future: _futureTask,
+              //     builder: (context, snapshot) {
+              //       if (snapshot.connectionState == ConnectionState.waiting) {
+              //         return Column(
+              //           children: [
+              //             SizedBox(height: 90),
+              //             const Center(child: CircularProgressIndicator()),
+              //           ],
+              //         );
+              //       } else if (snapshot.hasError) {
+              //         print(snapshot.error);
+              //         return Column(
+              //           children: [
+              //             SizedBox(height: 90),
+              //             Center(
+              //               child: Text("${snapshot.error}"),
+              //             ),
+              //           ],
+              //         );
+              //       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              //         return const Center(
+              //           child: Text("No tasks found"),
+              //         );
+              //       } else {
+              //         return ListView.builder(
+              //           shrinkWrap: true,
+              //           physics: NeverScrollableScrollPhysics(),
+              //           itemCount: getFilteredTasks(snapshot.data!).length,
+              //           itemBuilder: (context, index) {
+              //             final tasks = getFilteredTasks(snapshot.data!)[index];
+              //             final statusColor =
+              //                 index % 2 == 0 ? Colors.green : Colors.red;
+
+              //             return Draggable<int>(
+              //               data: int.parse(tasks.id.toString()),
+              //               feedback: Container(
+              //                 width: MediaQuery.of(context).size.width,
+              //                 //  height: 120,
+              //                 child: TaskCard(
+              //                     id: tasks.id!,
+              //                     taskName: tasks.pmkNumber!,
+              //                     description: tasks.description!,
+              //                     startDate: tasks.startedAt,
+              //                     endDate: tasks.completedAt,
+              //                     status: tasks.status!,
+              //                     statusColor: statusColor,
+              //                     onSelected: (index) {}),
+              //               ),
+              //               childWhenDragging: Container(
+              //                 width: MediaQuery.of(context).size.width,
+              //                 //  height: 120,
+              //                 child: TaskCard(
+              //                     id: tasks.id!,
+              //                     taskName: tasks.pmkNumber!,
+              //                     description: tasks.description!,
+              //                     startDate: tasks.startedAt,
+              //                     endDate: tasks.completedAt,
+              //                     status: tasks.status!,
+              //                     statusColor: statusColor,
+              //                     onSelected: (index) {}),
+              //               ),
+              //               child: TaskCard(
+              //                   id: tasks.id!,
+              //                   taskName: tasks.pmkNumber!,
+              //                   description: tasks.description!,
+              //                   startDate: tasks.startedAt,
+              //                   endDate: tasks.completedAt,
+              //                   status: tasks.status!,
+              //                   statusColor: statusColor,
+              //                   onSelected: (index) {}),
+              //               onDragCompleted: () async {
+              //                 Navigator.pop(context);
+              //                 Navigator.push(
+              //                     context,
+              //                     MaterialPageRoute(
+              //                         builder: (context) =>
+              //                             TaskList(jobId: widget.jobId)));
+              //                 // await updateSequenceTasks(
+              //                 //   sequenceId: sequencesList[index].SequenceId,
+              //                 //   task_id: tasks.id!,
+              //                 // );
+
+              //                 // await callApiMethods();
+
+              //                 // setState(() {});
+              //               },
+              //             );
+              //           },
+              //         );
+              //       }
+              //     },
+              //   ),
+              // ),
+              SizedBox(
+                height: 25,
+              ),
+            ],
+          ),
         ),
       ),
     );
