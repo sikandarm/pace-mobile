@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:com_a3_pace/services/check_task_play_or_pause_status.dart';
+import 'package:com_a3_pace/services/play_pause_task.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,13 +33,48 @@ class TaskDetail extends StatefulWidget {
 }
 
 class _TaskDetailState extends State<TaskDetail> {
+  final formKey = GlobalKey<FormState>();
+  final commentController = TextEditingController();
+  String? taskStatus;
+  List<TaskDetailObj> taskDetailObj = [
+    TaskDetailObj(
+      id: 0,
+      pmkNumber: null,
+      heatNo: null,
+      jobId: null,
+      userId: null,
+      description: null,
+      startedAt: null,
+      completedAt: null,
+      approvedAt: null,
+      approvedBy: null,
+      status: null,
+      comments: null,
+      image: null,
+      projectManager: null,
+      QCI: null,
+      fitter: null,
+      welder: null,
+      painter: null,
+      foreman: null,
+    )
+  ];
   Future<List<TaskDetailObj>> _futureTask = Future.value([]);
+  PlayAndPauseTask playAndPausetask = PlayAndPauseTask(
+    id: null,
+    taskId: null,
+    breakStart: null,
+    comment: null,
+    // createdBy: null,
+    // updatedAt: null,
+    // createdAt: null,
+  );
 
   @override
   void initState() {
     super.initState();
     _futureTask = fetchTaskDetail(widget.taskId);
-
+    callApiMethods();
     checkPermissionAndUpdateBool("collaborate_on_microsoft_whiteboard",
         (localBool) {
       _blCollaborate = localBool;
@@ -53,6 +91,16 @@ class _TaskDetailState extends State<TaskDetail> {
     });
   }
 
+  bool? taskPayOrPauseStatus = null;
+  Future<void> callApiMethods() async {
+    taskPayOrPauseStatus =
+        await getTaskPlayOrPauseStatus(taskId: widget.taskId.toString());
+    print('init method value taskPayOrPauseStatus: ' +
+        taskPayOrPauseStatus.toString());
+    taskDetailObj = await _futureTask;
+    setState(() {});
+  }
+
   void checkPermissionAndUpdateBool(
       String permValue, Function(bool) boolUpdater) async {
     var localBool = await hasPermission(permValue);
@@ -65,6 +113,185 @@ class _TaskDetailState extends State<TaskDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: taskDetailObj[0].status != 'in_process'
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: () async {
+                commentController.clear();
+
+                print('Status: ' + taskPayOrPauseStatus.toString());
+
+                if (taskPayOrPauseStatus != null &&
+                    taskPayOrPauseStatus == false) {
+                  final dialogResult = await showDialog<bool?>(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Form(
+                          //   key: formkeySequence,
+                          key: formKey,
+                          child: Column(
+                            children: [
+                              const Text(
+                                'Add a comment',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.deepPurple,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              TextFormField(
+                                controller: commentController,
+                                decoration: const InputDecoration(
+                                  hintStyle: TextStyle(fontSize: 13),
+                                  labelText: 'Comment',
+                                  hintText: 'Enter a comment',
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter a comment';
+                                  }
+
+                                  return null;
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () async {
+                              //  sequenceNameController.clear();
+                              ScaffoldMessenger.of(context).clearSnackBars();
+
+                              final validationResult =
+                                  formKey.currentState!.validate();
+                              if (!validationResult) {
+                                return;
+                              }
+
+                              //  Map<String, dynamic> decodedResponse =
+                              //      jsonDecode(response.body);
+
+                              //   sequenceNameController.clear();
+                              Navigator.of(context).pop(true);
+                              //        await callApiMethods();
+                            },
+                            child: const Text('Add Comment'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+
+                  if (dialogResult == true) {
+                    if (!taskPayOrPauseStatus!) {
+                      final response1 = await playAndPauseTaskApi(
+                        taskId: widget.taskId.toString(),
+                        break_start_as_DateTime: DateTime.now().toString(),
+                        break_end_as_DateTime: null,
+                        comment: commentController.text.trim(),
+                      );
+                    } else {
+                      final response1 = await playAndPauseTaskApi(
+                        taskId: widget.taskId.toString(),
+                        break_start_as_DateTime: null,
+                        break_end_as_DateTime: DateTime.now().toString(),
+                        comment: commentController.text.trim(),
+                      );
+                    }
+                    taskPayOrPauseStatus = await getTaskPlayOrPauseStatus(
+                        taskId: widget.taskId.toString());
+                    setState(() {});
+                    return;
+                    return;
+                  }
+                } else {
+                  if (!taskPayOrPauseStatus!) {
+                    final response1 = await playAndPauseTaskApi(
+                      taskId: widget.taskId.toString(),
+                      break_start_as_DateTime: DateTime.now().toString(),
+                      break_end_as_DateTime: null,
+                      comment: commentController.text.trim(),
+                    );
+                  } else {
+                    final response1 = await playAndPauseTaskApi(
+                      taskId: widget.taskId.toString(),
+                      break_start_as_DateTime: null,
+                      break_end_as_DateTime: DateTime.now().toString(),
+                      comment: commentController.text.trim(),
+                    );
+                  }
+                  taskPayOrPauseStatus = await getTaskPlayOrPauseStatus(
+                      taskId: widget.taskId.toString());
+                }
+
+                setState(() {});
+                return;
+                // PlayAndPauseTask(
+                //     id: null,
+                //     taskId: taskId,
+                //     breakStart: null,
+                //     comment: 'comment',
+                //     createdBy: null,
+                //     updatedAt: null,
+                //     createdAt: null);
+
+                final response1 = await playAndPauseTaskApi(
+                  taskId: widget.taskId.toString(),
+                  break_start_as_DateTime: DateTime.now().toString(),
+                  break_end_as_DateTime: null,
+                  comment: 'a test comment',
+                );
+                playAndPausetask = response1;
+                print('1st Response:' + response1.toJson().toString());
+
+                if (response1.id == null &&
+                        response1.breakStart == null &&
+                        response1.breakEnd == null &&
+                        //   response.createdAt == null &&
+                        response1.comment == null &&
+                        //  response.createdAt == null &&
+                        //   response.createdBy == null &&
+                        response1.taskId == null
+                    // &&
+                    //   response.updatedAt == null &&
+                    //   response.de == null &&
+                    //   response.id == null
+                    ) {
+                  print('here');
+                  final response2 = await playAndPauseTaskApi(
+                    taskId: widget.taskId.toString(),
+                    break_start_as_DateTime: null,
+                    break_end_as_DateTime: DateTime.now().toString(),
+                    comment: 'a test new one comment',
+                  );
+
+                  playAndPausetask = response2;
+                  print('2nd Response:' + response2.toJson().toString());
+                  //   print('oopos');
+                  //   setState(() {});
+                }
+
+                // final playAndPauseTaskBox = await Hive.openBox('playAndPauseTaskBox');
+                // await playAndPauseTaskBox.putAll({
+                //   'break_start': '',
+                //   'break_end': '',
+                // });
+                setState(() {});
+                print('==================================');
+                print('======================================');
+                print('============================================');
+                setState(() {});
+              },
+              label: Text(taskPayOrPauseStatus == false ? 'RESUME' : 'PAUSE'),
+              icon: Icon(taskPayOrPauseStatus == false
+                  ? Icons.play_arrow
+                  : Icons.pause),
+              backgroundColor:
+                  taskPayOrPauseStatus == false ? Colors.green : Colors.red,
+              foregroundColor: Colors.white,
+            ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -201,7 +428,7 @@ class _TaskDetailState extends State<TaskDetail> {
   }
 }
 
-class TaskDetailWidget extends StatelessWidget {
+class TaskDetailWidget extends StatefulWidget {
   final int id;
   final String? pmkNumber;
   final String? heatNo;
@@ -221,6 +448,36 @@ class TaskDetailWidget extends StatelessWidget {
   final String? welder;
   final String? painter;
   final String? foreman;
+
+  const TaskDetailWidget({
+    Key? key,
+    required this.id,
+    required this.pmkNumber,
+    required this.heatNo,
+    required this.jobId,
+    required this.userId,
+    required this.description,
+    required this.startedAt,
+    required this.completedAt,
+    required this.approvedAt,
+    required this.approvedBy,
+    required this.status,
+    required this.comments,
+    required this.imageUrl,
+    required this.projectManager,
+    required this.QCI,
+    required this.fitter,
+    required this.welder,
+    required this.painter,
+    required this.foreman,
+  }) : super(key: key);
+
+  @override
+  State<TaskDetailWidget> createState() => _TaskDetailWidgetState();
+}
+
+class _TaskDetailWidgetState extends State<TaskDetailWidget> {
+  //Future<void> callApiMethod2({required}) async {}
 
   Future<void> callUpdateTask(BuildContext context, int taskId, int jobId,
       DateTime startDate, String status) async {
@@ -280,29 +537,6 @@ class TaskDetailWidget extends StatelessWidget {
     }
   }
 
-  const TaskDetailWidget({
-    Key? key,
-    required this.id,
-    required this.pmkNumber,
-    required this.heatNo,
-    required this.jobId,
-    required this.userId,
-    required this.description,
-    required this.startedAt,
-    required this.completedAt,
-    required this.approvedAt,
-    required this.approvedBy,
-    required this.status,
-    required this.comments,
-    required this.imageUrl,
-    required this.projectManager,
-    required this.QCI,
-    required this.fitter,
-    required this.welder,
-    required this.painter,
-    required this.foreman,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -321,7 +555,7 @@ class TaskDetailWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Pmk# $pmkNumber",
+              "Pmk# ${widget.pmkNumber}",
               style: const TextStyle(
                 // color: Color(0xFF1E2022),
                 fontWeight: FontWeight.bold,
@@ -345,7 +579,7 @@ class TaskDetailWidget extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        heatNo!,
+                        widget.heatNo!,
                         style: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 15.0,
@@ -383,7 +617,7 @@ class TaskDetailWidget extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        description!,
+                        widget.description!,
                         style: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 15.0,
@@ -421,9 +655,10 @@ class TaskDetailWidget extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        startedAt == null
+                        widget.startedAt == null
                             ? "N/A"
-                            : DateFormat(US_DATE_FORMAT).format(startedAt!),
+                            : DateFormat(US_DATE_FORMAT)
+                                .format(widget.startedAt!),
                         style: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 15.0,
@@ -461,9 +696,9 @@ class TaskDetailWidget extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        setStatusText(status!),
+                        setStatusText(widget.status!),
                         style: TextStyle(
-                          color: setCardBorderColor(status!),
+                          color: setCardBorderColor(widget.status!),
                           fontSize: 15.0,
                         ),
                       ),
@@ -483,29 +718,29 @@ class TaskDetailWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            buildRolesFields("Project Manager", projectManager!),
+            buildRolesFields("Project Manager", widget.projectManager!),
             drawLine(),
             const SizedBox(height: 10),
-            buildRolesFields("QCI", QCI!),
+            buildRolesFields("QCI", widget.QCI!),
             drawLine(),
             const SizedBox(height: 10),
-            buildRolesFields("Fitter", fitter!),
+            buildRolesFields("Fitter", widget.fitter!),
             drawLine(),
             const SizedBox(height: 10),
-            buildRolesFields("Welder", welder!),
+            buildRolesFields("Welder", widget.welder!),
             drawLine(),
             const SizedBox(height: 10),
-            buildRolesFields("Painter", painter!),
+            buildRolesFields("Painter", widget.painter!),
             drawLine(),
             const SizedBox(height: 10),
-            buildRolesFields("Foreman", foreman!),
+            buildRolesFields("Foreman", widget.foreman!),
             drawLine(),
             const SizedBox(height: 10),
-            if (imageUrl != null && imageUrl!.isNotEmpty)
+            if (widget.imageUrl != null && widget.imageUrl!.isNotEmpty)
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    downloadImage(imageUrl!, "TaskDiagram.png");
+                    downloadImage(widget.imageUrl!, "TaskDiagram.png");
 
                     // _openExternalLink(
                     //     "https://play.google.com/store/apps/details?id=com.microsoft.whiteboard.publicpreview");
@@ -514,7 +749,7 @@ class TaskDetailWidget extends StatelessWidget {
                   // onTap: () => _openExternalLink(
                   //     "https://play.google.com/store/apps/details?id=com.microsoft.whiteboard.publicpreview"),
                   child: Image.network(
-                    imageUrl!,
+                    widget.imageUrl!,
                     width: 300.0,
                     height: 300.0,
                     fit: BoxFit.contain,
@@ -536,7 +771,7 @@ class TaskDetailWidget extends StatelessWidget {
                 ]),
                 child: _blApprovedTask && _blSelfAssignATask
                     ? ElevatedButton(
-                        onPressed: () => buttonAction(context),
+                        onPressed: () => buttonAction(context, widget.id),
                         style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all<Color>(Colors.blue),
@@ -548,16 +783,17 @@ class TaskDetailWidget extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          setButtonText(status!, userId!),
+                          setButtonText(widget.status!, widget.userId!),
                           style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
                       )
                     : (_blSelfAssignATask &&
-                            (status == "in_process" || status == "pending"))
+                            (widget.status == "in_process" ||
+                                widget.status == "pending"))
                         ? ElevatedButton(
-                            onPressed: () => buttonAction(context),
+                            onPressed: () => buttonAction(context, widget.id),
                             style: ButtonStyle(
                               backgroundColor:
                                   MaterialStateProperty.all<Color>(Colors.blue),
@@ -569,15 +805,17 @@ class TaskDetailWidget extends StatelessWidget {
                               ),
                             ),
                             child: Text(
-                              setSelfApprovedText(status!, userId!),
+                              setSelfApprovedText(
+                                  widget.status!, widget.userId!),
                               style: const TextStyle(
                                 color: Colors.white,
                               ),
                             ),
                           )
-                        : _blApprovedTask && status == "to_inspect"
+                        : _blApprovedTask && widget.status == "to_inspect"
                             ? ElevatedButton(
-                                onPressed: () => buttonAction(context),
+                                onPressed: () =>
+                                    buttonAction(context, widget.id),
                                 style: ButtonStyle(
                                   backgroundColor:
                                       MaterialStateProperty.all<Color>(
@@ -590,7 +828,8 @@ class TaskDetailWidget extends StatelessWidget {
                                   ),
                                 ),
                                 child: Text(
-                                  setInspectionText(status!, userId!),
+                                  setInspectionText(
+                                      widget.status!, widget.userId!),
                                   style: const TextStyle(
                                     color: Colors.white,
                                   ),
@@ -605,29 +844,44 @@ class TaskDetailWidget extends StatelessWidget {
     );
   }
 
-  buttonAction(BuildContext context) async {
+  buttonAction(BuildContext context, int taskId) async {
+    ScaffoldMessenger.of(context).clearSnackBars();
     // if same user is opening a task
-    if (status == "pending") {
+    if (widget.status == "pending") {
       // ignore: use_build_context_synchronously
-      callUpdateTask(context, id, jobId!, DateTime.now(), "in_process");
-    } else if (status == "in_process") {
+      callUpdateTask(
+          context, widget.id, widget.jobId!, DateTime.now(), "in_process");
+    } else if (widget.status == "approved") {
       // ignore: use_build_context_synchronously
-      callUpdateTask(context, id, jobId!, DateTime.now(), "to_inspect");
-    } else if (status == "to_inspect") {
+      callUpdateTask(
+          context, widget.id, widget.jobId!, DateTime.now(), "rejected");
+    } else if (widget.status == "in_process") {
+      final boolResult =
+          await getTaskPlayOrPauseStatus(taskId: taskId.toString());
+      if (boolResult == false) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Task must be resumed to proceed for completion!')));
+        return;
+      }
+      // ignore: use_build_context_synchronously
+      callUpdateTask(
+          context, widget.id, widget.jobId!, DateTime.now(), "to_inspect");
+    } else if (widget.status == "to_inspect") {
       // ignore: use_build_context_synchronously
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => TaskApproveRejectScreen(
-            taskId: id,
-            jobId: jobId,
-            startedAt: startedAt,
+            taskId: widget.id,
+            jobId: widget.jobId,
+            startedAt: widget.startedAt,
           ),
         ),
       );
     } else {
       // ignore: use_build_context_synchronously
-      callUpdateTask(context, id, jobId!, DateTime.now(), "approved");
+      callUpdateTask(
+          context, widget.id, widget.jobId!, DateTime.now(), "approved");
     }
   }
 
@@ -683,13 +937,15 @@ class TaskDetailWidget extends StatelessWidget {
   }
 
   String setButtonText(String? value, int? userIdValue) {
-    if (userIdValue == userId) {
+    if (userIdValue == widget.userId) {
       // if same user
       if (value == "pending") {
         return 'Pick Task';
       } else if (value == "in_process") {
         return 'Complete';
       } else if (value == "to_inspect") {
+        return 'Approve';
+      } else if (value == "rejected") {
         return 'Approve';
       } else {
         return 'Reject';
@@ -706,7 +962,7 @@ class TaskDetailWidget extends StatelessWidget {
   }
 
   String setSelfApprovedText(String? value, int? userIdValue) {
-    if (userIdValue == userId) {
+    if (userIdValue == widget.userId) {
       // if same user
       if (value == "pending") {
         return 'Pick Task';
@@ -725,7 +981,7 @@ class TaskDetailWidget extends StatelessWidget {
   }
 
   String setInspectionText(String? value, int? userIdValue) {
-    if (userIdValue == userId) {
+    if (userIdValue == widget.userId) {
       // if same user
       if (value == "to_inspect") {
         return 'Approve';
@@ -742,20 +998,8 @@ class TaskDetailWidget extends StatelessWidget {
     // Add a default return statement to handle all other cases
     return '';
   }
-  // bool showHideButton(String? value, int? userIdValue) {
-  //   if (value == "in_process" && userIdValue != 0 && userIdValue != userId) {
-  //     return false; // Disable button
-  //   } else if (value == "approved" && userIdValue != userId) {
-  //     return false;
-  //   } else if (value == "rejected" && userIdValue != userId) {
-  //     return false;
-  //   } else if (value == "approved" || value == "rejected") {
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  // }
 
+  // bool showHideButton(String? value, int? userIdValue) {
   Future<void> downloadImage(String imageUrl, String fileName) async {
     debugPrint(imageUrl.replaceAll(' ', '%20'));
     debugPrint(fileName);

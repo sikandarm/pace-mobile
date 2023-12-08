@@ -52,6 +52,7 @@ dependencies:
   expandable: ^5.0.1
   flexible_expansion_list: ^0.0.2
   dartz: ^0.10.1
+  shimmer_animation: ^2.1.0+1
 
 dev_dependencies:
   flutter_test:

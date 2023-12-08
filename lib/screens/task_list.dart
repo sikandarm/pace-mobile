@@ -13,6 +13,7 @@ import 'package:com_a3_pace/utils/constants.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 import '../components/task_list_card.dart';
 import '../services/task_service.dart';
@@ -549,11 +550,68 @@ class _TaskListState extends State<TaskList> {
 /////////////////////////////////////////aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
               isLoading
-                  ? Column(
-                      children: [
-                        SizedBox(height: 100),
-                        Center(child: CircularProgressIndicator()),
-                      ],
+                  ? Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                        children: [
+                          //  SizedBox(height: 100),
+                          // Center(child: CircularProgressIndicator()),
+                          Shimmer(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(7),
+                                color: Colors.grey.withOpacity(0.5),
+                              ),
+                              width: MediaQuery.of(context).size.width,
+                              height: 100,
+                            ),
+                          ),
+                          SizedBox(height: 11),
+                          Shimmer(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(7),
+                                color: Colors.grey.withOpacity(0.5),
+                              ),
+                              width: MediaQuery.of(context).size.width,
+                              height: 100,
+                            ),
+                          ),
+                          SizedBox(height: 11),
+                          Shimmer(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(7),
+                                color: Colors.grey.withOpacity(0.5),
+                              ),
+                              width: MediaQuery.of(context).size.width,
+                              height: 100,
+                            ),
+                          ),
+                          SizedBox(height: 11),
+                          Shimmer(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(7),
+                                color: Colors.grey.withOpacity(0.5),
+                              ),
+                              width: MediaQuery.of(context).size.width,
+                              height: 100,
+                            ),
+                          ),
+                          SizedBox(height: 11),
+                          Shimmer(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(7),
+                                color: Colors.grey.withOpacity(0.5),
+                              ),
+                              width: MediaQuery.of(context).size.width,
+                              height: 100,
+                            ),
+                          ),
+                        ],
+                      ),
                     )
                   : !isLoading && _futureTask.isEmpty
                       ? Column(
@@ -610,8 +668,8 @@ class _TaskListState extends State<TaskList> {
                                     //  final list = await getIndependentTasks(
                                     //    jobID: widget.jobId.toString());
                                     // _futureTask = getFilteredTasks(list);
-                                    await callOtherApiMethod();
-                                    await callOtherApiMethod();
+                                    //   await callOtherApiMethod();
+                                    //   await callOtherApiMethod();
 
                                     //   setState(() {});
                                     // Navigator.pop(context);
@@ -626,8 +684,9 @@ class _TaskListState extends State<TaskList> {
                                     // );
 
                                     // await callApiMethods();
-
-                                    // setState(() {});
+                                    _futureTask.removeWhere((element) =>
+                                        element.id == _futureTask[i].id!);
+                                    //  setState(() {});
                                   },
                                 ),
                               }
