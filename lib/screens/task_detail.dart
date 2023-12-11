@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:com_a3_pace/screens/display_full_screen_image.dart';
 import 'package:com_a3_pace/screens/task_logs_screens.dart';
+import 'package:com_a3_pace/screens/view_contacts_screen.dart';
 import 'package:com_a3_pace/services/check_task_play_or_pause_status.dart';
 import 'package:com_a3_pace/services/play_pause_task.dart';
 import 'package:dio/dio.dart';
@@ -521,10 +524,14 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
 
         print('isoDate: $isoDate');
 
+        //  print(object)
+
         var response = await request.send();
         var responseString = await response.stream.bytesToString();
         // print(responseString);
         Map<String, dynamic> jsonMap = jsonDecode(responseString);
+
+        print('jsonMap: ' + jsonMap.toString());
 
         // print(response.body);
         // Map<String, dynamic> jsonMap = jsonDecode(response.body);
@@ -755,8 +762,13 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    downloadImage(widget.imageUrl!, "TaskDiagram.png");
-
+                    //   downloadImage(widget.imageUrl!, "TaskDiagram.png");
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DisplayFullScreenImage(
+                              imageUrl: widget.imageUrl!),
+                        ));
                     // _openExternalLink(
                     //     "https://play.google.com/store/apps/details?id=com.microsoft.whiteboard.publicpreview");
                   },
@@ -766,12 +778,42 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                   child: Image.network(
                     widget.imageUrl!,
                     width: 300.0,
-                    height: 300.0,
+                    height: 250.0,
                     fit: BoxFit.contain,
                   ),
                 ),
               ),
-            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ViewContactsScreen(),
+                          ));
+                    },
+                    child: Text('Call')),
+                ElevatedButton(
+                    onPressed: () async {
+                      await downloadImage(widget.imageUrl!, "TaskDiagram.png");
+                    },
+                    child: Text('Download')),
+                ElevatedButton(
+                    onPressed: () async {
+                      if (Platform.isAndroid) {
+                        _openExternalLink(
+                            "https://play.google.com/store/apps/details?id=com.microsoft.whiteboard.publicpreview");
+                      } else if (Platform.isIOS) {
+                        _openExternalLink(
+                            "https://apps.apple.com/us/app/microsoft-whiteboard/id1352499399");
+                      }
+                    },
+                    child: Text('Collaborate')),
+              ],
+            ),
+            const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               height: 50.0,
@@ -1047,10 +1089,10 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
               // debugPrint('File download complete');
               showToast('File download complete');
 
-              if (_blCollaborate) {
-                _openExternalLink(
-                    "https://play.google.com/store/apps/details?id=com.microsoft.whiteboard.publicpreview");
-              }
+              // if (_blCollaborate) {
+              //   _openExternalLink(
+              //       "https://play.google.com/store/apps/details?id=com.microsoft.whiteboard.publicpreview");
+              // }
             }
           }
         },
