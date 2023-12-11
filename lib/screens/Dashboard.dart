@@ -1,4 +1,5 @@
 import 'package:com_a3_pace/screens/purchase_order.dart';
+import 'package:com_a3_pace/screens/view_contacts_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../components/dashboard_card.dart';
@@ -431,6 +432,21 @@ Widget _buildSideDrawer(BuildContext context) {
                             context,
                             MaterialPageRoute(
                               builder: (context) => const PurchaseOrder(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    Visibility(
+                      visible: blShowSharedCAR,
+                      child: ListTile(
+                        title: const Text('View Contacts'),
+                        leading: const Icon(Icons.call),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ViewContactsScreen(),
                             ),
                           );
                         },

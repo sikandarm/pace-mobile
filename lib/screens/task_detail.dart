@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:com_a3_pace/screens/task_logs_screens.dart';
 import 'package:com_a3_pace/services/check_task_play_or_pause_status.dart';
 import 'package:com_a3_pace/services/play_pause_task.dart';
 import 'package:dio/dio.dart';
@@ -313,6 +314,20 @@ class _TaskDetailState extends State<TaskDetail> {
         actions: [
           Row(
             children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return TaskLogsScreen(
+                            taskId: widget.taskId,
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  icon: Icon(Icons.view_kanban_outlined)),
               Padding(
                 padding: const EdgeInsets.only(right: 10.0),
                 child: Stack(
