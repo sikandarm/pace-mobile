@@ -13,8 +13,10 @@ class TaskCard extends StatefulWidget {
   final String status;
   final Color statusColor;
   final ValueChanged<int> onSelected;
+  void Function()? onPressedDelete;
+  bool showDeleteIcon;
 
-  const TaskCard({
+  TaskCard({
     Key? key,
     required this.id,
     required this.taskName,
@@ -24,6 +26,8 @@ class TaskCard extends StatefulWidget {
     required this.status,
     required this.statusColor,
     required this.onSelected,
+    this.onPressedDelete,
+    this.showDeleteIcon = false,
   }) : super(key: key);
 
   @override
@@ -77,6 +81,8 @@ class _TaskCardState extends State<TaskCard> {
                     ),
                   ),
                   child: TaskWidget(
+                    showDeleteIcon2: widget.showDeleteIcon,
+                    onPressedDelete2: widget.onPressedDelete,
                     taskId: widget.id,
                     taskName: widget.taskName,
                     description: widget.description,
@@ -143,8 +149,10 @@ class TaskWidget extends StatelessWidget {
   final String status;
   final Color statusColor;
   final DateTime? startDate;
+  void Function()? onPressedDelete2;
+  bool? showDeleteIcon2;
 
-  const TaskWidget({
+  TaskWidget({
     Key? key,
     required this.taskId,
     required this.taskName,
@@ -152,6 +160,8 @@ class TaskWidget extends StatelessWidget {
     required this.status,
     required this.statusColor,
     required this.startDate,
+    this.onPressedDelete2,
+    this.showDeleteIcon2,
   }) : super(key: key);
 
   @override
@@ -212,12 +222,28 @@ class TaskWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    setStatusText(status),
-                    style: TextStyle(
-                      color: setCardBorderColor(status),
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    //  mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        setStatusText(status),
+                        style: TextStyle(
+                          color: setCardBorderColor(status),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      showDeleteIcon2 == false
+                          ? SizedBox()
+                          : IconButton(
+                              //  splashRadius: 2,
+                              iconSize: 21,
+                              padding: EdgeInsets.zero,
+                              visualDensity: VisualDensity.compact,
+                              onPressed: onPressedDelete2,
+                              icon: Icon(Icons.delete),
+                            ),
+                    ],
                   ),
                 ],
               ),
