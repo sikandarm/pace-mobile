@@ -757,7 +757,52 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
             const SizedBox(height: 10),
             buildRolesFields("Foreman", widget.foreman!),
             drawLine(),
-            const SizedBox(height: 10),
+ SizedBox(height: 21,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 17),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+
+                Card(
+                  shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(33)),
+                  child: InkWell(
+splashColor: Colors.transparent,
+                    onTap: (){ Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ViewContactsScreen(),
+                        ));},
+                    child: CircleAvatar(
+                      backgroundColor: Colors.transparent,
+                      radius: 26,
+                      child: Icon(Icons.phone),
+                    ),
+                  ),
+                ),
+                  Card(
+                    shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(33)),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.transparent,
+
+                      radius: 26,
+                      child: Icon(Icons.download),
+                    ),
+                  ),
+                  Card(
+                    shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(33)),
+                    child: CircleAvatar(
+
+                      backgroundColor: Colors.transparent,
+
+                      radius: 26,
+                      child: Icon(Icons.edit_note),
+                    ),
+                  ),
+              ],),
+            ),
+
+            const SizedBox(height: 11),
             if (widget.imageUrl != null && widget.imageUrl!.isNotEmpty)
               Center(
                 child: GestureDetector(
@@ -777,9 +822,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                   //     "https://play.google.com/store/apps/details?id=com.microsoft.whiteboard.publicpreview"),
                   child: Image.network(
                     widget.imageUrl!,
-                    width: 300.0,
-                    height: 250.0,
-                    fit: BoxFit.contain,
+                    width: 285.0,
+                    height: 145.0,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
