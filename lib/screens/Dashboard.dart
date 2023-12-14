@@ -373,14 +373,16 @@ Widget _buildSideDrawer(BuildContext context) {
     child: Column(
       children: [
         DrawerHeader(
-          decoration: const BoxDecoration(
-            color: Colors.blue,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.7),
           ),
           child: Center(
             child: Image.asset(
-              'assets/images/ic_logo.png',
-              width: 120,
-              height: 120,
+              'assets/images/SFM_Logo.png',
+              // width: 120,
+              // height: 120,
+              width: 150,
+              height: 150,
             ),
           ),
         ),
@@ -425,7 +427,7 @@ Widget _buildSideDrawer(BuildContext context) {
                     Visibility(
                       visible: blShowSharedCAR,
                       child: ListTile(
-                        title: const Text('Purchase Order'),
+                        title: const Text('Purchase Orders'),
                         leading: const Icon(Icons.inventory),
                         onTap: () {
                           Navigator.push(
@@ -508,7 +510,7 @@ Widget _buildSideDrawer(BuildContext context) {
               ),
               SizedBox(width: 4),
               Text(
-                '2023 Pace by A3 Assurance',
+                '2023 SFM by A3 Assurance',
                 style: TextStyle(
                   fontSize: 12,
                 ),

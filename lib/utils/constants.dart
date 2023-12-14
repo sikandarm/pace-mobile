@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: constant_identifier_names
 // const String BASE_URL = "http://206.81.5.26:3500/api";  live url
-const String BASE_URL = "http://192.168.1.5:3500/api";
+const String BASE_URL = "http://192.168.1.7:3500/api";
 // ignore: constant_identifier_names
 
 const String CANNOT_BE_EMPTY = "Field cannot be empty.";

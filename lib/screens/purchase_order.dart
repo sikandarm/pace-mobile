@@ -49,7 +49,7 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
           },
         ),
         title: const Text(
-          "Purchase Order",
+          "Purchase Orders",
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -205,6 +205,9 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
                                     purchaseOrder: purchaseOrdersList[index])));
                       },
                       child: purchaseOrderCard(
+                          color: index % 2 == 0
+                              ? Colors.redAccent
+                              : Colors.green.withOpacity(0.8),
                           companyName: item.company!.name.toString(),
                           address: item.address.toString(),
                           orderDate: item.orderDate.toString(),
@@ -225,8 +228,10 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
     required String poId,
     required String address,
     required String orderDate,
+    required Color color,
   }) {
     return Card(
+      color: color,
       child: Column(
         children: [
           SizedBox(height: 15),
@@ -239,7 +244,8 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
                 poId,
 
                 style: const TextStyle(
-                  color: Color(0xFF1E2022),
+                  // color: Color(0xFF1E2022),
+                  color: Colors.white,
                   fontWeight: FontWeight.w600,
                   fontSize: 13.0,
                 ),
@@ -250,7 +256,8 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
                 DateFormat(US_DATE_FORMAT).format(DateTime.parse(orderDate)),
                 style: const TextStyle(
                   fontSize: 11.0,
-                  color: Color(0xFF77838F),
+                  //  color: Color(0xFF77838F),
+                  color: Colors.white,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -268,6 +275,7 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
                 address,
                 style: const TextStyle(
                   // color: getProgressColor(status),
+                  color: Colors.white,
                   fontSize: 12.0,
                   fontWeight: FontWeight.w500,
                 ),
@@ -278,6 +286,7 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
                 companyName,
                 style: const TextStyle(
                   fontSize: 12.0,
+                  color: Colors.white,
                   fontWeight: FontWeight.w500,
                 ),
               ),

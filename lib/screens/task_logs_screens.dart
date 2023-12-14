@@ -186,8 +186,10 @@ class _TaskLogsScreenState extends State<TaskLogsScreen> {
                                       ),
                                     ),
                                     DataCell(Text(
-                                      formatDateTime(DateTime.parse(
-                                          taskLogsList[i].breakEnd!)),
+                                      taskLogsList[i].breakEnd == null
+                                          ? 'waiting for task end!'
+                                          : formatDateTime(DateTime.parse(
+                                              taskLogsList[i].breakEnd!)),
                                       style: TextStyle(
                                         fontSize: 12,
                                       ),

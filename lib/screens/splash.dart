@@ -47,19 +47,28 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Center(
               child: Image.asset(
-                'assets/images/app-new-logo.jpg',
+                'assets/images/SFM_Logo.png',
                 width: 280,
                 height: 165,
               ),
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 15),
+            // Text(
+            //   '(SFM)',
+            //   style: TextStyle(
+            //     fontWeight: FontWeight.bold,
+            //     fontSize: 18,
+            //   ),
+            // ),
+            // SizedBox(height: 11),
+
             Text(
               'Shop Floor Management',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
-            )
+            ),
           ],
         ),
       ),

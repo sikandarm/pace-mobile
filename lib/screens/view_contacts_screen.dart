@@ -178,7 +178,7 @@ class _ViewContactsScreenState extends State<ViewContactsScreen> {
                               ElevatedButton.icon(
                                   style: ButtonStyle(
                                     backgroundColor:
-                                        MaterialStatePropertyAll(Colors.green),
+                                        MaterialStatePropertyAll(Colors.blue),
                                     foregroundColor:
                                         MaterialStatePropertyAll(Colors.white),
                                   ),

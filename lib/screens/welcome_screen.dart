@@ -32,11 +32,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
             ),
           ),
-           Center(
+          Center(
             child: Column(
               children: [
                 Center(
-                  child: Text("Welcome to Pace",
+                  child: Text("Welcome to SFM",
                       style: TextStyle(
                         color: Color(0xff2E2E2E),
                         fontSize: 30,
@@ -90,7 +90,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                   ),
                 ),
-                child:  Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
