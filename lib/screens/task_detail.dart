@@ -822,6 +822,11 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                         await downloadImage(
                             widget.imageUrl!, "TaskDiagram.png");
                       },
+
+
+
+
+                      
                       child: CircleAvatar(
                         backgroundColor: Colors.transparent,
                         radius: 26,

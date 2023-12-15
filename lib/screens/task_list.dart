@@ -518,10 +518,11 @@ class _TaskListState extends State<TaskList> {
                                 child: ListTile(
                               contentPadding: sequencesList[i].tasks.isNotEmpty
                                   ? EdgeInsets.all(-21)
-                                  : EdgeInsets.only(left: 21),
+                                  : EdgeInsets.only(left: 41),
                               title: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
+                                  //  SizedBox(width: 33),
                                   Text(
                                     sequencesList[i].sequenceName.toString(),
                                     style: const TextStyle(

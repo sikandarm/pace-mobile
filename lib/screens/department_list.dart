@@ -283,8 +283,10 @@ class _DeptListState extends State<DeptList> {
                                   id: tasks.id,
                                   taskName: tasks.pmkNumber,
                                   description: tasks.description!,
-                                  startDate: tasks.taskDate!,
-                                  endDate: tasks.taskDate!,
+                                  // startDate: tasks.taskDate!,
+                                  // endDate: tasks.taskDate!,
+                                  startDate: DateTime.now(),
+                                  endDate: DateTime.now(),
                                   status: tasks.status,
                                   statusColor: statusColor,
                                   onSelected: (index) {
