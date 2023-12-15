@@ -218,21 +218,22 @@ class _TaskListState extends State<TaskList> {
                               title: Form(
                                 key: formkeySequence,
                                 child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text(
                                       'Create a new sequence',
                                       style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.deepPurple,
+                                        fontSize: 15.5,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     TextFormField(
                                       controller: sequenceNameController,
                                       decoration: const InputDecoration(
-                                        hintStyle: TextStyle(fontSize: 13),
-                                        labelText: 'Sequence title',
+                                        hintStyle: TextStyle(fontSize: 13.5),
                                         hintText: 'Enter a sequence title',
+                                        labelText: 'Sequence title',
+                                        labelStyle: TextStyle(fontSize: 13.5),
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
