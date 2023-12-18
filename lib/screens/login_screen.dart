@@ -56,6 +56,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   callLoginApi(String uEmail, String uPass) async {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    String errorMsg = '';
     try {
       _fcmToken = await getStringFromSF(BL_FCM_TOKEN);
 
@@ -68,8 +70,23 @@ class _LoginScreenState extends State<LoginScreen> {
       // print('LOGIN RESPONSE=========================================');
       // print(loginRes.body);
 
+      // print('JSON MAP LOGIN API:' + loginRes.body);
+
       Map<String, dynamic> jsonMap = jsonDecode(loginRes.body);
+
+      // print('JSON MAP LOGIN API:' + jsonMap['message'].toString());
       // print('login token:' + jsonMap['data']['token']);
+
+      print(loginRes.statusCode);
+      print(loginRes.body);
+
+      if (loginRes.statusCode != 200) {
+        errorMsg = jsonDecode(loginRes.body)['message'];
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(errorMsg)));
+        return;
+      }
 
       final tokenBox = await Hive.openBox('tokenBox');
       await tokenBox.put('token', jsonMap['data']['token']);
@@ -103,13 +120,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
         // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, '/welcomeScreen');
-      } else {
+      } else if (loginRes.statusCode != 200) {
+        errorMsg = jsonDecode(loginRes.body)['message'];
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+            .showSnackBar(SnackBar(content: Text(errorMsg)));
       }
     } catch (e) {
-      print(e);
+      //  ScaffoldMessenger.of(context)
+      //    .showSnackBar(SnackBar(content: Text(errorMsg.toString())));
+      print('login api:' + e.toString());
     }
   }
 
