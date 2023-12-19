@@ -42,7 +42,10 @@ const List<String> LS_PERMISSIONS = [
   'edit_profile',
   'view_inventory_list',
   'view_inventory_detail',
-  'collaborate_on_microsoft_whiteboard'
+  'collaborate_on_microsoft_whiteboard',
+  /////////////////  new permissions added
+  'view_task_detail',
+  'create_sequence'
 ];
 
 InputDecoration textFieldDecoration(String title, bool ifPassword) {

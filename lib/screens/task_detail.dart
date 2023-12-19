@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:com_a3_pace/screens/display_full_screen_image.dart';
 import 'package:com_a3_pace/screens/task_logs_screens.dart';
 import 'package:com_a3_pace/screens/view_contacts_screen.dart';
@@ -9,9 +10,12 @@ import 'package:com_a3_pace/services/check_task_play_or_pause_status.dart';
 import 'package:com_a3_pace/services/play_pause_task.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -116,331 +120,334 @@ class _TaskDetailState extends State<TaskDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // floatingActionButton: taskDetailObj[0].status != 'in_process'
-      //     ? null
-      //     : FloatingActionButton.extended(
-      //         onPressed: () async {
-      //           commentController.clear();
+    return LoaderOverlay(
+      child: Scaffold(
+        // floatingActionButton: taskDetailObj[0].status != 'in_process'
+        //     ? null
+        //     : FloatingActionButton.extended(
+        //         onPressed: () async {
+        //           commentController.clear();
 
-      //           print('Status: ' + taskPayOrPauseStatus.toString());
+        //           print('Status: ' + taskPayOrPauseStatus.toString());
 
-      //           if (taskPayOrPauseStatus != null &&
-      //               taskPayOrPauseStatus == false) {
-      //             final dialogResult = await showDialog<bool?>(
-      //               context: context,
-      //               builder: (BuildContext context) {
-      //                 return AlertDialog(
-      //                   title: Form(
-      //                     //   key: formkeySequence,
-      //                     key: formKey,
-      //                     child: Column(
-      //                       children: [
-      //                         const Text(
-      //                           'Add a comment',
-      //                           style: TextStyle(
-      //                             fontSize: 15,
-      //                             color: Colors.deepPurple,
-      //                             fontWeight: FontWeight.bold,
-      //                           ),
-      //                         ),
-      //                         TextFormField(
-      //                           controller: commentController,
-      //                           decoration: const InputDecoration(
-      //                             hintStyle: TextStyle(fontSize: 13),
-      //                             labelText: 'Comment',
-      //                             hintText: 'Enter a comment',
-      //                           ),
-      //                           validator: (value) {
-      //                             if (value == null || value.isEmpty) {
-      //                               return 'Please enter a comment';
-      //                             }
+        //           if (taskPayOrPauseStatus != null &&
+        //               taskPayOrPauseStatus == false) {
+        //             final dialogResult = await showDialog<bool?>(
+        //               context: context,
+        //               builder: (BuildContext context) {
+        //                 return AlertDialog(
+        //                   title: Form(
+        //                     //   key: formkeySequence,
+        //                     key: formKey,
+        //                     child: Column(
+        //                       children: [
+        //                         const Text(
+        //                           'Add a comment',
+        //                           style: TextStyle(
+        //                             fontSize: 15,
+        //                             color: Colors.deepPurple,
+        //                             fontWeight: FontWeight.bold,
+        //                           ),
+        //                         ),
+        //                         TextFormField(
+        //                           controller: commentController,
+        //                           decoration: const InputDecoration(
+        //                             hintStyle: TextStyle(fontSize: 13),
+        //                             labelText: 'Comment',
+        //                             hintText: 'Enter a comment',
+        //                           ),
+        //                           validator: (value) {
+        //                             if (value == null || value.isEmpty) {
+        //                               return 'Please enter a comment';
+        //                             }
 
-      //                             return null;
-      //                           },
-      //                         ),
-      //                       ],
-      //                     ),
-      //                   ),
-      //                   actions: [
-      //                     TextButton(
-      //                       onPressed: () async {
-      //                         //  sequenceNameController.clear();
-      //                         ScaffoldMessenger.of(context).clearSnackBars();
+        //                             return null;
+        //                           },
+        //                         ),
+        //                       ],
+        //                     ),
+        //                   ),
+        //                   actions: [
+        //                     TextButton(
+        //                       onPressed: () async {
+        //                         //  sequenceNameController.clear();
+        //                         ScaffoldMessenger.of(context).clearSnackBars();
 
-      //                         final validationResult =
-      //                             formKey.currentState!.validate();
-      //                         if (!validationResult) {
-      //                           return;
-      //                         }
+        //                         final validationResult =
+        //                             formKey.currentState!.validate();
+        //                         if (!validationResult) {
+        //                           return;
+        //                         }
 
-      //                         //  Map<String, dynamic> decodedResponse =
-      //                         //      jsonDecode(response.body);
+        //                         //  Map<String, dynamic> decodedResponse =
+        //                         //      jsonDecode(response.body);
 
-      //                         //   sequenceNameController.clear();
-      //                         Navigator.of(context).pop(true);
-      //                         //        await callApiMethods();
-      //                       },
-      //                       child: const Text('Add Comment'),
-      //                     ),
-      //                   ],
-      //                 );
-      //               },
-      //             );
+        //                         //   sequenceNameController.clear();
+        //                         Navigator.of(context).pop(true);
+        //                         //        await callApiMethods();
+        //                       },
+        //                       child: const Text('Add Comment'),
+        //                     ),
+        //                   ],
+        //                 );
+        //               },
+        //             );
 
-      //             if (dialogResult == true) {
-      //               if (!taskPayOrPauseStatus!) {
-      //                 final response1 = await playAndPauseTaskApi(
-      //                   taskId: widget.taskId.toString(),
-      //                   break_start_as_DateTime: DateTime.now().toString(),
-      //                   break_end_as_DateTime: null,
-      //                   comment: commentController.text.trim(),
-      //                 );
-      //               } else {
-      //                 final response1 = await playAndPauseTaskApi(
-      //                   taskId: widget.taskId.toString(),
-      //                   break_start_as_DateTime: null,
-      //                   break_end_as_DateTime: DateTime.now().toString(),
-      //                   comment: commentController.text.trim(),
-      //                 );
-      //               }
-      //               taskPayOrPauseStatus = await getTaskPlayOrPauseStatus(
-      //                   taskId: widget.taskId.toString());
-      //               setState(() {});
-      //               return;
-      //               return;
-      //             }
-      //           } else {
-      //             if (!taskPayOrPauseStatus!) {
-      //               final response1 = await playAndPauseTaskApi(
-      //                 taskId: widget.taskId.toString(),
-      //                 break_start_as_DateTime: DateTime.now().toString(),
-      //                 break_end_as_DateTime: null,
-      //                 comment: commentController.text.trim(),
-      //               );
-      //             } else {
-      //               final response1 = await playAndPauseTaskApi(
-      //                 taskId: widget.taskId.toString(),
-      //                 break_start_as_DateTime: null,
-      //                 break_end_as_DateTime: DateTime.now().toString(),
-      //                 comment: commentController.text.trim(),
-      //               );
-      //             }
-      //             taskPayOrPauseStatus = await getTaskPlayOrPauseStatus(
-      //                 taskId: widget.taskId.toString());
-      //           }
+        //             if (dialogResult == true) {
+        //               if (!taskPayOrPauseStatus!) {
+        //                 final response1 = await playAndPauseTaskApi(
+        //                   taskId: widget.taskId.toString(),
+        //                   break_start_as_DateTime: DateTime.now().toString(),
+        //                   break_end_as_DateTime: null,
+        //                   comment: commentController.text.trim(),
+        //                 );
+        //               } else {
+        //                 final response1 = await playAndPauseTaskApi(
+        //                   taskId: widget.taskId.toString(),
+        //                   break_start_as_DateTime: null,
+        //                   break_end_as_DateTime: DateTime.now().toString(),
+        //                   comment: commentController.text.trim(),
+        //                 );
+        //               }
+        //               taskPayOrPauseStatus = await getTaskPlayOrPauseStatus(
+        //                   taskId: widget.taskId.toString());
+        //               setState(() {});
+        //               return;
+        //               return;
+        //             }
+        //           } else {
+        //             if (!taskPayOrPauseStatus!) {
+        //               final response1 = await playAndPauseTaskApi(
+        //                 taskId: widget.taskId.toString(),
+        //                 break_start_as_DateTime: DateTime.now().toString(),
+        //                 break_end_as_DateTime: null,
+        //                 comment: commentController.text.trim(),
+        //               );
+        //             } else {
+        //               final response1 = await playAndPauseTaskApi(
+        //                 taskId: widget.taskId.toString(),
+        //                 break_start_as_DateTime: null,
+        //                 break_end_as_DateTime: DateTime.now().toString(),
+        //                 comment: commentController.text.trim(),
+        //               );
+        //             }
+        //             taskPayOrPauseStatus = await getTaskPlayOrPauseStatus(
+        //                 taskId: widget.taskId.toString());
+        //           }
 
-      //           setState(() {});
-      //           return;
-      //           // PlayAndPauseTask(
-      //           //     id: null,
-      //           //     taskId: taskId,
-      //           //     breakStart: null,
-      //           //     comment: 'comment',
-      //           //     createdBy: null,
-      //           //     updatedAt: null,
-      //           //     createdAt: null);
+        //           setState(() {});
+        //           return;
+        //           // PlayAndPauseTask(
+        //           //     id: null,
+        //           //     taskId: taskId,
+        //           //     breakStart: null,
+        //           //     comment: 'comment',
+        //           //     createdBy: null,
+        //           //     updatedAt: null,
+        //           //     createdAt: null);
 
-      //           final response1 = await playAndPauseTaskApi(
-      //             taskId: widget.taskId.toString(),
-      //             break_start_as_DateTime: DateTime.now().toString(),
-      //             break_end_as_DateTime: null,
-      //             comment: 'a test comment',
-      //           );
-      //           playAndPausetask = response1;
-      //           print('1st Response:' + response1.toJson().toString());
+        //           final response1 = await playAndPauseTaskApi(
+        //             taskId: widget.taskId.toString(),
+        //             break_start_as_DateTime: DateTime.now().toString(),
+        //             break_end_as_DateTime: null,
+        //             comment: 'a test comment',
+        //           );
+        //           playAndPausetask = response1;
+        //           print('1st Response:' + response1.toJson().toString());
 
-      //           if (response1.id == null &&
-      //                   response1.breakStart == null &&
-      //                   response1.breakEnd == null &&
-      //                   //   response.createdAt == null &&
-      //                   response1.comment == null &&
-      //                   //  response.createdAt == null &&
-      //                   //   response.createdBy == null &&
-      //                   response1.taskId == null
-      //               // &&
-      //               //   response.updatedAt == null &&
-      //               //   response.de == null &&
-      //               //   response.id == null
-      //               ) {
-      //             print('here');
-      //             final response2 = await playAndPauseTaskApi(
-      //               taskId: widget.taskId.toString(),
-      //               break_start_as_DateTime: null,
-      //               break_end_as_DateTime: DateTime.now().toString(),
-      //               comment: 'a test new one comment',
-      //             );
+        //           if (response1.id == null &&
+        //                   response1.breakStart == null &&
+        //                   response1.breakEnd == null &&
+        //                   //   response.createdAt == null &&
+        //                   response1.comment == null &&
+        //                   //  response.createdAt == null &&
+        //                   //   response.createdBy == null &&
+        //                   response1.taskId == null
+        //               // &&
+        //               //   response.updatedAt == null &&
+        //               //   response.de == null &&
+        //               //   response.id == null
+        //               ) {
+        //             print('here');
+        //             final response2 = await playAndPauseTaskApi(
+        //               taskId: widget.taskId.toString(),
+        //               break_start_as_DateTime: null,
+        //               break_end_as_DateTime: DateTime.now().toString(),
+        //               comment: 'a test new one comment',
+        //             );
 
-      //             playAndPausetask = response2;
-      //             print('2nd Response:' + response2.toJson().toString());
-      //             //   print('oopos');
-      //             //   setState(() {});
-      //           }
+        //             playAndPausetask = response2;
+        //             print('2nd Response:' + response2.toJson().toString());
+        //             //   print('oopos');
+        //             //   setState(() {});
+        //           }
 
-      //           // final playAndPauseTaskBox = await Hive.openBox('playAndPauseTaskBox');
-      //           // await playAndPauseTaskBox.putAll({
-      //           //   'break_start': '',
-      //           //   'break_end': '',
-      //           // });
-      //           setState(() {});
-      //           print('==================================');
-      //           print('======================================');
-      //           print('============================================');
-      //           setState(() {});
-      //         },
-      //         label: Text(taskPayOrPauseStatus == false ? 'RESUME' : 'PAUSE'),
-      //         icon: Icon(taskPayOrPauseStatus == false
-      //             ? Icons.play_arrow
-      //             : Icons.pause),
-      //         backgroundColor:
-      //             taskPayOrPauseStatus == false ? Colors.green : Colors.red,
-      //         foregroundColor: Colors.white,
-      //       ),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Navigate to the last screen in the stack
-            Navigator.popUntil(context, (route) => route.isFirst);
-          },
-        ),
-        title: const Text(
-          "Task Detail",
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
+        //           // final playAndPauseTaskBox = await Hive.openBox('playAndPauseTaskBox');
+        //           // await playAndPauseTaskBox.putAll({
+        //           //   'break_start': '',
+        //           //   'break_end': '',
+        //           // });
+        //           setState(() {});
+        //           print('==================================');
+        //           print('======================================');
+        //           print('============================================');
+        //           setState(() {});
+        //         },
+        //         label: Text(taskPayOrPauseStatus == false ? 'RESUME' : 'PAUSE'),
+        //         icon: Icon(taskPayOrPauseStatus == false
+        //             ? Icons.play_arrow
+        //             : Icons.pause),
+        //         backgroundColor:
+        //             taskPayOrPauseStatus == false ? Colors.green : Colors.red,
+        //         foregroundColor: Colors.white,
+        //       ),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          iconTheme: const IconThemeData(color: Colors.black),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              // Navigate to the last screen in the stack
+              Navigator.popUntil(context, (route) => route.isFirst);
+            },
           ),
-        ),
-        actions: [
-          Row(
-            children: [
-              IconButton(
-                  onPressed: () {
+          title: const Text(
+            "Task Detail",
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          actions: [
+            Row(
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return TaskLogsScreen(
+                              taskId: widget.taskId,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    icon: Icon(Icons.view_kanban_outlined)),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: Stack(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          if (_blShowNotificationsList) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const NotificationsScreen()),
+                            );
+                          } else {
+                            showToast(
+                                "You do not have permission to see notifications.");
+                          }
+                        },
+                        child: Image.asset(
+                          "assets/images/ic_bell.png",
+                          width: 32,
+                          height: 32,
+                        ),
+                      ),
+                      Positioned(
+                        top: 5,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) {
-                          return TaskLogsScreen(
-                            taskId: widget.taskId,
-                          );
-                        },
-                      ),
+                          builder: (context) => const ProfileScreen()),
                     );
                   },
-                  icon: Icon(Icons.view_kanban_outlined)),
-              Padding(
-                padding: const EdgeInsets.only(right: 10.0),
-                child: Stack(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        if (_blShowNotificationsList) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const NotificationsScreen()),
-                          );
-                        } else {
-                          showToast(
-                              "You do not have permission to see notifications.");
-                        }
-                      },
-                      child: Image.asset(
-                        "assets/images/ic_bell.png",
-                        width: 32,
-                        height: 32,
-                      ),
+                  child: const Padding(
+                    padding: EdgeInsets.only(right: 10.0, left: 5.0),
+                    child: CircleAvatar(
+                      backgroundImage:
+                          AssetImage('assets/images/ic_profile.png'),
+                      radius: 15,
                     ),
-                    Positioned(
-                      top: 5,
-                      right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ProfileScreen()),
-                  );
-                },
-                child: const Padding(
-                  padding: EdgeInsets.only(right: 10.0, left: 5.0),
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/ic_profile.png'),
-                    radius: 15,
                   ),
                 ),
-              ),
-            ],
-          )
-        ],
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: FutureBuilder<List<TaskDetailObj>>(
-              future: _futureTask,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  print(snapshot.error);
-                  return Center(
-                    child: Text("Error : ${snapshot.error}"),
-                  );
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(
-                    child: Text("No tasks found"),
-                  );
-                } else {
-                  return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      final tasks = snapshot.data![index];
+              ],
+            )
+          ],
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: FutureBuilder<List<TaskDetailObj>>(
+                future: _futureTask,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    print(snapshot.error);
+                    return Center(
+                      child: Text("Error : ${snapshot.error}"),
+                    );
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(
+                      child: Text("No tasks found"),
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        final tasks = snapshot.data![index];
 
-                      return TaskDetailWidget(
-                        id: tasks.id,
-                        pmkNumber: tasks.pmkNumber,
-                        heatNo: tasks.heatNo,
-                        jobId: tasks.jobId,
-                        userId: tasks.userId,
-                        description: tasks.description,
-                        startedAt: tasks.startedAt,
-                        completedAt: tasks.completedAt,
-                        approvedAt: tasks.approvedAt,
-                        approvedBy: tasks.approvedBy,
-                        status: tasks.status,
-                        comments: tasks.comments,
-                        imageUrl: tasks.image,
-                        projectManager: tasks.projectManager,
-                        QCI: tasks.QCI,
-                        fitter: tasks.fitter,
-                        welder: tasks.welder,
-                        painter: tasks.painter,
-                        foreman: tasks.foreman,
-                      );
-                    },
-                  );
-                }
-              },
-            ),
-          )
-        ],
+                        return TaskDetailWidget(
+                          id: tasks.id,
+                          pmkNumber: tasks.pmkNumber,
+                          heatNo: tasks.heatNo,
+                          jobId: tasks.jobId,
+                          userId: tasks.userId,
+                          description: tasks.description,
+                          startedAt: tasks.startedAt,
+                          completedAt: tasks.completedAt,
+                          approvedAt: tasks.approvedAt,
+                          approvedBy: tasks.approvedBy,
+                          status: tasks.status,
+                          comments: tasks.comments,
+                          imageUrl: tasks.image,
+                          projectManager: tasks.projectManager,
+                          QCI: tasks.QCI,
+                          fitter: tasks.fitter,
+                          welder: tasks.welder,
+                          painter: tasks.painter,
+                          foreman: tasks.foreman,
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -798,8 +805,8 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                   Card(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(33)),
-                    child: InkWell(
-                      splashColor: Colors.transparent,
+                    child: GestureDetector(
+                      //  splashColor: Colors.transparent,
                       onTap: () {
                         Navigator.push(
                             context,
@@ -817,16 +824,11 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                   Card(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(33)),
-                    child: InkWell(
+                    child: GestureDetector(
                       onTap: () async {
                         await downloadImage(
                             widget.imageUrl!, "TaskDiagram.png");
                       },
-
-
-
-
-                      
                       child: CircleAvatar(
                         backgroundColor: Colors.transparent,
                         radius: 26,
@@ -837,7 +839,7 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                   Card(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(33)),
-                    child: InkWell(
+                    child: GestureDetector(
                       onTap: () async {
                         if (Platform.isAndroid) {
                           _openExternalLink(
@@ -875,11 +877,31 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
 
                   // onTap: () => _openExternalLink(
                   //     "https://play.google.com/store/apps/details?id=com.microsoft.whiteboard.publicpreview"),
-                  child: Image.network(
-                    widget.imageUrl!,
+                  // child: Image.network(
+                  //   widget.imageUrl!,
+                  //   width: 285.0,
+                  //   height: 145.0,
+                  //   fit: BoxFit.cover,
+                  // ),
+                  child: Container(
                     width: 285.0,
                     height: 145.0,
-                    fit: BoxFit.cover,
+                    child: CachedNetworkImage(
+                      width: 285.0,
+                      height: 145.0,
+                      imageUrl: widget.imageUrl!,
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) => Center(
+                        child: CircularProgressIndicator(
+                            value: downloadProgress.progress),
+                      ),
+                      // placeholder: (context, url) =>
+                      //     Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) => Icon(
+                        Icons.error,
+                        color: Colors.red,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -1415,100 +1437,170 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                               width: MediaQuery.of(context).size.width * 0.8,
                               height: 50.0,
                               child: Container(
-                                decoration: BoxDecoration(boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 2,
-                                    blurRadius: 5,
-                                    offset: const Offset(
-                                        0, 3), // changes position of shadow
-                                  )
-                                ]),
-                                child: _blApprovedTask && _blSelfAssignATask
-                                    ? ElevatedButton(
-                                        onPressed: () =>
-                                            buttonAction(context, widget.id),
-                                        style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all<Color>(
-                                                  Colors.blue),
-                                          shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
+                                  decoration: BoxDecoration(boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 2,
+                                      blurRadius: 5,
+                                      offset: const Offset(
+                                          0, 3), // changes position of shadow
+                                    )
+                                  ]),
+                                  child: _blApprovedTask && _blSelfAssignATask
+                                      ? ElevatedButton(
+                                          onPressed: () =>
+                                              buttonAction(context, widget.id),
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                    Color>(Colors.blue),
+                                            shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        child: Text(
-                                          setButtonText(
-                                              widget.status!, widget.userId!),
-                                          style: const TextStyle(
-                                            color: Colors.white,
+                                          child: Text(
+                                            setButtonText(
+                                                widget.status!, widget.userId!),
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                            ),
                                           ),
-                                        ),
-                                      )
-                                    : (_blSelfAssignATask &&
-                                            (widget.status == "in_process" ||
-                                                widget.status == "pending"))
-                                        ? ElevatedButton(
-                                            onPressed: () => buttonAction(
-                                                context, widget.id),
-                                            style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all<
-                                                      Color>(Colors.blue),
-                                              shape: MaterialStateProperty.all<
-                                                  RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0),
+                                        )
+                                      : (_blSelfAssignATask &&
+                                              (widget.status == "in_process" ||
+                                                  widget.status == "pending"))
+                                          ? ElevatedButton(
+                                              onPressed: () => buttonAction(
+                                                  context, widget.id),
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all<
+                                                        Color>(Colors.blue),
+                                                shape:
+                                                    MaterialStateProperty.all<
+                                                        RoundedRectangleBorder>(
+                                                  RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            child: Text(
-                                              setSelfApprovedText(
-                                                  widget.status!,
-                                                  widget.userId!),
-                                              style: const TextStyle(
-                                                color: Colors.white,
+                                              child: Text(
+                                                setSelfApprovedText(
+                                                    widget.status!,
+                                                    widget.userId!),
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                ),
                                               ),
-                                            ),
-                                          )
-                                        : _blApprovedTask &&
-                                                widget.status == "to_inspect"
-                                            ? ElevatedButton(
-                                                onPressed: () => buttonAction(
-                                                    context, widget.id),
-                                                style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all<
-                                                          Color>(Colors.blue),
-                                                  shape:
-                                                      MaterialStateProperty.all<
-                                                          RoundedRectangleBorder>(
-                                                    RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
+                                            )
+                                          : _blApprovedTask &&
+                                                  widget.status == "to_inspect"
+                                              ? ElevatedButton(
+                                                  onPressed: () => buttonAction(
+                                                      context, widget.id),
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all<Color>(
+                                                                Colors.blue),
+                                                    shape: MaterialStateProperty
+                                                        .all<
+                                                            RoundedRectangleBorder>(
+                                                      RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                child: Text(
-                                                  setInspectionText(
-                                                      widget.status!,
-                                                      widget.userId!),
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
+                                                  child: Text(
+                                                    setInspectionText(
+                                                        widget.status!,
+                                                        widget.userId!),
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                    ),
                                                   ),
-                                                ),
-                                              )
-                                            : SizedBox.shrink(),
-                              ),
+                                                )
+                                              : _blApprovedTask &&
+                                                      widget.status ==
+                                                          "rejected"
+                                                  ? ElevatedButton(
+                                                      onPressed: () =>
+                                                          buttonAction(context,
+                                                              widget.id),
+                                                      style: ButtonStyle(
+                                                        backgroundColor:
+                                                            MaterialStateProperty
+                                                                .all<Color>(
+                                                                    Colors.red),
+                                                        shape: MaterialStateProperty
+                                                            .all<
+                                                                RoundedRectangleBorder>(
+                                                          RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.0),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      child: Text(
+                                                        setInspectionText(
+                                                            widget.status!,
+                                                            widget.userId!),
+                                                        style: const TextStyle(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    )
+
+                                                  /// this button is now diaplay all the time if not complete button
+                                                  : ElevatedButton(
+                                                      onPressed: () =>
+                                                          buttonAction(context,
+                                                              widget.id),
+                                                      style: ButtonStyle(
+                                                        backgroundColor:
+                                                            MaterialStateProperty
+                                                                .all<Color>(
+                                                          widget.status ==
+                                                                  'rejected'
+                                                              ? Colors.blue
+                                                              : Colors.red,
+                                                        ),
+                                                        shape: MaterialStateProperty
+                                                            .all<
+                                                                RoundedRectangleBorder>(
+                                                          RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.0),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      child: Text(
+                                                        setButtonText(
+                                                            widget.status!,
+                                                            widget.userId!),
+                                                        style: const TextStyle(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    )
+                                  //  SizedBox.shrink(
+                                  //     child: Text('111')),
+                                  ),
                             ),
                           )
-                        : SizedBox()
+                        : SizedBox(child: Text('222'))
           ],
         ),
       ),
@@ -1681,12 +1773,11 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
 
   // bool showHideButton(String? value, int? userIdValue) {
   Future<void> downloadImage(String imageUrl, String fileName) async {
-    debugPrint(imageUrl.replaceAll(' ', '%20'));
-    debugPrint(fileName);
-
     var dio = Dio();
 
-    Directory? externalDir = await getExternalStorageDirectory();
+    // Directory? externalDir = await getExternalStorageDirectory();
+
+    Directory? externalDir = await getApplicationDocumentsDirectory();
 
     if (externalDir != null) {
       // Ensure the file name has a valid image file extension, like .jpg or .png
@@ -1696,8 +1787,8 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
         return;
       }
 
-      // String filePath = '${externalDir.path}/$fileName';
-      String filePath = '/storage/emulated/0/DCIM/$fileName';
+      String filePath = '${externalDir.path}/$fileName';
+      //  String filePath = '/storage/emulated/0/DCIM/$fileName';
 
       await dio.download(
         imageUrl,
@@ -1708,7 +1799,26 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
             double percentage = (received / total) * 100;
             debugPrint('Downloaded: ${percentage.toStringAsFixed(2)}%');
 
+            Fluttertoast.cancel();
+            showOverlayFileDownload(percentage.toString());
+
+            //     showToast(percentage.toString());
+
+            // showSimpleNotification(
+            //     Column(
+            //       children: [
+            //         CircularProgressIndicator(),
+            //         Text(percentage.toString())
+            //       ],
+            //     ),
+            //     background: Colors.green,
+            //     position: NotificationPosition.bottom);
+            debugPrint(
+                'imageUrl.replaceAll: ' + imageUrl.replaceAll(' ', '%20'));
+            debugPrint('fileName: ' + fileName);
+
             if (percentage == 100) {
+              context.loaderOverlay.hide();
               // debugPrint('File download complete');
               showToast('File download complete');
 
@@ -1723,5 +1833,37 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
     } else {
       debugPrint('External storage directory not available.');
     }
+  }
+
+  void showOverlayFileDownload(String percentage) {
+    context.loaderOverlay.show(
+        widgetBuilder: (progress) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(
+                color: Colors.blue,
+              ),
+              //     SizedBox(height: 0),
+
+              Container(
+                width: 100,
+                height: 100,
+                child: Center(
+                  child: Text(
+                    double.parse(progress.toString()).toInt().toString() + '%',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+        progress: percentage);
   }
 }

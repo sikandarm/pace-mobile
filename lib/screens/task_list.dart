@@ -34,6 +34,10 @@ class TaskList extends StatefulWidget {
 
 bool _blShowNotificationsList = false;
 
+bool _bShowTaskDetailScreen = false;
+
+bool _bShowCreateSequenceIcon = false;
+
 class _TaskListState extends State<TaskList> {
   Timer _timer = Timer(Duration.zero, () {});
 
@@ -128,6 +132,16 @@ class _TaskListState extends State<TaskList> {
     checkPermissionAndUpdateBool("view_notifications", (localBool) {
       _blShowNotificationsList = localBool;
     });
+
+    checkPermissionAndUpdateBool("view_task_detail", (localBool) {
+      _bShowTaskDetailScreen = localBool;
+    });
+
+    checkPermissionAndUpdateBool("create_sequence", (localBool) {
+      _bShowCreateSequenceIcon = localBool;
+    });
+    print('create seq permission:' + _bShowCreateSequenceIcon.toString());
+    print('go to task detail permission:' + _bShowTaskDetailScreen.toString());
   }
 
   bool isLoading = false;
@@ -209,91 +223,95 @@ class _TaskListState extends State<TaskList> {
                 padding: const EdgeInsets.only(right: 1.0),
                 child: Stack(
                   children: [
-                    IconButton(
-                      onPressed: () async {
-                        final dialogResult = await showDialog<bool?>(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Form(
-                                key: formkeySequence,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Create a new sequence',
-                                      style: TextStyle(
-                                        fontSize: 15.5,
-                                        fontWeight: FontWeight.bold,
+                    Visibility(
+                      visible: _bShowCreateSequenceIcon,
+                      child: IconButton(
+                        onPressed: () async {
+                          final dialogResult = await showDialog<bool?>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Form(
+                                  key: formkeySequence,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Create a new sequence',
+                                        style: TextStyle(
+                                          fontSize: 15.5,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    TextFormField(
-                                      controller: sequenceNameController,
-                                      decoration: const InputDecoration(
-                                        hintStyle: TextStyle(fontSize: 13.5),
-                                        hintText: 'Enter a sequence title',
-                                        labelText: 'Sequence title',
-                                        labelStyle: TextStyle(fontSize: 13.5),
-                                      ),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter a sequence title';
-                                        }
+                                      TextFormField(
+                                        controller: sequenceNameController,
+                                        decoration: const InputDecoration(
+                                          hintStyle: TextStyle(fontSize: 13.5),
+                                          hintText: 'Enter a sequence title',
+                                          labelText: 'Sequence title',
+                                          labelStyle: TextStyle(fontSize: 13.5),
+                                        ),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter a sequence title';
+                                          }
 
-                                        return null;
-                                      },
-                                    ),
-                                  ],
+                                          return null;
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () async {
-                                    //  sequenceNameController.clear();
-                                    ScaffoldMessenger.of(context)
-                                        .clearSnackBars();
-
-                                    final validationResult = formkeySequence
-                                        .currentState!
-                                        .validate();
-
-                                    if (!validationResult) {
-                                      return;
-                                    }
-
-                                    final response = await createNewSequence(
-                                      seqName:
-                                          sequenceNameController.text.trim(),
-                                      jobID: widget.jobId,
-                                    );
-                                    Map<String, dynamic> decodedResponse =
-                                        jsonDecode(response.body);
-
-                                    if (decodedResponse['message'] != null) {
+                                actions: [
+                                  TextButton(
+                                    onPressed: () async {
+                                      //  sequenceNameController.clear();
                                       ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                decodedResponse['message'])),
-                                      );
-                                    }
+                                          .clearSnackBars();
 
-                                    sequenceNameController.clear();
-                                    Navigator.of(context).pop();
-                                    await callApiMethods();
-                                  },
-                                  child: const Text('Create'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                        if (dialogResult != true) {
-                          sequenceNameController.clear();
-                        }
-                      },
-                      icon: const Icon(
-                        Icons.add_box_outlined,
+                                      final validationResult = formkeySequence
+                                          .currentState!
+                                          .validate();
+
+                                      if (!validationResult) {
+                                        return;
+                                      }
+
+                                      final response = await createNewSequence(
+                                        seqName:
+                                            sequenceNameController.text.trim(),
+                                        jobID: widget.jobId,
+                                      );
+                                      Map<String, dynamic> decodedResponse =
+                                          jsonDecode(response.body);
+
+                                      if (decodedResponse['message'] != null) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              content: Text(
+                                                  decodedResponse['message'])),
+                                        );
+                                      }
+
+                                      sequenceNameController.clear();
+                                      Navigator.of(context).pop();
+                                      await callApiMethods();
+                                    },
+                                    child: const Text('Create'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          if (dialogResult != true) {
+                            sequenceNameController.clear();
+                          }
+                        },
+                        icon: const Icon(
+                          Icons.add_box_outlined,
+                        ),
                       ),
                     ),
                   ],
@@ -370,6 +388,8 @@ class _TaskListState extends State<TaskList> {
                                         width:
                                             MediaQuery.of(context).size.width,
                                         child: TaskCard(
+                                          hasPermissionToGoToTaskDetailScreen:
+                                              _bShowTaskDetailScreen,
                                           onPressedDelete: () {},
                                           showDeleteIcon: true,
                                           id: sequencesList[i].tasks[j]['id'],
@@ -400,6 +420,8 @@ class _TaskListState extends State<TaskList> {
                                                 .size
                                                 .width,
                                             child: TaskCard(
+                                              hasPermissionToGoToTaskDetailScreen:
+                                                  _bShowTaskDetailScreen,
                                               onPressedDelete: () async {
                                                 print('sss here');
 
@@ -889,6 +911,8 @@ class _TaskListState extends State<TaskList> {
                                     //  height: 120,
 
                                     child: TaskCard(
+                                        hasPermissionToGoToTaskDetailScreen:
+                                            _bShowTaskDetailScreen,
                                         id: _futureTask[i].id!,
                                         taskName: _futureTask[i].pmkNumber!,
                                         description:
@@ -903,6 +927,8 @@ class _TaskListState extends State<TaskList> {
                                     width: MediaQuery.of(context).size.width,
                                     //  height: 120,
                                     child: TaskCard(
+                                        hasPermissionToGoToTaskDetailScreen:
+                                            _bShowTaskDetailScreen,
                                         id: _futureTask[i].id!,
                                         taskName: _futureTask[i].pmkNumber!,
                                         description:
@@ -914,6 +940,8 @@ class _TaskListState extends State<TaskList> {
                                         onSelected: (index) {}),
                                   ),
                                   child: TaskCard(
+                                      hasPermissionToGoToTaskDetailScreen:
+                                          _bShowTaskDetailScreen,
                                       id: _futureTask[i].id!,
                                       taskName: _futureTask[i].pmkNumber!,
                                       description: _futureTask[i].description!,
@@ -1019,6 +1047,7 @@ class _TaskListState extends State<TaskList> {
               //                     statusColor: statusColor,
               //                     onSelected: (index) {}),
               //               ),
+
               //               child: TaskCard(
               //                   id: tasks.id!,
               //                   taskName: tasks.pmkNumber!,

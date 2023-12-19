@@ -15,6 +15,7 @@ class TaskCard extends StatefulWidget {
   final ValueChanged<int> onSelected;
   void Function()? onPressedDelete;
   bool showDeleteIcon;
+  bool? hasPermissionToGoToTaskDetailScreen;
 
   TaskCard({
     Key? key,
@@ -28,6 +29,7 @@ class TaskCard extends StatefulWidget {
     required this.onSelected,
     this.onPressedDelete,
     this.showDeleteIcon = false,
+    this.hasPermissionToGoToTaskDetailScreen = false,
   }) : super(key: key);
 
   @override
@@ -81,6 +83,8 @@ class _TaskCardState extends State<TaskCard> {
                     ),
                   ),
                   child: TaskWidget(
+                    hasPermissionToGoToTaskDetailScreen:
+                        widget.hasPermissionToGoToTaskDetailScreen,
                     showDeleteIcon2: widget.showDeleteIcon,
                     onPressedDelete2: widget.onPressedDelete,
                     taskId: widget.id,
@@ -151,6 +155,7 @@ class TaskWidget extends StatelessWidget {
   final DateTime? startDate;
   void Function()? onPressedDelete2;
   bool? showDeleteIcon2;
+  bool? hasPermissionToGoToTaskDetailScreen;
 
   TaskWidget({
     Key? key,
@@ -162,6 +167,7 @@ class TaskWidget extends StatelessWidget {
     required this.startDate,
     this.onPressedDelete2,
     this.showDeleteIcon2,
+    this.hasPermissionToGoToTaskDetailScreen,
   }) : super(key: key);
 
   @override
@@ -169,14 +175,16 @@ class TaskWidget extends StatelessWidget {
     // final borderColor = statusColor.withOpacity(0.5);
     // final bgColor = statusColor.withOpacity(0.1);
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TaskDetail(taskId: taskId),
-          ),
-        );
-      },
+      onTap: hasPermissionToGoToTaskDetailScreen == true
+          ? () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TaskDetail(taskId: taskId),
+                ),
+              );
+            }
+          : () {},
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
