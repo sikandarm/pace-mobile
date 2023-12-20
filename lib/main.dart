@@ -7,6 +7,7 @@ import 'package:com_a3_pace/services/purchase_order_items_list.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -33,6 +34,7 @@ HttpOverrides global = MyHttpOverrides();
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 //  await FirebaseApi().initNotifications();
   // SecurityContext.defaultContext.setAlpnProtocols(['h2'], true);

@@ -162,10 +162,12 @@ class _TaskListState extends State<TaskList> {
     });
   }
 
-  void _onDropdownChanged(String? newValue) {
+  void _onDropdownChanged(String? newValue) async {
+    print('drop down val: ' + newValue.toString());
     setState(() {
       _selectedValue = newValue ?? "all";
     });
+    await callOtherApiMethod();
   }
 
   List<IndependentTaskModel> getFilteredTasks(

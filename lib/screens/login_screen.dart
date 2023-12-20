@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:com_a3_pace/screens/signup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -317,13 +318,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     Row(
                       children: [
                         _buildSocialIcon(
-                            context, 'assets/images/google.png', true),
+                            context, 'assets/images/google.png', true, false),
                         _buildSocialIcon(
-                            context, 'assets/images/apple.png', false),
+                            context, 'assets/images/apple.png', false, false),
                         _buildSocialIcon(
-                            context, 'assets/images/facebook.png', false),
+                            context, 'assets/images/facebook.png', false, true),
                       ],
                     ),
+
                     const SizedBox(height: 50),
                     if (_isLoading)
                       const CircularProgressIndicator(
@@ -341,13 +343,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-Widget _buildSocialIcon(
-    BuildContext context, String imagePath, bool isForGoogle) {
+Widget _buildSocialIcon(BuildContext context, String imagePath,
+    bool isForGoogle, bool isForFacebook) {
   return Expanded(
     child: InkWell(
       onTap: () async {
+        print('button pressed');
         // Button pressed action
         if (isForGoogle) {
+          print('google button code');
           User? user = await FirebaseApi().signInWithGoogle();
           if (user != null) {
             // Handle successful sign-in, e.g., navigate to another screen.
@@ -372,6 +376,9 @@ Widget _buildSocialIcon(
             // Handle sign-in failure.
             print("User auth FAIL");
           }
+        } else if (isForFacebook) {
+          print('facebook button code');
+          await loginWithFacebook();
         } else {
           // await FirebaseApi().signInWithFacebook();
         }
@@ -383,4 +390,17 @@ Widget _buildSocialIcon(
       ),
     ),
   );
+}
+
+Future<LoginResult> loginWithFacebook() async {
+  final LoginResult result = await FacebookAuth.instance.login();
+  if (result.status == LoginStatus.success) {
+    // Logged in successfully
+    final accessToken = result.accessToken;
+    print('fb access token:' + accessToken!.token.toString());
+    // Use the access token to get user data from Facebook
+  } else {
+    // Login failed
+  }
+  return result;
 }
