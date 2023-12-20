@@ -468,23 +468,39 @@ class _TaskListState extends State<TaskList> {
                                                     ),
                                                   );
 
+
+
+                                                  // sequencesList.removeWhere(
+                                                  //     (element) =>
+                                                  //         element.tasks[j]
+                                                  //             ['id'] ==
+                                                  //         sequencesList[i]
+                                                  //             .tasks[j]['id']);
+                                                  //
+                                                  // setState(() {});
+
                                                   await deleteSequenceTask(
                                                       taskId: sequencesList[i]
                                                           .tasks[j]['id']
                                                           .toString(),
                                                       context: context);
 
-                                                  sequencesList.removeWhere(
-                                                      (element) =>
-                                                          element.tasks[j]
-                                                              ['id'] ==
-                                                          sequencesList[i]
-                                                              .tasks[j]['id']);
 
-                                                  await callApiMethods();
-                                                  setState(() {});
+
+                                                  // sequencesList.removeWhere(
+                                                  //     (element) =>
+                                                  //         element.tasks[j]
+                                                  //             ['id'] ==
+                                                  //         sequencesList[i]
+                                                  //             .tasks[j]['id']);
+                                                  //
+
+
+                                                   await callApiMethods();
+                                                   setState(() {});
                                                 }
                                               },
+
                                               showDeleteIcon: true,
                                               id: sequencesList[i].tasks[j]
                                                   ['id'],
