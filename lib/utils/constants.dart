@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: constant_identifier_names
-const String BASE_URL = "http://206.81.5.26:3500/api";
+const String BASE_URL = "http://206.81.5.26:3500/api"; // live ip
 // const String BASE_URL = "http://192.168.1.3:3500/api";  // local ip
 
 // http://206.81.5.26/inventory
@@ -45,7 +45,61 @@ const List<String> LS_PERMISSIONS = [
   'collaborate_on_microsoft_whiteboard',
   /////////////////  new permissions added
   'view_task_detail',
-  'create_sequence'
+  // 'create_sequence'    // changed to add-sequeunce
+  'add_sequence',
+  'view_dashboard_with_graphs',
+  'view_inventory',
+  'add_inventory',
+  'view_rejected_tasks',
+  'view_car',
+  'approved_car',
+  'share_car',
+  'export_tasks_in_pdf',
+  'approved_task',
+  'add_job',
+  'export_job',
+  'edit_job',
+  'delete_job',
+  'add_task',
+  'edit_task', 'delete_task', 'export_task', 'delete_inventory',
+  'export_inventory',
+  'add_user',
+  'view_user', 'edit_user', 'delete_user', 'export_user',
+  'add_role', 'view_role', 'edit_role', 'delete_role', 'export_role',
+  'add_permision', 'view_permision',
+
+  /////////////////////////////////
+  'edit_permision',
+  'delete_permision',
+  'export_permision',
+  'rejected_car',
+  'rejected_task',
+  'review_tasks',
+  'view_contact',
+  'add_contact',
+  'delete_contact',
+  'edit_contact',
+  'add_purchase',
+  'edit_purchase',
+  'delete_purchase',
+  'view_purchasedetails',
+  'add_purchaseitem',
+  'add_vendor',
+  'edit_vendor',
+  'delete_vendor',
+  'detail_job',
+  'add_fabricateditems',
+  'add_company',
+  'delete_company',
+  'edit_company',
+  'add_sequence',
+  'delete_sequence',
+  'view_sequence',
+  'edit_sequence',
+  'update_fabricateditems',
+  'make_call',
+  'download_diagram',
+  'View Task Detail',
 ];
 
 InputDecoration textFieldDecoration(String title, bool ifPassword) {

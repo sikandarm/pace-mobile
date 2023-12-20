@@ -137,9 +137,10 @@ class _TaskListState extends State<TaskList> {
       _bShowTaskDetailScreen = localBool;
     });
 
-    checkPermissionAndUpdateBool("create_sequence", (localBool) {
+    checkPermissionAndUpdateBool("add_sequence", (localBool) {
       _bShowCreateSequenceIcon = localBool;
     });
+
     print('create seq permission:' + _bShowCreateSequenceIcon.toString());
     print('go to task detail permission:' + _bShowTaskDetailScreen.toString());
   }
@@ -468,8 +469,6 @@ class _TaskListState extends State<TaskList> {
                                                     ),
                                                   );
 
-
-
                                                   // sequencesList.removeWhere(
                                                   //     (element) =>
                                                   //         element.tasks[j]
@@ -485,8 +484,6 @@ class _TaskListState extends State<TaskList> {
                                                           .toString(),
                                                       context: context);
 
-
-
                                                   // sequencesList.removeWhere(
                                                   //     (element) =>
                                                   //         element.tasks[j]
@@ -495,9 +492,8 @@ class _TaskListState extends State<TaskList> {
                                                   //             .tasks[j]['id']);
                                                   //
 
-
-                                                   await callApiMethods();
-                                                   setState(() {});
+                                                  await callApiMethods();
+                                                  setState(() {});
                                                 }
                                               },
 
