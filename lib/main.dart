@@ -39,6 +39,7 @@ void main() async {
 //  await FirebaseApi().initNotifications();
   // SecurityContext.defaultContext.setAlpnProtocols(['h2'], true);
   await Hive.initFlutter();
+  // FirebaseMessaging.instance.getToken();
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// ignore: constant_identifier_names
-const String BASE_URL = "http://206.81.5.26:3500/api"; // live ip
-// const String BASE_URL = "http://192.168.1.3:3500/api";  // local ip
+// ignore: constant_identifier_names/
+//const String BASE_URL = "http://206.81.5.26:3500/api"; // live ip
+const String BASE_URL = "http://192.168.1.4:3500/api"; // local ip
 
 // http://206.81.5.26/inventory
 // ignore: constant_identifier_names

@@ -9,5 +9,5 @@
       Replace "000000000000" with your Facebook App ID here.
       **NOTE**: The scheme needs to start with `fb` and then your ID.
     -->
-    <string name="fb_login_protocol_scheme">fb773875151087090</string>
+    <string name="fb_login_protocol_scheme">fb866097658578135</string>
 </resources>

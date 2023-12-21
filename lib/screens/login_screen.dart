@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:com_a3_pace/screens/signup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:hive/hive.dart';
@@ -60,7 +61,18 @@ class _LoginScreenState extends State<LoginScreen> {
     ScaffoldMessenger.of(context).clearSnackBars();
     String errorMsg = '';
     try {
-      _fcmToken = await getStringFromSF(BL_FCM_TOKEN);
+      final fcmTokenBox = await Hive.openBox('fcmToken');
+
+      if (fcmTokenBox.get('fcmToken') == null) {
+        _fcmToken = (await FirebaseMessaging.instance.getToken())!;
+        await fcmTokenBox.put('fcmToken', _fcmToken);
+      } else {
+        _fcmToken = await fcmTokenBox.get('fcmToken');
+      }
+
+      // initiall _fcmToken="";
+      //  _fcmToken = (await FirebaseMessaging.instance.getToken())!;
+      // _fcmToken = await getStringFromSF(BL_FCM_TOKEN);
 
       var loginRes = await http.post(Uri.parse("$BASE_URL/auth/login"), body: {
         "email": uEmail,
