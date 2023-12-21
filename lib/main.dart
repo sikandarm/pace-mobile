@@ -40,6 +40,28 @@ void main() async {
   // SecurityContext.defaultContext.setAlpnProtocols(['h2'], true);
   await Hive.initFlutter();
   // FirebaseMessaging.instance.getToken();
+
+  FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+    if (notification != null && android != null) {
+      FirebaseApi().flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              FirebaseApi().channel.id,
+              FirebaseApi().channel.name,
+              'This channel is used for notifications',
+              color: Colors.blue,
+              playSound: true,
+              icon: '@mipmap/ic_launcher',
+            ),
+          ));
+    }
+  });
+  /////////////////////////////////////
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
