@@ -33,6 +33,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
     purchaseOrderItemsList = await fetchPurchaseOrderItemsDetailListData(
         id: widget.purchaseOrder.id!);
     isApiLoading = false;
+    print('st:' +widget.purchaseOrder.status.toString().toLowerCase());
     setState(() {});
   }
 
@@ -426,13 +427,17 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                           ),
                         ),
                       },
+
                     ],
                   ),
                 ),
           const Spacer(),
-          SizedBox(
+
+          widget.purchaseOrder.status.toString().toLowerCase()=='received'.toLowerCase()? SizedBox():   SizedBox(
             width: double.infinity,
+
             height: 50.0,
+
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 23),
               decoration: BoxDecoration(boxShadow: [
@@ -447,8 +452,8 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                 onPressed: () async {
                   final isRecievied = await changePurchaseOrderStatusByID(
                       id: widget.purchaseOrder.id!);
-
-                  showDialog(
+print('isRecievied: '+ isRecievied.toString());
+                 await  showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
@@ -475,6 +480,9 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                       );
                     },
                   );
+                 Navigator.pop(context);
+                  Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_)=>PurchaseOrder()));
                 },
                 style: ButtonStyle(
                   backgroundColor:
@@ -550,6 +558,9 @@ AppBar _buildAppBar(context) {
         // );
       },
     ),
+
+
+
     title: FutureBuilder<String?>(
       future: getStringFromSF(BL_USER_FULL_NAME),
       builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {

@@ -425,7 +425,7 @@ Widget _buildSideDrawer(BuildContext context) {
                       ),
                     ),
                     Visibility(
-                      visible: blShowSharedCAR,
+                      //     visible: blShowSharedCAR,
                       child: ListTile(
                         title: const Text('Purchase Orders'),
                         leading: const Icon(Icons.inventory),
@@ -440,7 +440,7 @@ Widget _buildSideDrawer(BuildContext context) {
                       ),
                     ),
                     Visibility(
-                      visible: blShowSharedCAR,
+                      //  visible: blShowSharedCAR,
                       child: ListTile(
                         title: const Text('View Contacts'),
                         leading: const Icon(Icons.call),

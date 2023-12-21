@@ -6,20 +6,79 @@ import 'package:http/http.dart' as http;
 import '../utils/constants.dart';
 
 class NotificationModel {
+  bool? success;
+  String? message;
+  Data? data;
+
+  NotificationModel({this.success, this.message, this.data});
+
+  NotificationModel.fromJson(Map<String, dynamic> json) {
+    success = json['success'];
+    message = json['message'];
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['success'] = this.success;
+    data['message'] = this.message;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
+  }
+}
+
+class Data {
+  List<Notifications>? notifications;
+
+  Data({this.notifications});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    if (json['notifications'] != null) {
+      notifications = <Notifications>[];
+      json['notifications'].forEach((v) {
+        notifications!.add(new Notifications.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.notifications != null) {
+      data['notifications'] =
+          this.notifications!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Notifications {
   int? id;
   String? title;
   String? body;
-  DateTime? updatedAt;
+  String? updatedAt;
 
-  NotificationModel({
-    this.id,
-    this.title,
-    this.body,
-    this.updatedAt,
-  });
+  Notifications({this.id, this.title, this.body, this.updatedAt});
+
+  Notifications.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    body = json['body'];
+    updatedAt = json['updatedAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['title'] = this.title;
+    data['body'] = this.body;
+    data['updatedAt'] = this.updatedAt;
+    return data;
+  }
 }
 
-Future<List<NotificationModel>> fetchAllCNotifications() async {
+Future<NotificationModel> fetchAllNotifications() async {
   int? userId = await getIntFromSF('UserId');
 
   var url = Uri.parse('$BASE_URL/notifications');
@@ -30,32 +89,5 @@ Future<List<NotificationModel>> fetchAllCNotifications() async {
   print(responseString);
 
   Map<String, dynamic> jsonMap = jsonDecode(responseString);
-
-  if (response.statusCode == 200) {
-    final List<dynamic> data = jsonMap['data']['notifications']['data'];
-
-    // ignore: unnecessary_type_check
-    if (data is List<dynamic> && data.isNotEmpty) {
-      final List<NotificationModel> jobs = data.map((item) {
-        DateTime? updatedAt;
-        if (item['updatedAt'] != null) {
-          updatedAt = DateTime.tryParse(item['updatedAt']);
-        }
-
-        return NotificationModel(
-          id: item['id'] ?? 0,
-          title: item['title'] ?? '',
-          updatedAt: updatedAt ?? DateTime(1970),
-          body: item['body'] ?? '',
-        );
-      }).toList();
-      return jobs;
-    } else if (data.isEmpty) {
-      return [];
-    } else {
-      throw Exception('Data is not in the expected format.');
-    }
-  } else {
-    throw Exception('Failed to fetch data');
-  }
+  return NotificationModel.fromJson(jsonMap);
 }

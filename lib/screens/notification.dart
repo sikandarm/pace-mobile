@@ -14,39 +14,40 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationListState extends State<NotificationsScreen> {
-  Future<List<NotificationModel>> _futureList = Future.value([]);
+  Future<NotificationModel> _futureList = Future.value(NotificationModel());
 
-  final groupedNotifications = <String, List<NotificationModel>>{};
+  final groupedNotifications = <String, NotificationModel>{};
   final today = DateTime.now();
 
   @override
   void initState() {
     super.initState();
-    _futureList = fetchAllCNotifications();
+    _futureList = fetchAllNotifications();
     groupNotificationsByDate();
   }
 
   void groupNotificationsByDate() {
     final yesterday = today.subtract(const Duration(days: 1));
     _futureList.then((notificationList) {
-      for (final notification in notificationList) {
+      for (final notification in notificationList.data!.notifications!) {
         final notificationDate = notification.updatedAt;
-        final isToday = today.year == notificationDate?.year &&
-            today.month == notificationDate?.month &&
-            today.day == notificationDate?.day;
-        final isYesterday = yesterday.year == notificationDate?.year &&
-            yesterday.month == notificationDate?.month &&
-            yesterday.day == notificationDate?.day;
+
+        print('date: ' + notificationDate.toString());
+
+        final isToday = today.year == extractYear(notificationDate!) &&
+            today.month == extractMonth(notificationDate) &&
+            today.day == extractDay(notificationDate);
+        final isYesterday = yesterday.year == extractYear(notificationDate!) &&
+            yesterday.month == extractMonth(notificationDate) &&
+            yesterday.day == extractDay(notificationDate);
         final headerText = isToday
             ? "Today"
             : isYesterday
-                ? "Yesterday"
-                : DateFormat("MMM dd, yyyy").format(notificationDate!);
-        groupedNotifications
-            .putIfAbsent(headerText, () => [])
-            .add(notification);
+            ? "Yesterday"
+            : DateFormat("MMM dd, yyyy")
+            .format(DateTime.parse(notificationDate!));
+        groupedNotifications.putIfAbsent(headerText, () => NotificationModel());
       }
-      // Call setState to trigger a rebuild of the UI with the updated groupedNotifications
       setState(() {});
     });
   }
@@ -67,7 +68,6 @@ class _NotificationListState extends State<NotificationsScreen> {
                 builder: (context) => const DashboardScreen(),
               ),
             );
-            // Navigator.popUntil(context, ModalRoute.withName('/dashboard'));
           },
         ),
         title: const Text(
@@ -97,69 +97,58 @@ class _NotificationListState extends State<NotificationsScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: FutureBuilder<List<NotificationModel>>(
-                future: _futureList,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    print(snapshot.error);
-                    return Center(
-                      child: Text("Error : ${snapshot.error}"),
-                    );
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(
-                      child: Text("No record found"),
-                    );
-                  } else {
-                    return ListView.builder(
-                      itemCount: groupedNotifications.length,
-                      itemBuilder: (context, index) {
-                        final headerText =
-                            groupedNotifications.keys.elementAt(index);
-                        final notifications = groupedNotifications[headerText]!;
+        child: FutureBuilder<NotificationModel>(
+          future: _futureList,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              print(snapshot.error);
+              return Center(
+                child: Text("Error : ${snapshot.error}"),
+              );
+            } else if (!snapshot.hasData ||
+                snapshot.data!.data!.notifications!.isEmpty) {
+              return const Center(
+                child: Text("No record found"),
+              );
+            } else {
+              return ListView.builder(
+                itemCount: groupedNotifications.length,
+                itemBuilder: (context, index) {
+                  final headerText = groupedNotifications.keys.elementAt(index);
+                  final notifications = groupedNotifications[headerText]!;
 
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                headerText,
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey.shade600),
-                              ),
-                            ),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: notifications.length,
-                              itemBuilder: (context, notificationIndex) {
-                                final notification =
-                                    notifications[notificationIndex];
-                                return ListItemWidget(
-                                  id: notification.id,
-                                  title: notification.title,
-                                  body: notification.body!,
-                                  time: notification.updatedAt,
-                                );
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          headerText,
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey.shade600),
+                        ),
+                      ),
+                      // Replace the inner ListView.builder with a Column
+                      Column(
+                        children: snapshot.data!.data!.notifications!
+                            .map((notification) => ListItemWidget(
+                          id: notification.id,
+                          title: notification.title,
+                          body: notification.body!,
+                          time: DateTime.parse(notification.updatedAt!),
+                        ))
+                            .toList(),
+                      ),
+                    ],
+                  );
                 },
-              ),
-            ),
-          ],
+              );
+            }
+          },
         ),
       ),
     );
@@ -173,35 +162,27 @@ class ListItemWidget extends StatelessWidget {
   final DateTime? time;
 
   const ListItemWidget({
-    super.key,
+    Key? key,
     this.id,
     this.title,
     this.body,
     required this.time,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // if (id! > 0 && status == "approved" || status == "rejected") {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => CARDetail(carId: id!),
-        //     ),
-        //   );
-        // }
+        // Handle onTap if needed
       },
       child: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Expanded(
+        child: Container(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const CircleAvatar(
-                backgroundColor:
-                    Colors.blue, // Set the background color to blue
+                backgroundColor: Colors.blue,
                 radius: 20.0,
                 child: Icon(
                   Icons.notifications_on_outlined,
@@ -209,9 +190,7 @@ class ListItemWidget extends StatelessWidget {
                   size: 24.0,
                 ),
               ),
-              const SizedBox(
-                  width:
-                      10.0), // Adjust the space between the image and the text if needed
+              const SizedBox(width: 10.0),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,9 +202,8 @@ class ListItemWidget extends StatelessWidget {
                         color: Color(0xFF1E2022),
                         fontWeight: FontWeight.normal,
                       ),
-                      maxLines: 3, // Allow unlimited lines
-                      overflow: TextOverflow
-                          .clip, // or TextOverflow.ellipsis for '...' at the end
+                      maxLines: 3,
+                      overflow: TextOverflow.clip,
                     ),
                     const SizedBox(height: 5.0),
                     Text(
@@ -245,4 +223,20 @@ class ListItemWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+// Helper functions to extract year, month, and day
+int extractYear(String timestamp) {
+  DateTime dateTime = DateTime.parse(timestamp);
+  return dateTime.year;
+}
+
+int extractMonth(String timestamp) {
+  DateTime dateTime = DateTime.parse(timestamp);
+  return dateTime.month;
+}
+
+int extractDay(String timestamp) {
+  DateTime dateTime = DateTime.parse(timestamp);
+  return dateTime.day;
 }
