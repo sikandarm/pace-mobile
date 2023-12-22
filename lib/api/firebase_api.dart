@@ -12,8 +12,9 @@ class FirebaseApi {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   final channel = const AndroidNotificationChannel('high_importance_channel',
-      'High Importance Notifications', 'This channel is used for notifications',
-      importance: Importance.high, playSound: true);
+      'High Importance Notifications', // 'This channel is used for notifications',
+      importance: Importance.high,
+      playSound: true);
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
