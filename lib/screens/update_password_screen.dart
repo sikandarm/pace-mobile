@@ -18,8 +18,8 @@ class UpdatePasswordScreen extends StatefulWidget {
 class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
   var passwordController = TextEditingController();
   var confirmPasswordController = TextEditingController();
-  bool isPasswordVisible = false;
-  bool isConfirmPasswordVisible = false;
+  bool isPasswordVisible = true;
+  bool isConfirmPasswordVisible = true;
 
   var formKey = GlobalKey<FormState>();
 
@@ -102,9 +102,17 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                           filled: true,
                           fillColor: const Color(0xffF8F9FD),
                           hintText: "Password",
-                          suffixIcon: const Icon(
-                            Icons.visibility,
-                            color: Colors.grey,
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              isPasswordVisible = !isPasswordVisible;
+                              setState(() {});
+                            },
+                            child: Icon(
+                              isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Colors.grey,
+                            ),
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -112,10 +120,18 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                     ),
                   ),
                   const SizedBox(height: 11),
+                  /////////////////////////////////////////////////////////////////////////
+                  ///
+                  /////////////////////////////////////////////////////////////////////////
+                  ///
+                  /////////////////////////////////////////////////////////////////////////
+                  ///
+                  /////////////////////////////////////////////////////////////////////////
                   SizedBox(
                     width: double.infinity,
                     height: 55,
                     child: TextFormField(
+                      obscureText: isConfirmPasswordVisible,
                       validator: (value) {
                         //    ScaffoldMessenger.of(context).clearSnackBars();
 
@@ -130,16 +146,23 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
 
                         return null;
                       },
-                      obscureText: isConfirmPasswordVisible,
                       controller: confirmPasswordController,
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: const Color(0xffF8F9FD),
                           hintText: "Confirm Password",
-                          suffixIcon: const Icon(
-                            Icons.visibility,
-                            color: Colors.grey,
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              isConfirmPasswordVisible =
+                                  !isConfirmPasswordVisible;
+                              setState(() {});
+                            },
+                            child: Icon(
+                              isConfirmPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
