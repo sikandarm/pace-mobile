@@ -19,6 +19,9 @@ bool blShowSharedCAR = false;
 bool blShowCAR = false;
 bool blShowInventory = false;
 
+bool b1ViewDashBoardWithGraphs =
+    false; // not used yet as was found b1ShowInventoryList
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
@@ -59,6 +62,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _futureJob.then((jobs) {
       updateJobCount(jobs.length);
     });
+
+    checkPermissionAndUpdateBool("view dashboard with graphs", (localBool) {
+      b1ViewDashBoardWithGraphs = localBool;
+    }); // not used yet
 
     checkPermissionAndUpdateBool("view_profile", (localBool) {
       blShowProfile = localBool;
@@ -235,6 +242,8 @@ PreferredSizeWidget _buildAppBar(
                 children: [
                   InkWell(
                     onTap: () {
+                      print('notifications permission: ' +
+                          blShowNotificationsList.toString());
                       if (blShowNotificationsList) {
                         Navigator.push(
                           context,

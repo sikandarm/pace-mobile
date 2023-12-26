@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 import '../screens/task_detail.dart';
@@ -184,7 +185,10 @@ class TaskWidget extends StatelessWidget {
                 ),
               );
             }
-          : () {},
+          : () async {
+              await Fluttertoast.cancel();
+              showToast('You do not have permissions');
+            },
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(

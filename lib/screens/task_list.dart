@@ -14,6 +14,7 @@ import 'package:com_a3_pace/services/update_sequence_tasks.dart';
 import 'package:com_a3_pace/utils/constants.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
@@ -227,9 +228,14 @@ class _TaskListState extends State<TaskList> {
                 child: Stack(
                   children: [
                     Visibility(
-                      visible: _bShowCreateSequenceIcon,
+                      //   visible: _bShowCreateSequenceIcon,
+                      visible: true,
                       child: IconButton(
                         onPressed: () async {
+                          if (!_bShowCreateSequenceIcon) {
+                            await Fluttertoast.cancel();
+                            showToast('You do not have permissions');
+                          }
                           final dialogResult = await showDialog<bool?>(
                             context: context,
                             builder: (BuildContext context) {
