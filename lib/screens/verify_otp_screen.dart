@@ -92,13 +92,17 @@
 //   }
 // }
 
+import 'package:com_a3_pace/screens/reset_password.dart';
+import 'package:com_a3_pace/screens/update_password_screen.dart';
 import 'package:com_a3_pace/screens/verify_otp_screen.dart';
 import 'package:com_a3_pace/services/forgot_password.dart';
+import 'package:com_a3_pace/services/verify_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
 class VerifyOtpScreen extends StatefulWidget {
-  const VerifyOtpScreen({super.key});
+  const VerifyOtpScreen({super.key, required this.email});
+  final String email;
 
   @override
   State<VerifyOtpScreen> createState() => _VerifyOtpScreenState();
@@ -151,19 +155,30 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
           SafeArea(
               child: Align(
             alignment: Alignment.topLeft,
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 30.0, horizontal: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  print('tapped');
-                  Navigator.pushReplacementNamed(context, '/login');
-                  //   Navigator.pushNamed(context, routeName)
-                },
-                child: Image.asset(
-                  'assets/images/ic_back.png',
+            child: GestureDetector(
+              onTap: () {
+                print('tapped');
+                //                  Navigator.pushReplacementNamed(context, '/login');
+                // Navigator.pushReplacement(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => ResetPassword(),
+                //     ));
+                Navigator.pop(context);
+                //   Navigator.pushNamed(context, routeName)
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 35.0, horizontal: 25.0),
+                child: Container(
+                  //   color: Colors.red,
                   width: 20,
                   height: 20,
+                  child: Image.asset(
+                    'assets/images/ic_back.png',
+                    width: 20,
+                    height: 20,
+                  ),
                 ),
               ),
             ),
@@ -220,7 +235,8 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                   child: Container(
                     decoration: BoxDecoration(boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
+                        color: const Color.fromARGB(255, 218, 162, 162)
+                            .withOpacity(0.5),
                         spreadRadius: 2,
                         blurRadius: 5,
                         offset:
@@ -234,6 +250,25 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text('Enter 6 digit otp!')));
                           return;
+                        }
+
+                        final response =
+                            await verifyOtpApi(otp: pinController.text.trim());
+
+                        if (response.success != true) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(response.message!)));
+                          return;
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(response.message.toString())));
+
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    UpdatePasswordScreen(email: widget.email),
+                              ));
                         }
 
                         //    Navigator.pushReplacementNamed(context, '/login');

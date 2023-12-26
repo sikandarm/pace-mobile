@@ -1,18 +1,26 @@
-import 'package:com_a3_pace/screens/ProfileScreen.dart';
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:com_a3_pace/screens/login_screen.dart';
 import 'package:com_a3_pace/screens/verify_otp_screen.dart';
 import 'package:com_a3_pace/services/forgot_password.dart';
+import 'package:com_a3_pace/services/update_password.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
-class ResetPassword extends StatefulWidget {
-  const ResetPassword({super.key});
+class UpdatePasswordScreen extends StatefulWidget {
+  const UpdatePasswordScreen({super.key, required this.email});
+  final String email;
 
   @override
-  State<ResetPassword> createState() => _ResetPassScreenState();
+  State<UpdatePasswordScreen> createState() => _UpdatePasswordScreenState();
 }
 
-class _ResetPassScreenState extends State<ResetPassword> {
-  var emailText = TextEditingController();
-  var passwordText = TextEditingController();
+class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
+  var passwordController = TextEditingController();
+  var confirmPasswordController = TextEditingController();
+  bool isPasswordVisible = false;
+  bool isConfirmPasswordVisible = false;
+
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -22,11 +30,6 @@ class _ResetPassScreenState extends State<ResetPassword> {
 
   @override
   Widget build(BuildContext context) {
-    // var welcomeText = Text(
-    //   'This is Login screen',
-    //   style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-    // );
-
     return Scaffold(
       body: Form(
         key: formKey,
@@ -37,21 +40,16 @@ class _ResetPassScreenState extends State<ResetPassword> {
               alignment: Alignment.topLeft,
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                    vertical: 35.0, horizontal: 25.0),
+                    vertical: 30.0, horizontal: 20.0),
                 child: GestureDetector(
                   onTap: () {
                     print('tapped');
                     Navigator.pushReplacementNamed(context, '/login');
-                    //   Navigator.pushNamed(context, routeName)
                   },
-                  child: Container(
+                  child: Image.asset(
+                    'assets/images/ic_back.png',
                     width: 20,
                     height: 20,
-                    child: Image.asset(
-                      'assets/images/ic_back.png',
-                      width: 20,
-                      height: 20,
-                    ),
                   ),
                 ),
               ),
@@ -63,7 +61,7 @@ class _ResetPassScreenState extends State<ResetPassword> {
                 children: [
                   const SizedBox(
                     width: double.infinity,
-                    child: Text("Reset Password",
+                    child: Text("Update Password",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 30,
@@ -73,7 +71,7 @@ class _ResetPassScreenState extends State<ResetPassword> {
                   const SizedBox(
                     width: double.infinity,
                     child: Text(
-                        "Please enter your email address to reset your account.",
+                        "Please enter your new password and confirm password.",
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 13,
@@ -84,38 +82,63 @@ class _ResetPassScreenState extends State<ResetPassword> {
                     width: double.infinity,
                     height: 55,
                     child: TextFormField(
+                      obscureText: isPasswordVisible,
                       validator: (value) {
                         ScaffoldMessenger.of(context).clearSnackBars();
-                        final RegExp emailRegExp = RegExp(
-                            r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+
                         if (value!.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Please enter an email address.'),
+                            const SnackBar(
+                              content: Text('Please enter new password.'),
                             ),
                           );
                           return;
-                          //     return 'Please enter an email address.';
-                        } else if (!emailRegExp.hasMatch(value)) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content:
-                                  Text('Please enter a valid email address.'),
-                            ),
-                          );
-                          return;
-                          //   return 'Please enter a valid email address.';
                         }
                         return null;
                       },
-                      controller: emailText,
-                      keyboardType: TextInputType.emailAddress,
+                      controller: passwordController,
+                      keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: const Color(0xffF8F9FD),
-                          hintText: "Email",
+                          hintText: "Password",
                           suffixIcon: const Icon(
-                            Icons.email,
+                            Icons.visibility,
+                            color: Colors.grey,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          )),
+                    ),
+                  ),
+                  const SizedBox(height: 11),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 55,
+                    child: TextFormField(
+                      validator: (value) {
+                        //    ScaffoldMessenger.of(context).clearSnackBars();
+
+                        if (value!.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please enter confirm password.'),
+                            ),
+                          );
+                          return;
+                        }
+
+                        return null;
+                      },
+                      obscureText: isConfirmPasswordVisible,
+                      controller: confirmPasswordController,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                          filled: true,
+                          fillColor: const Color(0xffF8F9FD),
+                          hintText: "Confirm Password",
+                          suffixIcon: const Icon(
+                            Icons.visibility,
                             color: Colors.grey,
                           ),
                           border: OutlineInputBorder(
@@ -133,34 +156,43 @@ class _ResetPassScreenState extends State<ResetPassword> {
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 2,
                           blurRadius: 5,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
+                          offset: const Offset(0, 3),
                         )
                       ]),
                       child: ElevatedButton(
                         onPressed: () async {
-                          //    Navigator.pushReplacementNamed(context, '/login');
                           if (!formKey.currentState!.validate()) {
                             return;
                           }
-                          final response = await forgotPasswordApi(
-                              email: emailText.text.trim());
-                          print(response.message);
-                          if (response.success != true) {
+                          if (passwordController.text.trim() !=
+                              confirmPasswordController.text.trim()) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(response.message!)));
-
+                                const SnackBar(
+                                    content: Text(
+                                        'Password and confirm password do no match!')));
                             return;
                           }
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => VerifyOtpScreen(
-                                    email: emailText.text.trim()),
-                              ));
+
+                          final response = await updatePasswordApi(
+                              email: widget.email,
+                              newPassword: passwordController.text.trim());
+
+                          if (response.success == false) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(response.message!)));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(response.message!)));
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginScreen(),
+                                ),
+                                (route) => false);
+                          }
                         },
                         style: ButtonStyle(
-                          fixedSize: MaterialStatePropertyAll(
+                          fixedSize: const MaterialStatePropertyAll(
                               Size(double.infinity, 50)),
                           backgroundColor:
                               MaterialStateProperty.all<Color>(Colors.blue),
@@ -171,7 +203,7 @@ class _ResetPassScreenState extends State<ResetPassword> {
                             ),
                           ),
                         ),
-                        child: const Text("Reset",
+                        child: const Text("Update Password",
                             style: TextStyle(
                               color: Colors.white,
                             )),
