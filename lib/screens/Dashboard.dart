@@ -1,5 +1,6 @@
 import 'package:com_a3_pace/screens/purchase_order.dart';
 import 'package:com_a3_pace/screens/view_contacts_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import '../components/dashboard_card.dart';
@@ -56,6 +57,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   void initState() {
+    FirebaseMessaging.onMessage.listen((event) {
+      hasNewNotifiaction=true;
+      setState(() {
+
+      });
+    });
+
+
     super.initState();
 
     _futureJob = fetchJobs();
@@ -242,6 +251,10 @@ PreferredSizeWidget _buildAppBar(
                 children: [
                   InkWell(
                     onTap: () {
+
+                      hasNewNotifiaction=false;
+
+
                       print('notifications permission: ' +
                           blShowNotificationsList.toString());
                       if (blShowNotificationsList) {
@@ -262,7 +275,7 @@ PreferredSizeWidget _buildAppBar(
                       height: 32,
                     ),
                   ),
-                  Positioned(
+               !hasNewNotifiaction? SizedBox():   Positioned(
                     top: 5,
                     right: 0,
                     child: Container(

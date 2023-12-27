@@ -4,6 +4,7 @@ import 'package:com_a3_pace/api/firebase_api.dart';
 import 'package:com_a3_pace/firebase_options.dart';
 import 'package:com_a3_pace/screens/purchase_order_detail_screen.dart';
 import 'package:com_a3_pace/services/purchase_order_items_list.dart';
+import 'package:com_a3_pace/utils/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -101,7 +102,9 @@ void main() async {
 
   /////////////////////////////////////
 
+
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    hasNewNotifiaction=true;
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     if (notification != null && android != null) {

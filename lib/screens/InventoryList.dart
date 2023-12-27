@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:com_a3_pace/screens/notification.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +64,13 @@ class _InventoryListState extends State<InventoryList> {
 
   @override
   void initState() {
+    FirebaseMessaging.onMessage.listen((event) {
+      hasNewNotifiaction=true;
+      setState(() {
+
+      });
+    });
+
     super.initState();
 
     _tooltipBehavior = TooltipBehavior(enable: true);
@@ -487,6 +495,7 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey) {
               children: [
                 InkWell(
                   onTap: () {
+                    hasNewNotifiaction=false;
                     if (_blShowNotifications) {
                       Navigator.push(
                         context,
@@ -504,7 +513,7 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey) {
                     height: 32,
                   ),
                 ),
-                Positioned(
+             !hasNewNotifiaction?SizedBox():   Positioned(
                   top: 5,
                   right: 0,
                   child: Container(

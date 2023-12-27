@@ -1,3 +1,6 @@
+
+
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -34,6 +37,8 @@ class _NotificationListState extends State<NotificationsScreen> {
 
         print('date: ' + notificationDate.toString());
 
+
+
         final isToday = today.year == extractYear(notificationDate!) &&
             today.month == extractMonth(notificationDate) &&
             today.day == extractDay(notificationDate);
@@ -41,6 +46,9 @@ class _NotificationListState extends State<NotificationsScreen> {
             yesterday.month == extractMonth(notificationDate) &&
             yesterday.day == extractDay(notificationDate);
         final headerText = isToday
+
+
+
             ? "Today"
             : isYesterday
             ? "Yesterday"

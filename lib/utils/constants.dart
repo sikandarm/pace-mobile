@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
+bool hasNewNotifiaction=false;
 // ignore: constant_identifier_names/
 //const String BASE_URL = "http://206.81.5.26:3500/api"; // live ip
 const String BASE_URL = "http://192.168.1.5:3500/api"; // local ip

@@ -9,6 +9,7 @@ import 'package:com_a3_pace/screens/view_contacts_screen.dart';
 import 'package:com_a3_pace/services/check_task_play_or_pause_status.dart';
 import 'package:com_a3_pace/services/play_pause_task.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -78,8 +79,16 @@ class _TaskDetailState extends State<TaskDetail> {
     // createdAt: null,
   );
 
+
+
   @override
   void initState() {
+    FirebaseMessaging.onMessage.listen((event) {
+      hasNewNotifiaction=true;
+      setState(() {
+
+      });
+    });
     super.initState();
     _futureTask = fetchTaskDetail(widget.taskId);
     callApiMethods();
@@ -342,6 +351,11 @@ class _TaskDetailState extends State<TaskDetail> {
                     children: [
                       InkWell(
                         onTap: () {
+                          hasNewNotifiaction=false;
+                          setState(() {
+
+
+                          });
                           if (_blShowNotificationsList) {
                             Navigator.push(
                               context,
@@ -360,7 +374,7 @@ class _TaskDetailState extends State<TaskDetail> {
                           height: 32,
                         ),
                       ),
-                      Positioned(
+               !hasNewNotifiaction? SizedBox():      Positioned(
                         top: 5,
                         right: 0,
                         child: Container(

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -31,6 +32,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
+    FirebaseMessaging.onMessage.listen((event) {
+      hasNewNotifiaction=true;
+      setState(() {
+
+      });
+    });
     super.initState();
     _futureProfile = fetchUserProfile();
 
@@ -88,6 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     InkWell(
                       onTap: () {
+                        hasNewNotifiaction=false;
                         if (_blShowNotificationsList) {
                           Navigator.push(
                             context,
@@ -106,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         height: 32,
                       ),
                     ),
-                    Positioned(
+                !hasNewNotifiaction?SizedBox():    Positioned(
                       top: 5,
                       right: 0,
                       child: Container(

@@ -108,6 +108,8 @@ class _InventoryDetailState extends State<InventoryDetailScreen> {
 Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey) {
   return AppBar(
     backgroundColor: Colors.white,
+
+
     leading: IconButton(
       icon: const Icon(Icons.arrow_back),
       onPressed: () {

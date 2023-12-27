@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -19,8 +20,16 @@ bool _blShowNotificationsList = false;
 class _SharedListState extends State<SharedCARList> {
   Future<List<CAReportModel>> _futureList = Future.value([]);
 
+
+
   @override
   void initState() {
+    FirebaseMessaging.onMessage.listen((event) {
+      hasNewNotifiaction=true;
+      setState(() {
+
+      });
+    });
     super.initState();
     _futureList = fetchSharedCARList();
 
@@ -73,6 +82,7 @@ class _SharedListState extends State<SharedCARList> {
                   children: [
                     InkWell(
                       onTap: () {
+                        hasNewNotifiaction=false;
                         if (_blShowNotificationsList) {
                           Navigator.push(
                             context,
@@ -90,7 +100,7 @@ class _SharedListState extends State<SharedCARList> {
                         height: 32,
                       ),
                     ),
-                    Positioned(
+              !hasNewNotifiaction? SizedBox():      Positioned(
                       top: 5,
                       right: 0,
                       child: Container(
