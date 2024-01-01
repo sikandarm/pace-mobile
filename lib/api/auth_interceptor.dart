@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 class AuthInterceptor extends Interceptor {
   final String token;
 
+
   AuthInterceptor(this.token);
 
   @override
