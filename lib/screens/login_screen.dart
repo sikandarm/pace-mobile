@@ -437,19 +437,27 @@ Widget _buildSocialIcon(BuildContext context, String imagePath,
   );
 }
 
+
 Future<LoginResult> loginWithFacebook() async {
   final LoginResult result =
-      await FacebookAuth.instance.login(loginBehavior: LoginBehavior.webOnly);
+      await FacebookAuth.instance.login(loginBehavior: LoginBehavior.webOnly,permissions: ['public_profile']);
   print(result.message);
   if (result.status == LoginStatus.success) {
     // Logged in successfully
     final accessToken = result.accessToken;
 
     print('fb access token:' + accessToken!.token.toString());
+
+    final profile=await FacebookAuth.instance.getUserData();
+    print('==================================');
+    print('fb profile data: '+ profile.toString() );
+
     // Use the access token to get user data from Facebook
   } else {
+
     // Login failed
   }
+
   return result;
 }
 
