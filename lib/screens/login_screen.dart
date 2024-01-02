@@ -153,7 +153,9 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(onPressed: () async {
         print('button pressed');
+       await loginApiFB();
         //  await FacebookAuth.instance.login();
+        return;
         final a = FacebookLogin(
           debug: false,
         );
@@ -213,6 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 40),
                     TextField(
+                      
                       controller: emailText,
                       keyboardType: TextInputType.emailAddress,
                       decoration: textFieldDecoration("Email", false),
@@ -496,3 +499,11 @@ Future<User?> signInWithGoogleFirebase() async {
     return null;
   }
 }
+
+Future<void> loginApiFB()async{
+  final response=await http.post(Uri.parse('$BASE_URL/user/facebook'));
+  print(response.body);
+
+
+}
+

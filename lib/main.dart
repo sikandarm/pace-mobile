@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:pace_application_fb/screens/facebook_email_screen.dart';
 
 import 'api/firebase_api.dart';
 import 'firebase_options.dart';
@@ -139,19 +140,20 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       //     home: SplashScreen(),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const SplashScreen(),
-        '/login': (context) => const LoginScreen(),
-        '/resetpassword': (context) => const ResetPassword(),
-        '/midwayscreen': (context) => const MidwayScreen(),
-        '/signup': (context) => const SignUpScreen(),
-        '/dashboard': (context) => const DashboardScreen(),
-        '/notification': (context) => const NotificationsScreen(),
-        '/welcomeScreen': (context) => const WelcomeScreen(),
-
-        // '/testScreen': (context) => const TestScreen(),
-      },
+     // initialRoute: '/',
+      home: FacebookEmailScreen(),
+      // routes: {
+      //   '/': (context) => const SplashScreen(),
+      //   '/login': (context) => const LoginScreen(),
+      //   '/resetpassword': (context) => const ResetPassword(),
+      //   '/midwayscreen': (context) => const MidwayScreen(),
+      //   '/signup': (context) => const SignUpScreen(),
+      //   '/dashboard': (context) => const DashboardScreen(),
+      //   '/notification': (context) => const NotificationsScreen(),
+      //   '/welcomeScreen': (context) => const WelcomeScreen(),
+      //
+      //   // '/testScreen': (context) => const TestScreen(),
+      // },
     );
   }
 }
