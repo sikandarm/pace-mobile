@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -377,6 +378,9 @@ Widget _buildSocialIcon(BuildContext context, String imagePath,
         print('button pressed');
         // Button pressed action
         if (isForGoogle) {
+         await loginWithGoogle();
+
+          return;
           print('google button code');
           User? user = await FirebaseApi().signInWithGoogle();
           if (user != null) {
@@ -432,4 +436,13 @@ Future<LoginResult> loginWithFacebook() async {
     // Login failed
   }
   return result;
+}
+
+
+Future<void> loginWithGoogle()async{
+ final googleSignInAccount=await GoogleSignIn().signIn();
+ if(googleSignInAccount!=null){
+print('account not null');
+ }
+
 }
