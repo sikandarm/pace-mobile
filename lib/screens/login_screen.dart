@@ -340,6 +340,7 @@ Widget _buildSocialIcon(
                 builder: (context) => const SignUpScreen(),
               ),
             );
+
           } else {
             // Handle sign-in failure.
             print("User auth FAIL");
