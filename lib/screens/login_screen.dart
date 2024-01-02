@@ -142,8 +142,8 @@ class _LoginScreenState extends State<LoginScreen> {
             .showSnackBar(SnackBar(content: Text(errorMsg)));
       }
     } catch (e) {
-      //  ScaffoldMessenger.of(context)
-      //    .showSnackBar(SnackBar(content: Text(errorMsg.toString())));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
       print('login api:' + e.toString());
     }
   }
@@ -159,10 +159,22 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         final result = await a.logIn(permissions: [
           FacebookPermission.publicProfile,
-          FacebookPermission.email,
+          // FacebookPermission.email,
+          // FacebookPermission.email,
         ]);
+
         final ok = await a.getUserProfile();
-        print('status ok:' + ok!.firstName.toString());
+        final image = await a.getProfileImageUrl(width: 200);
+        print('status ok:' +
+            ok!.firstName.toString() +
+            'image:' +
+            image.toString());
+
+        final AuthCredential credential =
+            FacebookAuthProvider.credential(result.accessToken!.token);
+        final fbUser =
+            await FirebaseAuth.instance.signInWithCredential(credential);
+        print('fb User:' + fbUser.additionalUserInfo!.profile.toString());
       }),
       body: SingleChildScrollView(
         child: Column(
@@ -378,11 +390,14 @@ Widget _buildSocialIcon(BuildContext context, String imagePath,
         print('button pressed');
         // Button pressed action
         if (isForGoogle) {
-         await loginWithGoogle();
+          // await loginWithGoogle();
+          final user = await signInWithGoogleFirebase();
+          print('G Email: ' + user.toString());
 
           return;
+
           print('google button code');
-          User? user = await FirebaseApi().signInWithGoogle();
+          //    User? user = await FirebaseApi().signInWithGoogle();
           if (user != null) {
             // Handle successful sign-in, e.g., navigate to another screen.
             // print("User-->" + user.email.toString());
@@ -438,11 +453,38 @@ Future<LoginResult> loginWithFacebook() async {
   return result;
 }
 
+Future<void> loginWithGoogle() async {
+  final googleSignInAccount = await GoogleSignIn().signIn();
+  if (googleSignInAccount != null) {
+    print('account not null');
+  }
+}
 
-Future<void> loginWithGoogle()async{
- final googleSignInAccount=await GoogleSignIn().signIn();
- if(googleSignInAccount!=null){
-print('account not null');
- }
+Future<User?> signInWithGoogleFirebase() async {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+  try {
+    final GoogleSignInAccount? googleSignInAccount =
+        await googleSignIn.signIn();
+    if (googleSignInAccount == null) {
+      // User canceled the sign-in process
+      return null;
+    }
 
+    final GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+
+    UserCredential authResult = await _auth.signInWithCredential(credential);
+    User? user = authResult.user;
+
+    return user;
+  } catch (e) {
+    print("Error during Google sign-in: $e");
+    return null;
+  }
 }

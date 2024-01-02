@@ -48,17 +48,17 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyBeCoiAX_mckZTeDOPo073JSnvSgUDXn1o',
-    appId: '1:493159430521:web:01d0ab6783acb2c59dd7a8',
+    appId: '1:493159430521:web:84be9b8ea2186c7a9dd7a8',
     messagingSenderId: '493159430521',
     projectId: 'pace-test-348c2',
     authDomain: 'pace-test-348c2.firebaseapp.com',
     storageBucket: 'pace-test-348c2.appspot.com',
-    measurementId: 'G-4F2LRNLN6M',
+    measurementId: 'G-N47P01BK0V',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCelUKVRS-gmdy2_vlrBftHTOgmnkSvxOk',
-    appId: '1:493159430521:android:69a02a1291ed4d4a9dd7a8',
+    appId: '1:493159430521:android:95177956a582a8ae9dd7a8',
     messagingSenderId: '493159430521',
     projectId: 'pace-test-348c2',
     storageBucket: 'pace-test-348c2.appspot.com',
@@ -66,10 +66,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyD5LR66rhmJVOD5HjheYpoPdsXnPSm9760',
-    appId: '1:493159430521:ios:0681c97e3200247e9dd7a8',
+    appId: '1:493159430521:ios:4f0537f8cbdfb5ec9dd7a8',
     messagingSenderId: '493159430521',
     projectId: 'pace-test-348c2',
     storageBucket: 'pace-test-348c2.appspot.com',
-    iosBundleId: 'com.example.paceApplication',
+    androidClientId: '493159430521-8ka61772dkd5fa2pu1iidu01i7c2vtr1.apps.googleusercontent.com',
+    iosClientId: '493159430521-r1plt9dv5tkbm96270v1hi8377edei78.apps.googleusercontent.com',
+    iosBundleId: 'com.example.paceApplicationFb',
   );
 }

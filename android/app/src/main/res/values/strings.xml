@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
+<string name="app_id">1:493159430521:android:69a02a1291ed4d4a9dd7a8</string>
 <string name="app_name">pace</string>
 <string name="facebook_app_id">1553153538819192</string>
 <string name="fb_login_protocol_scheme">fb1553153538819192</string>

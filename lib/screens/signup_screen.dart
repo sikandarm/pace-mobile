@@ -66,6 +66,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   callSignUpnApi(String fName, String lName, String emailText,
       String passwordText, String phone) async {
+    ScaffoldMessenger.of(context).clearSnackBars();
     try {
       print({
         "firstName": fName,
@@ -107,6 +108,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
       }
     } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+
       print("error");
       print(e);
     }

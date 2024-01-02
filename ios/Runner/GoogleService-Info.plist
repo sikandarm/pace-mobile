@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>493159430521-r1plt9dv5tkbm96270v1hi8377edei78.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.493159430521-r1plt9dv5tkbm96270v1hi8377edei78</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>493159430521-8ka61772dkd5fa2pu1iidu01i7c2vtr1.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD5LR66rhmJVOD5HjheYpoPdsXnPSm9760</string>
+	<key>GCM_SENDER_ID</key>
+	<string>493159430521</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.paceApplicationFb</string>
+	<key>PROJECT_ID</key>
+	<string>pace-test-348c2</string>
+	<key>STORAGE_BUCKET</key>
+	<string>pace-test-348c2.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:493159430521:ios:4f0537f8cbdfb5ec9dd7a8</string>
+</dict>
+</plist>
