@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,23 +15,27 @@ import 'package:http/http.dart' as http;
 import '../services/getAllRoles.dart';
 import '../utils/constants.dart';
 
-class FacebookEmailScreen extends StatefulWidget {
-  FacebookEmailScreen({super.key, required this.facebookLoginModel});
+class GoogleSignInScreen extends StatefulWidget {
+  GoogleSignInScreen({super.key,
+   // required this.facebookLoginModel
+    required this.userCredentials,
+  });
   // final String fbID;
 
+  final UserCredential? userCredentials;
 
   // final String name;
-  final FacebookLoginModel facebookLoginModel;
+  //final FacebookLoginModel facebookLoginModel;
 
   @override
-  State<FacebookEmailScreen> createState() => _FacebookEmailScreenState();
+  State<GoogleSignInScreen> createState() => _GoogleSignInScreenState();
 }
 
-class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
+class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
   // final Stirng fcmToken;
-  final emailController = TextEditingController();
+ // final emailController = TextEditingController();
 
-  final nameController = TextEditingController();
+ // final nameController = TextEditingController();
 
 
   int _selectedRoleIndex = 0;
@@ -52,7 +57,7 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Facebook Email Screen',
+          'Google Sign In',
           style: TextStyle(fontSize: 20),
         ),
       ),
@@ -63,22 +68,29 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
             SizedBox(
               height: 11,
             ),
+            CircleAvatar(
+                radius: 45,
+                backgroundImage: NetworkImage(widget.userCredentials!.user!.photoURL!)),
+
+            SizedBox(height: 33,),
             TextField(
 
-              controller: nameController,
+
+           //   controller: nameController,
               keyboardType: TextInputType.emailAddress,
-              decoration: textFieldDecoration(this.widget.facebookLoginModel.name!, false,enabled: false,),
+              decoration: textFieldDecoration(widget.userCredentials!.user!.displayName!, false,enabled: false,),
             ),
             SizedBox(
               height: 11,
             ),
             TextField(
-              controller: emailController,
+
+           //   controller: emailController,
               keyboardType: TextInputType.emailAddress,
-              decoration: textFieldDecoration("Email", false),
+              decoration: textFieldDecoration(widget.userCredentials!.user!.email!, false,enabled: false),
             ),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             FutureBuilder<List<allRolesModel>>(
               future: _futureRoles,
               builder: (context, snapshot) {
@@ -146,18 +158,18 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                     //   ScaffoldMessenger.of(context).showSnackBar(
                     //       SnackBar(content: Text('Please provide a name!')));
                     //   return;
-                  //  } else
-                      if (emailController.text.trim().isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Please provide an email!')));
-                      return;
-                    } else if (!EmailValidator.validate(
-                        emailController.text.trim())) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Please provide a valid email!')));
-                    }
+                    //  } else
+                    // if (emailController.text.trim().isEmpty) {
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //       SnackBar(content: Text('Please provide an email!')));
+                    //   return;
+                    // } else if (!EmailValidator.validate(
+                    //     emailController.text.trim())) {
+                    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    //       content: Text('Please provide a valid email!')));
+                    // }
 
-                      var _fcmToken='';
+                    var _fcmToken='';
                     final fcmTokenBox = await Hive.openBox('fcmToken');
 
                     if (fcmTokenBox.get('fcmToken') == null) {
@@ -171,43 +183,46 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                     print('dahi wala token:' + _fcmToken.toString());
                     print('roleid:'+ _selectedRoleId.toString());
                     final apiResponse= await http.post(Uri.parse('$BASE_URL/auth/socialLogin'),body: {
-                      'email':emailController.text.trim(),
-                      'Uid':widget.facebookLoginModel.id,
-                      'name':widget.facebookLoginModel.name,
+                      'email':widget.userCredentials!.user!.email!,
+                      'Uid':widget.userCredentials!.user!.uid!,
+                      'name':widget.userCredentials!.user!.displayName!,
                       'roleId':_selectedRoleId.toString(),
                       'fcm_token':_fcmToken,
 
                     });
 
-                      print('api res: '+ apiResponse.body.toString());
-                      final decodedResponse=jsonDecode(apiResponse.body);
 
-//if(decodedResponse['success']==false){
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(decodedResponse['message'])));
+                    print('api res google: '+ apiResponse.body.toString());
+                    final decodedResponse=jsonDecode(apiResponse.body);
 
-//}
+if(decodedResponse['success']==false){
+                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(decodedResponse['message'])));
+
+}
+
                     if(decodedResponse['success']==true){
-print('myy token: '+ decodedResponse['data']['token']);
-Map<String, dynamic>? decodedToken =
-JwtDecoder.decode( decodedResponse['data']['token']);
+                      print('myy token: '+ decodedResponse['data']['token']);
+                      Map<String, dynamic>? decodedToken =
+                      JwtDecoder.decode( decodedResponse['data']['token']);
 
-saveBoolToSP(true, BL_USER_LOGGED_IN);
-saveStringToSP(decodedResponse['data']['token'], BL_USER_TOKEN);
-saveIntToSP(decodedToken['id'], BL_USER_ID);
-saveStringToSP(decodedToken['firstName'], BL_USER_FULL_NAME);
+                      saveBoolToSP(true, BL_USER_LOGGED_IN);
+                      saveStringToSP(decodedResponse['data']['token'], BL_USER_TOKEN);
+                      saveIntToSP(decodedToken['id'], BL_USER_ID);
+                      print('decodedToken["id"]: ' + BL_USER_ID.toString());
+                      saveStringToSP(decodedToken['firstName'], BL_USER_FULL_NAME);
 
-String lsUserRoles = json.encode(decodedToken['roles']);
-print(decodedToken['roles']);
-print("permissions");
-print(decodedToken['permissions']);
-String lsUserPermissions = json.encode(decodedToken['permissions']);
+                      String lsUserRoles = json.encode(decodedToken['roles']);
+                      print(decodedToken['roles']);
+                      print("permissions");
+                      print(decodedToken['permissions']);
+                      String lsUserPermissions = json.encode(decodedToken['permissions']);
 
-saveStringToSP(lsUserRoles, BL_USER_ROLES);
-saveStringToSP(lsUserPermissions, BL_USER_PERMISSIONS);
+                      saveStringToSP(lsUserRoles, BL_USER_ROLES);
+                      saveStringToSP(lsUserPermissions, BL_USER_PERMISSIONS);
 
 
 
-Navigator.push(context, MaterialPageRoute(builder: (context)=>DashboardScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>DashboardScreen()));
 
                     }
 
@@ -223,7 +238,7 @@ Navigator.push(context, MaterialPageRoute(builder: (context)=>DashboardScreen())
                   },
                   style: ButtonStyle(
                     backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.blue),
+                    MaterialStateProperty.all<Color>(Colors.blue),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),

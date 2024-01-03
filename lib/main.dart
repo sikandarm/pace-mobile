@@ -140,20 +140,22 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       //     home: SplashScreen(),
-     // initialRoute: '/',
-      home: FacebookEmailScreen(),
-      // routes: {
-      //   '/': (context) => const SplashScreen(),
-      //   '/login': (context) => const LoginScreen(),
-      //   '/resetpassword': (context) => const ResetPassword(),
-      //   '/midwayscreen': (context) => const MidwayScreen(),
-      //   '/signup': (context) => const SignUpScreen(),
-      //   '/dashboard': (context) => const DashboardScreen(),
-      //   '/notification': (context) => const NotificationsScreen(),
-      //   '/welcomeScreen': (context) => const WelcomeScreen(),
-      //
-      //   // '/testScreen': (context) => const TestScreen(),
-      // },
+       initialRoute: '/',
+      //  home: FacebookEmailScreen(fbID: ''),
+     // home: LoginScreen(),
+
+      routes: {
+        '/': (context) => const SplashScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/resetpassword': (context) => const ResetPassword(),
+        '/midwayscreen': (context) => const MidwayScreen(),
+        '/signup': (context) => const SignUpScreen(),
+        '/dashboard': (context) => const DashboardScreen(),
+        '/notification': (context) => const NotificationsScreen(),
+        '/welcomeScreen': (context) => const WelcomeScreen(),
+
+        // '/testScreen': (context) => const TestScreen(),
+      },
     );
   }
 }

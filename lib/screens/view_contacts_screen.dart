@@ -128,9 +128,11 @@ class _ViewContactsScreenState extends State<ViewContactsScreen> {
             : SingleChildScrollView(
                 child: Column(
                   children: [
+
                     for (int i = 0;
                         i < contactApiData!.data!.users!.length;
                         i++) ...{
+
                       Card(
                         child: Padding(
                           padding: const EdgeInsets.all(21.0),

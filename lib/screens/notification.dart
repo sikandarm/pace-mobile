@@ -32,30 +32,33 @@ class _NotificationListState extends State<NotificationsScreen> {
   void groupNotificationsByDate() {
     final yesterday = today.subtract(const Duration(days: 1));
     _futureList.then((notificationList) {
-      for (final notification in notificationList.data!.notifications!) {
-        final notificationDate = notification.updatedAt;
 
-        print('date: ' + notificationDate.toString());
+     if(notificationList.data!.notifications!=null){
+       for (final notification in notificationList.data!.notifications!) {
+         final notificationDate = notification.updatedAt;
 
-
-
-        final isToday = today.year == extractYear(notificationDate!) &&
-            today.month == extractMonth(notificationDate) &&
-            today.day == extractDay(notificationDate);
-        final isYesterday = yesterday.year == extractYear(notificationDate!) &&
-            yesterday.month == extractMonth(notificationDate) &&
-            yesterday.day == extractDay(notificationDate);
-        final headerText = isToday
+         print('date: ' + notificationDate.toString());
 
 
 
-            ? "Today"
-            : isYesterday
-            ? "Yesterday"
-            : DateFormat("MMM dd, yyyy")
-            .format(DateTime.parse(notificationDate!));
-        groupedNotifications.putIfAbsent(headerText, () => NotificationModel());
-      }
+         final isToday = today.year == extractYear(notificationDate!) &&
+             today.month == extractMonth(notificationDate) &&
+             today.day == extractDay(notificationDate);
+         final isYesterday = yesterday.year == extractYear(notificationDate!) &&
+             yesterday.month == extractMonth(notificationDate) &&
+             yesterday.day == extractDay(notificationDate);
+         final headerText = isToday
+
+
+
+             ? "Today"
+             : isYesterday
+             ? "Yesterday"
+             : DateFormat("MMM dd, yyyy")
+             .format(DateTime.parse(notificationDate!));
+         groupedNotifications.putIfAbsent(headerText, () => NotificationModel());
+       }
+     }
       setState(() {});
     });
   }
@@ -115,8 +118,9 @@ class _NotificationListState extends State<NotificationsScreen> {
               return Center(
                 child: Text("Error : ${snapshot.error}"),
               );
+
             } else if (!snapshot.hasData ||
-                snapshot.data!.data!.notifications!.isEmpty) {
+                snapshot.data!.data!.notifications==[]|| snapshot.data!.data!.notifications==null) {
               return const Center(
                 child: Text("No record found"),
               );

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -10,9 +12,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:pace_application_fb/screens/facebook_email_screen.dart';
+import 'package:pace_application_fb/screens/google_sign_in_screen.dart';
+import 'package:pace_application_fb/services/facbook_api_model.dart';
 
 import '../api/firebase_api.dart';
 import '../utils/constants.dart';
+import 'Dashboard.dart';
 import 'signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -51,7 +57,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
+  tryAutoLogin();
     super.initState();
+  }
+
+  Future<void> tryAutoLogin()async{
+    final autologinBool=await     getBoolFromSF(BL_USER_LOGGED_IN);
+    if(autologinBool){
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>DashboardScreen()));
+      return;
+    }
   }
 
   void showMsgBar(String message) {
@@ -106,6 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final tokenBox = await Hive.openBox('tokenBox');
       await tokenBox.put('token', jsonMap['data']['token']);
 
+      print('today login response:'+ jsonMap.toString());
       if (loginRes.statusCode == 200) {
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context)
@@ -144,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));
-      print('login api:' + e.toString());
+      print('login api:$e');
     }
   }
 
@@ -153,9 +169,11 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(onPressed: () async {
         print('button pressed');
-       await loginApiFB();
+
+        await loginApiFB();
         //  await FacebookAuth.instance.login();
         return;
+
         final a = FacebookLogin(
           debug: false,
         );
@@ -167,16 +185,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
         final ok = await a.getUserProfile();
         final image = await a.getProfileImageUrl(width: 200);
-        print('status ok:' +
-            ok!.firstName.toString() +
-            'image:' +
-            image.toString());
+        print('status ok:${ok!.firstName}image:$image');
 
         final AuthCredential credential =
             FacebookAuthProvider.credential(result.accessToken!.token);
         final fbUser =
             await FirebaseAuth.instance.signInWithCredential(credential);
-        print('fb User:' + fbUser.additionalUserInfo!.profile.toString());
+        print('fb User:${fbUser.additionalUserInfo!.profile}');
       }),
       body: SingleChildScrollView(
         child: Column(
@@ -215,7 +230,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 40),
                     TextField(
-                      
                       controller: emailText,
                       keyboardType: TextInputType.emailAddress,
                       decoration: textFieldDecoration("Email", false),
@@ -394,39 +408,43 @@ Widget _buildSocialIcon(BuildContext context, String imagePath,
         // Button pressed action
         if (isForGoogle) {
           // await loginWithGoogle();
-          final user = await signInWithGoogleFirebase();
-          print('G Email: ' + user.toString());
-
+        //  final user = await signInWithGoogleFirebase();
+         // print('G Email: $user');
+         final userCredentials= await signInWithGoogle();
+         print('userCredentials: ' + userCredentials.toString());
+         if(userCredentials!=null){
+           Navigator.push(context, MaterialPageRoute(builder: (context)=>GoogleSignInScreen(userCredentials: userCredentials,)));
+         }
           return;
 
-          print('google button code');
-          //    User? user = await FirebaseApi().signInWithGoogle();
-          if (user != null) {
-            // Handle successful sign-in, e.g., navigate to another screen.
-            // print("User-->" + user.email.toString());
-            // print("User-->" + user.displayName.toString());
-
-            List<String> nameParts = user.displayName.toString().split(" ");
-            String firstName = nameParts[0];
-            String lastName = nameParts[1];
-
-            saveStringToSP(user.email.toString(), BL_USER_EMAIL);
-            saveStringToSP(firstName, BL_USER_FNAME);
-            saveStringToSP(lastName, BL_USER_LNAME);
-
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SignUpScreen(),
-              ),
-            );
-          } else {
-            // Handle sign-in failure.
-            print("User auth FAIL");
-          }
+          // print('google button code');
+          // //    User? user = await FirebaseApi().signInWithGoogle();
+          // if (user != null) {
+          //   // Handle successful sign-in, e.g., navigate to another screen.
+          //   // print("User-->" + user.email.toString());
+          //   // print("User-->" + user.displayName.toString());
+          //
+          //   List<String> nameParts = user.displayName.toString().split(" ");
+          //   String firstName = nameParts[0];
+          //   String lastName = nameParts[1];
+          //
+          //   saveStringToSP(user.email.toString(), BL_USER_EMAIL);
+          //   saveStringToSP(firstName, BL_USER_FNAME);
+          //   saveStringToSP(lastName, BL_USER_LNAME);
+          //
+          //   Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => const SignUpScreen(),
+          //     ),
+          //   );
+          // } else {
+          //   // Handle sign-in failure.
+          //   print("User auth FAIL");
+          // }
         } else if (isForFacebook) {
           print('facebook button code');
-          await loginWithFacebook();
+          await loginWithFacebook(context);
         } else {
           // await FirebaseApi().signInWithFacebook();
         }
@@ -440,24 +458,35 @@ Widget _buildSocialIcon(BuildContext context, String imagePath,
   );
 }
 
-
-Future<LoginResult> loginWithFacebook() async {
-  final LoginResult result =
-      await FacebookAuth.instance.login(loginBehavior: LoginBehavior.webOnly,permissions: ['public_profile']);
+Future<LoginResult> loginWithFacebook(BuildContext context) async {
+  final LoginResult result = await FacebookAuth.instance.login(
+      loginBehavior: LoginBehavior.webOnly, permissions: ['public_profile']);
   print(result.message);
   if (result.status == LoginStatus.success) {
     // Logged in successfully
     final accessToken = result.accessToken;
 
-    print('fb access token:' + accessToken!.token.toString());
+    print('fb access token:${accessToken!.token}');
 
-    final profile=await FacebookAuth.instance.getUserData();
+    final profile = await FacebookAuth.instance.getUserData();
     print('==================================');
-    print('fb profile data: '+ profile.toString() );
+    print('fb profile data: $profile');
+
+    //  final fbID=profile.
+  final fbLoginResponse=  await facebookLoginResponse(profile);
+  print('my response:'+fbLoginResponse.id.toString());
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              FacebookEmailScreen(
+           facebookLoginModel: fbLoginResponse,
+
+          ),
+        ));
 
     // Use the access token to get user data from Facebook
   } else {
-
     // Login failed
   }
 
@@ -500,10 +529,36 @@ Future<User?> signInWithGoogleFirebase() async {
   }
 }
 
-Future<void> loginApiFB()async{
-  final response=await http.post(Uri.parse('$BASE_URL/user/facebook'));
+
+Future<void> loginApiFB() async {
+  final response = await http.post(Uri.parse('$BASE_URL/user/facebook'));
   print(response.body);
-
-
 }
 
+Future<UserCredential?> signInWithGoogle() async {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+  try {
+    // Trigger the Google Sign In process
+    final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+
+    // Check if the sign-in was canceled
+    if (googleSignInAccount == null) return null;
+
+    // Obtain the GoogleSignInAuthentication object
+    final GoogleSignInAuthentication googleSignInAuthentication =
+    await googleSignInAccount.authentication;
+
+    // Create a new credential using the GoogleSignInAuthentication object
+    final OAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+// print('google sign in credentials:'+ credential.toString());
+    // Sign in to Firebase with the Google Auth credentials
+    return await _auth.signInWithCredential(credential);
+  } catch (e) {
+    print("Error during Google sign in: $e");
+    return null;
+  }
+}

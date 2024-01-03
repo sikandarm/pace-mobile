@@ -60,14 +60,17 @@ class Notifications {
   String? title;
   String? body;
   String? updatedAt;
+  int? userId;
 
-  Notifications({this.id, this.title, this.body, this.updatedAt});
+
+  Notifications({this.id, this.title, this.body, this.updatedAt,this.userId});
 
   Notifications.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     body = json['body'];
     updatedAt = json['updatedAt'];
+    userId=json['userId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -76,6 +79,7 @@ class Notifications {
     data['title'] = this.title;
     data['body'] = this.body;
     data['updatedAt'] = this.updatedAt;
+    data['userId'] = this.userId;
     return data;
   }
 }
@@ -85,18 +89,19 @@ Future<NotificationModel> fetchAllNotifications() async {
   int? userId = await getIntFromSF('UserId');
 
   var url = Uri.parse('$BASE_URL/notifications');
- // var requestUrl = url.replace(queryParameters: {'userId': userId.toString()});
+  var requestUrl = url.replace(queryParameters: {'userId': userId.toString()});
 
 
-  // var response = await http.get(requestUrl);
-  var response = await http.get(url);
+
+   var response = await http.get(requestUrl);
+ // var response = await http.get(url);
 
   var responseString = response.body;
   print(responseString);
 
   Map<String, dynamic> jsonMap = jsonDecode(responseString);
   if(jsonMap['message']=='No notifications found'){
-    return NotificationModel(data: Data(),message: null,success: true);
+    return NotificationModel(data: Data(notifications: []),message: null,success: true);
   }
   return NotificationModel.fromJson(jsonMap);
 }

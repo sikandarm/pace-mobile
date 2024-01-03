@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 bool hasNewNotifiaction = false;
 // ignore: constant_identifier_names/
 //const String BASE_URL = "http://206.81.5.26:3500/api"; // live ip
-const String BASE_URL = "http://192.168.1.6:3500/api"; // local ip
+const String BASE_URL = "http://192.168.1.4:3500/api"; // local ip
 
 // http://206.81.5.26/inventory
 // ignore: constant_identifier_names
@@ -103,12 +103,14 @@ const List<String> LS_PERMISSIONS = [
   'View Task Detail',
 ];
 
-InputDecoration textFieldDecoration(String title, bool ifPassword) {
+InputDecoration textFieldDecoration(String title, bool ifPassword ,{ bool enabled=true}) {
   var outlineInputBorder = OutlineInputBorder(
     borderSide: const BorderSide(color: Colors.transparent),
     borderRadius: BorderRadius.circular(10.0),
   );
   return InputDecoration(
+
+    enabled: enabled,
       filled: true,
       fillColor: const Color(0xffF8F9FD),
       hintText: title,
@@ -120,7 +122,7 @@ InputDecoration textFieldDecoration(String title, bool ifPassword) {
             ),
       enabledBorder: outlineInputBorder,
       focusedBorder: outlineInputBorder,
-      border: outlineInputBorder);
+      border: outlineInputBorder,);
 }
 
 void showSnackbar(BuildContext context, String text) {

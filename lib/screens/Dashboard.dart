@@ -98,6 +98,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     checkPermissionAndUpdateBool("view_inventory", (localBool) {
       blShowInventory = localBool;
     });
+    setState(() {
+
+    });
   }
 
   void checkPermissionAndUpdateBool(
@@ -129,10 +132,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+
                   Expanded(
                     child: DashboardCard(
                       title: 'Jobs',
-                      showList: blShowInventory,
+                      showList: blShowJobList,
                       // showList: true,   just wrote to check if it's connected or not to something
 
                       subtitle: jobCount,
@@ -163,6 +167,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             const SizedBox(height: 10),
             Visibility(
               visible: blShowJobList,
+
               child: Expanded(
                 child: FutureBuilder<List<Job>>(
                   future: _futureJob,
