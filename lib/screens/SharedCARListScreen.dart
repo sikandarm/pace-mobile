@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/get_shared_car.dart';
 import '../utils/constants.dart';
@@ -24,6 +25,7 @@ class _SharedListState extends State<SharedCARList> {
 
   @override
   void initState() {
+    getProfileImageToSharedPrefs();
     FirebaseMessaging.onMessage.listen((event) {
       hasNewNotifiaction=true;
       setState(() {
@@ -47,12 +49,25 @@ class _SharedListState extends State<SharedCARList> {
     });
   }
 
+
+  String? userProfileImage;
+
+  Future<void> getProfileImageToSharedPrefs() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    userProfileImage =
+    await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
+    print('user profile image: '+ userProfileImage.toString());
+    setState(() {});
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+
         iconTheme: const IconThemeData(color: Colors.black),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -122,10 +137,10 @@ class _SharedListState extends State<SharedCARList> {
                         builder: (context) => const ProfileScreen()),
                   );
                 },
-                child: const Padding(
+                child:  Padding(
                   padding: EdgeInsets.only(right: 10.0, left: 5.0),
                   child: CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/ic_profile.png'),
+                    backgroundImage: userProfileImage==null? AssetImage('assets/images/ic_profile.png'):NetworkImage(userProfileImage!) as ImageProvider,
                     radius: 15,
                   ),
                 ),

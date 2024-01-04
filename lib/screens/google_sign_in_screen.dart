@@ -5,21 +5,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:googleapis/admob/v1.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:pace_application_fb/screens/Dashboard.dart';
 import 'package:pace_application_fb/services/facbook_api_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/getAllRoles.dart';
 import '../utils/constants.dart';
 
 class GoogleSignInScreen extends StatefulWidget {
-  GoogleSignInScreen({super.key,
-   // required this.facebookLoginModel
+  GoogleSignInScreen({
+    super.key,
+    // required this.facebookLoginModel
     required this.userCredentials,
   });
+
   // final String fbID;
 
   final UserCredential? userCredentials;
@@ -32,24 +36,33 @@ class GoogleSignInScreen extends StatefulWidget {
 }
 
 class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
+  var phone = TextEditingController();
   // final Stirng fcmToken;
- // final emailController = TextEditingController();
+  // final emailController = TextEditingController();
 
- // final nameController = TextEditingController();
+  // final nameController = TextEditingController();
+
 
 
   int _selectedRoleIndex = 0;
   String _selectedRoleName = "";
-  int _selectedRoleId = 0;
+  int _selectedRoleId = 1;
   late Future<List<allRolesModel>> _futureRoles = Future.value([]);
   late List<String> _lsRoles; // List to store role names
 
   @override
   void initState() {
-
     _futureRoles = fetchAllRoles();
     _lsRoles = [];
+    saveProfileImageToSharedPrefs();
+
     super.initState();
+  }
+
+  Future<void> saveProfileImageToSharedPrefs()async{
+  final sharedPrefs= await SharedPreferences.getInstance();
+  await sharedPrefs.setString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE, widget.userCredentials!.user!.photoURL!);
+  print('photo url saved locally');
   }
 
   @override
@@ -70,26 +83,46 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
             ),
             CircleAvatar(
                 radius: 45,
-                backgroundImage: NetworkImage(widget.userCredentials!.user!.photoURL!)),
-
-            SizedBox(height: 33,),
+                backgroundImage:
+                    NetworkImage(widget.userCredentials!.user!.photoURL!)),
+            SizedBox(
+              height: 33,
+            ),
             TextField(
-
-
-           //   controller: nameController,
+              //   controller: nameController,
               keyboardType: TextInputType.emailAddress,
-              decoration: textFieldDecoration(widget.userCredentials!.user!.displayName!, false,enabled: false,),
+              decoration: textFieldDecoration(
+                widget.userCredentials!.user!.displayName!,
+                false,
+                enabled: false,
+              ),
             ),
             SizedBox(
               height: 11,
             ),
             TextField(
-
-           //   controller: emailController,
+              //   controller: emailController,
               keyboardType: TextInputType.emailAddress,
-              decoration: textFieldDecoration(widget.userCredentials!.user!.email!, false,enabled: false),
+              decoration: textFieldDecoration(
+                  widget.userCredentials!.user!.email!, false,
+                  enabled: false),
             ),
-
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: TextField(
+                textAlignVertical: TextAlignVertical.center,
+                controller: phone,
+                keyboardType: TextInputType.phone,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(
+                      12), // Limit input to 12 characters (including mask characters)
+                  PhoneNumberFormatter(), // Only allow digits
+                ],
+                decoration: textFieldDecoration("Phone", false),
+              ),
+            ),
             const SizedBox(height: 20),
             FutureBuilder<List<allRolesModel>>(
               future: _futureRoles,
@@ -99,8 +132,7 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (snapshot.hasData) {
-                  _lsRoles =
-                      snapshot.data!.map((role) => role.name!).toList();
+                  _lsRoles = snapshot.data!.map((role) => role.name!).toList();
 
                   return SizedBox(
                     height: 100,
@@ -133,9 +165,6 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
             SizedBox(
               height: 50,
             ),
-
-
-
             SizedBox(
               width: double.infinity,
               height: 50.0,
@@ -149,10 +178,13 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                   )
                 ]),
                 child: ElevatedButton(
-                  onPressed: () async{
-
-
+                  onPressed: () async {
                     ScaffoldMessenger.of(context).clearSnackBars();
+                     if (phone.text.trim().isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Please provide a phone number!')));
+                    return;
+                    }
                     // _validateFields();
                     // if (nameController.text.trim().isEmpty) {
                     //   ScaffoldMessenger.of(context).showSnackBar(
@@ -169,61 +201,70 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                     //       content: Text('Please provide a valid email!')));
                     // }
 
-                    var _fcmToken='';
+                    var _fcmToken = '';
                     final fcmTokenBox = await Hive.openBox('fcmToken');
 
                     if (fcmTokenBox.get('fcmToken') == null) {
-                      _fcmToken = (await FirebaseMessaging.instance.getToken())!;
+                      _fcmToken =
+                          (await FirebaseMessaging.instance.getToken())!;
                       await fcmTokenBox.put('fcmToken', _fcmToken);
                     } else {
                       _fcmToken = await fcmTokenBox.get('fcmToken');
                     }
 
-
                     print('dahi wala token:' + _fcmToken.toString());
-                    print('roleid:'+ _selectedRoleId.toString());
-                    final apiResponse= await http.post(Uri.parse('$BASE_URL/auth/socialLogin'),body: {
-                      'email':widget.userCredentials!.user!.email!,
-                      'Uid':widget.userCredentials!.user!.uid!,
-                      'name':widget.userCredentials!.user!.displayName!,
-                      'roleId':_selectedRoleId.toString(),
-                      'fcm_token':_fcmToken,
-
+                    print('roleid:' + _selectedRoleId.toString());
+                    final apiResponse = await http
+                        .post(Uri.parse('$BASE_URL/auth/socialLogin'), body: {
+                      'email': widget.userCredentials!.user!.email!,
+                      'Uid': widget.userCredentials!.user!.uid!,
+                      'name': widget.userCredentials!.user!.displayName!,
+                      'roleId': _selectedRoleId.toString(),
+                      'phone':phone.text,
+                      'fcm_token': _fcmToken,
                     });
 
+                    print('api res google: ' + apiResponse.body.toString());
+                    final decodedResponse = jsonDecode(apiResponse.body);
+                    print('socialLogin response: '+ decodedResponse.toString());
 
-                    print('api res google: '+ apiResponse.body.toString());
-                    final decodedResponse=jsonDecode(apiResponse.body);
+                    if (decodedResponse['success'] == false) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(decodedResponse['message'])));
+                    }
 
-if(decodedResponse['success']==false){
-                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(decodedResponse['message'])));
-
-}
-
-                    if(decodedResponse['success']==true){
-                      print('myy token: '+ decodedResponse['data']['token']);
+                    if (decodedResponse['success'] == true) {
+                      print('myy token: ' + decodedResponse['data']['token']);
                       Map<String, dynamic>? decodedToken =
-                      JwtDecoder.decode( decodedResponse['data']['token']);
+                          JwtDecoder.decode(decodedResponse['data']['token']);
+
+                      print('MYYYYYY DECODED TOKEN: '+decodedToken.toString());
 
                       saveBoolToSP(true, BL_USER_LOGGED_IN);
-                      saveStringToSP(decodedResponse['data']['token'], BL_USER_TOKEN);
+
+                       saveStringToSP(
+                          decodedResponse['data']['token'], BL_USER_TOKEN);
+                     // saveStringToSP(
+                       //   decodedToken.toString(), BL_USER_TOKEN); error ara hy ismai
                       saveIntToSP(decodedToken['id'], BL_USER_ID);
                       print('decodedToken["id"]: ' + BL_USER_ID.toString());
-                      saveStringToSP(decodedToken['firstName'], BL_USER_FULL_NAME);
+                      saveStringToSP(
+                          decodedToken['firstName'], BL_USER_FULL_NAME);
 
                       String lsUserRoles = json.encode(decodedToken['roles']);
                       print(decodedToken['roles']);
                       print("permissions");
                       print(decodedToken['permissions']);
-                      String lsUserPermissions = json.encode(decodedToken['permissions']);
+                      String lsUserPermissions =
+                          json.encode(decodedToken['permissions']);
 
                       saveStringToSP(lsUserRoles, BL_USER_ROLES);
                       saveStringToSP(lsUserPermissions, BL_USER_PERMISSIONS);
 
-
-
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>DashboardScreen()));
-
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DashboardScreen()));
                     }
 
                     //   String uEmail = emailText.text;
@@ -238,7 +279,7 @@ if(decodedResponse['success']==false){
                   },
                   style: ButtonStyle(
                     backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.blue),
+                        MaterialStateProperty.all<Color>(Colors.blue),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -256,6 +297,32 @@ if(decodedResponse['success']==false){
         ),
       ),
     );
-
   }
 }
+
+
+class PhoneNumberFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    final text = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+
+    if (text.length <= 3) {
+      return TextEditingValue(
+          text: text, selection: TextSelection.collapsed(offset: text.length));
+    } else if (text.length <= 6) {
+      return TextEditingValue(
+        text: '${text.substring(0, 3)}-${text.substring(3)}',
+        selection: TextSelection.collapsed(offset: text.length + 1),
+      );
+    } else {
+      return TextEditingValue(
+        text:
+        '${text.substring(0, 3)}-${text.substring(3, 6)}-${text.substring(6)}',
+        selection: TextSelection.collapsed(offset: text.length + 2),
+      );
+    }
+  }
+}
+
+

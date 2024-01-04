@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../services/check_task_play_or_pause_status.dart';
@@ -106,6 +107,7 @@ class _TaskDetailState extends State<TaskDetail> {
   }
 
   bool? taskPayOrPauseStatus = null;
+
   Future<void> callApiMethods() async {
     taskPayOrPauseStatus =
         await getTaskPlayOrPauseStatus(taskId: widget.taskId.toString());
@@ -122,6 +124,16 @@ class _TaskDetailState extends State<TaskDetail> {
     setState(() {
       boolUpdater(localBool);
     });
+  }
+
+  String? userProfileImage;
+
+  Future<void> getProfileImageToSharedPrefs() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    userProfileImage =
+        await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
+    print('user profile image: ' + userProfileImage.toString());
+    setState(() {});
   }
 
   @override
@@ -392,11 +404,12 @@ class _TaskDetailState extends State<TaskDetail> {
                           builder: (context) => const ProfileScreen()),
                     );
                   },
-                  child: const Padding(
+                  child: Padding(
                     padding: EdgeInsets.only(right: 10.0, left: 5.0),
                     child: CircleAvatar(
-                      backgroundImage:
-                          AssetImage('assets/images/ic_profile.png'),
+                      backgroundImage: userProfileImage == null
+                          ? AssetImage('assets/images/ic_profile.png')
+                          : NetworkImage(userProfileImage!) as ImageProvider,
                       radius: 15,
                     ),
                   ),
@@ -526,6 +539,7 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
   );
 
   bool? taskPayOrPauseStatus = null;
+
   Future<void> callApiMethods() async {
     taskPayOrPauseStatus =
         await getTaskPlayOrPauseStatus(taskId: widget.id.toString());

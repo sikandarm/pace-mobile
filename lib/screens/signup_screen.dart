@@ -29,8 +29,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   int _selectedRoleIndex = 0;
   String _selectedRoleName = "";
-  int _selectedRoleId = 0;
+  int _selectedRoleId = 1;
   late List<String> _lsRoles; // List to store role names
+
 
   @override
   void initState() {
@@ -397,6 +398,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 }
 
+
+
 class _PhoneNumberFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
@@ -420,3 +423,10 @@ class _PhoneNumberFormatter extends TextInputFormatter {
     }
   }
 }
+
+
+
+
+
+
+

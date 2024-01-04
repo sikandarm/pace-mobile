@@ -129,80 +129,82 @@ class _ViewContactsScreenState extends State<ViewContactsScreen> {
                 child: Column(
                   children: [
 
-                    for (int i = 0;
-                        i < contactApiData!.data!.users!.length;
-                        i++) ...{
+                    if(contactApiData!.data!.users!=null)...{
+                      for (int i = 0;
+                      i < contactApiData!.data!.users!.length;
+                      i++) ...{
 
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(21.0),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  const Text(
-                                    'First Name: ',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(contactApiData!
-                                      .data!.users![i].firstName!),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  const Text(
-                                    'Last Name: ',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(contactApiData!
-                                      .data!.users![i].lastName!),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  const Text(
-                                    'Email: ',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(contactApiData!.data!.users![i].email!),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  const Text(
-                                    'Contact No: ',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(contactApiData!.data!.users![i].phone!),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 25,
-                              ),
-                              ElevatedButton.icon(
-                                  style: const ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStatePropertyAll(Colors.blue),
-                                    foregroundColor:
-                                        MaterialStatePropertyAll(Colors.white),
-                                  ),
-                                  onPressed: () async {
-                                    await launchDialer(
-                                        contactApiData!.data!.users![i].phone!);
-                                  },
-                                  icon: const Icon(
-                                    Icons.call,
-                                    size: 18,
-                                  ),
-                                  label: const Text('Call')),
-                            ],
+                        Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(21.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    const Text(
+                                      'First Name: ',
+                                      style:
+                                      TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(contactApiData!
+                                        .data!.users![i].firstName!),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      'Last Name: ',
+                                      style:
+                                      TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(contactApiData!
+                                        .data!.users![i].lastName!),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      'Email: ',
+                                      style:
+                                      TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(contactApiData!.data!.users![i].email!),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      'Contact No: ',
+                                      style:
+                                      TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(contactApiData!.data!.users![i].phone.toString()),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 25,
+                                ),
+                                ElevatedButton.icon(
+                                    style: const ButtonStyle(
+                                      backgroundColor:
+                                      MaterialStatePropertyAll(Colors.blue),
+                                      foregroundColor:
+                                      MaterialStatePropertyAll(Colors.white),
+                                    ),
+                                    onPressed: () async {
+                                      await launchDialer(
+                                          contactApiData!.data!.users![i].phone!);
+                                    },
+                                    icon: const Icon(
+                                      Icons.call,
+                                      size: 18,
+                                    ),
+                                    label: const Text('Call')),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
+                      }
                     }
                   ],
                 ),

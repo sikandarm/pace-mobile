@@ -460,11 +460,12 @@ Widget _buildSocialIcon(BuildContext context, String imagePath,
 
 Future<LoginResult> loginWithFacebook(BuildContext context) async {
   final LoginResult result = await FacebookAuth.instance.login(
-      loginBehavior: LoginBehavior.webOnly, permissions: ['public_profile']);
+      loginBehavior: LoginBehavior.webOnly, permissions: ['public_profile',]);
   print(result.message);
   if (result.status == LoginStatus.success) {
     // Logged in successfully
     final accessToken = result.accessToken;
+
 
     print('fb access token:${accessToken!.token}');
 
@@ -481,6 +482,9 @@ Future<LoginResult> loginWithFacebook(BuildContext context) async {
           builder: (context) =>
               FacebookEmailScreen(
            facebookLoginModel: fbLoginResponse,
+                accessToken: result.accessToken,
+
+
 
           ),
         ));

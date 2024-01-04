@@ -5,6 +5,7 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 import '../components/task_list_card.dart';
@@ -113,6 +114,7 @@ class _TaskListState extends State<TaskList> {
   @override
   void initState() {
     //  _expandableController = ExpandableController();
+    getProfileImageToSharedPrefs();
     super.initState();
     callOtherApiMethod();
     callApiMethods();
@@ -147,6 +149,7 @@ class _TaskListState extends State<TaskList> {
     isLoading = true;
     _futureTask = await getIndependentTasks(jobID: widget.jobId.toString());
     _futureTask = getFilteredTasks(_futureTask);
+    print('all future tasks:'+ _futureTask.toString());
     isLoading = false;
     setState(() {});
   }
@@ -187,6 +190,17 @@ class _TaskListState extends State<TaskList> {
         return allTasks;
     }
   }
+
+  String? userProfileImage;
+
+  Future<void> getProfileImageToSharedPrefs() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    userProfileImage =
+    await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
+    print('user profile image: '+ userProfileImage.toString());
+    setState(() {});
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -330,10 +344,10 @@ class _TaskListState extends State<TaskList> {
                         builder: (context) => const ProfileScreen()),
                   );
                 },
-                child: const Padding(
+                child:  Padding(
                   padding: EdgeInsets.only(right: 10.0, left: 5.0),
                   child: CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/ic_profile.png'),
+                    backgroundImage: userProfileImage==null? AssetImage('assets/images/ic_profile.png'):NetworkImage(userProfileImage!) as ImageProvider,
                     radius: 15,
                   ),
                 ),

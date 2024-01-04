@@ -7,7 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 bool hasNewNotifiaction = false;
 // ignore: constant_identifier_names/
 //const String BASE_URL = "http://206.81.5.26:3500/api"; // live ip
-const String BASE_URL = "http://192.168.1.4:3500/api"; // local ip
+const String BASE_URL = "http://192.168.1.8:3500/api"; // local ip
+
+
+
 
 // http://206.81.5.26/inventory
 // ignore: constant_identifier_names
@@ -21,6 +24,9 @@ const String BL_USER_LOGGED_IN = "UserLoggedIn";
 const String BL_USER_TOKEN = "UserToken";
 const String BL_USER_ID = "UserId";
 const String BL_USER_FULL_NAME = "UserFullName";
+const String BL_USER_GOOGLE_OR_FACEBOOK_IMAGE = "UserProfileImage";
+// const String BL_USER_FACEBOOK_IMAGE = "UserProfileImage";
+
 
 const String BL_USER_FNAME = "UserFirstName";
 const String BL_USER_LNAME = "UserLastName";
@@ -103,26 +109,27 @@ const List<String> LS_PERMISSIONS = [
   'View Task Detail',
 ];
 
-InputDecoration textFieldDecoration(String title, bool ifPassword ,{ bool enabled=true}) {
+InputDecoration textFieldDecoration(String title, bool ifPassword,
+    {bool enabled = true}) {
   var outlineInputBorder = OutlineInputBorder(
     borderSide: const BorderSide(color: Colors.transparent),
     borderRadius: BorderRadius.circular(10.0),
   );
   return InputDecoration(
-
     enabled: enabled,
-      filled: true,
-      fillColor: const Color(0xffF8F9FD),
-      hintText: title,
-      suffixIcon: !ifPassword
-          ? null
-          : const Icon(
-              Icons.remove_red_eye,
-              color: Colors.grey,
-            ),
-      enabledBorder: outlineInputBorder,
-      focusedBorder: outlineInputBorder,
-      border: outlineInputBorder,);
+    filled: true,
+    fillColor: const Color(0xffF8F9FD),
+    hintText: title,
+    suffixIcon: !ifPassword
+        ? null
+        : const Icon(
+            Icons.remove_red_eye,
+            color: Colors.grey,
+          ),
+    enabledBorder: outlineInputBorder,
+    focusedBorder: outlineInputBorder,
+    border: outlineInputBorder,
+  );
 }
 
 void showSnackbar(BuildContext context, String text) {
@@ -252,9 +259,12 @@ void showToast(String message) {
   Fluttertoast.showToast(
     msg: message,
     toastLength: Toast.LENGTH_SHORT,
-    gravity: ToastGravity.CENTER, // Position where the toast will appear
-    backgroundColor: Colors.white, // Background color of the toast
-    textColor: Colors.blue, // Text color of the toast
+    gravity: ToastGravity.CENTER,
+    // Position where the toast will appear
+    backgroundColor: Colors.white,
+    // Background color of the toast
+    textColor: Colors.blue,
+    // Text color of the toast
     fontSize: 16.0, // Font size of the toast text
   );
 }

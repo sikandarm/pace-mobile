@@ -4,52 +4,82 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:googleapis/admob/v1.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:pace_application_fb/screens/Dashboard.dart';
 import 'package:pace_application_fb/services/facbook_api_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/getAllRoles.dart';
 import '../utils/constants.dart';
 
 class FacebookEmailScreen extends StatefulWidget {
-  FacebookEmailScreen({super.key, required this.facebookLoginModel});
-  // final String fbID;
+  FacebookEmailScreen(
+      {super.key, required this.facebookLoginModel, required this.accessToken});
 
+  // final String fbID;
 
   // final String name;
   final FacebookLoginModel facebookLoginModel;
+  final AccessToken? accessToken;
+
 
   @override
   State<FacebookEmailScreen> createState() => _FacebookEmailScreenState();
 }
 
 class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
+  var phone = TextEditingController();
   // final Stirng fcmToken;
   final emailController = TextEditingController();
 
   final nameController = TextEditingController();
 
-
   int _selectedRoleIndex = 0;
   String _selectedRoleName = "";
-  int _selectedRoleId = 0;
+  int _selectedRoleId = 1;
   late Future<List<allRolesModel>> _futureRoles = Future.value([]);
   late List<String> _lsRoles; // List to store role names
 
+  Future<void> facebookGraphApi() async {
+    final response = await http.post(Uri.parse(
+        'https://graph.facebook.com/${widget.facebookLoginModel.id}?fields=id,name,email,picture&access_token=${widget.accessToken!.token}'));
+    print('graph api response: ' + response.body);
+    final decodedResponse=jsonDecode(response.body);
+    print('-------------------------');
+    profileImageUrl=decodedResponse['picture']['data']['url'];
+    setState(() {
+
+    });
+  }
+  String profileImageUrl='';
+
   @override
   void initState() {
-
     _futureRoles = fetchAllRoles();
     _lsRoles = [];
+   // saveProfileImageToSharedPrefs();
     super.initState();
   }
+
+  Future<void> saveProfileImageToSharedPrefs() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    await sharedPrefs.setString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE,
+        widget.facebookLoginModel.picture!.data!.url!);
+    print('photo url saved locally');
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: () async {
+        await facebookGraphApi();
+      }),
       appBar: AppBar(
         title: Text(
           'Facebook Email Screen',
@@ -57,17 +87,23 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
         ),
       ),
       body: Padding(
+
         padding: const EdgeInsets.all(27.0),
         child: Column(
           children: [
+         //   CircleAvatar(radius: 33,backgroundImage: NetworkImage(profileImageUrl) as ImageProvider,),
+
             SizedBox(
               height: 11,
             ),
             TextField(
-
               controller: nameController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: textFieldDecoration(this.widget.facebookLoginModel.name!, false,enabled: false,),
+              keyboardType: TextInputType.text,
+              decoration: textFieldDecoration(
+                this.widget.facebookLoginModel.name!,
+                false,
+                enabled: false,
+              ),
             ),
             SizedBox(
               height: 11,
@@ -77,7 +113,22 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
               keyboardType: TextInputType.emailAddress,
               decoration: textFieldDecoration("Email", false),
             ),
-
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: TextField(
+                textAlignVertical: TextAlignVertical.center,
+                controller: phone,
+                keyboardType: TextInputType.phone,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(
+                      12), // Limit input to 12 characters (including mask characters)
+                  PhoneNumberFormatter(), // Only allow digits
+                ],
+                decoration: textFieldDecoration("Phone", false),
+              ),
+            ),
             const SizedBox(height: 10),
             FutureBuilder<List<allRolesModel>>(
               future: _futureRoles,
@@ -87,8 +138,7 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (snapshot.hasData) {
-                  _lsRoles =
-                      snapshot.data!.map((role) => role.name!).toList();
+                  _lsRoles = snapshot.data!.map((role) => role.name!).toList();
 
                   return SizedBox(
                     height: 100,
@@ -121,9 +171,6 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
             SizedBox(
               height: 50,
             ),
-
-
-
             SizedBox(
               width: double.infinity,
               height: 50.0,
@@ -136,18 +183,17 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                     offset: const Offset(0, 3), // changes position of shadow
                   )
                 ]),
+
                 child: ElevatedButton(
-                  onPressed: () async{
-
-
+                  onPressed: () async {
                     ScaffoldMessenger.of(context).clearSnackBars();
                     // _validateFields();
                     // if (nameController.text.trim().isEmpty) {
                     //   ScaffoldMessenger.of(context).showSnackBar(
                     //       SnackBar(content: Text('Please provide a name!')));
                     //   return;
-                  //  } else
-                      if (emailController.text.trim().isEmpty) {
+                    //  } else
+                    if (emailController.text.trim().isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Please provide an email!')));
                       return;
@@ -155,60 +201,74 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                         emailController.text.trim())) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text('Please provide a valid email!')));
+                    return;
+                    }
+                    else if (phone.text.trim().isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('Please provide a phone number!')));
+                  return;
                     }
 
-                      var _fcmToken='';
+
+                    var _fcmToken = '';
                     final fcmTokenBox = await Hive.openBox('fcmToken');
 
                     if (fcmTokenBox.get('fcmToken') == null) {
-                      _fcmToken = (await FirebaseMessaging.instance.getToken())!;
+                      _fcmToken =
+                          (await FirebaseMessaging.instance.getToken())!;
                       await fcmTokenBox.put('fcmToken', _fcmToken);
                     } else {
                       _fcmToken = await fcmTokenBox.get('fcmToken');
                     }
 
-
                     print('dahi wala token:' + _fcmToken.toString());
-                    print('roleid:'+ _selectedRoleId.toString());
-                    final apiResponse= await http.post(Uri.parse('$BASE_URL/auth/socialLogin'),body: {
-                      'email':emailController.text.trim(),
-                      'Uid':widget.facebookLoginModel.id,
-                      'name':widget.facebookLoginModel.name,
-                      'roleId':_selectedRoleId.toString(),
-                      'fcm_token':_fcmToken,
+                    print('roleid:' + _selectedRoleId.toString());
+                    final apiResponse = await http
+                        .post(Uri.parse('$BASE_URL/auth/socialLogin'), body: {
+                      'email': emailController.text.trim(),
+                      'Uid': widget.facebookLoginModel.id,
+                      'name': widget.facebookLoginModel.name,
+                      'roleId': _selectedRoleId.toString(),
+                      'phone':phone.text,
+                      'fcm_token': _fcmToken,
 
                     });
 
-                      print('api res: '+ apiResponse.body.toString());
-                      final decodedResponse=jsonDecode(apiResponse.body);
+                    print('api res: ' + apiResponse.body.toString());
+                    final decodedResponse = jsonDecode(apiResponse.body);
 
 //if(decodedResponse['success']==false){
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(decodedResponse['message'])));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(decodedResponse['message'])));
 
 //}
-                    if(decodedResponse['success']==true){
-print('myy token: '+ decodedResponse['data']['token']);
-Map<String, dynamic>? decodedToken =
-JwtDecoder.decode( decodedResponse['data']['token']);
-
-saveBoolToSP(true, BL_USER_LOGGED_IN);
-saveStringToSP(decodedResponse['data']['token'], BL_USER_TOKEN);
-saveIntToSP(decodedToken['id'], BL_USER_ID);
-saveStringToSP(decodedToken['firstName'], BL_USER_FULL_NAME);
-
-String lsUserRoles = json.encode(decodedToken['roles']);
-print(decodedToken['roles']);
-print("permissions");
-print(decodedToken['permissions']);
-String lsUserPermissions = json.encode(decodedToken['permissions']);
-
-saveStringToSP(lsUserRoles, BL_USER_ROLES);
-saveStringToSP(lsUserPermissions, BL_USER_PERMISSIONS);
+                    if (decodedResponse['success'] == true) {
+                      print('myy token: ' + decodedResponse['data']['token']);
+                      Map<String, dynamic>? decodedToken =
+                          JwtDecoder.decode(decodedResponse['data']['token']);
 
 
+                      saveBoolToSP(true, BL_USER_LOGGED_IN);
+                      saveStringToSP(
+                          decodedResponse['data']['token'], BL_USER_TOKEN);
+                      saveIntToSP(decodedToken['id'], BL_USER_ID);
+                      saveStringToSP(
+                          decodedToken['firstName'], BL_USER_FULL_NAME);
 
-Navigator.push(context, MaterialPageRoute(builder: (context)=>DashboardScreen()));
+                      String lsUserRoles = json.encode(decodedToken['roles']);
+                      print(decodedToken['roles']);
+                      print("permissions");
+                      print(decodedToken['permissions']);
+                      String lsUserPermissions =
+                          json.encode(decodedToken['permissions']);
 
+                      saveStringToSP(lsUserRoles, BL_USER_ROLES);
+                      saveStringToSP(lsUserPermissions, BL_USER_PERMISSIONS);
+
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DashboardScreen()));
                     }
 
                     //   String uEmail = emailText.text;
@@ -243,4 +303,31 @@ Navigator.push(context, MaterialPageRoute(builder: (context)=>DashboardScreen())
     );
 
   }
+
 }
+
+
+class PhoneNumberFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    final text = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+
+    if (text.length <= 3) {
+      return TextEditingValue(
+          text: text, selection: TextSelection.collapsed(offset: text.length));
+    } else if (text.length <= 6) {
+      return TextEditingValue(
+        text: '${text.substring(0, 3)}-${text.substring(3)}',
+        selection: TextSelection.collapsed(offset: text.length + 1),
+      );
+    } else {
+      return TextEditingValue(
+        text:
+        '${text.substring(0, 3)}-${text.substring(3, 6)}-${text.substring(6)}',
+        selection: TextSelection.collapsed(offset: text.length + 2),
+      );
+    }
+  }
+}
+

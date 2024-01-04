@@ -1,5 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/dashboard_card.dart';
 import '../components/job_list_card.dart';
@@ -55,8 +58,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
+  String? userProfileImage;
+
+  Future<void> getProfileImageToSharedPrefs() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    userProfileImage =
+        await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
+    print('user profile image: '+ userProfileImage.toString());
+    setState(() {});
+  }
+
   @override
   void initState() {
+    getProfileImageToSharedPrefs();
     FirebaseMessaging.onMessage.listen((event) {
       hasNewNotifiaction = true;
       setState(() {});
@@ -98,9 +112,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     checkPermissionAndUpdateBool("view_inventory", (localBool) {
       blShowInventory = localBool;
     });
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   void checkPermissionAndUpdateBool(
@@ -121,8 +133,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       // }),
       key: scaffoldKey,
       drawer: _buildSideDrawer(context),
-      appBar: _buildAppBar(context, scaffoldKey),
+      appBar: _buildAppBar(context, scaffoldKey,userProfileImage),
       body: RefreshIndicator(
+
         onRefresh: _refreshData,
         child: Column(
           children: [
@@ -132,7 +145,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-
                   Expanded(
                     child: DashboardCard(
                       title: 'Jobs',
@@ -167,7 +179,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             const SizedBox(height: 10),
             Visibility(
               visible: blShowJobList,
-
               child: Expanded(
                 child: FutureBuilder<List<Job>>(
                   future: _futureJob,
@@ -211,7 +222,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 }
 
 PreferredSizeWidget _buildAppBar(
-    context, GlobalKey<ScaffoldState> scaffoldKey) {
+    context, GlobalKey<ScaffoldState> scaffoldKey, String? userProfileImage) {
   return AppBar(
     backgroundColor: Colors.white,
     leading: IconButton(
@@ -293,7 +304,7 @@ PreferredSizeWidget _buildAppBar(
             ),
           ),
           Visibility(
-            visible: blShowProfile,
+           // visible: blShowProfile,
             child: GestureDetector(
               onTap: () {
                 // showModalBottomSheet(
@@ -377,10 +388,10 @@ PreferredSizeWidget _buildAppBar(
                       builder: (context) => const ProfileScreen()),
                 );
               },
-              child: const Padding(
+              child:  Padding(
                 padding: EdgeInsets.only(right: 10.0, left: 5.0),
                 child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/ic_profile.png'),
+                  backgroundImage: userProfileImage==null?  AssetImage('assets/images/ic_profile.png'):NetworkImage(userProfileImage) as ImageProvider,
                   radius: 15,
                 ),
               ),
@@ -402,7 +413,8 @@ Widget _buildSideDrawer(BuildContext context) {
           ),
           child: Center(
             child: Image.asset(
-              'assets/images/SFM_Logo.png',
+
+               'assets/images/SFM_Logo.png',
               // width: 120,
               // height: 120,
               width: 150,
@@ -500,7 +512,7 @@ Widget _buildSideDrawer(BuildContext context) {
                           ),
                           TextButton(
                             child: const Text('Logout'),
-                            onPressed: () {
+                            onPressed: () async {
                               Navigator.of(context).pop();
                               // Handle side drawer item 1 tap
                               saveBoolToSP(false, BL_USER_LOGGED_IN);
@@ -511,6 +523,18 @@ Widget _buildSideDrawer(BuildContext context) {
                                 '/login',
                                 (route) => false,
                               );
+
+                              final googleSignIn = GoogleSignIn();
+                              await googleSignIn.signOut();
+                              await FacebookAuth.instance.logOut();
+
+                              /////
+                              final sharedPrefs =
+                                  await SharedPreferences.getInstance();
+                              // await sharedPrefs.setString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE, widget.userCredentials!.user!.photoURL!);
+                              await sharedPrefs
+                                  .remove(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
+                              print('photo url deleted locally');
                             },
                           ),
                         ],
