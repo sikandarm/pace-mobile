@@ -79,7 +79,6 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
   Future<void> checkUserFBDataByApi(String uid) async {
     checkUserFbData = await checkFbData.checkFBDataApi(uid: uid);
 
-
     if (checkUserFbData!.data!.fbdata!.phone != null) {
       phone.value =
           TextEditingValue(text: checkUserFbData!.data!.fbdata!.phone!);
