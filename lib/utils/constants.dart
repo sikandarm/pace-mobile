@@ -7,10 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 bool hasNewNotifiaction = false;
 // ignore: constant_identifier_names/
 //const String BASE_URL = "http://206.81.5.26:3500/api"; // live ip
-const String BASE_URL = "http://192.168.1.8:3500/api"; // local ip
-
-
-
+const String BASE_URL = "http://192.168.1.5:3500/api"; // local ip
 
 // http://206.81.5.26/inventory
 // ignore: constant_identifier_names
@@ -26,7 +23,6 @@ const String BL_USER_ID = "UserId";
 const String BL_USER_FULL_NAME = "UserFullName";
 const String BL_USER_GOOGLE_OR_FACEBOOK_IMAGE = "UserProfileImage";
 // const String BL_USER_FACEBOOK_IMAGE = "UserProfileImage";
-
 
 const String BL_USER_FNAME = "UserFirstName";
 const String BL_USER_LNAME = "UserLastName";

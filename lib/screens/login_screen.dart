@@ -149,6 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
         print(jsonMap['data']['token']);
         // print(jsonRoles);
 
+
         // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, '/welcomeScreen');
       } else if (loginRes.statusCode != 200) {

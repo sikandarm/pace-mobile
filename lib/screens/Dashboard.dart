@@ -534,6 +534,9 @@ Widget _buildSideDrawer(BuildContext context) {
                               // await sharedPrefs.setString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE, widget.userCredentials!.user!.photoURL!);
                               await sharedPrefs
                                   .remove(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
+                            await  sharedPrefs.clear();
+
+
                               print('photo url deleted locally');
                             },
                           ),

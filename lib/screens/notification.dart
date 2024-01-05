@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -32,33 +29,29 @@ class _NotificationListState extends State<NotificationsScreen> {
   void groupNotificationsByDate() {
     final yesterday = today.subtract(const Duration(days: 1));
     _futureList.then((notificationList) {
+      if (notificationList.data!.notifications != null) {
+        for (final notification in notificationList.data!.notifications!) {
+          final notificationDate = notification.updatedAt;
 
-     if(notificationList.data!.notifications!=null){
-       for (final notification in notificationList.data!.notifications!) {
-         final notificationDate = notification.updatedAt;
+          print('date: ' + notificationDate.toString());
 
-         print('date: ' + notificationDate.toString());
-
-
-
-         final isToday = today.year == extractYear(notificationDate!) &&
-             today.month == extractMonth(notificationDate) &&
-             today.day == extractDay(notificationDate);
-         final isYesterday = yesterday.year == extractYear(notificationDate!) &&
-             yesterday.month == extractMonth(notificationDate) &&
-             yesterday.day == extractDay(notificationDate);
-         final headerText = isToday
-
-
-
-             ? "Today"
-             : isYesterday
-             ? "Yesterday"
-             : DateFormat("MMM dd, yyyy")
-             .format(DateTime.parse(notificationDate!));
-         groupedNotifications.putIfAbsent(headerText, () => NotificationModel());
-       }
-     }
+          final isToday = today.year == extractYear(notificationDate!) &&
+              today.month == extractMonth(notificationDate) &&
+              today.day == extractDay(notificationDate);
+          final isYesterday =
+              yesterday.year == extractYear(notificationDate!) &&
+                  yesterday.month == extractMonth(notificationDate) &&
+                  yesterday.day == extractDay(notificationDate);
+          final headerText = isToday
+              ? "Today"
+              : isYesterday
+                  ? "Yesterday"
+                  : DateFormat("MMM dd, yyyy")
+                      .format(DateTime.parse(notificationDate!));
+          groupedNotifications.putIfAbsent(
+              headerText, () => NotificationModel());
+        }
+      }
       setState(() {});
     });
   }
@@ -118,9 +111,15 @@ class _NotificationListState extends State<NotificationsScreen> {
               return Center(
                 child: Text("Error : ${snapshot.error}"),
               );
-
+            } else if (snapshot.data!.data!.notifications?.length == 0) {
+              print(snapshot.data!.data!.notifications?.length);
+              return Center(
+                child: Text("No notifications found !"),
+              );
             } else if (!snapshot.hasData ||
-                snapshot.data!.data!.notifications==[]|| snapshot.data!.data!.notifications==null) {
+                (snapshot.data!.data!.notifications == [] ||
+                    snapshot.data!.data!.notifications == null)) {
+              print('here in else if 1:');
               return const Center(
                 child: Text("No record found"),
               );
@@ -148,11 +147,11 @@ class _NotificationListState extends State<NotificationsScreen> {
                       Column(
                         children: snapshot.data!.data!.notifications!
                             .map((notification) => ListItemWidget(
-                          id: notification.id,
-                          title: notification.title,
-                          body: notification.body!,
-                          time: DateTime.parse(notification.updatedAt!),
-                        ))
+                                  id: notification.id,
+                                  title: notification.title,
+                                  body: notification.body!,
+                                  time: DateTime.parse(notification.updatedAt!),
+                                ))
                             .toList(),
                       ),
                     ],
