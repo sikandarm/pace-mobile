@@ -64,7 +64,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final sharedPrefs = await SharedPreferences.getInstance();
     userProfileImage =
         await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
-    print('user profile image: '+ userProfileImage.toString());
+    print('user profile image: ' + userProfileImage.toString());
     setState(() {});
   }
 
@@ -83,7 +83,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       updateJobCount(jobs.length);
     });
 
-    checkPermissionAndUpdateBool("view dashboard with graphs", (localBool) {
+    checkPermissionAndUpdateBool("view_dashboard_with_graphs", (localBool) {
       b1ViewDashBoardWithGraphs = localBool;
     }); // not used yet
 
@@ -133,9 +133,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       // }),
       key: scaffoldKey,
       drawer: _buildSideDrawer(context),
-      appBar: _buildAppBar(context, scaffoldKey,userProfileImage),
+      appBar: _buildAppBar(context, scaffoldKey, userProfileImage),
       body: RefreshIndicator(
-
         onRefresh: _refreshData,
         child: Column(
           children: [
@@ -304,7 +303,7 @@ PreferredSizeWidget _buildAppBar(
             ),
           ),
           Visibility(
-           // visible: blShowProfile,
+            // visible: blShowProfile,
             child: GestureDetector(
               onTap: () {
                 // showModalBottomSheet(
@@ -388,10 +387,12 @@ PreferredSizeWidget _buildAppBar(
                       builder: (context) => const ProfileScreen()),
                 );
               },
-              child:  Padding(
+              child: Padding(
                 padding: EdgeInsets.only(right: 10.0, left: 5.0),
                 child: CircleAvatar(
-                  backgroundImage: userProfileImage==null?  AssetImage('assets/images/ic_profile.png'):NetworkImage(userProfileImage) as ImageProvider,
+                  backgroundImage: userProfileImage == null
+                      ? AssetImage('assets/images/ic_profile.png')
+                      : NetworkImage(userProfileImage) as ImageProvider,
                   radius: 15,
                 ),
               ),
@@ -413,8 +414,7 @@ Widget _buildSideDrawer(BuildContext context) {
           ),
           child: Center(
             child: Image.asset(
-
-               'assets/images/SFM_Logo.png',
+              'assets/images/SFM_Logo.png',
               // width: 120,
               // height: 120,
               width: 150,
@@ -534,8 +534,7 @@ Widget _buildSideDrawer(BuildContext context) {
                               // await sharedPrefs.setString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE, widget.userCredentials!.user!.photoURL!);
                               await sharedPrefs
                                   .remove(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
-                            await  sharedPrefs.clear();
-
+                              await sharedPrefs.clear();
 
                               print('photo url deleted locally');
                             },

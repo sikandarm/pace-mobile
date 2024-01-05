@@ -495,6 +495,7 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey) {
                 InkWell(
                   onTap: () {
                     hasNewNotifiaction = false;
+
                     if (_blShowNotifications) {
                       Navigator.push(
                         context,

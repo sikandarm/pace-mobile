@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import '../services/inventory_detail_service.dart';
@@ -24,6 +25,11 @@ class _InventoryDetailState extends State<InventoryDetailScreen> {
 
   @override
   void initState() {
+    FirebaseMessaging.onMessage.listen((event) {
+      hasNewNotifiaction = true;
+      setState(() {});
+    });
+
     super.initState();
     _futureTask = fetchInventoryDetail(widget.itemId!);
 
@@ -108,8 +114,6 @@ class _InventoryDetailState extends State<InventoryDetailScreen> {
 Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey) {
   return AppBar(
     backgroundColor: Colors.white,
-
-
     leading: IconButton(
       icon: const Icon(Icons.arrow_back),
       onPressed: () {
@@ -152,6 +156,7 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey) {
               children: [
                 InkWell(
                   onTap: () {
+                    hasNewNotifiaction = false;
                     if (_blShowNotificationsList) {
                       Navigator.push(
                         context,
@@ -169,17 +174,19 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey) {
                     height: 32,
                   ),
                 ),
-                Positioned(
-                  top: 5,
-                  right: 0,
-                  child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
+                hasNewNotifiaction
+                    ? Positioned(
+                        top: 5,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      )
+                    : SizedBox(),
               ],
             ),
           ),

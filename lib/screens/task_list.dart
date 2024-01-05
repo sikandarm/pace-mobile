@@ -36,6 +36,8 @@ bool _bShowTaskDetailScreen = false;
 
 bool _bShowCreateSequenceIcon = false;
 
+bool _b1ShowTask = false;
+
 class _TaskListState extends State<TaskList> {
   Timer _timer = Timer(Duration.zero, () {});
 
@@ -140,6 +142,10 @@ class _TaskListState extends State<TaskList> {
       _bShowCreateSequenceIcon = localBool;
     });
 
+    //  _b1ShowTask;
+    checkPermissionAndUpdateBool("view_task", (localBool) {
+      _b1ShowTask = localBool;
+    });
     print('create seq permission:' + _bShowCreateSequenceIcon.toString());
     print('go to task detail permission:' + _bShowTaskDetailScreen.toString());
   }
@@ -149,7 +155,7 @@ class _TaskListState extends State<TaskList> {
     isLoading = true;
     _futureTask = await getIndependentTasks(jobID: widget.jobId.toString());
     _futureTask = getFilteredTasks(_futureTask);
-    print('all future tasks:'+ _futureTask.toString());
+    print('all future tasks:' + _futureTask.toString());
     isLoading = false;
     setState(() {});
   }
@@ -196,22 +202,19 @@ class _TaskListState extends State<TaskList> {
   Future<void> getProfileImageToSharedPrefs() async {
     final sharedPrefs = await SharedPreferences.getInstance();
     userProfileImage =
-    await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
-    print('user profile image: '+ userProfileImage.toString());
+        await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
+    print('user profile image: ' + userProfileImage.toString());
     setState(() {});
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(onPressed: () async {
-      //  await getSingleTask(taskId: '166');
-        final sharedPrefs=await SharedPreferences.getInstance();
-      final token=  sharedPrefs.getString(BL_USER_TOKEN);
-      print('token: '+token.toString() );
-
+        //  await getSingleTask(taskId: '166');
+        final sharedPrefs = await SharedPreferences.getInstance();
+        final token = sharedPrefs.getString(BL_USER_TOKEN);
+        print('token: ' + token.toString());
       }),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -243,14 +246,16 @@ class _TaskListState extends State<TaskList> {
                 child: Stack(
                   children: [
                     Visibility(
-                      //   visible: _bShowCreateSequenceIcon,
+                      //  visible: _bShowCreateSequenceIcon,
                       visible: true,
                       child: IconButton(
                         onPressed: () async {
                           if (!_bShowCreateSequenceIcon) {
                             await Fluttertoast.cancel();
                             showToast('You do not have permissions');
+                            return;
                           }
+
                           final dialogResult = await showDialog<bool?>(
                             context: context,
                             builder: (BuildContext context) {
@@ -349,10 +354,12 @@ class _TaskListState extends State<TaskList> {
                         builder: (context) => const ProfileScreen()),
                   );
                 },
-                child:  Padding(
+                child: Padding(
                   padding: EdgeInsets.only(right: 10.0, left: 5.0),
                   child: CircleAvatar(
-                    backgroundImage: userProfileImage==null? AssetImage('assets/images/ic_profile.png'):NetworkImage(userProfileImage!) as ImageProvider,
+                    backgroundImage: userProfileImage == null
+                        ? AssetImage('assets/images/ic_profile.png')
+                        : NetworkImage(userProfileImage!) as ImageProvider,
                     radius: 15,
                   ),
                 ),
@@ -788,230 +795,240 @@ class _TaskListState extends State<TaskList> {
                       ),
                     )
                   : !isLoading && _futureTask.isEmpty
-                      ? Column(
-                          children: [
-                            SizedBox(height: 100),
-                            Text('No independent tasks found'),
-                          ],
-                        )
-                      : Container(
-                          width: MediaQuery.of(context).size.width,
+                      ? Visibility(
+                          visible: _b1ShowTask,
                           child: Column(
                             children: [
-                              for (int i = 0; i < _futureTask.length; i++) ...{
-                                // DragTarget(
-                                //   onAccept: (data) async {
-                                //     // await deleteSequenceTask(
-                                //     //     taskId: _futureTask[i].id.toString(),
-                                //     //     context: context);
-                                //     // print(data); //data is taskID
-                                //     // await deleteSequenceTask(
-                                //     //     taskId: data.toString(),
-                                //     //     context: context);
-
-                                //     // _futureTask.insert(
-                                //     //     0,
-                                //     //     IndependentTaskModel(
-                                //     //       id: _futureTask[i].id,
-                                //     //       approvedAt: _futureTask[i].approvedAt,
-                                //     //       approvedBy: _futureTask[i].approvedBy,
-                                //     //       cOPQ: _futureTask[i].cOPQ,
-                                //     //       comments: _futureTask[i].comments,
-                                //     //       completedAt:
-                                //     //           _futureTask[i].completedAt,
-                                //     //       description:
-                                //     //           _futureTask[i].description,
-                                //     //       estimatedHour:
-                                //     //           _futureTask[i].estimatedHour,
-                                //     //       fitter: _futureTask[i].fitter,
-                                //     //       foreman: _futureTask[i].foreman,
-                                //     //       heatNo: _futureTask[i].heatNo,
-                                //     //       image: _futureTask[i].image,
-                                //     //       jobId: _futureTask[i].jobId,
-                                //     //       painter: _futureTask[i].painter,
-                                //     //       pmkNumber: _futureTask[i].pmkNumber,
-                                //     //       projectManager:
-                                //     //           _futureTask[i].projectManager,
-                                //     //       qCI: _futureTask[i].qCI,
-                                //     //       rejectionReason:
-                                //     //           _futureTask[i].rejectionReason,
-                                //     //       startedAt: _futureTask[i].startedAt,
-                                //     //       status: _futureTask[i].status,
-                                //     //       userId: _futureTask[i].userId,
-                                //     //       welder: _futureTask[i].welder,
-                                //     //     ));
-                                //     // setState(() {});
-                                //   },
-                                //   builder:
-                                //       (context, candidateData, rejectedData) {
-                                //     return Draggable<int>(
-                                //       data: int.parse(
-                                //           _futureTask[i].id.toString()),
-                                //       feedback: Container(
-                                //         width:
-                                //             MediaQuery.of(context).size.width,
-                                //         //  height: 120,
-
-                                //         child: TaskCard(
-                                //             id: _futureTask[i].id!,
-                                //             taskName: _futureTask[i].pmkNumber!,
-                                //             description:
-                                //                 _futureTask[i].description!,
-                                //             startDate: _futureTask[i].startedAt,
-                                //             endDate: _futureTask[i].completedAt,
-                                //             status: _futureTask[i].status!,
-                                //             statusColor: Colors.transparent,
-                                //             onSelected: (index) {}),
-                                //       ),
-                                //       childWhenDragging: Container(
-                                //         width:
-                                //             MediaQuery.of(context).size.width,
-                                //         //  height: 120,
-                                //         child: TaskCard(
-                                //             id: _futureTask[i].id!,
-                                //             taskName: _futureTask[i].pmkNumber!,
-                                //             description:
-                                //                 _futureTask[i].description!,
-                                //             startDate: _futureTask[i].startedAt,
-                                //             endDate: _futureTask[i].completedAt,
-                                //             status: _futureTask[i].status!,
-                                //             statusColor: Colors.transparent,
-                                //             onSelected: (index) {}),
-                                //       ),
-                                //       child: TaskCard(
-                                //           id: _futureTask[i].id!,
-                                //           taskName: _futureTask[i].pmkNumber!,
-                                //           description:
-                                //               _futureTask[i].description!,
-                                //           startDate: _futureTask[i].startedAt,
-                                //           endDate: _futureTask[i].completedAt,
-                                //           status: _futureTask[i].status!,
-                                //           statusColor: Colors.transparent,
-                                //           onSelected: (index) {}),
-                                //       onDragCompleted: () async {
-                                //         //  final list = await getIndependentTasks(
-                                //         //    jobID: widget.jobId.toString());
-                                //         // _futureTask = getFilteredTasks(list);
-                                //         //   await callOtherApiMethod();
-                                //         //   await callOtherApiMethod();
-
-                                //         //   setState(() {});
-                                //         // Navigator.pop(context);
-                                //         // Navigator.push(
-                                //         //     context,
-                                //         //     MaterialPageRoute(
-                                //         //         builder: (context) =>
-                                //         //             TaskList(jobId: widget.jobId)));
-                                //         // await updateSequenceTasks(
-                                //         //   sequenceId: sequencesList[index].SequenceId,
-                                //         //   task_id: tasks.id!,
-                                //         // );
-
-                                //         // await callApiMethods();
-                                //         _futureTask.removeWhere((element) =>
-                                //             element.id == _futureTask[i].id!);
-                                //         //  setState(() {});
-                                //       },
-                                //     );
-                                //   },
-                                // )
-
-                                Draggable<int>(
-                                  onDragStarted: () {
-                                    // scrollController.animateTo(
-                                    //     scrollController.offset - 20,
-                                    //     duration: Duration(milliseconds: 500),
-                                    //     curve: Curves.linear);
-                                    // setState(() {});
-                                    // Timer.periodic(
-                                    //     const Duration(milliseconds: 100), (_) {
-                                    //   // scroll up
-                                    //   scrollController.animateTo(
-                                    //     scrollController.offset - 20,
-                                    //     duration:
-                                    //         const Duration(milliseconds: 100),
-                                    //     curve: Curves.linear,
-                                    //   );
-                                    // });
-                                    startScrolling();
-                                  },
-                                  onDragEnd: (details) {
-                                    //  scrollController.dispose();
-                                    //  setState(() {});
-                                    cancelScrolling();
-                                  },
-                                  data: int.parse(_futureTask[i].id.toString()),
-                                  feedback: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    //  height: 120,
-
-                                    child: TaskCard(
-                                        hasPermissionToGoToTaskDetailScreen:
-                                            _bShowTaskDetailScreen,
-                                        id: _futureTask[i].id!,
-                                        taskName: _futureTask[i].pmkNumber!,
-                                        description:
-                                            _futureTask[i].description!,
-                                        startDate: _futureTask[i].startedAt,
-                                        endDate: _futureTask[i].completedAt,
-                                        status: _futureTask[i].status!,
-                                        statusColor: Colors.transparent,
-                                        onSelected: (index) {}),
-                                  ),
-                                  childWhenDragging: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    //  height: 120,
-                                    child: TaskCard(
-                                        hasPermissionToGoToTaskDetailScreen:
-                                            _bShowTaskDetailScreen,
-                                        id: _futureTask[i].id!,
-                                        taskName: _futureTask[i].pmkNumber!,
-                                        description:
-                                            _futureTask[i].description!,
-                                        startDate: _futureTask[i].startedAt,
-                                        endDate: _futureTask[i].completedAt,
-                                        status: _futureTask[i].status!,
-                                        statusColor: Colors.transparent,
-                                        onSelected: (index) {}),
-                                  ),
-                                  child: TaskCard(
-                                      hasPermissionToGoToTaskDetailScreen:
-                                          _bShowTaskDetailScreen,
-                                      id: _futureTask[i].id!,
-                                      taskName: _futureTask[i].pmkNumber!,
-                                      description: _futureTask[i].description!,
-                                      startDate: _futureTask[i].startedAt,
-                                      endDate: _futureTask[i].completedAt,
-                                      status: _futureTask[i].status!,
-                                      statusColor: Colors.transparent,
-                                      onSelected: (index) {}),
-                                  onDragCompleted: () async {
-                                    //  final list = await getIndependentTasks(
-                                    //    jobID: widget.jobId.toString());
-                                    // _futureTask = getFilteredTasks(list);
-                                    //   await callOtherApiMethod();
-                                    //   await callOtherApiMethod();
-
-                                    //   setState(() {});
-                                    // Navigator.pop(context);
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (context) =>
-                                    //             TaskList(jobId: widget.jobId)));
-                                    // await updateSequenceTasks(
-                                    //   sequenceId: sequencesList[index].SequenceId,
-                                    //   task_id: tasks.id!,
-                                    // );
-
-                                    // await callApiMethods();
-                                    _futureTask.removeWhere((element) =>
-                                        element.id == _futureTask[i].id!);
-                                    //  setState(() {});
-                                  },
-                                ),
-                              }
+                              SizedBox(height: 100),
+                              Text('No independent tasks found'),
                             ],
+                          ),
+                        )
+                      : Visibility(
+                          visible: _b1ShowTask,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: Column(
+                              children: [
+                                for (int i = 0;
+                                    i < _futureTask.length;
+                                    i++) ...{
+                                  // DragTarget(
+                                  //   onAccept: (data) async {
+                                  //     // await deleteSequenceTask(
+                                  //     //     taskId: _futureTask[i].id.toString(),
+                                  //     //     context: context);
+                                  //     // print(data); //data is taskID
+                                  //     // await deleteSequenceTask(
+                                  //     //     taskId: data.toString(),
+                                  //     //     context: context);
+
+                                  //     // _futureTask.insert(
+                                  //     //     0,
+                                  //     //     IndependentTaskModel(
+                                  //     //       id: _futureTask[i].id,
+                                  //     //       approvedAt: _futureTask[i].approvedAt,
+                                  //     //       approvedBy: _futureTask[i].approvedBy,
+                                  //     //       cOPQ: _futureTask[i].cOPQ,
+                                  //     //       comments: _futureTask[i].comments,
+                                  //     //       completedAt:
+                                  //     //           _futureTask[i].completedAt,
+                                  //     //       description:
+                                  //     //           _futureTask[i].description,
+                                  //     //       estimatedHour:
+                                  //     //           _futureTask[i].estimatedHour,
+                                  //     //       fitter: _futureTask[i].fitter,
+                                  //     //       foreman: _futureTask[i].foreman,
+                                  //     //       heatNo: _futureTask[i].heatNo,
+                                  //     //       image: _futureTask[i].image,
+                                  //     //       jobId: _futureTask[i].jobId,
+                                  //     //       painter: _futureTask[i].painter,
+                                  //     //       pmkNumber: _futureTask[i].pmkNumber,
+                                  //     //       projectManager:
+                                  //     //           _futureTask[i].projectManager,
+                                  //     //       qCI: _futureTask[i].qCI,
+                                  //     //       rejectionReason:
+                                  //     //           _futureTask[i].rejectionReason,
+                                  //     //       startedAt: _futureTask[i].startedAt,
+                                  //     //       status: _futureTask[i].status,
+                                  //     //       userId: _futureTask[i].userId,
+                                  //     //       welder: _futureTask[i].welder,
+                                  //     //     ));
+                                  //     // setState(() {});
+                                  //   },
+                                  //   builder:
+                                  //       (context, candidateData, rejectedData) {
+                                  //     return Draggable<int>(
+                                  //       data: int.parse(
+                                  //           _futureTask[i].id.toString()),
+                                  //       feedback: Container(
+                                  //         width:
+                                  //             MediaQuery.of(context).size.width,
+                                  //         //  height: 120,
+
+                                  //         child: TaskCard(
+                                  //             id: _futureTask[i].id!,
+                                  //             taskName: _futureTask[i].pmkNumber!,
+                                  //             description:
+                                  //                 _futureTask[i].description!,
+                                  //             startDate: _futureTask[i].startedAt,
+                                  //             endDate: _futureTask[i].completedAt,
+                                  //             status: _futureTask[i].status!,
+                                  //             statusColor: Colors.transparent,
+                                  //             onSelected: (index) {}),
+                                  //       ),
+                                  //       childWhenDragging: Container(
+                                  //         width:
+                                  //             MediaQuery.of(context).size.width,
+                                  //         //  height: 120,
+                                  //         child: TaskCard(
+                                  //             id: _futureTask[i].id!,
+                                  //             taskName: _futureTask[i].pmkNumber!,
+                                  //             description:
+                                  //                 _futureTask[i].description!,
+                                  //             startDate: _futureTask[i].startedAt,
+                                  //             endDate: _futureTask[i].completedAt,
+                                  //             status: _futureTask[i].status!,
+                                  //             statusColor: Colors.transparent,
+                                  //             onSelected: (index) {}),
+                                  //       ),
+                                  //       child: TaskCard(
+                                  //           id: _futureTask[i].id!,
+                                  //           taskName: _futureTask[i].pmkNumber!,
+                                  //           description:
+                                  //               _futureTask[i].description!,
+                                  //           startDate: _futureTask[i].startedAt,
+                                  //           endDate: _futureTask[i].completedAt,
+                                  //           status: _futureTask[i].status!,
+                                  //           statusColor: Colors.transparent,
+                                  //           onSelected: (index) {}),
+                                  //       onDragCompleted: () async {
+                                  //         //  final list = await getIndependentTasks(
+                                  //         //    jobID: widget.jobId.toString());
+                                  //         // _futureTask = getFilteredTasks(list);
+                                  //         //   await callOtherApiMethod();
+                                  //         //   await callOtherApiMethod();
+
+                                  //         //   setState(() {});
+                                  //         // Navigator.pop(context);
+                                  //         // Navigator.push(
+                                  //         //     context,
+                                  //         //     MaterialPageRoute(
+                                  //         //         builder: (context) =>
+                                  //         //             TaskList(jobId: widget.jobId)));
+                                  //         // await updateSequenceTasks(
+                                  //         //   sequenceId: sequencesList[index].SequenceId,
+                                  //         //   task_id: tasks.id!,
+                                  //         // );
+
+                                  //         // await callApiMethods();
+                                  //         _futureTask.removeWhere((element) =>
+                                  //             element.id == _futureTask[i].id!);
+                                  //         //  setState(() {});
+                                  //       },
+                                  //     );
+                                  //   },
+                                  // )
+
+                                  Draggable<int>(
+                                    onDragStarted: () {
+                                      // scrollController.animateTo(
+                                      //     scrollController.offset - 20,
+                                      //     duration: Duration(milliseconds: 500),
+                                      //     curve: Curves.linear);
+                                      // setState(() {});
+                                      // Timer.periodic(
+                                      //     const Duration(milliseconds: 100), (_) {
+                                      //   // scroll up
+                                      //   scrollController.animateTo(
+                                      //     scrollController.offset - 20,
+                                      //     duration:
+                                      //         const Duration(milliseconds: 100),
+                                      //     curve: Curves.linear,
+                                      //   );
+                                      // });
+                                      startScrolling();
+                                    },
+                                    onDragEnd: (details) {
+                                      //  scrollController.dispose();
+                                      //  setState(() {});
+                                      cancelScrolling();
+                                    },
+                                    data:
+                                        int.parse(_futureTask[i].id.toString()),
+                                    feedback: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      //  height: 120,
+
+                                      child: TaskCard(
+                                          hasPermissionToGoToTaskDetailScreen:
+                                              _bShowTaskDetailScreen,
+                                          id: _futureTask[i].id!,
+                                          taskName: _futureTask[i].pmkNumber!,
+                                          description:
+                                              _futureTask[i].description!,
+                                          startDate: _futureTask[i].startedAt,
+                                          endDate: _futureTask[i].completedAt,
+                                          status: _futureTask[i].status!,
+                                          statusColor: Colors.transparent,
+                                          onSelected: (index) {}),
+                                    ),
+                                    childWhenDragging: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      //  height: 120,
+                                      child: TaskCard(
+                                          hasPermissionToGoToTaskDetailScreen:
+                                              _bShowTaskDetailScreen,
+                                          id: _futureTask[i].id!,
+                                          taskName: _futureTask[i].pmkNumber!,
+                                          description:
+                                              _futureTask[i].description!,
+                                          startDate: _futureTask[i].startedAt,
+                                          endDate: _futureTask[i].completedAt,
+                                          status: _futureTask[i].status!,
+                                          statusColor: Colors.transparent,
+                                          onSelected: (index) {}),
+                                    ),
+                                    child: TaskCard(
+                                        hasPermissionToGoToTaskDetailScreen:
+                                            _bShowTaskDetailScreen,
+                                        id: _futureTask[i].id!,
+                                        taskName: _futureTask[i].pmkNumber!,
+                                        description:
+                                            _futureTask[i].description!,
+                                        startDate: _futureTask[i].startedAt,
+                                        endDate: _futureTask[i].completedAt,
+                                        status: _futureTask[i].status!,
+                                        statusColor: Colors.transparent,
+                                        onSelected: (index) {}),
+                                    onDragCompleted: () async {
+                                      //  final list = await getIndependentTasks(
+                                      //    jobID: widget.jobId.toString());
+                                      // _futureTask = getFilteredTasks(list);
+                                      //   await callOtherApiMethod();
+                                      //   await callOtherApiMethod();
+
+                                      //   setState(() {});
+                                      // Navigator.pop(context);
+                                      // Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //         builder: (context) =>
+                                      //             TaskList(jobId: widget.jobId)));
+                                      // await updateSequenceTasks(
+                                      //   sequenceId: sequencesList[index].SequenceId,
+                                      //   task_id: tasks.id!,
+                                      // );
+
+                                      // await callApiMethods();
+                                      _futureTask.removeWhere((element) =>
+                                          element.id == _futureTask[i].id!);
+                                      //  setState(() {});
+                                    },
+                                  ),
+                                }
+                              ],
+                            ),
                           ),
                         ),
 
