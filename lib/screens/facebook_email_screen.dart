@@ -10,6 +10,7 @@ import 'package:googleapis/admob/v1.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:pace_application_fb/screens/Dashboard.dart';
+import 'package:pace_application_fb/services/checkFBData.dart' as checkFbData;
 import 'package:pace_application_fb/services/facbook_api_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,13 +28,13 @@ class FacebookEmailScreen extends StatefulWidget {
   final FacebookLoginModel facebookLoginModel;
   final AccessToken? accessToken;
 
-
   @override
   State<FacebookEmailScreen> createState() => _FacebookEmailScreenState();
 }
 
 class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
   var phone = TextEditingController();
+
   // final Stirng fcmToken;
   final emailController = TextEditingController();
 
@@ -49,21 +50,47 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
     final response = await http.post(Uri.parse(
         'https://graph.facebook.com/${widget.facebookLoginModel.id}?fields=id,name,email,picture&access_token=${widget.accessToken!.token}'));
     print('graph api response: ' + response.body);
-    final decodedResponse=jsonDecode(response.body);
+    final decodedResponse = jsonDecode(response.body);
     print('-------------------------');
-    profileImageUrl=decodedResponse['picture']['data']['url'];
-    setState(() {
-
-    });
+    profileImageUrl = decodedResponse['picture']['data']['url'];
+    setState(() {});
   }
-  String profileImageUrl='';
+
+  String profileImageUrl = '';
 
   @override
   void initState() {
+    checkUserFBDataByApi(widget.facebookLoginModel.id!);
     _futureRoles = fetchAllRoles();
     _lsRoles = [];
-   // saveProfileImageToSharedPrefs();
+    // saveProfileImageToSharedPrefs();
     super.initState();
+  }
+
+  checkFbData.CheckFBData? checkUserFbData = checkFbData.CheckFBData(
+    success: true,
+    message: null,
+    data: checkFbData.Data(
+      assignrole: false,
+      fbdata: checkFbData.Fbdata(email: null, phone: null),
+    ),
+  );
+
+  Future<void> checkUserFBDataByApi(String uid) async {
+    checkUserFbData = await checkFbData.checkFBDataApi(uid: uid);
+
+
+    if (checkUserFbData!.data!.fbdata!.phone != null) {
+      phone.value =
+          TextEditingValue(text: checkUserFbData!.data!.fbdata!.phone!);
+      ;
+    }
+
+    if (checkUserFbData!.data!.fbdata!.email != null) {
+      emailController.text = checkUserFbData!.data!.fbdata!.email!;
+    }
+
+    setState(() {});
   }
 
   Future<void> saveProfileImageToSharedPrefs() async {
@@ -72,7 +99,6 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
         widget.facebookLoginModel.picture!.data!.url!);
     print('photo url saved locally');
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -87,11 +113,10 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
         ),
       ),
       body: Padding(
-
         padding: const EdgeInsets.all(27.0),
         child: Column(
           children: [
-         //   CircleAvatar(radius: 33,backgroundImage: NetworkImage(profileImageUrl) as ImageProvider,),
+            //   CircleAvatar(radius: 33,backgroundImage: NetworkImage(profileImageUrl) as ImageProvider,),
 
             SizedBox(
               height: 11,
@@ -111,22 +136,27 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
             TextField(
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
-              decoration: textFieldDecoration("Email", false),
+              decoration: textFieldDecoration("Email", false,
+                  enabled: checkUserFbData!.data!.assignrole! ? false : true),
             ),
             const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
-              height: 50,
+              height: 100,
               child: TextField(
                 textAlignVertical: TextAlignVertical.center,
                 controller: phone,
                 keyboardType: TextInputType.phone,
                 inputFormatters: [
-                  LengthLimitingTextInputFormatter(
-                      12), // Limit input to 12 characters (including mask characters)
-                  PhoneNumberFormatter(), // Only allow digits
+                  LengthLimitingTextInputFormatter(12),
+                  // Limit input to 12 characters (including mask characters)
+                  PhoneNumberFormatter(),
+                  // Only allow digits
                 ],
-                decoration: textFieldDecoration("Phone", false),
+                decoration: textFieldDecoration("Phone", false,
+                    enabled: checkUserFbData!.data!.fbdata!.phone != null
+                        ? false
+                        : true),
               ),
             ),
             const SizedBox(height: 10),
@@ -140,27 +170,30 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                 } else if (snapshot.hasData) {
                   _lsRoles = snapshot.data!.map((role) => role.name!).toList();
 
-                  return SizedBox(
-                    height: 100,
-                    child: CupertinoPicker(
-                      scrollController: FixedExtentScrollController(
-                          initialItem: _selectedRoleIndex),
-                      itemExtent: 32,
-                      onSelectedItemChanged: (index) {
-                        setState(() {
-                          _selectedRoleIndex = index;
-                          _selectedRoleName = _lsRoles[index];
-                          _selectedRoleId = snapshot.data![index].id!;
-                          print("$_selectedRoleName-$_selectedRoleId");
-                        });
+                  return Visibility(
+                    visible: !checkUserFbData!.data!.assignrole!,
+                    child: SizedBox(
+                      height: 100,
+                      child: CupertinoPicker(
+                        scrollController: FixedExtentScrollController(
+                            initialItem: _selectedRoleIndex),
+                        itemExtent: 32,
+                        onSelectedItemChanged: (index) {
+                          setState(() {
+                            _selectedRoleIndex = index;
+                            _selectedRoleName = _lsRoles[index];
+                            _selectedRoleId = snapshot.data![index].id!;
+                            print("$_selectedRoleName-$_selectedRoleId");
+                          });
 
-                        print(_selectedRoleName);
-                      },
-                      children: _lsRoles.map((String role) {
-                        return Center(
-                          child: Text(role),
-                        );
-                      }).toList(),
+                          print(_selectedRoleName);
+                        },
+                        children: _lsRoles.map((String role) {
+                          return Center(
+                            child: Text(role),
+                          );
+                        }).toList(),
+                      ),
                     ),
                   );
                 } else {
@@ -183,7 +216,6 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                     offset: const Offset(0, 3), // changes position of shadow
                   )
                 ]),
-
                 child: ElevatedButton(
                   onPressed: () async {
                     ScaffoldMessenger.of(context).clearSnackBars();
@@ -201,14 +233,12 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                         emailController.text.trim())) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text('Please provide a valid email!')));
-                    return;
-                    }
-                    else if (phone.text.trim().isEmpty) {
+                      return;
+                    } else if (phone.text.trim().isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text('Please provide a phone number!')));
-                  return;
+                      return;
                     }
-
 
                     var _fcmToken = '';
                     final fcmTokenBox = await Hive.openBox('fcmToken');
@@ -229,9 +259,8 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                       'Uid': widget.facebookLoginModel.id,
                       'name': widget.facebookLoginModel.name,
                       'roleId': _selectedRoleId.toString(),
-                      'phone':phone.text,
+                      'phone': phone.text,
                       'fcm_token': _fcmToken,
-
                     });
 
                     print('api res: ' + apiResponse.body.toString());
@@ -248,9 +277,8 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                           JwtDecoder.decode(decodedResponse['data']['token']);
 
                       final tokenBox = await Hive.openBox('tokenBox');
-                      await tokenBox.put('token', decodedResponse['data']['token']);
-
-
+                      await tokenBox.put(
+                          'token', decodedResponse['data']['token']);
 
                       saveBoolToSP(true, BL_USER_LOGGED_IN);
                       saveStringToSP(
@@ -268,7 +296,6 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
 
                       saveStringToSP(lsUserRoles, BL_USER_ROLES);
                       saveStringToSP(lsUserPermissions, BL_USER_PERMISSIONS);
-
 
                       Navigator.push(
                           context,
@@ -306,11 +333,8 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
         ),
       ),
     );
-
   }
-
 }
-
 
 class PhoneNumberFormatter extends TextInputFormatter {
   @override
@@ -329,10 +353,9 @@ class PhoneNumberFormatter extends TextInputFormatter {
     } else {
       return TextEditingValue(
         text:
-        '${text.substring(0, 3)}-${text.substring(3, 6)}-${text.substring(6)}',
+            '${text.substring(0, 3)}-${text.substring(3, 6)}-${text.substring(6)}',
         selection: TextSelection.collapsed(offset: text.length + 2),
       );
     }
   }
 }
-

@@ -10,6 +10,8 @@ import 'package:googleapis/admob/v1.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:pace_application_fb/screens/Dashboard.dart';
+import 'package:pace_application_fb/services/check_user_phone.dart';
+import 'package:pace_application_fb/services/check_user_role.dart';
 import 'package:pace_application_fb/services/facbook_api_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,12 +39,11 @@ class GoogleSignInScreen extends StatefulWidget {
 
 class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
   var phone = TextEditingController();
+
   // final Stirng fcmToken;
   // final emailController = TextEditingController();
 
   // final nameController = TextEditingController();
-
-
 
   int _selectedRoleIndex = 0;
   String _selectedRoleName = "";
@@ -52,17 +53,39 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
 
   @override
   void initState() {
+    checkUserPhoneByApi(widget.userCredentials!.user!.email!);
+    checkUserRoleByApi(widget.userCredentials!.user!.email!);
     _futureRoles = fetchAllRoles();
     _lsRoles = [];
     saveProfileImageToSharedPrefs();
+    print('widget.userCredentials!.user!.email!: ' +
+        widget.userCredentials!.user!.email!);
 
     super.initState();
   }
 
-  Future<void> saveProfileImageToSharedPrefs()async{
-  final sharedPrefs= await SharedPreferences.getInstance();
-  await sharedPrefs.setString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE, widget.userCredentials!.user!.photoURL!);
-  print('photo url saved locally');
+  Future<void> saveProfileImageToSharedPrefs() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    await sharedPrefs.setString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE,
+        widget.userCredentials!.user!.photoURL!);
+    print('photo url saved locally');
+  }
+
+  CheckUserPhoneModel? checkUserPhoneModel = CheckUserPhoneModel(
+    success: false,
+  );
+
+  Future<void> checkUserPhoneByApi(String email) async {
+    checkUserPhoneModel = await checkUserPhone(email: email);
+    phone.value = TextEditingValue(text: checkUserPhoneModel!.data!);
+    setState(() {});
+  }
+
+  CheckUserRoleModel? checkUserRoleModel;
+
+  Future<void> checkUserRoleByApi(String email) async {
+    checkUserRoleModel = await checkUserRole(email: email);
+    setState(() {});
   }
 
   @override
@@ -110,17 +133,23 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
             const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
-              height: 50,
+              height: 100,
               child: TextField(
                 textAlignVertical: TextAlignVertical.center,
                 controller: phone,
                 keyboardType: TextInputType.phone,
                 inputFormatters: [
-                  LengthLimitingTextInputFormatter(
-                      12), // Limit input to 12 characters (including mask characters)
-                  PhoneNumberFormatter(), // Only allow digits
+                  LengthLimitingTextInputFormatter(12),
+                  // Limit input to 12 characters (including mask characters)
+                  PhoneNumberFormatter(),
+                  // Only allow digits
                 ],
-                decoration: textFieldDecoration("Phone", false),
+                decoration: textFieldDecoration(
+                    checkUserPhoneModel!.data == null
+                        ? "Phone"
+                        : checkUserPhoneModel!.data.toString(),
+                    false,
+                    enabled: checkUserPhoneModel!.data == null ? true : false),
               ),
             ),
             const SizedBox(height: 20),
@@ -134,27 +163,33 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                 } else if (snapshot.hasData) {
                   _lsRoles = snapshot.data!.map((role) => role.name!).toList();
 
-                  return SizedBox(
-                    height: 100,
-                    child: CupertinoPicker(
-                      scrollController: FixedExtentScrollController(
-                          initialItem: _selectedRoleIndex),
-                      itemExtent: 32,
-                      onSelectedItemChanged: (index) {
-                        setState(() {
-                          _selectedRoleIndex = index;
-                          _selectedRoleName = _lsRoles[index];
-                          _selectedRoleId = snapshot.data![index].id!;
-                          print("$_selectedRoleName-$_selectedRoleId");
-                        });
+                  return Visibility(
+                    visible: !checkUserRoleModel!.data!,
+                    child: SizedBox(
+                      height: 100,
+                      child: Expanded(
 
-                        print(_selectedRoleName);
-                      },
-                      children: _lsRoles.map((String role) {
-                        return Center(
-                          child: Text(role),
-                        );
-                      }).toList(),
+                        child: CupertinoPicker(
+                          scrollController: FixedExtentScrollController(
+                              initialItem: _selectedRoleIndex),
+                          itemExtent: 32,
+                          onSelectedItemChanged: (index) {
+                            setState(() {
+                              _selectedRoleIndex = index;
+                              _selectedRoleName = _lsRoles[index];
+                              _selectedRoleId = snapshot.data![index].id!;
+                              print("$_selectedRoleName-$_selectedRoleId");
+                            });
+
+                            print(_selectedRoleName);
+                          },
+                          children: _lsRoles.map((String role) {
+                            return Center(
+                              child: Text(role),
+                            );
+                          }).toList(),
+                        ),
+                      ),
                     ),
                   );
                 } else {
@@ -180,10 +215,10 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                 child: ElevatedButton(
                   onPressed: () async {
                     ScaffoldMessenger.of(context).clearSnackBars();
-                     if (phone.text.trim().isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Please provide a phone number!')));
-                    return;
+                    if (phone.text.trim().isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('Please provide a phone number!')));
+                      return;
                     }
                     // _validateFields();
                     // if (nameController.text.trim().isEmpty) {
@@ -220,42 +255,40 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                       'Uid': widget.userCredentials!.user!.uid!,
                       'name': widget.userCredentials!.user!.displayName!,
                       'roleId': _selectedRoleId.toString(),
-                      'phone':phone.text,
+                      'phone': phone.text,
                       'fcm_token': _fcmToken,
                     });
-                   // final tokenBox = await Hive.openBox('tokenBox');
-                   // final token = tokenBox.get('token');
-
-
-
+                    // final tokenBox = await Hive.openBox('tokenBox');
+                    // final token = tokenBox.get('token');
 
                     print('api res google: ' + apiResponse.body.toString());
                     final decodedResponse = jsonDecode(apiResponse.body);
-                    print('socialLogin response: '+ decodedResponse.toString());
+                    print(
+                        'socialLogin response: ' + decodedResponse.toString());
 
                     if (decodedResponse['success'] == false) {
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text(decodedResponse['message'])));
                     }
 
-
                     if (decodedResponse['success'] == true) {
                       print('myy token: ' + decodedResponse['data']['token']);
                       Map<String, dynamic>? decodedToken =
                           JwtDecoder.decode(decodedResponse['data']['token']);
 
-
                       final tokenBox = await Hive.openBox('tokenBox');
-                      await tokenBox.put('token', decodedResponse['data']['token']);
+                      await tokenBox.put(
+                          'token', decodedResponse['data']['token']);
 
-                      print('MYYYYYY DECODED TOKEN: '+decodedToken.toString());
+                      print(
+                          'MYYYYYY DECODED TOKEN: ' + decodedToken.toString());
 
                       saveBoolToSP(true, BL_USER_LOGGED_IN);
 
-                       saveStringToSP(
+                      saveStringToSP(
                           decodedResponse['data']['token'], BL_USER_TOKEN);
-                     // saveStringToSP(
-                       //   decodedToken.toString(), BL_USER_TOKEN); error ara hy ismai
+                      // saveStringToSP(
+                      //   decodedToken.toString(), BL_USER_TOKEN); error ara hy ismai
                       saveIntToSP(decodedToken['id'], BL_USER_ID);
                       print('decodedToken["id"]: ' + BL_USER_ID.toString());
                       saveStringToSP(
@@ -310,7 +343,6 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
   }
 }
 
-
 class PhoneNumberFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
@@ -328,11 +360,9 @@ class PhoneNumberFormatter extends TextInputFormatter {
     } else {
       return TextEditingValue(
         text:
-        '${text.substring(0, 3)}-${text.substring(3, 6)}-${text.substring(6)}',
+            '${text.substring(0, 3)}-${text.substring(3, 6)}-${text.substring(6)}',
         selection: TextSelection.collapsed(offset: text.length + 2),
       );
     }
   }
 }
-
-
