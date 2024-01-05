@@ -247,6 +247,10 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                       Map<String, dynamic>? decodedToken =
                           JwtDecoder.decode(decodedResponse['data']['token']);
 
+                      final tokenBox = await Hive.openBox('tokenBox');
+                      await tokenBox.put('token', decodedResponse['data']['token']);
+
+
 
                       saveBoolToSP(true, BL_USER_LOGGED_IN);
                       saveStringToSP(
@@ -264,6 +268,7 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
 
                       saveStringToSP(lsUserRoles, BL_USER_ROLES);
                       saveStringToSP(lsUserPermissions, BL_USER_PERMISSIONS);
+
 
                       Navigator.push(
                           context,

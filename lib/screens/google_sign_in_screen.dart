@@ -223,6 +223,11 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                       'phone':phone.text,
                       'fcm_token': _fcmToken,
                     });
+                   // final tokenBox = await Hive.openBox('tokenBox');
+                   // final token = tokenBox.get('token');
+
+
+
 
                     print('api res google: ' + apiResponse.body.toString());
                     final decodedResponse = jsonDecode(apiResponse.body);
@@ -233,10 +238,15 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                           SnackBar(content: Text(decodedResponse['message'])));
                     }
 
+
                     if (decodedResponse['success'] == true) {
                       print('myy token: ' + decodedResponse['data']['token']);
                       Map<String, dynamic>? decodedToken =
                           JwtDecoder.decode(decodedResponse['data']['token']);
+
+
+                      final tokenBox = await Hive.openBox('tokenBox');
+                      await tokenBox.put('token', decodedResponse['data']['token']);
 
                       print('MYYYYYY DECODED TOKEN: '+decodedToken.toString());
 
