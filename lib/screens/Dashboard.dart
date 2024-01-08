@@ -21,6 +21,7 @@ bool blShowJobList = false;
 bool blShowNotificationsList = false;
 bool blShowSharedCAR = false;
 bool blShowCAR = false;
+bool b1ShowPurchaseOrder = false;
 bool blShowInventory = false;
 
 bool b1ViewDashBoardWithGraphs =
@@ -83,6 +84,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _futureJob.then((jobs) {
       updateJobCount(jobs.length);
     });
+
+    checkPermissionAndUpdateBool("view_purchasedetails", (localBool) {
+      b1ShowPurchaseOrder = localBool;
+    }); // not used yet
 
     checkPermissionAndUpdateBool("view_dashboard_with_graphs", (localBool) {
       b1ViewDashBoardWithGraphs = localBool;
@@ -487,10 +492,10 @@ Widget _buildSideDrawer(BuildContext context) {
                         title: const Text('Purchase Orders'),
                         leading: const Icon(Icons.inventory),
                         onTap: () {
-                          //  if (!b1) {
-                          //   showToast('You do not have permissions.');
-                          //   return;
-                          // }
+                          if (!b1ShowPurchaseOrder) {
+                            showToast('You do not have permissions.');
+                            return;
+                          }
 
                           Navigator.push(
                             context,

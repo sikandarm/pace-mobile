@@ -167,27 +167,27 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                     visible: !checkUserRoleModel!.data!,
                     child: SizedBox(
                       height: 100,
-                      child: Expanded(
-                        child: CupertinoPicker(
-                          scrollController: FixedExtentScrollController(
-                              initialItem: _selectedRoleIndex),
-                          itemExtent: 32,
-                          onSelectedItemChanged: (index) {
-                            setState(() {
-                              _selectedRoleIndex = index;
-                              _selectedRoleName = _lsRoles[index];
-                              _selectedRoleId = snapshot.data![index].id!;
-                              print("$_selectedRoleName-$_selectedRoleId");
-                            });
 
-                            print(_selectedRoleName);
-                          },
-                          children: _lsRoles.map((String role) {
-                            return Center(
-                              child: Text(role),
-                            );
-                          }).toList(),
-                        ),
+
+                      child: CupertinoPicker(
+                        scrollController: FixedExtentScrollController(
+                            initialItem: _selectedRoleIndex),
+                        itemExtent: 32,
+                        onSelectedItemChanged: (index) {
+                          setState(() {
+                            _selectedRoleIndex = index;
+                            _selectedRoleName = _lsRoles[index];
+                            _selectedRoleId = snapshot.data![index].id!;
+                            print("$_selectedRoleName-$_selectedRoleId");
+                          });
+
+                          print(_selectedRoleName);
+                        },
+                        children: _lsRoles.map((String role) {
+                          return Center(
+                            child: Text(role),
+                          );
+                        }).toList(),
                       ),
                     ),
                   );

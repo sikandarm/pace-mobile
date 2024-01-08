@@ -334,7 +334,8 @@ class _TaskDetailState extends State<TaskDetail> {
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
               // Navigate to the last screen in the stack
-              Navigator.popUntil(context, (route) => route.isFirst);
+              Navigator.pop(context);
+              // Navigator.popUntil(context, (route) => route.isFirst);
             },
           ),
           title: Text(
