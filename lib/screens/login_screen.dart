@@ -57,14 +57,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-  tryAutoLogin();
+    tryAutoLogin();
     super.initState();
   }
 
-  Future<void> tryAutoLogin()async{
-    final autologinBool=await     getBoolFromSF(BL_USER_LOGGED_IN);
-    if(autologinBool){
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>DashboardScreen()));
+  Future<void> tryAutoLogin() async {
+    final autologinBool = await getBoolFromSF(BL_USER_LOGGED_IN);
+    if (autologinBool) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => DashboardScreen()));
       return;
     }
   }
@@ -121,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final tokenBox = await Hive.openBox('tokenBox');
       await tokenBox.put('token', jsonMap['data']['token']);
 
-      print('today login response:'+ jsonMap.toString());
+      print('today login response:' + jsonMap.toString());
       if (loginRes.statusCode == 200) {
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context)
@@ -148,7 +149,6 @@ class _LoginScreenState extends State<LoginScreen> {
         // print("USER ID-->${decodedToken['id']}");
         print(jsonMap['data']['token']);
         // print(jsonRoles);
-
 
         // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, '/welcomeScreen');
@@ -409,13 +409,18 @@ Widget _buildSocialIcon(BuildContext context, String imagePath,
         // Button pressed action
         if (isForGoogle) {
           // await loginWithGoogle();
-        //  final user = await signInWithGoogleFirebase();
-         // print('G Email: $user');
-         final userCredentials= await signInWithGoogle();
-         print('userCredentials: ' + userCredentials.toString());
-         if(userCredentials!=null){
-           Navigator.push(context, MaterialPageRoute(builder: (context)=>GoogleSignInScreen(userCredentials: userCredentials,)));
-         }
+          //  final user = await signInWithGoogleFirebase();
+          // print('G Email: $user');
+          final userCredentials = await signInWithGoogle();
+          print('userCredentials: ' + userCredentials.toString());
+          if (userCredentials != null) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => GoogleSignInScreen(
+                          userCredentials: userCredentials,
+                        )));
+          }
           return;
 
           // print('google button code');
@@ -460,13 +465,14 @@ Widget _buildSocialIcon(BuildContext context, String imagePath,
 }
 
 Future<LoginResult> loginWithFacebook(BuildContext context) async {
-  final LoginResult result = await FacebookAuth.instance.login(
-      loginBehavior: LoginBehavior.webOnly, permissions: ['public_profile',]);
+  final LoginResult result = await FacebookAuth.instance
+      .login(loginBehavior: LoginBehavior.webOnly, permissions: [
+    'public_profile',
+  ]);
   print(result.message);
   if (result.status == LoginStatus.success) {
     // Logged in successfully
     final accessToken = result.accessToken;
-
 
     print('fb access token:${accessToken!.token}');
 
@@ -475,18 +481,14 @@ Future<LoginResult> loginWithFacebook(BuildContext context) async {
     print('fb profile data: $profile');
 
     //  final fbID=profile.
-  final fbLoginResponse=  await facebookLoginResponse(profile);
-  print('my response:'+fbLoginResponse.id.toString());
+    final fbLoginResponse = await facebookLoginResponse(profile);
+    print('my response:' + fbLoginResponse.id.toString());
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              FacebookEmailScreen(
-           facebookLoginModel: fbLoginResponse,
-                accessToken: result.accessToken,
-
-
-
+          builder: (context) => FacebookEmailScreen(
+            facebookLoginModel: fbLoginResponse,
+            accessToken: result.accessToken,
           ),
         ));
 
@@ -534,7 +536,6 @@ Future<User?> signInWithGoogleFirebase() async {
   }
 }
 
-
 Future<void> loginApiFB() async {
   final response = await http.post(Uri.parse('$BASE_URL/user/facebook'));
   print(response.body);
@@ -545,14 +546,15 @@ Future<UserCredential?> signInWithGoogle() async {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   try {
     // Trigger the Google Sign In process
-    final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAccount? googleSignInAccount =
+        await googleSignIn.signIn();
 
     // Check if the sign-in was canceled
     if (googleSignInAccount == null) return null;
 
     // Obtain the GoogleSignInAuthentication object
     final GoogleSignInAuthentication googleSignInAuthentication =
-    await googleSignInAccount.authentication;
+        await googleSignInAccount.authentication;
 
     // Create a new credential using the GoogleSignInAuthentication object
     final OAuthCredential credential = GoogleAuthProvider.credential(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/get_all_notifications.dart';
 import '../utils/constants.dart';
@@ -18,12 +19,28 @@ class _NotificationListState extends State<NotificationsScreen> {
 
   final groupedNotifications = <String, NotificationModel>{};
   final today = DateTime.now();
+  bool _b1ShowProfile = false;
 
   @override
   void initState() {
+    checkPermissionAndUpdateBool("view_profile", (localBool) {
+      _b1ShowProfile = localBool;
+    });
+    getProfileImageToSharedPrefs();
+
     super.initState();
     _futureList = fetchAllNotifications();
     groupNotificationsByDate();
+  }
+
+  String? userProfileImage;
+
+  Future<void> getProfileImageToSharedPrefs() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    userProfileImage =
+        await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
+    print('user profile image: ' + userProfileImage.toString());
+    setState(() {});
   }
 
   void groupNotificationsByDate() {
@@ -84,15 +101,22 @@ class _NotificationListState extends State<NotificationsScreen> {
         actions: [
           GestureDetector(
             onTap: () {
+              if (!_b1ShowProfile) {
+                showToast('You do not have permissions.');
+                return;
+              }
+
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const ProfileScreen()),
               );
             },
-            child: const Padding(
+            child: Padding(
               padding: EdgeInsets.only(right: 20.0),
               child: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/ic_profile.png'),
+                backgroundImage: userProfileImage == null
+                    ? AssetImage('assets/images/ic_profile.png')
+                    : NetworkImage(userProfileImage!) as ImageProvider,
                 radius: 15,
               ),
             ),
@@ -163,6 +187,15 @@ class _NotificationListState extends State<NotificationsScreen> {
         ),
       ),
     );
+  }
+
+  void checkPermissionAndUpdateBool(
+      String permValue, Function(bool) boolUpdater) async {
+    var localBool = await hasPermission(permValue);
+
+    setState(() {
+      boolUpdater(localBool);
+    });
   }
 }
 

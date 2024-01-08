@@ -296,10 +296,16 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                       saveStringToSP(lsUserRoles, BL_USER_ROLES);
                       saveStringToSP(lsUserPermissions, BL_USER_PERMISSIONS);
 
-                      Navigator.push(
+                      // Navigator.pushReplacement(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => DashboardScreen()));
+
+                      Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => DashboardScreen()));
+                              builder: (context) => DashboardScreen()),
+                          (route) => false);
                     }
 
                     //   String uEmail = emailText.text;

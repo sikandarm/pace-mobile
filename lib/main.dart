@@ -140,9 +140,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       //     home: SplashScreen(),
-       initialRoute: '/',
+      initialRoute: '/',
       //  home: FacebookEmailScreen(fbID: ''),
-     // home: LoginScreen(),
+      // home: LoginScreen(),
 
       routes: {
         '/': (context) => const SplashScreen(),

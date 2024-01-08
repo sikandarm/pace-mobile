@@ -25,6 +25,7 @@ bool blShowInventory = false;
 
 bool b1ViewDashBoardWithGraphs =
     false; // not used yet as was found b1ShowInventoryList
+bool b1ViewContacts = false;
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -112,6 +113,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     checkPermissionAndUpdateBool("view_inventory", (localBool) {
       blShowInventory = localBool;
     });
+//view_contact
+
+    checkPermissionAndUpdateBool("view_contact", (localBool) {
+      b1ViewContacts = localBool;
+    });
+
     setState(() {});
   }
 
@@ -381,6 +388,7 @@ PreferredSizeWidget _buildAppBar(
                 //         ],
                 //       );
                 //     });
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -430,11 +438,16 @@ Widget _buildSideDrawer(BuildContext context) {
                   padding: EdgeInsets.zero,
                   children: <Widget>[
                     Visibility(
-                      visible: blShowProfile,
+                      //   visible: blShowProfile,
                       child: ListTile(
                         leading: const Icon(Icons.person),
                         title: const Text('Profile'),
                         onTap: () {
+                          if (!blShowProfile) {
+                            showToast('You do not have permissions.');
+                            return;
+                          }
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -466,6 +479,11 @@ Widget _buildSideDrawer(BuildContext context) {
                         title: const Text('Purchase Orders'),
                         leading: const Icon(Icons.inventory),
                         onTap: () {
+                          //  if (!b1) {
+                          //   showToast('You do not have permissions.');
+                          //   return;
+                          // }
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -481,6 +499,11 @@ Widget _buildSideDrawer(BuildContext context) {
                         title: const Text('View Contacts'),
                         leading: const Icon(Icons.call),
                         onTap: () {
+                          if (!b1ViewContacts) {
+                            showToast('You do not have permissions.');
+                            return;
+                          }
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(

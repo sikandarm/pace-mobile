@@ -32,6 +32,7 @@ bool _blCollaborate = false;
 bool _blShowNotificationsList = false;
 bool _blApprovedTask = false;
 bool _blSelfAssignATask = false;
+bool _b1ShowProfile = false;
 
 class TaskDetail extends StatefulWidget {
   final int taskId;
@@ -90,6 +91,10 @@ class _TaskDetailState extends State<TaskDetail> {
     super.initState();
     _futureTask = fetchTaskDetail(widget.taskId);
     callApiMethods();
+    checkPermissionAndUpdateBool("view_profile", (localBool) {
+      _b1ShowProfile = localBool;
+    });
+
     checkPermissionAndUpdateBool("collaborate_on_microsoft_whiteboard",
         (localBool) {
       _blCollaborate = localBool;
@@ -398,6 +403,11 @@ class _TaskDetailState extends State<TaskDetail> {
                 ),
                 GestureDetector(
                   onTap: () {
+                    if (!_b1ShowProfile) {
+                      showToast('You do not have permissions.');
+                      return;
+                    }
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(

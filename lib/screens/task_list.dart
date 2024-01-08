@@ -210,12 +210,12 @@ class _TaskListState extends State<TaskList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () async {
-        //  await getSingleTask(taskId: '166');
-        final sharedPrefs = await SharedPreferences.getInstance();
-        final token = sharedPrefs.getString(BL_USER_TOKEN);
-        print('token: ' + token.toString());
-      }),
+      // floatingActionButton: FloatingActionButton(onPressed: () async {
+      //   //  await getSingleTask(taskId: '166');
+      //   final sharedPrefs = await SharedPreferences.getInstance();
+      //   final token = sharedPrefs.getString(BL_USER_TOKEN);
+      //   print('token: ' + token.toString());
+      // }),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,

@@ -24,11 +24,14 @@ Future<List<CAReportModel>> fetchAllCARList() async {
   int? userId = await getIntFromSF('UserId');
 
   var url = Uri.parse('$BASE_URL/CA-report');
+  //////////////////////////
   var requestUrl = url.replace(queryParameters: {'userId': userId.toString()});
-
   var response = await http.get(requestUrl);
+  ////////////////////////////////////////////
+  // var response = await http.get(url);
   var responseString = response.body;
-  // print(responseString);
+
+  print('View CAR API: $responseString');
 
   Map<String, dynamic> jsonMap = jsonDecode(responseString);
 

@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,6 +19,7 @@ bool blAddCar = false;
 bool blViewCar = false;
 bool _blShowNotificationsList = false;
 bool blRejectedTasks = false;
+bool _b1ShowProfile = false;
 int _totalEstimatedHours = 0;
 double _totalCOPQ = 0.00;
 
@@ -35,11 +37,20 @@ class _DeptListState extends State<DeptList> {
 
   @override
   void initState() {
+    FirebaseMessaging.onMessage.listen((event) {
+      hasNewNotifiaction = true;
+      setState(() {});
+    });
+    getProfileImageToSharedPrefs();
     super.initState();
     _futureTask = fetchAllRejectedTasks();
 
     checkPermissionAndUpdateBool("add_car", (localBool) {
       blAddCar = localBool;
+    });
+
+    checkPermissionAndUpdateBool("view_profile", (localBool) {
+      _b1ShowProfile = localBool;
     });
 
     checkPermissionAndUpdateBool("view_car", (localBool) {
@@ -153,6 +164,16 @@ class _DeptListState extends State<DeptList> {
     return token;
   }
 
+  String? userProfileImage;
+
+  Future<void> getProfileImageToSharedPrefs() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    userProfileImage =
+        await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
+    print('user profile image: ' + userProfileImage.toString());
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -173,7 +194,8 @@ class _DeptListState extends State<DeptList> {
           },
         ),
         title: const Text(
-          "Dashboard",
+          // "Dashboard",
+          "Departments",
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -206,32 +228,41 @@ class _DeptListState extends State<DeptList> {
                         height: 32,
                       ),
                     ),
-                    Positioned(
-                      top: 5,
-                      right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
+                    hasNewNotifiaction
+                        ? Positioned(
+                            top: 5,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          )
+                        : SizedBox(),
                   ],
                 ),
               ),
               GestureDetector(
                 onTap: () {
+                  if (!_b1ShowProfile) {
+                    showToast('You do not have permissions.');
+                    return;
+                  }
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const ProfileScreen()),
                   );
                 },
-                child: const Padding(
+                child: Padding(
                   padding: EdgeInsets.only(right: 10.0, left: 5.0),
                   child: CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/ic_profile.png'),
+                    backgroundImage: userProfileImage == null
+                        ? AssetImage('assets/images/ic_profile.png')
+                        : NetworkImage(userProfileImage!) as ImageProvider,
                     radius: 15,
                   ),
                 ),
@@ -441,6 +472,11 @@ class TaskListHeader extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
+                  if (!blAddCar) {
+                    showToast('You do not have permissions.');
+                    return;
+                  }
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -449,7 +485,8 @@ class TaskListHeader extends StatelessWidget {
                   );
                 },
                 child: Visibility(
-                  visible: blAddCar,
+                  //  visible: blAddCar,
+                  visible: true,
                   child: const Text(
                     "Add CAR",
                     style: TextStyle(
@@ -462,6 +499,11 @@ class TaskListHeader extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
+                  if (!blViewCar) {
+                    showToast('You do not have permissions.');
+                    return;
+                  }
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -470,7 +512,8 @@ class TaskListHeader extends StatelessWidget {
                   );
                 },
                 child: Visibility(
-                  visible: blViewCar,
+                  //   visible: blViewCar,
+                  visible: true,
                   child: const Padding(
                     padding: EdgeInsets.only(left: 10),
                     child: Text(

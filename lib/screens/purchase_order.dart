@@ -15,8 +15,14 @@ class PurchaseOrder extends StatefulWidget {
 
 class _PurchaseOrderState extends State<PurchaseOrder> {
   bool isLoading = false;
+
+  bool blViewPurchaseOrderDetail = false;
+
   @override
   void initState() {
+    checkPermissionAndUpdateBool("view_purchasedetails", (localBool) {
+      blViewPurchaseOrderDetail = localBool;
+    });
     callApiMethods();
     super.initState();
   }
@@ -197,6 +203,10 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
                     return InkWell(
                       onTap: () {
                         // Handle item tap
+                        if (!blViewPurchaseOrderDetail) {
+                          showToast('You do not have permissions.');
+                          return;
+                        }
 
                         Navigator.push(
                             context,
@@ -315,5 +325,14 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
         ],
       ),
     );
+  }
+
+  void checkPermissionAndUpdateBool(
+      String permValue, Function(bool) boolUpdater) async {
+    var localBool = await hasPermission(permValue);
+
+    setState(() {
+      boolUpdater(localBool);
+    });
   }
 }
