@@ -24,7 +24,10 @@ class _SplashScreenState extends State<SplashScreen> {
       if (await getBoolFromSF(BL_USER_LOGGED_IN)) {
         // Navigate to home screen after splash screen is displayed
         // ignore: use_build_context_synchronously
-        Navigator.pushReplacementNamed(context, '/dashboard');
+        Navigator.pushReplacementNamed(
+          context,
+          '/dashboard',
+        );
       } else {
         // Navigate to home screen after splash screen is displayed
         // ignore: use_build_context_synchronously

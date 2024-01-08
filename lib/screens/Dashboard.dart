@@ -228,7 +228,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 }
 
 PreferredSizeWidget _buildAppBar(
-    context, GlobalKey<ScaffoldState> scaffoldKey, String? userProfileImage) {
+  context,
+  GlobalKey<ScaffoldState> scaffoldKey,
+  String? userProfileImage,
+) {
   return AppBar(
     backgroundColor: Colors.white,
     leading: IconButton(
@@ -458,11 +461,16 @@ Widget _buildSideDrawer(BuildContext context) {
                       ),
                     ),
                     Visibility(
-                      visible: blShowSharedCAR,
+                      // visible: blShowSharedCAR,
                       child: ListTile(
                         title: const Text('View Shared CAR'),
                         leading: const Icon(Icons.share),
                         onTap: () {
+                          if (!blShowSharedCAR) {
+                            showToast('You do not have permissions');
+                            return;
+                          }
+
                           Navigator.pop(context);
                           Navigator.push(
                             context,

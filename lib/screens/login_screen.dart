@@ -168,32 +168,33 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () async {
-        print('button pressed');
+      // floatingActionButton: FloatingActionButton(onPressed: () async {
+      //   print('button pressed');
 
-        await loginApiFB();
-        //  await FacebookAuth.instance.login();
-        return;
+      //   await loginApiFB();
+      //   //  await FacebookAuth.instance.login();
+      //   return;
 
-        final a = FacebookLogin(
-          debug: false,
-        );
-        final result = await a.logIn(permissions: [
-          FacebookPermission.publicProfile,
-          // FacebookPermission.email,
-          // FacebookPermission.email,
-        ]);
+      //   final a = FacebookLogin(
+      //     debug: false,
+      //   );
+      //   final result = await a.logIn(permissions: [
+      //     FacebookPermission.publicProfile,
+      //     // FacebookPermission.email,
+      //     // FacebookPermission.email,
+      //   ]);
 
-        final ok = await a.getUserProfile();
-        final image = await a.getProfileImageUrl(width: 200);
-        print('status ok:${ok!.firstName}image:$image');
+      //   final ok = await a.getUserProfile();
+      //   final image = await a.getProfileImageUrl(width: 200);
+      //   print('status ok:${ok!.firstName}image:$image');
 
-        final AuthCredential credential =
-            FacebookAuthProvider.credential(result.accessToken!.token);
-        final fbUser =
-            await FirebaseAuth.instance.signInWithCredential(credential);
-        print('fb User:${fbUser.additionalUserInfo!.profile}');
-      }),
+      //   final AuthCredential credential =
+      //       FacebookAuthProvider.credential(result.accessToken!.token);
+      //   final fbUser =
+      //       await FirebaseAuth.instance.signInWithCredential(credential);
+      //   print('fb User:${fbUser.additionalUserInfo!.profile}');
+      // }),
+
       body: SingleChildScrollView(
         child: Column(
           children: [
