@@ -216,7 +216,6 @@ class CARDetailWidget extends StatelessWidget {
             buildGradeRow("Name", approvalName!),
             buildGradeRow(
                 "Date", DateFormat(US_DATE_FORMAT).format(approvalDate!)),
-
             Row(
               children: [
                 Expanded(

@@ -51,10 +51,10 @@ class _RejectedReasonsListState extends State<RejectedReasonsScreen> {
             // Navigator.popUntil(context, ModalRoute.withName('/dashboard'));
           },
         ),
-        title: const Text(
+        title: Text(
           "Rejected Reasons",
           style: TextStyle(
-            fontSize: 22,
+            fontSize: appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),

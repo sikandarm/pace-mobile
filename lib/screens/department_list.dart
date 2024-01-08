@@ -193,11 +193,11 @@ class _DeptListState extends State<DeptList> {
             // Navigator.popUntil(context, ModalRoute.withName('/dashboard'));
           },
         ),
-        title: const Text(
+        title: Text(
           // "Dashboard",
           "Departments",
           style: TextStyle(
-            fontSize: 22,
+            fontSize: appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),

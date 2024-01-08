@@ -94,7 +94,7 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
       appBar: AppBar(
         title: Text(
           'Google Sign In',
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: appBarTiltleSize),
         ),
       ),
       body: Padding(

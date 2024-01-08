@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../components/job_list_card.dart';
 import '../services/job_service.dart';
+import '../utils/constants.dart';
 
 class ViewAllJobsScreen extends StatefulWidget {
   const ViewAllJobsScreen({super.key});
@@ -51,10 +52,10 @@ class _ViewAllJobsScreenState extends State<ViewAllJobsScreen> {
             Navigator.popUntil(context, (route) => route.isFirst);
           },
         ),
-        title: const Text(
+        title: Text(
           "All Jobs",
           style: TextStyle(
-            fontSize: 22,
+            fontSize: appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),

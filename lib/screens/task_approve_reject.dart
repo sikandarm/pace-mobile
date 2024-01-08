@@ -83,10 +83,10 @@ class _TaskApproveRejectState extends State<TaskApproveRejectScreen> {
             // Navigator.popUntil(context, ModalRoute.withName('/dashboard'));
           },
         ),
-        title: const Text(
+        title: Text(
           "Task Status",
           style: TextStyle(
-            fontSize: 22,
+            fontSize: appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),

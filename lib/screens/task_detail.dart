@@ -337,10 +337,10 @@ class _TaskDetailState extends State<TaskDetail> {
               Navigator.popUntil(context, (route) => route.isFirst);
             },
           ),
-          title: const Text(
+          title: Text(
             "Task Detail",
             style: TextStyle(
-              fontSize: 22,
+              fontSize: appBarTiltleSize,
               fontWeight: FontWeight.bold,
             ),
           ),

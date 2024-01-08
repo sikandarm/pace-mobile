@@ -491,12 +491,12 @@ Widget _buildAppBar(
       builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
         if (snapshot.hasData) {
           // String? title = snapshot.data;
-          return const Text(
+          return Text(
             "Inventory",
             style: TextStyle(
               color: Color(0xff1E2022),
               fontWeight: FontWeight.bold,
-              fontSize: 25,
+              fontSize: appBarTiltleSize,
             ),
           );
         } else if (snapshot.hasError) {
@@ -1220,6 +1220,7 @@ Widget makeTransactionsIcon() {
 
 class ChartSampleData {
   ChartSampleData(this.x, this.high, this.low);
+
   final DateTime x;
   final double high;
   final double low;
@@ -1227,6 +1228,7 @@ class ChartSampleData {
 
 class ChartData {
   ChartData(this.x, this.y1, this.y2, this.y3, this.y4);
+
   final String x;
   final int y1;
   final int y2;
@@ -1239,6 +1241,7 @@ class SyncLineChartData {
     this.x,
     this.y,
   );
+
   final int x;
   final double y;
 }

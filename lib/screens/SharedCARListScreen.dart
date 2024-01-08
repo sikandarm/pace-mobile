@@ -79,10 +79,10 @@ class _SharedListState extends State<SharedCARList> {
             // Navigator.popUntil(context, ModalRoute.withName('/dashboard'));
           },
         ),
-        title: const Text(
+        title: Text(
           "Shared CA Reports",
           style: TextStyle(
-            fontSize: 22,
+            fontSize: appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),

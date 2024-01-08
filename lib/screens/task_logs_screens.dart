@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pace_application_fb/utils/constants.dart';
 
 import '../services/get_task_logs.dart';
 
@@ -41,10 +42,10 @@ class _TaskLogsScreenState extends State<TaskLogsScreen> {
             Navigator.popUntil(context, (route) => route.isFirst);
           },
         ),
-        title: const Text(
+        title: Text(
           "Task Logs",
           style: TextStyle(
-            fontSize: 22,
+            fontSize: appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),

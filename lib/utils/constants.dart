@@ -35,6 +35,8 @@ const String BL_REJECTED_REASON = "RejectedReason";
 const String US_DATE_FORMAT = 'MMMM dd yyyy';
 const String NOTIFICATION_DATE_FORMAT = 'MMMM dd, yyyy - hh:mm aa';
 
+double appBarTiltleSize=22.0;
+
 const List<String> LS_PERMISSIONS = [
   'view_job',
   'view_task',

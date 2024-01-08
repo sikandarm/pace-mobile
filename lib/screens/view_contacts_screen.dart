@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../services/get_all_user_contacts.dart';
+import '../utils/constants.dart';
 
 class ViewContactsScreen extends StatefulWidget {
   const ViewContactsScreen({super.key});
@@ -49,10 +50,10 @@ class _ViewContactsScreenState extends State<ViewContactsScreen> {
             Navigator.pop(context);
           },
         ),
-        title: const Text(
+        title: Text(
           "All Contacts",
           style: TextStyle(
-            fontSize: 22,
+            fontSize: appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -128,12 +129,10 @@ class _ViewContactsScreenState extends State<ViewContactsScreen> {
             : SingleChildScrollView(
                 child: Column(
                   children: [
-
-                    if(contactApiData!.data!.users!=null)...{
+                    if (contactApiData!.data!.users != null) ...{
                       for (int i = 0;
-                      i < contactApiData!.data!.users!.length;
-                      i++) ...{
-
+                          i < contactApiData!.data!.users!.length;
+                          i++) ...{
                         Card(
                           child: Padding(
                             padding: const EdgeInsets.all(21.0),
@@ -143,8 +142,8 @@ class _ViewContactsScreenState extends State<ViewContactsScreen> {
                                   children: [
                                     const Text(
                                       'First Name: ',
-                                      style:
-                                      TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     Text(contactApiData!
                                         .data!.users![i].firstName!),
@@ -154,8 +153,8 @@ class _ViewContactsScreenState extends State<ViewContactsScreen> {
                                   children: [
                                     const Text(
                                       'Last Name: ',
-                                      style:
-                                      TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     Text(contactApiData!
                                         .data!.users![i].lastName!),
@@ -165,20 +164,22 @@ class _ViewContactsScreenState extends State<ViewContactsScreen> {
                                   children: [
                                     const Text(
                                       'Email: ',
-                                      style:
-                                      TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                    Text(contactApiData!.data!.users![i].email!),
+                                    Text(
+                                        contactApiData!.data!.users![i].email!),
                                   ],
                                 ),
                                 Row(
                                   children: [
                                     const Text(
                                       'Contact No: ',
-                                      style:
-                                      TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                    Text(contactApiData!.data!.users![i].phone.toString()),
+                                    Text(contactApiData!.data!.users![i].phone
+                                        .toString()),
                                   ],
                                 ),
                                 const SizedBox(
@@ -187,13 +188,13 @@ class _ViewContactsScreenState extends State<ViewContactsScreen> {
                                 ElevatedButton.icon(
                                     style: const ButtonStyle(
                                       backgroundColor:
-                                      MaterialStatePropertyAll(Colors.blue),
-                                      foregroundColor:
-                                      MaterialStatePropertyAll(Colors.white),
+                                          MaterialStatePropertyAll(Colors.blue),
+                                      foregroundColor: MaterialStatePropertyAll(
+                                          Colors.white),
                                     ),
                                     onPressed: () async {
-                                      await launchDialer(
-                                          contactApiData!.data!.users![i].phone!);
+                                      await launchDialer(contactApiData!
+                                          .data!.users![i].phone!);
                                     },
                                     icon: const Icon(
                                       Icons.call,

@@ -54,10 +54,10 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
             // Navigator.popUntil(context, ModalRoute.withName('/dashboard'));
           },
         ),
-        title: const Text(
+        title: Text(
           "Purchase Orders",
           style: TextStyle(
-            fontSize: 22,
+            fontSize: appBarTiltleSize,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
@@ -132,8 +132,6 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
           borderRadius: BorderRadius.circular(8.0),
           color: Colors.white,
           boxShadow: [
-
-
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 1,

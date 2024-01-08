@@ -33,10 +33,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     FirebaseMessaging.onMessage.listen((event) {
-      hasNewNotifiaction=true;
-      setState(() {
-
-      });
+      hasNewNotifiaction = true;
+      setState(() {});
     });
     super.initState();
     _futureProfile = fetchUserProfile();
@@ -79,10 +77,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // Navigator.popUntil(context, ModalRoute.withName('/dashboard'));
           },
         ),
-        title: const Text(
+        title: Text(
           "Profile",
           style: TextStyle(
-            fontSize: 22,
+            fontSize: appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -95,7 +93,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     InkWell(
                       onTap: () {
-                        hasNewNotifiaction=false;
+                        hasNewNotifiaction = false;
                         if (_blShowNotificationsList) {
                           Navigator.push(
                             context,
@@ -114,17 +112,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         height: 32,
                       ),
                     ),
-                !hasNewNotifiaction?SizedBox():    Positioned(
-                      top: 5,
-                      right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
+                    !hasNewNotifiaction
+                        ? SizedBox()
+                        : Positioned(
+                            top: 5,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
                   ],
                 ),
               ),

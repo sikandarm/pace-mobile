@@ -49,8 +49,6 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
       // }),
       appBar: _buildAppBar(context),
       body: Container(
-
-
         child: ListView(
           children: [
             //    const SizedBox(height: 10),
@@ -65,7 +63,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 7),
               width: MediaQuery.of(context).size.width,
               // height: MediaQuery.of(context).size.height * 0.74,
-             // height: MediaQuery.of(context).size.height * 0.4,
+              // height: MediaQuery.of(context).size.height * 0.4,
               color: Colors.white,
               child: SingleChildScrollView(
                 child: Column(
@@ -308,8 +306,8 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ),
                     ListTileItem(
                       label: 'First Name',
-                      value: widget.purchaseOrder.firstName!.firstName
-                          .toString(),
+                      value:
+                          widget.purchaseOrder.firstName!.firstName.toString(),
                     ),
                     const Padding(
                       padding:
@@ -334,9 +332,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
 
             isApiLoading
                 ? const Column(
-
                     children: [
-
                       SizedBox(
                         height: 70,
                       ),
@@ -344,14 +340,13 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ],
                   )
                 : Container(
-              color: Colors.white,
-              width: MediaQuery.of(context).size.width,
+                    color: Colors.white,
+                    width: MediaQuery.of(context).size.width,
                     // height: MediaQuery.of(context).size.height * 0.4,
 
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 13),
-                child: Column(
-
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 13),
+                      child: Column(
                         //  margin: const EdgeInsets.all(21),
                         //             width: MediaQuery.of(context).size.width,
                         //             // height: MediaQuery.of(context).size.height * 0.74,
@@ -375,13 +370,14 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                               width: MediaQuery.of(context).size.width,
                               child: Card(
                                 color: Colors.white,
-
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4)),
                                 child: Column(
                                   children: [
                                     // Text(purchaseOrderItemsList[i].id.toString()),
-                                    SizedBox(height: 9,),
+                                    SizedBox(
+                                      height: 9,
+                                    ),
                                     ListTileItem(
                                         label: 'ID',
                                         value: purchaseOrderItemsList[i]
@@ -432,16 +428,16 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                           },
                         ],
                       ),
-              ),
+                    ),
                   ),
-          //  const Spacer(),
+            //  const Spacer(),
 
             widget.purchaseOrder.status.toString().toLowerCase() ==
                     'received'.toLowerCase()
                 ? SizedBox()
                 : SizedBox(
-              width: MediaQuery.of(context).size.width,
-                  //  width: 100,
+                    width: MediaQuery.of(context).size.width,
+                    //  width: 100,
                     height: 50.0,
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 23),
@@ -456,8 +452,9 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                       ]),
                       child: ElevatedButton(
                         onPressed: () async {
-                          final isRecievied = await changePurchaseOrderStatusByID(
-                              id: widget.purchaseOrder.id!);
+                          final isRecievied =
+                              await changePurchaseOrderStatusByID(
+                                  id: widget.purchaseOrder.id!);
                           print('isRecievied: ' + isRecievied.toString());
                           await showDialog(
                             context: context,
@@ -489,8 +486,10 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
 
                           Navigator.pop(context);
                           Navigator.pop(context);
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => PurchaseOrder()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => PurchaseOrder()));
                         },
                         style: ButtonStyle(
                           backgroundColor:
@@ -573,12 +572,12 @@ AppBar _buildAppBar(context) {
       builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
         if (snapshot.hasData) {
           // String? title = snapshot.data;
-          return const Text(
+          return Text(
             "Purchase Order Detail",
             style: TextStyle(
               color: Color(0xff1E2022),
               fontWeight: FontWeight.bold,
-              fontSize: 20,
+              fontSize: appBarTiltleSize,
             ),
           );
         } else if (snapshot.hasError) {

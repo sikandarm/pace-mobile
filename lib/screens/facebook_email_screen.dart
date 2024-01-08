@@ -102,13 +102,14 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () async {
-        await facebookGraphApi();
-      }),
+      // floatingActionButton: FloatingActionButton(onPressed: () async {
+      //   await facebookGraphApi();
+      // }),
+
       appBar: AppBar(
         title: Text(
           'Facebook Email Screen',
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: appBarTiltleSize),
         ),
       ),
       body: Padding(

@@ -231,10 +231,10 @@ class _TaskListState extends State<TaskList> {
             );
           },
         ),
-        title: const Text(
+        title: Text(
           "Tasks List",
           style: TextStyle(
-            fontSize: 22,
+            fontSize: appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),

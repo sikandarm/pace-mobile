@@ -91,10 +91,10 @@ class _NotificationListState extends State<NotificationsScreen> {
             );
           },
         ),
-        title: const Text(
+        title: Text(
           "Notifications",
           style: TextStyle(
-            fontSize: 22,
+            fontSize: appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),

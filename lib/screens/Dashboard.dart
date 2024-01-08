@@ -247,10 +247,10 @@ PreferredSizeWidget _buildAppBar(
           String? title = snapshot.data;
           return Text(
             "Hi, ${title ?? ''}",
-            style: const TextStyle(
+            style: TextStyle(
               color: Color(0xff1E2022),
               fontWeight: FontWeight.bold,
-              fontSize: 25,
+              fontSize: appBarTiltleSize,
             ),
           );
         } else if (snapshot.hasError) {

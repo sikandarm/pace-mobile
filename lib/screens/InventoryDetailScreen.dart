@@ -130,12 +130,12 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey) {
       builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
         if (snapshot.hasData) {
           // String? title = snapshot.data;
-          return const Text(
+          return Text(
             "Inventory Detail",
             style: TextStyle(
               color: Color(0xff1E2022),
               fontWeight: FontWeight.bold,
-              fontSize: 25,
+              fontSize: appBarTiltleSize,
             ),
           );
         } else if (snapshot.hasError) {

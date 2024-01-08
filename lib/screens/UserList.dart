@@ -28,7 +28,7 @@ callShareCAR(BuildContext context, int reportId, List<int> userId) async {
       "userId": userId.map((id) => id.toString()).toList().join(","),
     });
 
-    print('Car share response api: '+response.body);
+    print('Car share response api: ' + response.body);
     Map<String, dynamic> jsonMap = jsonDecode(response.body);
     // print(jsonMap);
 
@@ -142,12 +142,12 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey, int carId) {
       builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
         if (snapshot.hasData) {
           // String? title = snapshot.data;
-          return const Text(
+          return Text(
             "User List",
             style: TextStyle(
               color: Color(0xff1E2022),
               fontWeight: FontWeight.bold,
-              fontSize: 25,
+              fontSize: appBarTiltleSize,
             ),
           );
         } else if (snapshot.hasError) {
