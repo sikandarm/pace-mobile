@@ -17,26 +17,27 @@ class SharedCARList extends StatefulWidget {
 }
 
 bool _blShowNotificationsList = false;
+bool _blShowProfile = false;
 
 class _SharedListState extends State<SharedCARList> {
   Future<List<CAReportModel>> _futureList = Future.value([]);
-
-
 
   @override
   void initState() {
     getProfileImageToSharedPrefs();
     FirebaseMessaging.onMessage.listen((event) {
-      hasNewNotifiaction=true;
-      setState(() {
-
-      });
+      hasNewNotifiaction = true;
+      setState(() {});
     });
     super.initState();
     _futureList = fetchSharedCARList();
 
     checkPermissionAndUpdateBool("view_notifications", (localBool) {
       _blShowNotificationsList = localBool;
+    });
+
+    checkPermissionAndUpdateBool("view_profile", (localBool) {
+      _blShowProfile = localBool;
     });
   }
 
@@ -49,17 +50,15 @@ class _SharedListState extends State<SharedCARList> {
     });
   }
 
-
   String? userProfileImage;
 
   Future<void> getProfileImageToSharedPrefs() async {
     final sharedPrefs = await SharedPreferences.getInstance();
     userProfileImage =
-    await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
-    print('user profile image: '+ userProfileImage.toString());
+        await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
+    print('user profile image: ' + userProfileImage.toString());
     setState(() {});
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +66,6 @@ class _SharedListState extends State<SharedCARList> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-
         iconTheme: const IconThemeData(color: Colors.black),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -97,12 +95,13 @@ class _SharedListState extends State<SharedCARList> {
                   children: [
                     InkWell(
                       onTap: () {
-                        hasNewNotifiaction=false;
+                        hasNewNotifiaction = false;
                         if (_blShowNotificationsList) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const NotificationsScreen()),
+                                builder: (context) =>
+                                    const NotificationsScreen()),
                           );
                         } else {
                           showToast(
@@ -115,32 +114,40 @@ class _SharedListState extends State<SharedCARList> {
                         height: 32,
                       ),
                     ),
-              !hasNewNotifiaction? SizedBox():      Positioned(
-                      top: 5,
-                      right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
+                    !hasNewNotifiaction
+                        ? SizedBox()
+                        : Positioned(
+                            top: 5,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
                   ],
                 ),
               ),
               GestureDetector(
                 onTap: () {
+                  if (_blShowProfile) {
+                    showToast('You do not have permissions.');
+                    return;
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const ProfileScreen()),
                   );
                 },
-                child:  Padding(
+                child: Padding(
                   padding: EdgeInsets.only(right: 10.0, left: 5.0),
                   child: CircleAvatar(
-                    backgroundImage: userProfileImage==null? AssetImage('assets/images/ic_profile.png'):NetworkImage(userProfileImage!) as ImageProvider,
+                    backgroundImage: userProfileImage == null
+                        ? AssetImage('assets/images/ic_profile.png')
+                        : NetworkImage(userProfileImage!) as ImageProvider,
                     radius: 15,
                   ),
                 ),

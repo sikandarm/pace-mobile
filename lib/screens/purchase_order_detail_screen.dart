@@ -48,464 +48,470 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
       //   print('result:${result.first.inventoryItem}');
       // }),
       appBar: _buildAppBar(context),
-      body: Column(
-        children: [
-          //    const SizedBox(height: 10),
+      body: Container(
 
-          //  SfDataGrid(source: DataGridS, columns: <GridColumn>[])
 
-          /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-          /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-          /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-          ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 7),
-            width: MediaQuery.of(context).size.width,
-            // height: MediaQuery.of(context).size.height * 0.74,
-            height: MediaQuery.of(context).size.height * 0.4,
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Scrollbar(
-                radius: const Radius.circular(33),
+        child: ListView(
+          children: [
+            //    const SizedBox(height: 10),
 
-                thumbVisibility: true,
-                //   trackVisibility: true,
-                //   showTrackOnHover: true,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      ListTileItem(
-                        label: 'ID',
-                        value: widget.purchaseOrder.id.toString(),
-                      ),
+            //  SfDataGrid(source: DataGridS, columns: <GridColumn>[])
 
-                      // ListTileItem(
-                      //   label: 'Company Name',
-                      //   value: purchaseOrder.companyName.toString(),
-                      // ),
-                      // const Padding(
-                      //   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                      //   child: Divider(),
-                      // ),
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 7),
+              width: MediaQuery.of(context).size.width,
+              // height: MediaQuery.of(context).size.height * 0.74,
+             // height: MediaQuery.of(context).size.height * 0.4,
+              color: Colors.white,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ListTileItem(
+                      label: 'ID',
+                      value: widget.purchaseOrder.id.toString(),
+                    ),
 
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
+                    // ListTileItem(
+                    //   label: 'Company Name',
+                    //   value: purchaseOrder.companyName.toString(),
+                    // ),
+                    // const Padding(
+                    //   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                    //   child: Divider(),
+                    // ),
 
-                      ListTileItem(
-                        label: 'PO Number',
-                        value: widget.purchaseOrder.poNumber.toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
 
-                      ListTileItem(
-                        label: 'Address',
-                        value: widget.purchaseOrder.address.toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                      ListTileItem(
-                        label: 'Phone',
-                        value: widget.purchaseOrder.phone.toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                      ListTileItem(
-                        label: 'Fax',
-                        value: widget.purchaseOrder.fax.toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                      ListTileItem(
-                        label: 'Email',
-                        value: widget.purchaseOrder.email.toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                      ListTileItem(
-                        label: 'Status',
-                        value: widget.purchaseOrder.status.toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                      // ListTileItem(
-                      //   label: 'User ID',
-                      //   value: purchaseOrder.userId.toString(),
-                      // ),
-                      // const Padding(
-                      //   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                      //   child: Divider(),
-                      // ),
+                    ListTileItem(
+                      label: 'PO Number',
+                      value: widget.purchaseOrder.poNumber.toString(),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
 
-                      ListTileItem(
-                        label: 'Order Date',
-                        // value: purchaseOrder.orderDate.toString(),
-                        value: DateFormat(US_DATE_FORMAT).format(DateTime.parse(
-                            widget.purchaseOrder.orderDate.toString())),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                      ListTileItem(
-                        label: 'Delivery Date',
-                        //  value: purchaseOrder.deliveryDate.toString(),
-                        value: DateFormat(US_DATE_FORMAT).format(DateTime.parse(
-                            widget.purchaseOrder.deliveryDate.toString())),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                      ListTileItem(
-                        label: 'Vender Name',
-                        value: widget.purchaseOrder.vendorName.toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                      ListTileItem(
-                        label: 'Ship To',
-                        value: widget.purchaseOrder.shipTo.toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                      ListTileItem(
-                        label: 'Ship Via',
-                        value: widget.purchaseOrder.shipVia.toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                      ListTileItem(
-                        label: 'Term',
-                        value: widget.purchaseOrder.term.toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                      ListTileItem(
-                        label: 'Order By',
-                        value: widget.purchaseOrder.orderBy.toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                      ListTileItem(
-                        label: 'Confirm With',
-                        value: widget.purchaseOrder.confirmWith.toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                      ListTileItem(
-                        label: 'Placed Via',
-                        value: widget.purchaseOrder.placedVia.toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                      // ListTileItem(
-                      //   label: 'Created By',
-                      //   value: purchaseOrder.createdBy.toString(),
-                      // ),
-                      // const Padding(
-                      //   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                      //   child: Divider(),
-                      // ),
-                      // ListTileItem(
-                      //   label: 'Updated By',
-                      //   value: purchaseOrder.updatedBy.toString(),
-                      // ),
-                      // const Padding(
-                      //   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                      //   child: Divider(),
-                      // ),
-                      // ListTileItem(
-                      //   label: 'Deleted At',
-                      //   value: purchaseOrder.deletedAt.toString(),
-                      // ),
-                      // const Padding(
-                      //   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                      //   child: Divider(),
-                      // ),
-                      // ListTileItem(
-                      //   label: 'Deleted By',
-                      //   value: purchaseOrder.deletedBy.toString(),
-                      // ),
-                      // const Padding(
-                      //   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                      //   child: Divider(),
-                      // ),
-                      ListTileItem(
-                        label: 'Created At',
-                        value: widget.purchaseOrder.createdAt.toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                      // ListTileItem(
-                      //   label: 'Updated At',
-                      //   value: purchaseOrder.updatedAt.toString(),
-                      // ),
-                      // const Padding(
-                      //   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                      //   child: Divider(),
-                      // ),
-                      ListTileItem(
-                        label: 'Company',
-                        value: widget.purchaseOrder.company!.name.toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                      ListTileItem(
-                        label: 'Vendor',
-                        value: widget.purchaseOrder.vendorName.toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                      ListTileItem(
-                        label: 'First Name',
-                        value: widget.purchaseOrder.firstName!.firstName
-                            .toString(),
-                      ),
-                      const Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 3, horizontal: 20),
-                        child: Divider(),
-                      ),
-                    ],
-                  ),
+                    ListTileItem(
+                      label: 'Address',
+                      value: widget.purchaseOrder.address.toString(),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                    ListTileItem(
+                      label: 'Phone',
+                      value: widget.purchaseOrder.phone.toString(),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                    ListTileItem(
+                      label: 'Fax',
+                      value: widget.purchaseOrder.fax.toString(),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                    ListTileItem(
+                      label: 'Email',
+                      value: widget.purchaseOrder.email.toString(),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                    ListTileItem(
+                      label: 'Status',
+                      value: widget.purchaseOrder.status.toString(),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                    // ListTileItem(
+                    //   label: 'User ID',
+                    //   value: purchaseOrder.userId.toString(),
+                    // ),
+                    // const Padding(
+                    //   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                    //   child: Divider(),
+                    // ),
+
+                    ListTileItem(
+                      label: 'Order Date',
+                      // value: purchaseOrder.orderDate.toString(),
+                      value: DateFormat(US_DATE_FORMAT).format(DateTime.parse(
+                          widget.purchaseOrder.orderDate.toString())),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                    ListTileItem(
+                      label: 'Delivery Date',
+                      //  value: purchaseOrder.deliveryDate.toString(),
+                      value: DateFormat(US_DATE_FORMAT).format(DateTime.parse(
+                          widget.purchaseOrder.deliveryDate.toString())),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                    ListTileItem(
+                      label: 'Vender Name',
+                      value: widget.purchaseOrder.vendorName.toString(),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                    ListTileItem(
+                      label: 'Ship To',
+                      value: widget.purchaseOrder.shipTo.toString(),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                    ListTileItem(
+                      label: 'Ship Via',
+                      value: widget.purchaseOrder.shipVia.toString(),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                    ListTileItem(
+                      label: 'Term',
+                      value: widget.purchaseOrder.term.toString(),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                    ListTileItem(
+                      label: 'Order By',
+                      value: widget.purchaseOrder.orderBy.toString(),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                    ListTileItem(
+                      label: 'Confirm With',
+                      value: widget.purchaseOrder.confirmWith.toString(),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                    ListTileItem(
+                      label: 'Placed Via',
+                      value: widget.purchaseOrder.placedVia.toString(),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                    // ListTileItem(
+                    //   label: 'Created By',
+                    //   value: purchaseOrder.createdBy.toString(),
+                    // ),
+                    // const Padding(
+                    //   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                    //   child: Divider(),
+                    // ),
+                    // ListTileItem(
+                    //   label: 'Updated By',
+                    //   value: purchaseOrder.updatedBy.toString(),
+                    // ),
+                    // const Padding(
+                    //   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                    //   child: Divider(),
+                    // ),
+                    // ListTileItem(
+                    //   label: 'Deleted At',
+                    //   value: purchaseOrder.deletedAt.toString(),
+                    // ),
+                    // const Padding(
+                    //   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                    //   child: Divider(),
+                    // ),
+                    // ListTileItem(
+                    //   label: 'Deleted By',
+                    //   value: purchaseOrder.deletedBy.toString(),
+                    // ),
+                    // const Padding(
+                    //   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                    //   child: Divider(),
+                    // ),
+                    ListTileItem(
+                      label: 'Created At',
+                      value: widget.purchaseOrder.createdAt.toString(),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                    // ListTileItem(
+                    //   label: 'Updated At',
+                    //   value: purchaseOrder.updatedAt.toString(),
+                    // ),
+                    // const Padding(
+                    //   padding: EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                    //   child: Divider(),
+                    // ),
+                    ListTileItem(
+                      label: 'Company',
+                      value: widget.purchaseOrder.company!.name.toString(),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                    ListTileItem(
+                      label: 'Vendor',
+                      value: widget.purchaseOrder.vendorName.toString(),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                    ListTileItem(
+                      label: 'First Name',
+                      value: widget.purchaseOrder.firstName!.firstName
+                          .toString(),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+                      child: Divider(),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ),
 
-          // Container(
-          //     margin: EdgeInsets.symmetric(horizontal: 20),
-          //     width: MediaQuery.of(context).size.width,
-          //     child: ElevatedButton(
-          //         style: ButtonStyle(
-          //           backgroundColor: MaterialStatePropertyAll(Colors.blue),
-          //           foregroundColor: MaterialStatePropertyAll(Colors.white),
-          //         ),
-          //         onPressed: () {},
-          //         child: Text('Recieved')))
+            // Container(
+            //     margin: EdgeInsets.symmetric(horizontal: 20),
+            //     width: MediaQuery.of(context).size.width,
+            //     child: ElevatedButton(
+            //         style: ButtonStyle(
+            //           backgroundColor: MaterialStatePropertyAll(Colors.blue),
+            //           foregroundColor: MaterialStatePropertyAll(Colors.white),
+            //         ),
+            //         onPressed: () {},
+            //         child: Text('Recieved')))
 
-          isApiLoading
-              ? const Column(
-                  children: [
-                    SizedBox(
-                      height: 70,
-                    ),
-                    Center(child: CircularProgressIndicator()),
-                  ],
-                )
-              : Container(
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  child: ListView(
-                    //  margin: const EdgeInsets.all(21),
-                    //             width: MediaQuery.of(context).size.width,
-                    //             // height: MediaQuery.of(context).size.height * 0.74,
-                    //             height: MediaQuery.of(context).size.height * 0.5,
-                    //             child: Card(
-                    //               shape: RoundedRectangleBorder(
-                    //                 borderRadius: BorderRadius.circular(4),
-                    //               ),
-                    //               child: Scrollbar(
-                    //                 radius: const Radius.circular(33),
-
-                    //                 thumbVisibility: true,
+            isApiLoading
+                ? const Column(
 
                     children: [
-                      for (int i = 0;
-                          i < purchaseOrderItemsList.length;
-                          i++) ...{
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 4, horizontal: 7),
-                          width: MediaQuery.of(context).size.width,
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4)),
-                            child: Column(
-                              children: [
-                                // Text(purchaseOrderItemsList[i].id.toString()),
-                                ListTileItem(
-                                    label: 'ID',
-                                    value: purchaseOrderItemsList[i]
-                                        .id
-                                        .toString()),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 3, horizontal: 20),
-                                  child: Divider(),
-                                ),
 
-                                ListTileItem(
-                                    label: 'PO ID',
-                                    value: purchaseOrderItemsList[i]
-                                        .poId
-                                        .toString()),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 3, horizontal: 20),
-                                  child: Divider(),
-                                ),
+                      SizedBox(
+                        height: 70,
+                      ),
+                      Center(child: CircularProgressIndicator()),
+                    ],
+                  )
+                : Container(
+              color: Colors.white,
+              width: MediaQuery.of(context).size.width,
+                    // height: MediaQuery.of(context).size.height * 0.4,
 
-                                ListTileItem(
-                                    label: 'Inventory Item',
-                                    value: purchaseOrderItemsList[i]
-                                        .inventoryItem
-                                        .toString()),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 3, horizontal: 20),
-                                  child: Divider(),
-                                ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 13),
+                child: Column(
 
-                                ListTileItem(
-                                    label: 'Quantity',
-                                    value: purchaseOrderItemsList[i]
-                                        .quantity
-                                        .toString()),
-                                const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 3, horizontal: 20),
-                                  child: Divider(),
+                        //  margin: const EdgeInsets.all(21),
+                        //             width: MediaQuery.of(context).size.width,
+                        //             // height: MediaQuery.of(context).size.height * 0.74,
+                        //             height: MediaQuery.of(context).size.height * 0.5,
+                        //             child: Card(
+                        //               shape: RoundedRectangleBorder(
+                        //                 borderRadius: BorderRadius.circular(4),
+                        //               ),
+                        //               child: Scrollbar(
+                        //                 radius: const Radius.circular(33),
+
+                        //                 thumbVisibility: true,
+
+                        children: [
+                          for (int i = 0;
+                              i < purchaseOrderItemsList.length;
+                              i++) ...{
+                            Container(
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 4, horizontal: 7),
+                              width: MediaQuery.of(context).size.width,
+                              child: Card(
+                                color: Colors.white,
+
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4)),
+                                child: Column(
+                                  children: [
+                                    // Text(purchaseOrderItemsList[i].id.toString()),
+                                    SizedBox(height: 9,),
+                                    ListTileItem(
+                                        label: 'ID',
+                                        value: purchaseOrderItemsList[i]
+                                            .id
+                                            .toString()),
+                                    const Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 3, horizontal: 20),
+                                      child: Divider(),
+                                    ),
+
+                                    // ListTileItem(
+                                    //     label: 'PO ID',
+                                    //     value: purchaseOrderItemsList[i]
+                                    //         .poId
+                                    //         .toString()),
+                                    // const Padding(
+                                    //   padding: EdgeInsets.symmetric(
+                                    //       vertical: 3, horizontal: 20),
+                                    //   child: Divider(),
+                                    // ),
+
+                                    ListTileItem(
+                                        label: 'Inventory Item',
+                                        value: purchaseOrderItemsList[i]
+                                            .inventoryItem
+                                            .toString()),
+                                    const Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 3, horizontal: 20),
+                                      child: Divider(),
+                                    ),
+
+                                    ListTileItem(
+                                        label: 'Quantity',
+                                        value: purchaseOrderItemsList[i]
+                                            .quantity
+                                            .toString()),
+                                    const Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 3, horizontal: 20),
+                                      child: Divider(),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
+                            ),
+                          },
+                        ],
+                      ),
+              ),
+                  ),
+          //  const Spacer(),
+
+            widget.purchaseOrder.status.toString().toLowerCase() ==
+                    'received'.toLowerCase()
+                ? SizedBox()
+                : SizedBox(
+              width: MediaQuery.of(context).size.width,
+                  //  width: 100,
+                    height: 50.0,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 23),
+                      decoration: BoxDecoration(boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
+                        )
+                      ]),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          final isRecievied = await changePurchaseOrderStatusByID(
+                              id: widget.purchaseOrder.id!);
+                          print('isRecievied: ' + isRecievied.toString());
+                          await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text(
+                                  'Your Recieved Status',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.deepPurple,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                content: Text(isRecievied
+                                    ? 'Purchase order successfully recieved'
+                                    : 'Failed to purchase order recieved'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      // Close the dialog
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => PurchaseOrder()));
+                        },
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.blue),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
                         ),
-                      },
-                    ],
-                  ),
-                ),
-          const Spacer(),
-
-          widget.purchaseOrder.status.toString().toLowerCase() ==
-                  'received'.toLowerCase()
-              ? SizedBox()
-              : SizedBox(
-                  width: double.infinity,
-                  height: 50.0,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 23),
-                    decoration: BoxDecoration(boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
-                      )
-                    ]),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        final isRecievied = await changePurchaseOrderStatusByID(
-                            id: widget.purchaseOrder.id!);
-                        print('isRecievied: ' + isRecievied.toString());
-                        await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text(
-                                'Your Recieved Status',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.deepPurple,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              content: Text(isRecievied
-                                  ? 'Purchase order successfully recieved'
-                                  : 'Failed to purchase order recieved'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    // Close the dialog
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => PurchaseOrder()));
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.blue),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
+                        child: const Text("Received",
+                            style: TextStyle(
+                              color: Colors.white,
+                            )),
                       ),
-                      child: const Text("Received",
-                          style: TextStyle(
-                            color: Colors.white,
-                          )),
                     ),
                   ),
-                ),
-          const SizedBox(height: 11),
-        ],
+            const SizedBox(height: 11),
+          ],
+        ),
       ),
     );
   }

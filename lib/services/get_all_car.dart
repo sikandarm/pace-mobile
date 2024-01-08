@@ -25,10 +25,10 @@ Future<List<CAReportModel>> fetchAllCARList() async {
 
   var url = Uri.parse('$BASE_URL/CA-report');
   //////////////////////////
-  var requestUrl = url.replace(queryParameters: {'userId': userId.toString()});
-  var response = await http.get(requestUrl);
+ // var requestUrl = url.replace(queryParameters: {'userId': userId.toString()});
+ // var response = await http.get(requestUrl);
   ////////////////////////////////////////////
-  // var response = await http.get(url);
+   var response = await http.get(url);
   var responseString = response.body;
 
   print('View CAR API: $responseString');
