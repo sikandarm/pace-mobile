@@ -7,6 +7,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/inventory_list_service.dart';
 import '../utils/AppColors.dart';
@@ -60,6 +61,7 @@ class _InventoryListState extends State<InventoryList> {
   int touchedIndex = -1;
   bool isPlaying = false;
   bool isShowingMainData = true;
+  bool blShowProfile = false;
 
   late TooltipBehavior _tooltipBehavior;
 
@@ -69,6 +71,8 @@ class _InventoryListState extends State<InventoryList> {
       hasNewNotifiaction = true;
       setState(() {});
     });
+
+    getProfileImageToSharedPrefs();
 
     super.initState();
 
@@ -97,6 +101,10 @@ class _InventoryListState extends State<InventoryList> {
     rawBarGroups = items;
 
     showingBarGroups = rawBarGroups;
+
+    checkPermissionAndUpdateBool("view_profile", (localBool) {
+      blShowProfile = localBool;
+    });
 
     checkPermissionAndUpdateBool("view_inventory", (localBool) {
       _blShowInventory = localBool;
@@ -195,6 +203,16 @@ class _InventoryListState extends State<InventoryList> {
     }
   }
 
+  String? userProfileImage;
+
+  Future<void> getProfileImageToSharedPrefs() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    userProfileImage =
+        await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
+    print('user profile image: $userProfileImage');
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -202,7 +220,7 @@ class _InventoryListState extends State<InventoryList> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildAppBar(context, scaffoldKey),
+          _buildAppBar(context, scaffoldKey, userProfileImage, blShowProfile),
           const SizedBox(height: 10),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -449,7 +467,12 @@ class _InventoryListState extends State<InventoryList> {
   }
 }
 
-Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey) {
+Widget _buildAppBar(
+  context,
+  GlobalKey<ScaffoldState> scaffoldKey,
+  String? userProfileImage,
+  bool isShowProfile,
+) {
   return AppBar(
     backgroundColor: Colors.white,
     leading: IconButton(
@@ -531,15 +554,22 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey) {
           ),
           GestureDetector(
             onTap: () {
+              if (!isShowProfile) {
+                showToast('You do not have permissions.');
+
+                return;
+              }
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const ProfileScreen()),
               );
             },
-            child: const Padding(
+            child: Padding(
               padding: EdgeInsets.only(right: 10.0, left: 5.0),
               child: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/ic_profile.png'),
+                backgroundImage: userProfileImage == null
+                    ? AssetImage('assets/images/ic_profile.png')
+                    : NetworkImage(userProfileImage) as ImageProvider,
                 radius: 15,
               ),
             ),

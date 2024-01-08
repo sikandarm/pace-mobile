@@ -84,10 +84,12 @@ class _TaskDetailState extends State<TaskDetail> {
 
   @override
   void initState() {
+    getProfileImageToSharedPrefs();
     FirebaseMessaging.onMessage.listen((event) {
       hasNewNotifiaction = true;
       setState(() {});
     });
+
     super.initState();
     _futureTask = fetchTaskDetail(widget.taskId);
     callApiMethods();
