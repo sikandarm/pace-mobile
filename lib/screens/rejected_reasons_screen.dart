@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/rejection_reason.dart';
 import '../utils/constants.dart';
@@ -17,9 +18,21 @@ class RejectedReasonsScreen extends StatefulWidget {
 class _RejectedReasonsListState extends State<RejectedReasonsScreen> {
   @override
   void initState() {
+    getProfileImageToSharedPrefs();
     super.initState();
     fetchReasonCategories();
   }
+
+  String? userProfileImage;
+
+  Future<void> getProfileImageToSharedPrefs() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    userProfileImage =
+    await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
+    print('user profile image: ' + userProfileImage.toString());
+    setState(() {});
+  }
+
 
   Future<void> fetchReasonCategories() async {
     try {
@@ -66,10 +79,12 @@ class _RejectedReasonsListState extends State<RejectedReasonsScreen> {
                 MaterialPageRoute(builder: (context) => const ProfileScreen()),
               );
             },
-            child: const Padding(
+            child:  Padding(
               padding: EdgeInsets.only(right: 20.0),
               child: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/ic_profile.png'),
+                backgroundImage: userProfileImage == null
+                    ? AssetImage('assets/images/ic_profile.png')
+                    : NetworkImage(userProfileImage!) as ImageProvider,
                 radius: 15,
               ),
             ),

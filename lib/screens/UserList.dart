@@ -266,9 +266,13 @@ class _UserListItemWidgetState extends State<UserListItemWidget> {
                       widget.firstName![0].toUpperCase(),
                       style: const TextStyle(
                         color: Colors.black,
-                        fontSize: 20,
+                        fontSize: 17,
                         fontWeight: FontWeight.normal,
                       ),
+
+
+
+
                     ),
                   ),
                 ),

@@ -32,12 +32,15 @@ class _SharedListState extends State<CARList> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const DashboardScreen(),
-              ),
-            );
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => const DashboardScreen(),
+            //   ),
+            //);
+            ////////////////////////
+            Navigator.pop(context);
+            ///////////////////////
             // Navigator.popUntil(context, ModalRoute.withName('/dashboard'));
           },
         ),
@@ -123,6 +126,8 @@ class TaskListHeader extends StatelessWidget {
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
+
+
           ),
         ],
       ),
