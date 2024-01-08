@@ -182,6 +182,7 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                         onSelectedItemChanged: (index) {
                           setState(() {
                             _selectedRoleIndex = index;
+
                             _selectedRoleName = _lsRoles[index];
                             _selectedRoleId = snapshot.data![index].id!;
                             print("$_selectedRoleName-$_selectedRoleId");
