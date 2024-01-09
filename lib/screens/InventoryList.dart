@@ -169,7 +169,8 @@ class _InventoryListState extends State<InventoryList> {
   final List<SyncLineChartData> lineChartData = <SyncLineChartData>[];
 
   Future fetchGraphData() async {
-    const String apiUrl = '$BASE_URL/task/rejected-task-by-month-year';
+    String apiUrl = '$BASE_URL/task/rejected-task-by-month-year';
+
     final response = await http.get(Uri.parse(apiUrl));
     // final timestamp = DateTime.now().millisecondsSinceEpoch;
     // final response = await http

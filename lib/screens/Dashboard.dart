@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/dashboard_card.dart';
@@ -12,6 +13,7 @@ import '../utils/constants.dart';
 import 'InventoryList.dart';
 import 'ProfileScreen.dart';
 import 'SharedCARListScreen.dart';
+import 'bill_of_lading_screen.dart';
 import 'notification.dart';
 import 'purchase_order.dart';
 import 'view_contacts_screen.dart';
@@ -66,19 +68,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final sharedPrefs = await SharedPreferences.getInstance();
     userProfileImage =
         await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
-    print('user profile image: ' + userProfileImage.toString());
+    print('user profile image: $userProfileImage');
     setState(() {});
   }
 
-  @override
-  void initState() {
+  Future<void> getIPLocally() async {
+    final ipBox = await Hive.openBox('ipBox');
+
+    final ip = await ipBox.get('ip');
+    print('ip in dashboard screen: $ip');
+    BASE_URL = ip;
+    setState(() {});
+  }
+
+  Future<void> callAllInitStateHere() async {
+    await getIPLocally();
     getProfileImageToSharedPrefs();
     FirebaseMessaging.onMessage.listen((event) {
       hasNewNotifiaction = true;
       setState(() {});
     });
-
-    super.initState();
 
     _futureJob = fetchJobs();
     _futureJob.then((jobs) {
@@ -125,6 +134,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
 
     setState(() {});
+  }
+
+  @override
+  void initState() {
+    // getIPLocally();
+    // getProfileImageToSharedPrefs();
+    // FirebaseMessaging.onMessage.listen((event) {
+    //   hasNewNotifiaction = true;
+    //   setState(() {});
+    // });
+    callAllInitStateHere();
+
+    super.initState();
   }
 
   void checkPermissionAndUpdateBool(
@@ -280,8 +302,8 @@ PreferredSizeWidget _buildAppBar(
                     onTap: () {
                       hasNewNotifiaction = false;
 
-                      print('notifications permission: ' +
-                          blShowNotificationsList.toString());
+                      print(
+                          'notifications permission: $blShowNotificationsList');
                       if (blShowNotificationsList) {
                         Navigator.push(
                           context,
@@ -521,6 +543,28 @@ Widget _buildSideDrawer(BuildContext context) {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ViewContactsScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+
+                    ////////////////////////////////////////
+                    Visibility(
+                      //  visible: blShowSharedCAR,
+                      child: ListTile(
+                        title: const Text('Bill of lading'),
+                        leading: const Icon(Icons.report),
+                        onTap: () {
+                          // if (!b1ViewContacts) {
+                          //   showToast('You do not have permissions.');
+                          //   return;
+                          // }
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BillOfLading(),
                             ),
                           );
                         },

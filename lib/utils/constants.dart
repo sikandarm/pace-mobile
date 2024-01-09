@@ -7,7 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 bool hasNewNotifiaction = false;
 // ignore: constant_identifier_names/
 //const String BASE_URL = "http://206.81.5.26:3500/api"; // live ip
-const String BASE_URL = "http://192.168.1.3:3500/api"; // local ip
+String ipPart = '';
+String BASE_URL = "http://$ipPart:3500/api"; // local ip
 
 // http://206.81.5.26/inventory
 // ignore: constant_identifier_names
@@ -35,7 +36,7 @@ const String BL_REJECTED_REASON = "RejectedReason";
 const String US_DATE_FORMAT = 'MMMM dd yyyy';
 const String NOTIFICATION_DATE_FORMAT = 'MMMM dd, yyyy - hh:mm aa';
 
-double appBarTiltleSize=22.0;
+double appBarTiltleSize = 20.0;
 
 const List<String> LS_PERMISSIONS = [
   'view_job',

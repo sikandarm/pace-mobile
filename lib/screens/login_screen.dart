@@ -29,6 +29,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final ipFormKey = GlobalKey<FormFieldState>();
   // var emailText = TextEditingController(text: 'noman@yahoo.com');
   // var passwordText = TextEditingController(text: '12345');
   bool _passwordVisible = false;
@@ -55,8 +56,16 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  Future<void> getIPLocally() async {
+    final ipBox = await Hive.openBox('ipBox');
+    BASE_URL = await ipBox.get('ip').toString();
+    setState(() {});
+  }
+
+//////////////////////////////////
   @override
   void initState() {
+    getIPLocally();
     tryAutoLogin();
     super.initState();
   }
@@ -199,23 +208,102 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           children: [
             SafeArea(
-                child: Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 30.0, horizontal: 20.0),
-                child: GestureDetector(
-                  onTap: () => {
-                    Navigator.pushReplacementNamed(context, '/midwayscreen')
-                  },
-                  child: Image.asset(
-                    'assets/images/ic_back.png',
-                    width: 20,
-                    height: 20,
+              child: Row(
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 30.0, horizontal: 20.0),
+                      child: GestureDetector(
+                        onTap: () => {
+                          Navigator.pushReplacementNamed(
+                              context, '/midwayscreen')
+                        },
+                        child: Image.asset(
+                          'assets/images/ic_back.png',
+                          width: 20,
+                          height: 20,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  Spacer(),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 0.0, horizontal: 20.0),
+                      child: GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text('Change IP'),
+                                  content: TextFormField(
+                                    key: ipFormKey,
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(
+                                            decimal: true),
+                                    validator: (value) {
+                                      if (value!.trim().isEmpty) {
+                                        return 'Enter an IP address!';
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (value) async {
+                                      ipPart = value.trim();
+                                      print("IP :" + ipPart);
+                                      BASE_URL = 'http://$ipPart:3500/api';
+
+                                      final ipBox = await Hive.openBox('ipBox');
+                                      await ipBox.put('ip', BASE_URL);
+                                    },
+                                    decoration:
+                                        InputDecoration(hintText: 'IP address'),
+                                  ),
+                                  actions: [
+                                    ElevatedButton(
+                                        onPressed: () async {
+                                          ScaffoldMessenger.of(context)
+                                              .clearSnackBars();
+                                          if (!ipFormKey.currentState!
+                                              .validate()) return;
+                                          //    Navigator.pop(context);
+                                          //  BASE_URL=
+
+                                          print('ipPart on Submit: ' + ipPart);
+                                          print('BASE_url on Submit: ' +
+                                              BASE_URL);
+                                          Navigator.pop(context);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      'oops IP updated!')));
+                                          //    setState(() {});
+                                        },
+                                        child: Text('Update'))
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: Chip(
+                            label: Text('Update Server IP'),
+                          )),
+                      // child: Container(
+                      //   padding: EdgeInsets.all(7),
+                      //   color: Colors.red,
+                      //   child: Text(
+                      //     'Update Server IP',
+                      //     style: TextStyle(color: Colors.white),
+                      //   )),
+                    ),
+                  ),
+                ],
               ),
-            )),
+            ),
             Center(
               child: SizedBox(
                 width: 300,
