@@ -78,7 +78,7 @@ class BillOfLading extends StatelessWidget {
                     child: const Center(child: CircularProgressIndicator()));
               }
 
-              final dataList = snapshot.data!.data!.billdata;
+              final dataList = snapshot.data?.data!.billdata;
               //  final d = snapshot.data?.data?.data;
               return Expanded(
                 child: ListView.builder(
@@ -95,8 +95,10 @@ class BillOfLading extends StatelessWidget {
                               children: [
                                 Text('Fabricated Item:', style: headingStyle),
                                 Spacer(),
-                                //      Text(
-                                //          dataList[index].fabricatedItems.toString()),
+                                Text(dataList[index]
+                                    .billofLadingItems!
+                                    .fabricatedItems
+                                    .toString()),
                               ],
                             ),
                             SizedBox(height: 4),
@@ -104,7 +106,10 @@ class BillOfLading extends StatelessWidget {
                               children: [
                                 Text('Quantity:', style: headingStyle),
                                 Spacer(),
-                                //       Text(dataList[index].quantity.toString()),
+                                Text(dataList[index]
+                                    .billofLadingItems!
+                                    .quantity
+                                    .toString()),
                               ],
                             ),
                             SizedBox(height: 4),
@@ -112,7 +117,10 @@ class BillOfLading extends StatelessWidget {
                               children: [
                                 Text('Company Name:', style: headingStyle),
                                 Spacer(),
-                                //     Text(dataList[index].companyName.toString()),
+                                Text(dataList[index]
+                                    .billofLadingItems!
+                                    .companyName
+                                    .toString()),
                               ],
                             ),
                             SizedBox(height: 4),
@@ -120,7 +128,10 @@ class BillOfLading extends StatelessWidget {
                               children: [
                                 Text('Vendor:', style: headingStyle),
                                 Spacer(),
-                                //   Text(dataList[index].vendorName.toString()),
+                                Text(dataList[index]
+                                    .billofLadingItems!
+                                    .vendorName
+                                    .toString()),
                               ],
                             ),
                             SizedBox(height: 3),
@@ -499,6 +510,8 @@ class BillOfLading extends StatelessWidget {
           //     ])),
 
           ////////////// new pdf starts from here...
+
+
           pw.Container(
             width: 1000,
             decoration: pw.BoxDecoration(
@@ -506,9 +519,13 @@ class BillOfLading extends StatelessWidget {
             ),
             child: pw.Column(children: [
               // row-1-----------------------------------
-              pw.Row(
-                  mainAxisAlignment: pw.MainAxisAlignment.center,
-                  children: [pw.Center(child: pw.Text('Purchase Order'))]),
+              pw.SizedBox(height: 2),
+              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
+                pw.Center(
+                    child: pw.Text('Automated Invoice',
+                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))
+              ]),
+              pw.SizedBox(height: 2),
               // row-2-----------------------------------
               pw.Container(
                 width: 1000,
@@ -685,7 +702,7 @@ class BillOfLading extends StatelessWidget {
                 ),
                 //  pw.SizedBox(width: 3),
                 pw.SizedBox(width: 17),
-                pw.Text('Order Date:',
+                pw.Text('Delivery Date:',
                     style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 pw.SizedBox(width: 17),
               ]),
