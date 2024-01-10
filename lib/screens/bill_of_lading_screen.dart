@@ -81,10 +81,10 @@ class BillOfLading extends StatelessWidget {
                 child: ListView.builder(
                   itemCount: dataList!.length,
                   itemBuilder: (context, index) {
-                    return Card(
+                    return Container(
                       color: Colors.white,
                       child: Padding(
-                        padding: const EdgeInsets.all(21.0),
+                        padding: const EdgeInsets.symmetric(horizontal:  21.0,vertical: 3),
                         child: Column(
                           children: [
                             Row(
@@ -107,7 +107,7 @@ class BillOfLading extends StatelessWidget {
                             SizedBox(height: 4),
                             Row(
                               children: [
-                                Text('companyName:', style: headingStyle),
+                                Text('Company Name:', style: headingStyle),
                                 Spacer(),
                                 Text(dataList[index].companyName.toString()),
                               ],
@@ -120,7 +120,8 @@ class BillOfLading extends StatelessWidget {
                                 Text(dataList[index].vendorName.toString()),
                               ],
                             ),
-                            SizedBox(height: 4),
+                           SizedBox(height: 3),
+                            Divider(),
                           ],
                         ),
                       ),
