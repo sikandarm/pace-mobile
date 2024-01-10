@@ -25,10 +25,10 @@ class BillOfLading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () async {
-        final billOfLading = await getBillOfLading();
-        print(billOfLading.data.dataList.toList());
-      }),
+      // floatingActionButton: FloatingActionButton(onPressed: () async {
+      //   final billOfLading = await getBillOfLading();
+      //   print(billOfLading.data.dataList.toList());
+      // }),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
