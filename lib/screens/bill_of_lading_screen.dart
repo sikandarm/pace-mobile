@@ -77,7 +77,8 @@ class BillOfLading extends StatelessWidget {
                     height: MediaQuery.of(context).size.height * 0.7,
                     child: const Center(child: CircularProgressIndicator()));
               }
-              final dataList = snapshot.data!.data!.billData;
+
+              final dataList = snapshot.data!.data!.billdata;
               //  final d = snapshot.data?.data?.data;
               return Expanded(
                 child: ListView.builder(
@@ -94,8 +95,8 @@ class BillOfLading extends StatelessWidget {
                               children: [
                                 Text('Fabricated Item:', style: headingStyle),
                                 Spacer(),
-                                Text(
-                                    dataList[index].fabricatedItems.toString()),
+                                //      Text(
+                                //          dataList[index].fabricatedItems.toString()),
                               ],
                             ),
                             SizedBox(height: 4),
@@ -103,7 +104,7 @@ class BillOfLading extends StatelessWidget {
                               children: [
                                 Text('Quantity:', style: headingStyle),
                                 Spacer(),
-                                Text(dataList[index].quantity.toString()),
+                                //       Text(dataList[index].quantity.toString()),
                               ],
                             ),
                             SizedBox(height: 4),
@@ -111,7 +112,7 @@ class BillOfLading extends StatelessWidget {
                               children: [
                                 Text('Company Name:', style: headingStyle),
                                 Spacer(),
-                                Text(dataList[index].companyName.toString()),
+                                //     Text(dataList[index].companyName.toString()),
                               ],
                             ),
                             SizedBox(height: 4),
@@ -119,7 +120,7 @@ class BillOfLading extends StatelessWidget {
                               children: [
                                 Text('Vendor:', style: headingStyle),
                                 Spacer(),
-                                Text(dataList[index].vendorName.toString()),
+                                //   Text(dataList[index].vendorName.toString()),
                               ],
                             ),
                             SizedBox(height: 3),
