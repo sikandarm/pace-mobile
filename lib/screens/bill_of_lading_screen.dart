@@ -1,10 +1,17 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart';
+
+//import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
 import 'package:pace_application_fb/services/get_bill_of_lading_service.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../utils/constants.dart';
 
 class BillOfLading extends StatelessWidget {
@@ -43,82 +50,9 @@ class BillOfLading extends StatelessWidget {
         actions: [
           InkWell(
             onTap: () async {
-              final pdf = pw.Document();
-
-// Add content to the PDF (see examples below)
-
-// Save the PDF
-
-              final path = await getApplicationDocumentsDirectory();
-              final file = File('${path.path}/my_document.pdf');
-              await file.writeAsBytes(await pdf.save());
-
-              pdf.addPage(pw.Page(
-                build: (pw.Context context) {
-                  return pw.Center(
-                    child: pw.Text('Hello, world!'),
-                  );
-                },
-              ));
-
-              pdf.addPage(pw.Page(
-                pageFormat: PdfPageFormat.a4,
-                build: (pw.Context context) {
-                  return pw.Column(
-                    children: [
-                      pw.Header(
-                        child: pw.Text('My Document'),
-                      ),
-                      pw.Paragraph(text: 'This is some content.'),
-                      // Add more content here
-                    ],
-                  );
-                },
-              ));
-
-              final tableData = [
-                ['Column 1', 'Column 2', 'Column 3'],
-                ['Data 1', 'Data 2', 'Data 3'],
-                // Add more rows here
-              ];
-
-              pdf.addPage(pw.Page(
-                build: (pw.Context context) {
-                  return pw.Table(
-                    border: pw.TableBorder.all(),
-                    children: tableData
-                        .map((row) => pw.TableRow(
-                            children:
-                                row.map((cell) => pw.Text(cell)).toList()))
-                        .toList(), // Map each cell to a pw.Text widget
-                  );
-                },
-              ));
-
-              ///////////////////////////////////////////////////////
-              // final pdf = pw.Document();
-
-              // pdf.addPage(pw.Page(
-              //     pageFormat: PdfPageFormat.a4,
-              //     build: (pw.Context context) {
-              //       return pw.Center(
-              //         child: pw.Text("Hello World"),
-              //       ); // Center
-              //     })); //
-
-              // On Flutter, use the [path_provider](https://pub.dev/packages/path_provider) library:
-//   final output = await getTemporaryDirectory();
-//   final file = File("${output.path}/example.pdf");
-              //   final file = File("example.pdf");
-              // await file.writeAsBytes(await pdf.save());
-              // final output = await getApplicationDocumentsDirectory();
-              // final file = File("${output.path}/pdf_pace");
-              // final p = await file.writeAsBytes(await pdf.save());
-              // print(p.absolute);
-              // print(p.path);
-              // print(p.parent);
+              await generateAndViewPdf();
             },
-            child: Chip(
+            child: const Chip(
                 backgroundColor: Colors.green,
                 label: Text(
                   'Generate PDF',
@@ -199,5 +133,99 @@ class BillOfLading extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> generateAndViewPdf() async {
+    // final pdf = pw.Document();
+
+    // // Add content to the PDF
+    // pdf.addPage(pw.Page(
+    //   build: (pw.Context context) {
+    //     return pw.Center(
+    //       child: pw.Text(
+    //         'Hello, world!',
+    //       ),
+    //     ); // Replace this with your desired content
+    //   },
+    // ));
+
+    // // Get a temporary directory path for saving the PDF
+    // final outputDirectory = await getTemporaryDirectory();
+    // final file = File('${outputDirectory.path}/example.pdf');
+
+    // // Save the generated PDF to the file
+    // final f = await file.writeAsBytes(await pdf.save());
+
+    // // View the generated PDF using Syncfusion PDF Viewer
+    // // SfPdfViewer.openFromBytes(file.readAsBytesSync());
+    // //  SfPdfViewer.file(f);
+    // // SfPdfViewer.memory(f.readAsBytesSync());
+    // SfPdfViewer.file(f);
+    final pdf = pw.Document();
+final apiData=await getBillOfLading();
+    pdf.addPage(pw.Page(
+      build: (pw.Context context) {
+        // return pw.Center(
+        //   child: pw.Text('Data: '+ apiData.data.dataList.toString()),
+        // );
+         String formattedTime = DateFormat('h:mm a').format(DateTime.now());
+        return pw.Column(children: [
+         pw.Center(child:  pw.Text('Bill of Lading Report',style: pw.TextStyle(fontWeight: pw.FontWeight.bold,fontSize: 19))),
+          pw.SizedBox(height: 50),
+          pw.Row(children: [
+          //  pw.Text('Generated Invoice Date: ',style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+
+            pw.Text('Issuance Date: ',style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+            pw.Text(DateFormat('MM/dd/yyyy').format(DateTime.now())),
+            pw.Spacer(),
+            pw.Text('Time: ',style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+            pw.Text(formattedTime),
+          ]),
+          pw.SizedBox(height: 2.5),
+
+          for(int i=0;i<apiData.data.dataList.length;i++)...{
+           // pw.Text(apiData.data.dataList[i].fabricatedItemName,)
+   pw.Column(children: [
+     pw.SizedBox(height: 9),
+
+     pw.Container(
+       padding: pw.EdgeInsets.all(21),
+         decoration:pw.BoxDecoration(
+           
+           border: pw.Border.all(width: 0.5, color: PdfColor.fromHex('#808080')),
+
+         ),
+         child: pw.Column(children: [
+
+      pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [ pw.Text('Fabricated Item:', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),pw.Text(apiData.data.dataList[i].fabricatedItemName)]),
+       pw.Divider(color: PdfColor.fromHex('#D3D3D3')),
+           pw.Row(
+               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+               children: [ pw.Text('Company Name:', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),pw.Text(apiData.data.dataList[i].companyName)]),
+           pw.Divider(color: PdfColor.fromHex('#D3D3D3')),
+           pw.Row(
+               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+               children: [ pw.Text('Vendor Name:', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),pw.Text(apiData.data.dataList[i].vendorName)]),
+           pw.Divider(color: PdfColor.fromHex('#D3D3D3')),
+           pw.Row(
+               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+               children: [ pw.Text('Item Quantity:', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),pw.Text(apiData.data.dataList[i].quantity.toString())]),
+     ])),
+   ]),
+
+
+          }
+        ]);
+      },
+    ));
+    final path = await getTemporaryDirectory();
+    final file = File(path.path + '/bill of lading.pdf');
+    final f = await file.writeAsBytes(await pdf.save());
+    print('f path:' + f.toString());
+
+    final result = await OpenFile.open(file.path);
+    print('messsage: ${result.message}');
   }
 }

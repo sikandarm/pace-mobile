@@ -358,7 +358,7 @@ class _InventoryListState extends State<InventoryList> {
                                       const MajorTickLines(width: 0),
                                   axisBorderType:
                                       AxisBorderType.withoutTopAndBottom),
-                              series: <ChartSeries>[
+                              series: [
                                 StackedColumnSeries<ChartData, String>(
                                     dataSource: chartData,
                                     width: 0.2,
@@ -400,7 +400,7 @@ class _InventoryListState extends State<InventoryList> {
                                           const MajorTickLines(width: 0),
                                       axisBorderType:
                                           AxisBorderType.withoutTopAndBottom),
-                                  series: <ChartSeries>[
+                                  series: [
                                     SplineAreaSeries<SyncLineChartData, int>(
                                         dataSource: lineChartData,
                                         splineType: SplineType.cardinal,
