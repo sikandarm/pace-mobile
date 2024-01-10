@@ -25,6 +25,7 @@ class BillOfLading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       // floatingActionButton: FloatingActionButton(onPressed: () async {
       //   final billOfLading = await getBillOfLading();
       //   print(billOfLading.data.dataList.toList());
@@ -66,7 +67,8 @@ class BillOfLading extends StatelessWidget {
       ),
       body: Column(
         children: [
-          SizedBox(height: 27),
+          SizedBox(height: 30),
+
           FutureBuilder(
             future: getBillOfLading(),
             builder: (context, snapshot) {
