@@ -5,55 +5,106 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../utils/constants.dart';
 
 class BillOfLadingModel {
-  bool success;
-  String message;
-  Data data;
+  bool? success;
+  String? message;
+  Data? data;
 
-  BillOfLadingModel(
-      {required this.success, required this.message, required this.data});
+  BillOfLadingModel({this.success, this.message, this.data});
 
-  factory BillOfLadingModel.fromJson(Map<String, dynamic> json) {
-    return BillOfLadingModel(
-      success: json['success'],
-      message: json['message'],
-      data: Data.fromJson(json['data']),
-    );
+  BillOfLadingModel.fromJson(Map<String, dynamic> json) {
+    success = json['success'];
+    message = json['message'];
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['success'] = this.success;
+    data['message'] = this.message;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
   }
 }
 
 class Data {
-  List<Item> dataList;
+  List<BillData>? billData;
 
-  Data({required this.dataList});
+  Data({this.billData});
 
-  factory Data.fromJson(Map<String, dynamic> json) {
-    var list = json['data'] as List;
-    List<Item> items = list.map((item) => Item.fromJson(item)).toList();
+  Data.fromJson(Map<String, dynamic> json) {
+    if (json['billData'] != null) {
+      billData = <BillData>[];
+      json['billData'].forEach((v) {
+        billData!.add(new BillData.fromJson(v));
+      });
+    }
+  }
 
-    return Data(dataList: items);
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.billData != null) {
+      data['billData'] = this.billData!.map((v) => v.toJson()).toList();
+    }
+    return data;
   }
 }
 
-class Item {
-  String fabricatedItemName;
-  int quantity;
-  String companyName;
-  String vendorName;
+class BillData {
+  int? quantity;
+  String? address;
+  String? dilveryDate;
+  String? orderDate;
+  String? terms;
+  String? shipVia;
+  String? vendorName;
+  String? fabricatedItems;
+  int? pONumber;
+  String? companyName;
+  String? companyAddress;
 
-  Item({
-    required this.fabricatedItemName,
-    required this.quantity,
-    required this.companyName,
-    required this.vendorName,
-  });
+  BillData(
+      {this.quantity,
+      this.address,
+      this.dilveryDate,
+      this.orderDate,
+      this.terms,
+      this.shipVia,
+      this.vendorName,
+      this.fabricatedItems,
+      this.pONumber,
+      this.companyName,
+      this.companyAddress});
 
-  factory Item.fromJson(Map<String, dynamic> json) {
-    return Item(
-      fabricatedItemName: json['fabricatedItemName'],
-      quantity: json['quantity'],
-      companyName: json['companyName'],
-      vendorName: json['vendorName'],
-    );
+  BillData.fromJson(Map<String, dynamic> json) {
+    quantity = json['quantity'];
+    address = json['address'];
+    dilveryDate = json['dilveryDate'];
+    orderDate = json['orderDate'];
+    terms = json['terms'];
+    shipVia = json['shipVia'];
+    vendorName = json['VendorName'];
+    fabricatedItems = json['FabricatedItems'];
+    pONumber = json['PO_Number'];
+    companyName = json['CompanyName'];
+    companyAddress = json['CompanyAddress'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['quantity'] = this.quantity;
+    data['address'] = this.address;
+    data['dilveryDate'] = this.dilveryDate;
+    data['orderDate'] = this.orderDate;
+    data['terms'] = this.terms;
+    data['shipVia'] = this.shipVia;
+    data['VendorName'] = this.vendorName;
+    data['FabricatedItems'] = this.fabricatedItems;
+    data['PO_Number'] = this.pONumber;
+    data['CompanyName'] = this.companyName;
+    data['CompanyAddress'] = this.companyAddress;
+    return data;
   }
 }
 

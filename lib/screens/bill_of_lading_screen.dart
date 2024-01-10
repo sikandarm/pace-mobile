@@ -77,7 +77,8 @@ class BillOfLading extends StatelessWidget {
                     height: MediaQuery.of(context).size.height * 0.7,
                     child: const Center(child: CircularProgressIndicator()));
               }
-              final dataList = snapshot.data?.data.dataList;
+              final dataList = snapshot.data!.data!.billData;
+              //  final d = snapshot.data?.data?.data;
               return Expanded(
                 child: ListView.builder(
                   itemCount: dataList!.length,
@@ -93,9 +94,8 @@ class BillOfLading extends StatelessWidget {
                               children: [
                                 Text('Fabricated Item:', style: headingStyle),
                                 Spacer(),
-                                Text(dataList[index]
-                                    .fabricatedItemName
-                                    .toString()),
+                                Text(
+                                    dataList[index].fabricatedItems.toString()),
                               ],
                             ),
                             SizedBox(height: 4),
@@ -533,7 +533,7 @@ class BillOfLading extends StatelessWidget {
                 pw.SizedBox(width: 17),
                 pw.Text('(Company) Inc.:',
                     style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 17),
+                pw.SizedBox(width: 18.5),
                 pw.Container(
                   width: 0,
                   height: 21,
@@ -566,7 +566,7 @@ class BillOfLading extends StatelessWidget {
                   ),
                 ),
                 //  pw.SizedBox(width: 3),
-                   pw.SizedBox(width: 17),
+                pw.SizedBox(width: 17),
                 pw.Text('PO Number:',
                     style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 pw.SizedBox(width: 17),
@@ -576,6 +576,63 @@ class BillOfLading extends StatelessWidget {
               pw.Divider(height: 0),
 
               // row-4---------------------------------
+              pw.Row(children: [
+                pw.SizedBox(width: 17),
+
+                pw.Text('---------------',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 15.9),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 8),
+                pw.Text('Address, CT 08080',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 10.7),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                //  pw.SizedBox(width: 3),
+                pw.SizedBox(width: 17),
+                pw.Text('Order Date:',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 17),
+              ]),
+              pw.Divider(height: 0),
+              // row-5---------------------------------
               pw.Row(children: [
                 pw.SizedBox(width: 17),
 
@@ -629,6 +686,510 @@ class BillOfLading extends StatelessWidget {
                 pw.SizedBox(width: 17),
                 pw.Text('Order Date:',
                     style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 17),
+              ]),
+
+              pw.Divider(height: 0),
+              // row-6---------------------------------
+              pw.Row(children: [
+                pw.SizedBox(width: 17),
+
+                pw.Text('---------------',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 15.9),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 8),
+                pw.Text('Tel: (860) 354-XXXX',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 6),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                //  pw.SizedBox(width: 3),
+                pw.SizedBox(width: 17),
+                pw.Text('Page:',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 17),
+              ]),
+
+              pw.Divider(height: 0),
+
+              // row-7---------------------------------
+              pw.Row(children: [
+                pw.SizedBox(width: 17),
+
+                pw.Text('---------------',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 15.9),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 6),
+                pw.Text('Fax: (860) 354-XXXX',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 4.5),
+
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                //  pw.SizedBox(width: 3),
+                pw.SizedBox(width: 17),
+                //  pw.SizedBox(width: 3),
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.SizedBox(width: 17),
+              ]),
+
+              pw.Divider(height: 0),
+              // row-8---------------------------------
+              pw.Row(children: [
+                pw.SizedBox(width: 17),
+
+                pw.Text('---------------',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 15.9),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 6),
+                //// here
+                pw.Text('-----------------------------',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 4),
+
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                //  pw.SizedBox(width: 3),
+                pw.SizedBox(width: 17),
+                //  pw.SizedBox(width: 3),
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.SizedBox(width: 17),
+              ]),
+
+              /////////////////////////////////
+
+              pw.Divider(height: 0),
+              // row-9---------------------------------
+              pw.Row(children: [
+                pw.SizedBox(width: 17),
+
+                pw.Text('---------------',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 15.9),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 6),
+                //// here
+                pw.Text('-----------------------------',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 4),
+
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                //  pw.SizedBox(width: 3),
+                pw.SizedBox(width: 17),
+                //  pw.SizedBox(width: 3),
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.SizedBox(width: 17),
+              ]),
+
+              //////////////////////////////////////////
+
+              pw.Divider(height: 0),
+              // row-10---------------------------------
+              pw.Row(children: [
+                pw.SizedBox(width: 17),
+
+                pw.Text('Vendor:',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 30.5),
+
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 6),
+                //// here
+                pw.Text('-----------------------------',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 4),
+
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                //  pw.SizedBox(width: 3),
+                pw.SizedBox(width: 17),
+                //  pw.SizedBox(width: 3),
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.SizedBox(width: 17),
+              ]),
+
+              pw.Divider(height: 0),
+              // row-10---------------------------------
+              pw.Row(children: [
+                pw.SizedBox(width: 17),
+
+                pw.Text('---------------',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 15.9),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 6),
+                //// here
+                pw.Text('-----------------------------',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 4),
+
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                //  pw.SizedBox(width: 3),
+                pw.SizedBox(width: 17),
+                //  pw.SizedBox(width: 3),
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.SizedBox(width: 17),
+              ]),
+
+              pw.Divider(height: 0),
+              // row-11---------------------------------
+              pw.Row(children: [
+                pw.SizedBox(width: 17),
+
+                pw.Text('---------------',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 15.9),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 6),
+                //// here
+                pw.Text('-----------------------------',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 4),
+
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                //  pw.SizedBox(width: 3),
+                pw.SizedBox(width: 17),
+                //  pw.SizedBox(width: 3),
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.SizedBox(width: 17),
+              ]),
+
+              pw.Divider(height: 0),
+              // row-12---------------------------------
+              pw.Row(children: [
+                pw.SizedBox(width: 17),
+
+                pw.Text('---------------',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 15.9),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 6),
+                //// here
+                pw.Text('-----------------------------',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.SizedBox(width: 4),
+
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                pw.SizedBox(width: 3),
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
+                pw.Container(
+                  width: 0,
+                  height: 21,
+                  decoration: pw.BoxDecoration(
+                    border: pw.Border.all(width: 1),
+                  ),
+                ),
+                //  pw.SizedBox(width: 3),
+                pw.SizedBox(width: 17),
+                //  pw.SizedBox(width: 3),
+                pw.Text('-----------------',
+                    style: pw.TextStyle(
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColor.fromHex('#FFFFFF'))),
                 pw.SizedBox(width: 17),
               ]),
             ]),
