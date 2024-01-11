@@ -52,7 +52,9 @@ class Data {
 }
 
 class Billdata {
+  int? id;
   String? billTitle;
+  int? poNumber;
   String? address;
   String? dilveryDate;
   String? orderDate;
@@ -61,7 +63,9 @@ class Billdata {
   List<BillofLadingItems>? billofLadingItems;
 
   Billdata(
-      {this.billTitle,
+      {this.id,
+      this.billTitle,
+      this.poNumber,
       this.address,
       this.dilveryDate,
       this.orderDate,
@@ -70,7 +74,9 @@ class Billdata {
       this.billofLadingItems});
 
   Billdata.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     billTitle = json['billTitle'];
+    poNumber = json['poNumber'];
     address = json['address'];
     dilveryDate = json['dilveryDate'];
     orderDate = json['orderDate'];
@@ -86,7 +92,9 @@ class Billdata {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
     data['billTitle'] = this.billTitle;
+    data['poNumber'] = this.poNumber;
     data['address'] = this.address;
     data['dilveryDate'] = this.dilveryDate;
     data['orderDate'] = this.orderDate;
@@ -105,7 +113,6 @@ class BillofLadingItems {
   String? fabricatedItems;
   String? companyName;
   String? fax;
-  int? poNumber;
   String? phone;
 
   BillofLadingItems(
@@ -113,7 +120,6 @@ class BillofLadingItems {
       this.fabricatedItems,
       this.companyName,
       this.fax,
-      this.poNumber,
       this.phone});
 
   BillofLadingItems.fromJson(Map<String, dynamic> json) {
@@ -121,7 +127,6 @@ class BillofLadingItems {
     fabricatedItems = json['FabricatedItems'];
     companyName = json['CompanyName'];
     fax = json['Fax'];
-    poNumber = json['PoNumber'];
     phone = json['Phone'];
   }
 
@@ -131,7 +136,6 @@ class BillofLadingItems {
     data['FabricatedItems'] = this.fabricatedItems;
     data['CompanyName'] = this.companyName;
     data['Fax'] = this.fax;
-    data['PoNumber'] = this.poNumber;
     data['Phone'] = this.phone;
     return data;
   }

@@ -96,6 +96,14 @@ class BillOfLading extends StatelessWidget {
                           children: [
                             Row(
                               children: [
+                                Text('PO Number:', style: headingStyle),
+                                Spacer(),
+                                Text(dataList[index].poNumber!.toString()),
+                              ],
+                            ),
+                            SizedBox(height: 4),
+                            Row(
+                              children: [
                                 Text('Bill Title:', style: headingStyle),
                                 Spacer(),
                                 Text(dataList[index].billTitle!.toString()),
@@ -144,7 +152,15 @@ class BillOfLading extends StatelessWidget {
                               children: [
                                 Text('Terms:', style: headingStyle),
                                 Spacer(),
-                                Text(dataList[index].terms!.toString()),
+                                Container(
+                                  width:
+                                      dataList[index].terms!.trim().length <= 50
+                                          ? 83
+                                          : 140,
+                                  child: Text(
+                                    dataList[index].terms!.trim().toString(),
+                                  ),
+                                ),
                               ],
                             ),
                             SizedBox(height: 7),
@@ -153,7 +169,7 @@ class BillOfLading extends StatelessWidget {
                               child: ElevatedButton(
                                   style: const ButtonStyle(
                                     backgroundColor:
-                                        MaterialStatePropertyAll(Colors.green),
+                                        MaterialStatePropertyAll(Colors.blue),
                                     foregroundColor:
                                         MaterialStatePropertyAll(Colors.white),
                                     shape: MaterialStatePropertyAll(
@@ -253,6 +269,27 @@ class BillOfLading extends StatelessWidget {
                 pw.Padding(
                   padding: pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),
                   child: pw.Row(
+
+                      //    mainAxisAlignment: pw.MainAxisAlignment.center,
+                      children: [
+                        pw.Text('PO Number',
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(width: 24.3),
+                        pw.Container(
+                            //  width: MediaQuery.of(Mycontext).size.width,
+                            height: 20,
+                            decoration: pw.BoxDecoration(
+                                border: pw.Border.all(width: 1))),
+                        pw.SizedBox(width: 10),
+                        pw.Text(billData.poNumber!.toString(),
+                            style: pw.TextStyle()),
+                      ]),
+                ),
+                pw.Divider(height: 0),
+                pw.Padding(
+                  padding: pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  child: pw.Row(
                       //    mainAxisAlignment: pw.MainAxisAlignment.center,
                       children: [
                         pw.Text('Bill Title:',
@@ -339,11 +376,20 @@ class BillOfLading extends StatelessWidget {
                         pw.SizedBox(width: 50.5),
                         pw.Container(
                             //  width: MediaQuery.of(Mycontext).size.width,
-                            height: 20,
+                            height:
+                                billData.terms!.trim().length <= 50 ? 20 : 150,
                             decoration: pw.BoxDecoration(
                                 border: pw.Border.all(width: 1))),
                         pw.SizedBox(width: 10),
-                        pw.Text(billData.terms!, style: pw.TextStyle()),
+                        // dataList[index].terms!.trim().length <= 50
+                        //                 ? 83
+                        //                 : 140,
+                        pw.Container(
+                          width:
+                              billData.terms!.trim().length <= 50 ? 1000 : 350,
+                          child:
+                              pw.Text(billData.terms!, style: pw.TextStyle()),
+                        ),
                       ]),
                 ),
                 pw.Divider(height: 0),
@@ -522,21 +568,21 @@ class BillOfLading extends StatelessWidget {
                           //         .quantity
                           //         .toString(),
                           //     style: pw.TextStyle()),
-                          pw.Text('PO Number:',
-                              style:
-                                  pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                          pw.SizedBox(width: 2),
+                          // pw.Text('PO Number:',
+                          //     style:
+                          //         pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                          // pw.SizedBox(width: 2),
 
-                          pw.Container(
-                              //  width: MediaQuery.of(Mycontext).size.width,
-                              height: 20,
-                              decoration: pw.BoxDecoration(
-                                  border: pw.Border.all(width: 1))),
-                          pw.SizedBox(width: 10),
-                          pw.Text(
-                              billData.billofLadingItems![i].poNumber
-                                  .toString(),
-                              style: pw.TextStyle()),
+                          // pw.Container(
+                          //     //  width: MediaQuery.of(Mycontext).size.width,
+                          //     height: 20,
+                          //     decoration: pw.BoxDecoration(
+                          //         border: pw.Border.all(width: 1))),
+                          // pw.SizedBox(width: 10),
+                          // pw.Text(
+                          //     billData.billofLadingItems![i].poNumber
+                          //         .toString(),
+                          //     style: pw.TextStyle()),
                         ]),
                   ),
                 }
@@ -1765,7 +1811,8 @@ class BillOfLading extends StatelessWidget {
       },
     ));
     final path = await getTemporaryDirectory();
-    final file = File(path.path + '/bill of lading.pdf');
+    final file =
+        File(path.path + '/(${billData.billTitle})_bill of lading.pdf');
     final f = await file.writeAsBytes(await pdf.save());
     print('f path:' + f.toString());
 
