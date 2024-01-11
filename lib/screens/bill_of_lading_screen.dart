@@ -340,6 +340,8 @@ class BillOfLading extends StatelessWidget {
                     i < apiData.data!.billdata![0].billofLadingItems!.length;
                     i++) ...{
                   pw.Divider(height: 0),
+                  pw.SizedBox(height: 4),
+                  pw.Divider(height: 0),
                   pw.Padding(
                     padding:
                         pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),
@@ -398,22 +400,22 @@ class BillOfLading extends StatelessWidget {
                               apiData.data!.billdata![0].billofLadingItems![i]
                                   .companyName!,
                               style: pw.TextStyle()),
-                          pw.SizedBox(width: 140),
-                          pw.Text('PO Number:',
-                              style:
-                                  pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                          pw.SizedBox(width: 12),
-                          pw.Container(
-                              //  width: MediaQuery.of(Mycontext).size.width,
-                              height: 20,
-                              decoration: pw.BoxDecoration(
-                                  border: pw.Border.all(width: 1))),
-                          pw.SizedBox(width: 20),
-                          pw.Text(
-                              apiData.data!.billdata![0].billofLadingItems![i]
-                                  .poNumber
-                                  .toString(),
-                              style: pw.TextStyle()),
+                          pw.SizedBox(width: 90),
+                          // pw.Text('PO Number:',
+                          //     style:
+                          //         pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                          // pw.SizedBox(width: 1),
+                          // pw.Container(
+                          //     //  width: MediaQuery.of(Mycontext).size.width,
+                          //     height: 20,
+                          //     decoration: pw.BoxDecoration(
+                          //         border: pw.Border.all(width: 1))),
+                          // pw.SizedBox(width: 10),
+                          // pw.Text(
+                          //     apiData.data!.billdata![0].billofLadingItems![i]
+                          //         .poNumber
+                          //         .toString(),
+                          //     style: pw.TextStyle()),
                         ]),
                   ),
                   pw.Padding(
@@ -475,7 +477,8 @@ class BillOfLading extends StatelessWidget {
                               apiData.data!.billdata![0].billofLadingItems![i]
                                   .fax!,
                               style: pw.TextStyle()),
-                          pw.SizedBox(width: 172),
+                          pw.SizedBox(width: 103),
+
                           // pw.Text('Quantity:',
                           //     style:
                           //         pw.TextStyle(fontWeight: pw.FontWeight.bold)),
@@ -491,6 +494,22 @@ class BillOfLading extends StatelessWidget {
                           //         .quantity
                           //         .toString(),
                           //     style: pw.TextStyle()),
+                          pw.Text('PO Number:',
+                              style:
+                                  pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                          pw.SizedBox(width: 2),
+
+                          pw.Container(
+                              //  width: MediaQuery.of(Mycontext).size.width,
+                              height: 20,
+                              decoration: pw.BoxDecoration(
+                                  border: pw.Border.all(width: 1))),
+                          pw.SizedBox(width: 10),
+                          pw.Text(
+                              apiData.data!.billdata![0].billofLadingItems![i]
+                                  .poNumber
+                                  .toString(),
+                              style: pw.TextStyle()),
                         ]),
                   ),
                 }
