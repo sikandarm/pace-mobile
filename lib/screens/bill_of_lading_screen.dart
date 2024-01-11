@@ -95,10 +95,10 @@ class BillOfLading extends StatelessWidget {
                               children: [
                                 Text('Fabricated Item:', style: headingStyle),
                                 Spacer(),
-                                Text(dataList[index]
-                                    .billofLadingItems!
-                                    .fabricatedItems
-                                    .toString()),
+                                // Text(dataList[index]
+                                //     .billofLadingItems!
+                                //     .fabricatedItems
+                                //     .toString()),
                               ],
                             ),
                             SizedBox(height: 4),
@@ -106,10 +106,10 @@ class BillOfLading extends StatelessWidget {
                               children: [
                                 Text('Quantity:', style: headingStyle),
                                 Spacer(),
-                                Text(dataList[index]
-                                    .billofLadingItems!
-                                    .quantity
-                                    .toString()),
+                                // Text(dataList[index]
+                                //     .billofLadingItems!
+                                //     .quantity
+                                //     .toString()),
                               ],
                             ),
                             SizedBox(height: 4),
@@ -117,10 +117,10 @@ class BillOfLading extends StatelessWidget {
                               children: [
                                 Text('Company Name:', style: headingStyle),
                                 Spacer(),
-                                Text(dataList[index]
-                                    .billofLadingItems!
-                                    .companyName
-                                    .toString()),
+                                // Text(dataList[index]
+                                //     .billofLadingItems!
+                                //     .companyName
+                                //     .toString()),
                               ],
                             ),
                             SizedBox(height: 4),
@@ -128,10 +128,10 @@ class BillOfLading extends StatelessWidget {
                               children: [
                                 Text('Vendor:', style: headingStyle),
                                 Spacer(),
-                                Text(dataList[index]
-                                    .billofLadingItems!
-                                    .vendorName
-                                    .toString()),
+                                // Text(dataList[index]
+                                //     .billofLadingItems!
+                                //     .vendorName
+                                //     .toString()),
                               ],
                             ),
                             SizedBox(height: 3),
@@ -510,7 +510,6 @@ class BillOfLading extends StatelessWidget {
           //     ])),
 
           ////////////// new pdf starts from here...
-
 
           pw.Container(
             width: 1000,
