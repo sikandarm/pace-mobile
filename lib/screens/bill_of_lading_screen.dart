@@ -114,7 +114,10 @@ class BillOfLading extends StatelessWidget {
                               children: [
                                 Text('Delivery Date:', style: headingStyle),
                                 Spacer(),
-                                Text(dataList[index].dilveryDate!.toString()),
+                                // Text(dataList[index].dilveryDate!.toString()),
+                                Text(DateFormat('MMMM d, y').format(
+                                    DateTime.parse(
+                                        dataList[index].dilveryDate!))),
                               ],
                             ),
                             SizedBox(height: 4),
@@ -122,7 +125,10 @@ class BillOfLading extends StatelessWidget {
                               children: [
                                 Text('Order Date:', style: headingStyle),
                                 Spacer(),
-                                Text(dataList[index].orderDate!.toString()),
+                                //  Text(dataList[index].orderDate!.toString()),
+                                Text(DateFormat('MMMM d, y').format(
+                                    DateTime.parse(
+                                        dataList[index].orderDate!))),
                               ],
                             ),
                             SizedBox(height: 4),
@@ -252,7 +258,7 @@ class BillOfLading extends StatelessWidget {
                         pw.Text('Bill Title:',
                             style:
                                 pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                        pw.SizedBox(width: 33),
+                        pw.SizedBox(width: 39.7),
                         pw.Container(
                             //  width: MediaQuery.of(Mycontext).size.width,
                             height: 20,
@@ -271,7 +277,7 @@ class BillOfLading extends StatelessWidget {
                         pw.Text('Address:',
                             style:
                                 pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                        pw.SizedBox(width: 31.7),
+                        pw.SizedBox(width: 38.5),
                         pw.Container(
                             //  width: MediaQuery.of(Mycontext).size.width,
                             height: 20,
@@ -287,7 +293,7 @@ class BillOfLading extends StatelessWidget {
                   child: pw.Row(
                       //    mainAxisAlignment: pw.MainAxisAlignment.center,
                       children: [
-                        pw.Text('Dilvery Date:',
+                        pw.Text('Delivery Date:',
                             style:
                                 pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                         pw.SizedBox(width: 10.4),
@@ -297,7 +303,8 @@ class BillOfLading extends StatelessWidget {
                             decoration: pw.BoxDecoration(
                                 border: pw.Border.all(width: 1))),
                         pw.SizedBox(width: 10),
-                        pw.Text(billData.dilveryDate!, style: pw.TextStyle()),
+                        pw.Text(DateFormat('MMMM d, y')
+                            .format(DateTime.parse(billData.dilveryDate!))),
                       ]),
                 ),
                 pw.Divider(height: 0),
@@ -309,14 +316,15 @@ class BillOfLading extends StatelessWidget {
                         pw.Text('Order Date:',
                             style:
                                 pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                        pw.SizedBox(width: 17.7),
+                        pw.SizedBox(width: 24.5),
                         pw.Container(
                             //  width: MediaQuery.of(Mycontext).size.width,
                             height: 20,
                             decoration: pw.BoxDecoration(
                                 border: pw.Border.all(width: 1))),
                         pw.SizedBox(width: 10),
-                        pw.Text(billData.orderDate!, style: pw.TextStyle()),
+                        pw.Text(DateFormat('MMMM d, y')
+                            .format(DateTime.parse(billData.orderDate!))),
                       ]),
                 ),
                 pw.Divider(height: 0),
@@ -328,7 +336,7 @@ class BillOfLading extends StatelessWidget {
                         pw.Text('Terms:',
                             style:
                                 pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                        pw.SizedBox(width: 43.7),
+                        pw.SizedBox(width: 50.5),
                         pw.Container(
                             //  width: MediaQuery.of(Mycontext).size.width,
                             height: 20,
@@ -347,8 +355,9 @@ class BillOfLading extends StatelessWidget {
                         pw.Text('Ship Via:',
                             style:
                                 pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                        pw.SizedBox(width: 32.4),
+                        pw.SizedBox(width: 39.15),
                         pw.Container(
+
                             //  width: MediaQuery.of(Mycontext).size.width,
                             height: 20,
                             decoration: pw.BoxDecoration(
