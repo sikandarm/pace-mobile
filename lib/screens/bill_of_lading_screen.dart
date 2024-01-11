@@ -227,7 +227,8 @@ class BillOfLading extends StatelessWidget {
                             decoration: pw.BoxDecoration(
                                 border: pw.Border.all(width: 1))),
                         pw.SizedBox(width: 10),
-                        pw.Text('Test Bill', style: pw.TextStyle()),
+                        pw.Text(apiData.data!.billdata![0].billTitle!,
+                            style: pw.TextStyle()),
                       ]),
                 ),
                 pw.Divider(height: 0),
@@ -246,7 +247,8 @@ class BillOfLading extends StatelessWidget {
                             decoration: pw.BoxDecoration(
                                 border: pw.Border.all(width: 1))),
                         pw.SizedBox(width: 10),
-                        pw.Text('Test Bill', style: pw.TextStyle()),
+                        pw.Text(apiData.data!.billdata![0].address!,
+                            style: pw.TextStyle()),
                       ]),
                 ),
                 pw.Divider(height: 0),
@@ -265,7 +267,8 @@ class BillOfLading extends StatelessWidget {
                             decoration: pw.BoxDecoration(
                                 border: pw.Border.all(width: 1))),
                         pw.SizedBox(width: 10),
-                        pw.Text('Test Bill', style: pw.TextStyle()),
+                        pw.Text(apiData.data!.billdata![0].dilveryDate!,
+                            style: pw.TextStyle()),
                       ]),
                 ),
                 pw.Divider(height: 0),
@@ -284,7 +287,8 @@ class BillOfLading extends StatelessWidget {
                             decoration: pw.BoxDecoration(
                                 border: pw.Border.all(width: 1))),
                         pw.SizedBox(width: 10),
-                        pw.Text('Test Bill', style: pw.TextStyle()),
+                        pw.Text(apiData.data!.billdata![0].orderDate!,
+                            style: pw.TextStyle()),
                       ]),
                 ),
                 pw.Divider(height: 0),
@@ -303,7 +307,8 @@ class BillOfLading extends StatelessWidget {
                             decoration: pw.BoxDecoration(
                                 border: pw.Border.all(width: 1))),
                         pw.SizedBox(width: 10),
-                        pw.Text('Test Bill', style: pw.TextStyle()),
+                        pw.Text(apiData.data!.billdata![0].terms!,
+                            style: pw.TextStyle()),
                       ]),
                 ),
                 pw.Divider(height: 0),
@@ -322,9 +327,173 @@ class BillOfLading extends StatelessWidget {
                             decoration: pw.BoxDecoration(
                                 border: pw.Border.all(width: 1))),
                         pw.SizedBox(width: 10),
-                        pw.Text('Test Bill', style: pw.TextStyle()),
+                        pw.Text(apiData.data!.billdata![0].shipVia!,
+                            style: pw.TextStyle()),
                       ]),
                 ),
+                ////////////////////////////////////////////////////////////  items parts from here
+                ///////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////////
+
+                for (int i = 0;
+                    i < apiData.data!.billdata![0].billofLadingItems!.length;
+                    i++) ...{
+                  pw.Divider(height: 0),
+                  pw.Padding(
+                    padding:
+                        pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                    child: pw.Row(
+                        //    mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Text('Item Name:',
+                              style:
+                                  pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                          pw.SizedBox(width: 49),
+                          pw.Container(
+                              //  width: MediaQuery.of(Mycontext).size.width,
+                              height: 20,
+                              decoration: pw.BoxDecoration(
+                                  border: pw.Border.all(width: 1))),
+                          pw.SizedBox(width: 10),
+                          pw.Text(
+                              apiData.data!.billdata![0].billofLadingItems![i]
+                                  .fabricatedItems!,
+                              style: pw.TextStyle()),
+                          pw.SizedBox(width: 172),
+                          pw.Text('Quantity:',
+                              style:
+                                  pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                          pw.SizedBox(width: 20),
+                          pw.Container(
+                              //  width: MediaQuery.of(Mycontext).size.width,
+                              height: 20,
+                              decoration: pw.BoxDecoration(
+                                  border: pw.Border.all(width: 1))),
+                          pw.SizedBox(width: 20),
+                          pw.Text(
+                              apiData.data!.billdata![0].billofLadingItems![i]
+                                  .quantity
+                                  .toString(),
+                              style: pw.TextStyle()),
+                        ]),
+                  ),
+                  pw.Padding(
+                    padding:
+                        pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                    child: pw.Row(
+                        //    mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Text('Company Name:',
+                              style:
+                                  pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                          pw.SizedBox(width: 19),
+                          pw.Container(
+                              //  width: MediaQuery.of(Mycontext).size.width,
+                              height: 20,
+                              decoration: pw.BoxDecoration(
+                                  border: pw.Border.all(width: 1))),
+                          pw.SizedBox(width: 10),
+                          pw.Text(
+                              apiData.data!.billdata![0].billofLadingItems![i]
+                                  .companyName!,
+                              style: pw.TextStyle()),
+                          pw.SizedBox(width: 140),
+                          pw.Text('PO Number:',
+                              style:
+                                  pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                          pw.SizedBox(width: 12),
+                          pw.Container(
+                              //  width: MediaQuery.of(Mycontext).size.width,
+                              height: 20,
+                              decoration: pw.BoxDecoration(
+                                  border: pw.Border.all(width: 1))),
+                          pw.SizedBox(width: 20),
+                          pw.Text(
+                              apiData.data!.billdata![0].billofLadingItems![i]
+                                  .poNumber
+                                  .toString(),
+                              style: pw.TextStyle()),
+                        ]),
+                  ),
+                  pw.Padding(
+                    padding:
+                        pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                    child: pw.Row(
+                        //    mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Text('Telephone:',
+                              style:
+                                  pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                          pw.SizedBox(width: 49.7),
+
+                          pw.Container(
+                              //  width: MediaQuery.of(Mycontext).size.width,
+                              height: 20,
+                              decoration: pw.BoxDecoration(
+                                  border: pw.Border.all(width: 1))),
+                          pw.SizedBox(width: 10),
+                          pw.Text(
+                              apiData.data!.billdata![0].billofLadingItems![i]
+                                  .phone!,
+                              style: pw.TextStyle()),
+                          pw.SizedBox(width: 172),
+                          // pw.Text('Quantity:',
+                          //     style:
+                          //         pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                          // pw.SizedBox(width: 20),
+                          // pw.Container(
+                          //     //  width: MediaQuery.of(Mycontext).size.width,
+                          //     height: 20,
+                          //     decoration: pw.BoxDecoration(
+                          //         border: pw.Border.all(width: 1))),
+                          // pw.SizedBox(width: 20),
+                          // pw.Text(
+                          //     apiData.data!.billdata![0].billofLadingItems![i]
+                          //         .quantity
+                          //         .toString(),
+                          //     style: pw.TextStyle()),
+                        ]),
+                  ),
+                  pw.Padding(
+                    padding:
+                        pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                    child: pw.Row(
+                        //    mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Text('Fax:',
+                              style:
+                                  pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                          pw.SizedBox(width: 89),
+                          pw.Container(
+                              //  width: MediaQuery.of(Mycontext).size.width,
+                              height: 20,
+                              decoration: pw.BoxDecoration(
+                                  border: pw.Border.all(width: 1))),
+                          pw.SizedBox(width: 10),
+                          pw.Text(
+                              apiData.data!.billdata![0].billofLadingItems![i]
+                                  .fax!,
+                              style: pw.TextStyle()),
+                          pw.SizedBox(width: 172),
+                          // pw.Text('Quantity:',
+                          //     style:
+                          //         pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                          // pw.SizedBox(width: 20),
+                          // pw.Container(
+                          //     //  width: MediaQuery.of(Mycontext).size.width,
+                          //     height: 20,
+                          //     decoration: pw.BoxDecoration(
+                          //         border: pw.Border.all(width: 1))),
+                          // pw.SizedBox(width: 20),
+                          // pw.Text(
+                          //     apiData.data!.billdata![0].billofLadingItems![i]
+                          //         .quantity
+                          //         .toString(),
+                          //     style: pw.TextStyle()),
+                        ]),
+                  ),
+                }
               ],
             ),
           ),
