@@ -78,6 +78,14 @@ class BillOfLading extends StatelessWidget {
                     child: const Center(child: CircularProgressIndicator()));
               }
 
+              if (snapshot.data!.data!.billdata!.isEmpty) {
+                return SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    child: const Center(child: Text('No Bills Available.')));
+
+              }
+
               final dataList = snapshot.data!.data!.billdata;
               //  final d = snapshot.data?.data?.data;
 
