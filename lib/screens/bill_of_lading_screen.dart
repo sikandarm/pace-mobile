@@ -78,11 +78,13 @@ class BillOfLading extends StatelessWidget {
                     child: const Center(child: CircularProgressIndicator()));
               }
 
-              final dataList = snapshot.data?.data!.billdata;
+              final dataList = snapshot.data!.data!.billdata;
               //  final d = snapshot.data?.data?.data;
               return Expanded(
                 child: ListView.builder(
                   itemCount: dataList!.length,
+
+                  // itemCount: 2,
                   itemBuilder: (context, index) {
                     return Container(
                       color: Colors.white,
@@ -205,20 +207,142 @@ class BillOfLading extends StatelessWidget {
           ]),
           pw.SizedBox(height: 2.5),
 
-          //  for(int i=0;i<apiData.data.dataList.length;i++)...{
+          pw.Container(
+            width: 1000,
+            decoration: pw.BoxDecoration(border: pw.Border.all(width: 1)),
+            child: pw.Column(
+              children: [
+                pw.Padding(
+                  padding: pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  child: pw.Row(
+                      //    mainAxisAlignment: pw.MainAxisAlignment.center,
+                      children: [
+                        pw.Text('Bill Title:',
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(width: 33),
+                        pw.Container(
+                            //  width: MediaQuery.of(Mycontext).size.width,
+                            height: 20,
+                            decoration: pw.BoxDecoration(
+                                border: pw.Border.all(width: 1))),
+                        pw.SizedBox(width: 10),
+                        pw.Text('Test Bill', style: pw.TextStyle()),
+                      ]),
+                ),
+                pw.Divider(height: 0),
+                pw.Padding(
+                  padding: pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  child: pw.Row(
+                      //    mainAxisAlignment: pw.MainAxisAlignment.center,
+                      children: [
+                        pw.Text('Address:',
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(width: 31.7),
+                        pw.Container(
+                            //  width: MediaQuery.of(Mycontext).size.width,
+                            height: 20,
+                            decoration: pw.BoxDecoration(
+                                border: pw.Border.all(width: 1))),
+                        pw.SizedBox(width: 10),
+                        pw.Text('Test Bill', style: pw.TextStyle()),
+                      ]),
+                ),
+                pw.Divider(height: 0),
+                pw.Padding(
+                  padding: pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  child: pw.Row(
+                      //    mainAxisAlignment: pw.MainAxisAlignment.center,
+                      children: [
+                        pw.Text('Dilvery Date:',
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(width: 10.4),
+                        pw.Container(
+                            //  width: MediaQuery.of(Mycontext).size.width,
+                            height: 20,
+                            decoration: pw.BoxDecoration(
+                                border: pw.Border.all(width: 1))),
+                        pw.SizedBox(width: 10),
+                        pw.Text('Test Bill', style: pw.TextStyle()),
+                      ]),
+                ),
+                pw.Divider(height: 0),
+                pw.Padding(
+                  padding: pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  child: pw.Row(
+                      //    mainAxisAlignment: pw.MainAxisAlignment.center,
+                      children: [
+                        pw.Text('Order Date:',
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(width: 17.7),
+                        pw.Container(
+                            //  width: MediaQuery.of(Mycontext).size.width,
+                            height: 20,
+                            decoration: pw.BoxDecoration(
+                                border: pw.Border.all(width: 1))),
+                        pw.SizedBox(width: 10),
+                        pw.Text('Test Bill', style: pw.TextStyle()),
+                      ]),
+                ),
+                pw.Divider(height: 0),
+                pw.Padding(
+                  padding: pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  child: pw.Row(
+                      //    mainAxisAlignment: pw.MainAxisAlignment.center,
+                      children: [
+                        pw.Text('Terms:',
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(width: 43.7),
+                        pw.Container(
+                            //  width: MediaQuery.of(Mycontext).size.width,
+                            height: 20,
+                            decoration: pw.BoxDecoration(
+                                border: pw.Border.all(width: 1))),
+                        pw.SizedBox(width: 10),
+                        pw.Text('Test Bill', style: pw.TextStyle()),
+                      ]),
+                ),
+                pw.Divider(height: 0),
+                pw.Padding(
+                  padding: pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  child: pw.Row(
+                      //    mainAxisAlignment: pw.MainAxisAlignment.center,
+                      children: [
+                        pw.Text('Ship Via:',
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(width: 32.4),
+                        pw.Container(
+                            //  width: MediaQuery.of(Mycontext).size.width,
+                            height: 20,
+                            decoration: pw.BoxDecoration(
+                                border: pw.Border.all(width: 1))),
+                        pw.SizedBox(width: 10),
+                        pw.Text('Test Bill', style: pw.TextStyle()),
+                      ]),
+                ),
+              ],
+            ),
+          ),
+
+          //  for(int i=0;i<apiData.data.z.length;i++)...{
           // pw.Text(apiData.data.dataList[i].fabricatedItemName,)
           // pw.Column(children: [
           //   pw.SizedBox(height: 9),
-          //
+
           //   pw.Container(
           //     padding: pw.EdgeInsets.all(21),
           //       decoration:pw.BoxDecoration(
-          //
+
           //         border: pw.Border.all(width: 0.5, color: PdfColor.fromHex('#808080')),
-          //
+
           //       ),
           //     child: pw.Column(children: [
-          //
+
           //  pw.Row(
           //      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
           //      children: [ pw.Text('Fabricated Item:', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),pw.Text(apiData.data.dataList[i].fabricatedItemName)]),
@@ -239,7 +363,7 @@ class BillOfLading extends StatelessWidget {
 
           //  }
 
-          // previous pdf starts from here.
+//          previous pdf starts from here.
           // pw.Container(
           //     //  width: MediaQuery.of(Mycontext).size.width,
           //     width: 1000,
@@ -307,10 +431,10 @@ class BillOfLading extends StatelessWidget {
           //                 pw.BoxDecoration(border: pw.Border.all(width: 1))),
           //         // pw.VerticalDivider(width: 3),
           //         //   pw.VerticalDivider(width: 10,color: PdfColor.fromHex('#808080')),
-          //
+
           //         /////////////////////////////////////////////////////////////////////////// --------(-col-2-)--------
           //         pw.Column(
-          //         //    crossAxisAlignment: pw.CrossAxisAlignment.start,
+          //             //    crossAxisAlignment: pw.CrossAxisAlignment.start,
           //             children: [
           //               pw.Padding(
           //                 padding: pw.EdgeInsets.all(0),
@@ -319,7 +443,6 @@ class BillOfLading extends StatelessWidget {
           //                         pw.TextStyle(fontWeight: pw.FontWeight.bold)),
           //               ),
           //               pw.SizedBox(height: 10),
-          //
           //               pw.Container(
           //                   width: 100,
           //                   decoration: pw.BoxDecoration(
@@ -330,12 +453,10 @@ class BillOfLading extends StatelessWidget {
           //                     style:
           //                         pw.TextStyle(fontWeight: pw.FontWeight.bold)),
           //               ),
-          //
           //               pw.Container(
           //                   width: 100,
           //                   decoration: pw.BoxDecoration(
           //                       border: pw.Border.all(width: 1))),
-          //
           //               pw.Padding(
           //                 padding: pw.EdgeInsets.all(0),
           //                 child: pw.Text('Address, CT 08080:',
@@ -346,7 +467,6 @@ class BillOfLading extends StatelessWidget {
           //                   width: 100,
           //                   decoration: pw.BoxDecoration(
           //                       border: pw.Border.all(width: 1))),
-          //
           //               pw.Container(
           //                   width: 100,
           //                   decoration: pw.BoxDecoration(
@@ -367,7 +487,6 @@ class BillOfLading extends StatelessWidget {
           //                     style:
           //                         pw.TextStyle(fontWeight: pw.FontWeight.bold)),
           //               ),
-          //
           //               pw.Container(
           //                   width: 100,
           //                   decoration: pw.BoxDecoration(
@@ -387,7 +506,7 @@ class BillOfLading extends StatelessWidget {
           //             height: 150,
           //             decoration:
           //                 pw.BoxDecoration(border: pw.Border.all(width: 1))),
-          //
+
           //         ///  col-3
           //         pw.Column(
           //             crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -428,7 +547,7 @@ class BillOfLading extends StatelessWidget {
           //             height: 100,
           //             decoration:
           //                 pw.BoxDecoration(border: pw.Border.all(width: 1))),
-          //
+
           //         ////////////  col-4
           //         pw.Column(
           //             crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -469,7 +588,7 @@ class BillOfLading extends StatelessWidget {
           //             height: 100,
           //             decoration:
           //                 pw.BoxDecoration(border: pw.Border.all(width: 1))),
-          //
+
           //         ///////////// col-5--------------
           //         pw.Column(
           //             crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -511,908 +630,922 @@ class BillOfLading extends StatelessWidget {
 
           ////////////// new pdf starts from here...
 
-          pw.Container(
-            width: 1000,
-            decoration: pw.BoxDecoration(
-              border: pw.Border.all(width: 1),
-            ),
-            child: pw.Column(children: [
-              // row-1-----------------------------------
-              pw.SizedBox(height: 2),
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
-                pw.Center(
-                    child: pw.Text('Automated Invoice',
-                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))
-              ]),
-              pw.SizedBox(height: 2),
-              // row-2-----------------------------------
-              pw.Container(
-                width: 1000,
-                height: 11,
-                decoration: pw.BoxDecoration(
-                  border: pw.Border.all(width: 1),
-                ),
-              ),
+          // pw.Container(
+          //   width: 1000,
+          //   decoration: pw.BoxDecoration(
+          //     border: pw.Border.all(width: 1),
+          //   ),
+          //   child: pw.Column(children: [
+          //     // row-1-----------------------------------
+          //     pw.SizedBox(height: 2),
+          //     pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
+          //       pw.Center(
+          //           child: pw.Text('Automated Invoice',
+          //               style: pw.TextStyle(fontWeight: pw.FontWeight.bold)))
+          //     ]),
+          //     pw.SizedBox(height: 2),
+          //     // row-2-----------------------------------
+          //     pw.Container(
+          //       width: 1000,
+          //       height: 11,
+          //       decoration: pw.BoxDecoration(
+          //         border: pw.Border.all(width: 1),
+          //       ),
+          //     ),
 
-              // row-3-----------------------------------
-              pw.Row(children: [
-                pw.SizedBox(width: 17),
-                pw.Text('Company:',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 17),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 17),
-                pw.Text('(Company) Inc.:',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 18.5),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                //  pw.SizedBox(width: 3),
-                pw.SizedBox(width: 17),
-                pw.Text('PO Number:',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 17),
-              ]),
+          //     // row-3-----------------------------------
+          //     pw.Row(children: [
+          //       pw.SizedBox(width: 17),
+          //       pw.Text('Company:',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 17),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 17),
+          //       pw.Text('(Company) Inc.:',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 18.5),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.SizedBox(width: 17),
+          //       pw.Text('PO Number:',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 17),
+          //     ]),
 
-              //// row-2
-              pw.Divider(height: 0),
+          //     //// row-2
+          //     pw.Divider(height: 0),
 
-              // row-4---------------------------------
-              pw.Row(children: [
-                pw.SizedBox(width: 17),
+          //     // row-4---------------------------------
+          //     pw.Row(children: [
+          //       pw.SizedBox(width: 17),
 
-                pw.Text('---------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 15.9),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 8),
-                pw.Text('Address, CT 08080',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 10.7),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
+          //       pw.Text('---------------',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 15.9),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 8),
+          //       pw.Text(apiData.data!.billdata![0].address!,
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 10.7),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
 
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                //  pw.SizedBox(width: 3),
-                pw.SizedBox(width: 17),
-                pw.Text('Order Date:',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 17),
-              ]),
-              pw.Divider(height: 0),
-              // row-5---------------------------------
-              pw.Row(children: [
-                pw.SizedBox(width: 17),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.SizedBox(width: 17),
+          //       pw.Text('Order Date:',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 17),
+          //     ]),
+          //     pw.Divider(height: 0),
+          //     // row-5---------------------------------
+          //     pw.Row(children: [
+          //       pw.SizedBox(width: 17),
 
-                pw.Text('---------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 15.9),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 17),
-                pw.Text('Address:',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 57),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
+          //       pw.Text('---------------',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 15.9),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 17),
+          //       pw.Text('Address:',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 57),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
 
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                //  pw.SizedBox(width: 3),
-                pw.SizedBox(width: 17),
-                pw.Text('Delivery Date:',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 17),
-              ]),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.SizedBox(width: 17),
+          //       pw.Text('Delivery Date:',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 17),
+          //     ]),
 
-              pw.Divider(height: 0),
-              // row-6---------------------------------
-              pw.Row(children: [
-                pw.SizedBox(width: 17),
+          //     pw.Divider(height: 0),
+          //     // row-6---------------------------------
+          //     pw.Row(children: [
+          //       pw.SizedBox(width: 17),
 
-                pw.Text('---------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 15.9),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 8),
-                pw.Text('Tel: (860) 354-XXXX',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 6),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
+          //       pw.Text('---------------',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 15.9),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 8),
+          //       pw.Text('Tel: (860) 354-XXXX',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 6),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
 
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                //  pw.SizedBox(width: 3),
-                pw.SizedBox(width: 17),
-                pw.Text('Page:',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 17),
-              ]),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.SizedBox(width: 17),
+          //       pw.Text('Page:',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 17),
+          //     ]),
 
-              pw.Divider(height: 0),
+          //     pw.Divider(height: 0),
 
-              // row-7---------------------------------
-              pw.Row(children: [
-                pw.SizedBox(width: 17),
+          //     // row-7---------------------------------
+          //     pw.Row(children: [
+          //       pw.SizedBox(width: 17),
 
-                pw.Text('---------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 15.9),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 6),
-                pw.Text('Fax: (860) 354-XXXX',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 4.5),
+          //       pw.Text('---------------',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 15.9),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 6),
+          //       pw.Text('Fax: (860) 354-XXXX',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 4.5),
 
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
 
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                //  pw.SizedBox(width: 3),
-                pw.SizedBox(width: 17),
-                //  pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.SizedBox(width: 17),
-              ]),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.SizedBox(width: 17),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.SizedBox(width: 17),
+          //     ]),
 
-              pw.Divider(height: 0),
-              // row-8---------------------------------
-              pw.Row(children: [
-                pw.SizedBox(width: 17),
+          //     pw.Divider(height: 0),
+          //     // row-8---------------------------------
+          //     pw.Row(children: [
+          //       pw.SizedBox(width: 17),
 
-                pw.Text('---------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 15.9),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 6),
-                //// here
-                pw.Text('-----------------------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 4),
+          //       pw.Text('---------------',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 15.9),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 6),
+          //       //// here
+          //       pw.Text('-----------------------------',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 4),
 
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
 
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                //  pw.SizedBox(width: 3),
-                pw.SizedBox(width: 17),
-                //  pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.SizedBox(width: 17),
-              ]),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.SizedBox(width: 17),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.SizedBox(width: 17),
+          //     ]),
 
-              /////////////////////////////////
+          //     /////////////////////////////////
 
-              pw.Divider(height: 0),
-              // row-9---------------------------------
-              pw.Row(children: [
-                pw.SizedBox(width: 17),
+          //     pw.Divider(height: 0),
+          //     // row-9---------------------------------
+          //     pw.Row(children: [
+          //       pw.SizedBox(width: 17),
 
-                pw.Text('---------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 15.9),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 6),
-                //// here
-                pw.Text('-----------------------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 4),
+          //       pw.Text('---------------',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 15.9),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 6),
+          //       //// here
+          //       pw.Text('-----------------------------',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 4),
 
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
 
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                //  pw.SizedBox(width: 3),
-                pw.SizedBox(width: 17),
-                //  pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.SizedBox(width: 17),
-              ]),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.SizedBox(width: 17),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.SizedBox(width: 17),
+          //     ]),
 
-              //////////////////////////////////////////
+          //     //////////////////////////////////////////
 
-              pw.Divider(height: 0),
-              // row-10---------------------------------
-              pw.Row(children: [
-                pw.SizedBox(width: 17),
+          //     pw.Divider(height: 0),
+          //     // row-10---------------------------------
+          //     pw.Row(children: [
+          //       pw.SizedBox(width: 17),
 
-                pw.Text('Vendor:',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 30.5),
+          //       pw.Text('Vendor:',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 30.5),
 
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 6),
-                //// here
-                pw.Text('-----------------------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 4),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 6),
+          //       //// here
+          //       pw.Text('-----------------------------',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 4),
 
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
 
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                //  pw.SizedBox(width: 3),
-                pw.SizedBox(width: 17),
-                //  pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.SizedBox(width: 17),
-              ]),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.SizedBox(width: 17),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.SizedBox(width: 17),
+          //     ]),
 
-              pw.Divider(height: 0),
-              // row-11---------------------------------
-              pw.Row(children: [
-                pw.SizedBox(width: 17),
+          //     pw.Divider(height: 0),
 
-                pw.Text('---------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 15.9),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 6),
-                //// here
-                pw.Text('-----------------------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 4),
+          //     for (int i = 0;
+          //         i < apiData.data!.billdata![0].billofLadingItems!.length;
+          //         i++) ...{
+          //       // row-11---------------------------------
+          //       pw.Row(children: [
+          //         pw.SizedBox(width: 17),
 
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
+          //         pw.Text('---------------',
+          //             style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //         pw.SizedBox(width: 15.9),
+          //         pw.Container(
+          //           width: 0,
+          //           height: 21,
+          //           decoration: pw.BoxDecoration(
+          //             border: pw.Border.all(width: 1),
+          //           ),
+          //         ),
+          //         pw.SizedBox(width: 6),
+          //         //// here
+          //         // pw.Text('-----------------------------',
+          //         //     style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //         pw.Text(
+          //             apiData.data!.billdata![0].billofLadingItems![i]
+          //                 .fabricatedItems!,
+          //             style: pw.TextStyle()),
+          //         pw.SizedBox(width: 4),
 
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                //  pw.SizedBox(width: 3),
-                pw.SizedBox(width: 17),
-                //  pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.SizedBox(width: 17),
-              ]),
+          //         pw.Container(
+          //           width: 0,
+          //           height: 21,
+          //           decoration: pw.BoxDecoration(
+          //             border: pw.Border.all(width: 1),
+          //           ),
+          //         ),
+          //         pw.SizedBox(width: 3),
 
-              pw.Divider(height: 0),
-              // row-12---------------------------------
-              pw.Row(children: [
-                pw.SizedBox(width: 17),
+          //         // pw.Text('-----------------',
+          //         //     style: pw.TextStyle(
+          //         //         fontWeight: pw.FontWeight.bold,
+          //         //         color: PdfColor.fromHex('#FFFFFF'))),
+          //         pw.Text(
+          //             apiData.data!.billdata![0].billofLadingItems![i].quantity
+          //                 .toString(),
+          //             style: pw.TextStyle()),
+          //         pw.Container(
+          //           width: 0,
+          //           height: 21,
+          //           decoration: pw.BoxDecoration(
+          //             border: pw.Border.all(width: 1),
+          //           ),
+          //         ),
+          //         pw.SizedBox(width: 3),
+          //         pw.Text('-----------------',
+          //             style: pw.TextStyle(
+          //                 fontWeight: pw.FontWeight.bold,
+          //                 color: PdfColor.fromHex('#FFFFFF'))),
+          //         pw.Container(
+          //           width: 0,
+          //           height: 21,
+          //           decoration: pw.BoxDecoration(
+          //             border: pw.Border.all(width: 1),
+          //           ),
+          //         ),
+          //         //  pw.SizedBox(width: 3),
+          //         pw.SizedBox(width: 17),
+          //         //  pw.SizedBox(width: 3),
+          //         pw.Text('-----------------',
+          //             style: pw.TextStyle(
+          //                 fontWeight: pw.FontWeight.bold,
+          //                 color: PdfColor.fromHex('#FFFFFF'))),
+          //         pw.SizedBox(width: 17),
+          //       ]),
 
-                pw.Text('---------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 15.9),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 6),
-                //// here
-                pw.Text('-----------------------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 4),
+          //       pw.Divider(height: 0),
+          //     },
 
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
+          //     // row-12---------------------------------
+          //     pw.Row(children: [
+          //       pw.SizedBox(width: 17),
 
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                //  pw.SizedBox(width: 3),
-                pw.SizedBox(width: 17),
-                //  pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.SizedBox(width: 17),
-              ]),
+          //       pw.Text('---------------',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 15.9),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 6),
+          //       //// here
+          //       pw.Text('-----------------------------',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 4),
 
-              pw.Divider(height: 0),
-              // row-13---------------------------------
-              pw.Row(children: [
-                pw.SizedBox(width: 17),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
 
-                pw.Text('---------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 15.9),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 6),
-                //// here
-                pw.Text('-----------------------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 4),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.SizedBox(width: 17),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.SizedBox(width: 17),
+          //     ]),
 
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
+          //     pw.Divider(height: 0),
+          //     // row-13---------------------------------
+          //     pw.Row(children: [
+          //       pw.SizedBox(width: 17),
 
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                //  pw.SizedBox(width: 3),
-                pw.SizedBox(width: 17),
-                //  pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.SizedBox(width: 17),
-              ]),
+          //       pw.Text('---------------',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 15.9),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 6),
+          //       //// here
+          //       pw.Text('-----------------------------',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 4),
 
-              //////////////////////////////////////////////////////////////
-              ////////////////////////////////////////////////////////////
-              ///////////////////////////////////////////////////////////
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
 
-              //////////////////////////////////////////
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.SizedBox(width: 17),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.SizedBox(width: 17),
+          //     ]),
 
-              pw.Divider(height: 0),
-              // row-14---------------------------------
-              pw.Row(children: [
-                pw.SizedBox(width: 17),
+          //     //////////////////////////////////////////////////////////////
+          //     ////////////////////////////////////////////////////////////
+          //     ///////////////////////////////////////////////////////////
 
-                pw.Text('Ship Via:',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 24.5),
+          //     //////////////////////////////////////////
 
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 6),
-                //// here
-                pw.Text('--------------------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 16),
+          //     pw.Divider(height: 0),
+          //     // row-14---------------------------------
+          //     pw.Row(children: [
+          //       pw.SizedBox(width: 17),
 
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
+          //       pw.Text('Ship Via:',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 24.5),
 
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                //  pw.SizedBox(width: 3),
-                pw.SizedBox(width: 17),
-                //  pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.SizedBox(width: 17),
-              ]),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 6),
+          //       //// here
+          //       pw.Text('--------------------------',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 16),
 
-              pw.Divider(height: 0),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
 
-              //   pw.Divider(height: 0),
-              // row-15---------------------------------
-              pw.Row(children: [
-                pw.SizedBox(width: 17),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.SizedBox(width: 17),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.SizedBox(width: 17),
+          //     ]),
 
-                pw.Text('Terms:',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 36),
+          //     pw.Divider(height: 0),
 
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 6),
-                //// here
-                pw.Text('--------------------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 16),
+          //     //   pw.Divider(height: 0),
+          //     // row-15---------------------------------
+          //     pw.Row(children: [
+          //       pw.SizedBox(width: 17),
 
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
+          //       pw.Text('Terms:',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 36),
 
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                //  pw.SizedBox(width: 3),
-                pw.SizedBox(width: 17),
-                //  pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.SizedBox(width: 17),
-              ]),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 6),
+          //       //// here
+          //       pw.Text('--------------------------',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 16),
 
-              pw.Divider(height: 0),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
 
-              //   pw.Divider(height: 0),
-              // row-15---------------------------------
-              pw.Row(children: [
-                pw.SizedBox(width: 17),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.SizedBox(width: 17),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.SizedBox(width: 17),
+          //     ]),
 
-                pw.Text('FOB:',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 46.5),
+          //     pw.Divider(height: 0),
 
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 6),
-                //// here
-                pw.Text('--------------------------',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.SizedBox(width: 16),
+          //     //   pw.Divider(height: 0),
+          //     // row-15---------------------------------
+          //     pw.Row(children: [
+          //       pw.SizedBox(width: 18.5),
 
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
+          //       pw.Text('FOB:',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 46.5),
 
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.Container(
-                  width: 0,
-                  height: 21,
-                  decoration: pw.BoxDecoration(
-                    border: pw.Border.all(width: 1),
-                  ),
-                ),
-                //  pw.SizedBox(width: 3),
-                pw.SizedBox(width: 17),
-                //  pw.SizedBox(width: 3),
-                pw.Text('-----------------',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        color: PdfColor.fromHex('#FFFFFF'))),
-                pw.SizedBox(width: 17),
-              ]),
-            ]),
-          ),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 6),
+          //       //// here
+          //       pw.Text('--------------------------',
+          //           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+          //       pw.SizedBox(width: 16),
+
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
+
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.Container(
+          //         width: 0,
+          //         height: 21,
+          //         decoration: pw.BoxDecoration(
+          //           border: pw.Border.all(width: 1),
+          //         ),
+          //       ),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.SizedBox(width: 17),
+          //       //  pw.SizedBox(width: 3),
+          //       pw.Text('-----------------',
+          //           style: pw.TextStyle(
+          //               fontWeight: pw.FontWeight.bold,
+          //               color: PdfColor.fromHex('#FFFFFF'))),
+          //       pw.SizedBox(width: 17),
+          //     ]),
+          //   ]),
+          // ),
         ]);
       },
     ));

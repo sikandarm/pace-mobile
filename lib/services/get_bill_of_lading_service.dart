@@ -4,7 +4,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../utils/constants.dart';
 
-
 class BillOfLadingModel {
   bool? success;
   String? message;
@@ -55,8 +54,8 @@ class Data {
 class Billdata {
   String? billTitle;
   String? address;
-  Null? dilveryDate;
-  Null? orderDate;
+  String? dilveryDate;
+  String? orderDate;
   String? terms;
   String? shipVia;
   List<BillofLadingItems>? billofLadingItems;
@@ -104,18 +103,36 @@ class Billdata {
 class BillofLadingItems {
   int? quantity;
   String? fabricatedItems;
+  String? companyName;
+  String? fax;
+  int? poNumber;
+  String? phone;
 
-  BillofLadingItems({this.quantity, this.fabricatedItems});
+  BillofLadingItems(
+      {this.quantity,
+      this.fabricatedItems,
+      this.companyName,
+      this.fax,
+      this.poNumber,
+      this.phone});
 
   BillofLadingItems.fromJson(Map<String, dynamic> json) {
     quantity = json['Quantity'];
     fabricatedItems = json['FabricatedItems'];
+    companyName = json['CompanyName'];
+    fax = json['Fax'];
+    poNumber = json['PoNumber'];
+    phone = json['Phone'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Quantity'] = this.quantity;
     data['FabricatedItems'] = this.fabricatedItems;
+    data['CompanyName'] = this.companyName;
+    data['Fax'] = this.fax;
+    data['PoNumber'] = this.poNumber;
+    data['Phone'] = this.phone;
     return data;
   }
 }
