@@ -78,6 +78,12 @@ class BillOfLading extends StatelessWidget {
                     child: Center(child: CircularProgressIndicator()));
               }
 
+              if (snapshot.data!.data!.billdata.isEmpty) {
+                return Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.7,
+                    child: Center(child: Text('No Bill Available')));
+              }
 
               final billList = snapshot.data!.data!.billdata;
               return Expanded(
@@ -640,7 +646,110 @@ class BillOfLading extends StatelessWidget {
                           //     style: pw.TextStyle()),
                         ]),
                   ),
-                }
+                },
+
+                pw.Divider(height: 0),
+                pw.SizedBox(height: 18.5),
+
+                pw.Divider(height: 0),
+
+                pw.Divider(height: 0),
+                pw.SizedBox(height: 4),
+                pw.Row(children: [
+                  pw.SizedBox(width: 5),
+                  pw.Align(
+                    alignment: pw.Alignment.topLeft,
+                    child: pw.Text('Signature is required for all deliveries',
+                        style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  ),
+                ]),
+                pw.Divider(height: 3),
+                pw.SizedBox(height: 15),
+                pw.Divider(height: 5),
+
+                pw.Row(children: [
+                  pw.SizedBox(width: 5),
+                  pw.Align(
+                    alignment: pw.Alignment.topLeft,
+                    child: pw.Text(
+                        'ALL MATERIAL SHOULD BE MARKED WITH A ID# PO# SIZE GRADE AND HEAT NUMBER',
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold, fontSize: 9)),
+                  ),
+                ]),
+                pw.Divider(height: 5),
+
+                //   pw.Divider(height: 5),
+
+                pw.Row(children: [
+                  pw.SizedBox(width: 5),
+                  pw.Align(
+                    alignment: pw.Alignment.topLeft,
+                    child: pw.Text(
+                        'BEAMS: A992\\A572-GR,50 TUBES: AS01GR.B\\C BARS:A36.A892YA5T2 MTR\'S REQUIRED',
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold, fontSize: 9)),
+                  ),
+                ]),
+                //       pw.SizedBox(height: 2.5),
+
+                pw.Divider(height: 3),
+                pw.SizedBox(height: 15),
+
+                /////////////////////////////////////////////////////  prev ok
+
+                pw.Divider(height: 5),
+
+                pw.Row(children: [
+                  pw.SizedBox(width: 5),
+                  pw.Align(
+                    alignment: pw.Alignment.topLeft,
+                    child: pw.Text(
+                        'We reserve the right to reject any material shipped under thi Purchase Order',
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold, fontSize: 9)),
+                  ),
+                  pw.SizedBox(width: 70),
+                  pw.Align(
+                    alignment: pw.Alignment.topLeft,
+                    child: pw.Text('PER',
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold, fontSize: 9)),
+                  ),
+                ]),
+                pw.Divider(height: 3),
+
+                //  pw.Divider(height: 5),
+
+                pw.Row(children: [
+                  pw.SizedBox(width: 5),
+                  pw.Align(
+                    alignment: pw.Alignment.topLeft,
+                    child: pw.Text(
+                        'in part or full, that does not conform to every specification of this order, and for any',
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold, fontSize: 9)),
+                  ),
+                ]),
+                pw.Divider(height: 3),
+
+                // pw.Divider(height: 5),
+
+                pw.Row(children: [
+                  pw.SizedBox(width: 5),
+                  pw.Align(
+                    alignment: pw.Alignment.topLeft,
+                    child: pw.Text(
+                        'material that is damaged or shipped in an unacceptable manner',
+                        style: pw.TextStyle(
+                            fontWeight: pw.FontWeight.bold, fontSize: 9)),
+                  ),
+                ]),
+                //  pw.Divider(height: 3),
+
+                pw.Divider(height: 3),
+                pw.SizedBox(height: 15),
+                //   pw.Divider(height: 5),
               ],
             ),
           ),
