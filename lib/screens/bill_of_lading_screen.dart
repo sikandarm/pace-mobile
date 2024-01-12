@@ -78,6 +78,7 @@ class BillOfLading extends StatelessWidget {
                     child: Center(child: CircularProgressIndicator()));
               }
 
+
               final billList = snapshot.data!.data!.billdata;
               return Expanded(
                   child: ListView.builder(
