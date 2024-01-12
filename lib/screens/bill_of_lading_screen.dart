@@ -70,143 +70,147 @@ class BillOfLading extends StatelessWidget {
           SizedBox(height: 30),
           FutureBuilder(
             future: getBillOfLading(),
-            builder: (context, snapshot) {
+            builder: (context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return SizedBox(
+                return Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * 0.7,
-                    child: const Center(child: CircularProgressIndicator()));
+                    child: Center(child: CircularProgressIndicator()));
               }
 
-              if (snapshot.data!.data!.billdata!.isEmpty) {
-                return SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.7,
-                    child: const Center(child: Text('No Bills Available.')));
-
-              }
-
-              final dataList = snapshot.data!.data!.billdata;
-              //  final d = snapshot.data?.data?.data;
-
+              final billList = snapshot.data!.data!.billdata;
               return Expanded(
-                child: ListView.builder(
-                  itemCount: dataList!.length,
-
-                  // itemCount: 2,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 21.0, vertical: 3),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Text('PO Number:', style: headingStyle),
-                                Spacer(),
-                                Text(dataList[index].poNumber!.toString()),
-                              ],
-                            ),
-                            SizedBox(height: 4),
-                            Row(
-                              children: [
-                                Text('Bill Title:', style: headingStyle),
-                                Spacer(),
-                                Text(dataList[index].billTitle!.toString()),
-                              ],
-                            ),
-                            SizedBox(height: 4),
-                            Row(
-                              children: [
-                                Text('Address:', style: headingStyle),
-                                Spacer(),
-                                Text(dataList[index].address!.toString()),
-                              ],
-                            ),
-                            SizedBox(height: 4),
-                            Row(
-                              children: [
-                                Text('Delivery Date:', style: headingStyle),
-                                Spacer(),
-                                // Text(dataList[index].dilveryDate!.toString()),
-                                Text(DateFormat('MMMM d, y').format(
-                                    DateTime.parse(
-                                        dataList[index].dilveryDate!))),
-                              ],
-                            ),
-                            SizedBox(height: 4),
-                            Row(
-                              children: [
-                                Text('Order Date:', style: headingStyle),
-                                Spacer(),
-                                //  Text(dataList[index].orderDate!.toString()),
-                                Text(DateFormat('MMMM d, y').format(
-                                    DateTime.parse(
-                                        dataList[index].orderDate!))),
-                              ],
-                            ),
-                            SizedBox(height: 4),
-                            Row(
-                              children: [
-                                Text('Ship Via:', style: headingStyle),
-                                Spacer(),
-                                Text(dataList[index].shipVia!.toString()),
-                              ],
-                            ),
-                            SizedBox(height: 3),
-                            Row(
-                              children: [
-                                Text('Terms:', style: headingStyle),
-                                Spacer(),
-                                Container(
-                                  width:
-                                      dataList[index].terms!.trim().length <= 50
-                                          ? 83
-                                          : 140,
-                                  child: Text(
-                                    dataList[index].terms!.trim().toString(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 7),
-                            Container(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                  style: const ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStatePropertyAll(Colors.blue),
-                                    foregroundColor:
-                                        MaterialStatePropertyAll(Colors.white),
-                                    shape: MaterialStatePropertyAll(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(7),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    generateAndViewPdf(
-                                      context,
-                                      dataList[index],
-                                    );
-                                  },
-                                  child: Text('Generate PDF')),
-                            ),
-                            Divider(),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              );
+                  child: ListView.builder(
+                itemCount: billList!.length,
+                itemBuilder: (context, index) {
+                  return LadingContainer(billList[index], context);
+                },
+              ));
             },
           ),
         ],
+      ),
+    );
+  }
+
+  Container LadingContainer(Billdata billdata, BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 21.0, vertical: 3),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Text('PO Number:', style: headingStyle),
+                Spacer(),
+                Text(billdata.poNumber.toString()),
+              ],
+            ),
+            SizedBox(height: 4),
+            Row(
+              children: [
+                Text('Bill Title:', style: headingStyle),
+                Spacer(),
+                Text(billdata.billTitle!.toString()),
+              ],
+            ),
+            SizedBox(height: 4),
+            Row(
+              children: [
+                Text('Address:', style: headingStyle),
+                Spacer(),
+                Text(billdata.address!.toString()),
+              ],
+            ),
+            SizedBox(height: 4),
+            Row(
+              children: [
+                Text('Company Name:', style: headingStyle),
+                Spacer(),
+                Text(billdata.companyName!.toString()),
+              ],
+            ),
+            SizedBox(height: 4),
+            Row(
+              children: [
+                Text('Company Address:', style: headingStyle),
+                Spacer(),
+                Text(billdata.companyAddress!.toString()),
+              ],
+            ),
+            SizedBox(height: 4),
+            Row(
+              children: [
+                Text('Delivery Date:', style: headingStyle),
+                Spacer(),
+
+                // Text(dataList[index].dilveryDate!.toString()),
+                billdata.dilveryDate != null
+                    ? Text(DateFormat('MMMM d, y')
+                        .format(DateTime.parse(billdata.dilveryDate!)))
+                    : Text('NA'),
+              ],
+            ),
+            SizedBox(height: 4),
+            Row(
+              children: [
+                Text('Order Date:', style: headingStyle),
+                Spacer(),
+                //  Text(dataList[index].orderDate!.toString()),
+                billdata.orderDate != null
+                    ? Text(DateFormat('MMMM d, y')
+                        .format(DateTime.parse(billdata.orderDate!)))
+                    : Text('NA'),
+              ],
+            ),
+            SizedBox(height: 4),
+            Row(
+              children: [
+                Text('Ship Via:', style: headingStyle),
+                Spacer(),
+                Text(billdata.shipVia!.toString()),
+              ],
+            ),
+            SizedBox(height: 3),
+            Row(
+              children: [
+                Text('Terms:', style: headingStyle),
+                Spacer(),
+                Container(
+                  width: billdata.terms!.trim().length <= 50 ? 83 : 140,
+                  child: Text(
+                    billdata.terms!.trim().toString(),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 7),
+            Container(
+              width: double.infinity,
+              child: ElevatedButton(
+                  style: const ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(Colors.blue),
+                    foregroundColor: MaterialStatePropertyAll(Colors.white),
+                    shape: MaterialStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(7),
+                        ),
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    generateAndViewPdf(
+                      context,
+                      billdata,
+                    );
+                  },
+                  child: Text('Generate PDF')),
+            ),
+            Divider(),
+          ],
+        ),
       ),
     );
   }
@@ -283,7 +287,7 @@ class BillOfLading extends StatelessWidget {
                         pw.Text('PO Number',
                             style:
                                 pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                        pw.SizedBox(width: 24.3),
+                        pw.SizedBox(width: 55),
                         pw.Container(
                             //  width: MediaQuery.of(Mycontext).size.width,
                             height: 20,
@@ -303,7 +307,7 @@ class BillOfLading extends StatelessWidget {
                         pw.Text('Bill Title:',
                             style:
                                 pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                        pw.SizedBox(width: 39.7),
+                        pw.SizedBox(width: 70.3),
                         pw.Container(
                             //  width: MediaQuery.of(Mycontext).size.width,
                             height: 20,
@@ -322,7 +326,7 @@ class BillOfLading extends StatelessWidget {
                         pw.Text('Address:',
                             style:
                                 pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                        pw.SizedBox(width: 38.5),
+                        pw.SizedBox(width: 69.1),
                         pw.Container(
                             //  width: MediaQuery.of(Mycontext).size.width,
                             height: 20,
@@ -330,6 +334,47 @@ class BillOfLading extends StatelessWidget {
                                 border: pw.Border.all(width: 1))),
                         pw.SizedBox(width: 10),
                         pw.Text(billData.address!, style: pw.TextStyle()),
+                      ]),
+                ),
+
+                pw.Divider(height: 0),
+                pw.Padding(
+                  padding: pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  child: pw.Row(
+                      //    mainAxisAlignment: pw.MainAxisAlignment.center,
+                      children: [
+                        pw.Text('Company Name:',
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(width: 26.5),
+                        pw.Container(
+                            //  width: MediaQuery.of(Mycontext).size.width,
+                            height: 20,
+                            decoration: pw.BoxDecoration(
+                                border: pw.Border.all(width: 1))),
+                        pw.SizedBox(width: 10),
+                        pw.Text(billData.companyName!, style: pw.TextStyle()),
+                      ]),
+                ),
+
+                pw.Divider(height: 0),
+                pw.Padding(
+                  padding: pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  child: pw.Row(
+                      //    mainAxisAlignment: pw.MainAxisAlignment.center,
+                      children: [
+                        pw.Text('Company Address:',
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(width: 11.2),
+                        pw.Container(
+                            //  width: MediaQuery.of(Mycontext).size.width,
+                            height: 20,
+                            decoration: pw.BoxDecoration(
+                                border: pw.Border.all(width: 1))),
+                        pw.SizedBox(width: 10.5),
+                        pw.Text(billData.companyAddress!,
+                            style: pw.TextStyle()),
                       ]),
                 ),
                 pw.Divider(height: 0),
@@ -341,7 +386,7 @@ class BillOfLading extends StatelessWidget {
                         pw.Text('Delivery Date:',
                             style:
                                 pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                        pw.SizedBox(width: 10.4),
+                        pw.SizedBox(width: 41.2),
                         pw.Container(
                             //  width: MediaQuery.of(Mycontext).size.width,
                             height: 20,
@@ -361,7 +406,7 @@ class BillOfLading extends StatelessWidget {
                         pw.Text('Order Date:',
                             style:
                                 pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                        pw.SizedBox(width: 24.5),
+                        pw.SizedBox(width: 55.3),
                         pw.Container(
                             //  width: MediaQuery.of(Mycontext).size.width,
                             height: 20,
@@ -381,7 +426,7 @@ class BillOfLading extends StatelessWidget {
                         pw.Text('Terms:',
                             style:
                                 pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                        pw.SizedBox(width: 50.5),
+                        pw.SizedBox(width: 81.2),
                         pw.Container(
                             //  width: MediaQuery.of(Mycontext).size.width,
                             height:
@@ -409,7 +454,7 @@ class BillOfLading extends StatelessWidget {
                         pw.Text('Ship Via:',
                             style:
                                 pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                        pw.SizedBox(width: 39.15),
+                        pw.SizedBox(width: 70),
                         pw.Container(
 
                             //  width: MediaQuery.of(Mycontext).size.width,
@@ -429,7 +474,7 @@ class BillOfLading extends StatelessWidget {
                     i < billData.billofLadingItems!.length;
                     i++) ...{
                   pw.Divider(height: 0),
-                  pw.SizedBox(height: 4),
+                  pw.SizedBox(height: 5.5),
                   pw.Divider(height: 0),
                   pw.Padding(
                     padding:
@@ -440,7 +485,7 @@ class BillOfLading extends StatelessWidget {
                           pw.Text('Item Name:',
                               style:
                                   pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                          pw.SizedBox(width: 49),
+                          pw.SizedBox(width: 56.5),
                           pw.Container(
                               //  width: MediaQuery.of(Mycontext).size.width,
                               height: 20,
@@ -474,19 +519,19 @@ class BillOfLading extends StatelessWidget {
                     child: pw.Row(
                         //    mainAxisAlignment: pw.MainAxisAlignment.center,
                         children: [
-                          pw.Text('Company Name:',
-                              style:
-                                  pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                          pw.SizedBox(width: 19),
-                          pw.Container(
-                              //  width: MediaQuery.of(Mycontext).size.width,
-                              height: 20,
-                              decoration: pw.BoxDecoration(
-                                  border: pw.Border.all(width: 1))),
-                          pw.SizedBox(width: 10),
-                          pw.Text(billData.billofLadingItems![i].companyName!,
-                              style: pw.TextStyle()),
-                          pw.SizedBox(width: 90),
+                          // pw.Text('Company Name:',
+                          //     style:
+                          //         pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                          // pw.SizedBox(width: 19),
+                          // pw.Container(
+                          //     //  width: MediaQuery.of(Mycontext).size.width,
+                          //     height: 20,
+                          //     decoration: pw.BoxDecoration(
+                          //         border: pw.Border.all(width: 1))),
+                          // pw.SizedBox(width: 10),
+                          // pw.Text(billData.billofLadingItems![i].companyName!,
+                          //     style: pw.TextStyle()),
+                          // pw.SizedBox(width: 90),
                           // pw.Text('PO Number:',
                           //     style:
                           //         pw.TextStyle(fontWeight: pw.FontWeight.bold)),
@@ -513,7 +558,7 @@ class BillOfLading extends StatelessWidget {
                           pw.Text('Telephone:',
                               style:
                                   pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                          pw.SizedBox(width: 49.7),
+                          pw.SizedBox(width: 57.2),
 
                           pw.Container(
                               //  width: MediaQuery.of(Mycontext).size.width,
@@ -550,7 +595,8 @@ class BillOfLading extends StatelessWidget {
                           pw.Text('Fax:',
                               style:
                                   pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                          pw.SizedBox(width: 89),
+                          pw.SizedBox(width: 96.55),
+
                           pw.Container(
                               //  width: MediaQuery.of(Mycontext).size.width,
                               height: 20,

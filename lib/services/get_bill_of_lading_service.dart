@@ -60,6 +60,8 @@ class Billdata {
   String? orderDate;
   String? terms;
   String? shipVia;
+  String? companyName;
+  String? companyAddress;
   List<BillofLadingItems>? billofLadingItems;
 
   Billdata(
@@ -71,6 +73,8 @@ class Billdata {
       this.orderDate,
       this.terms,
       this.shipVia,
+      this.companyName,
+      this.companyAddress,
       this.billofLadingItems});
 
   Billdata.fromJson(Map<String, dynamic> json) {
@@ -82,6 +86,8 @@ class Billdata {
     orderDate = json['orderDate'];
     terms = json['terms'];
     shipVia = json['shipVia'];
+    companyName = json['CompanyName'];
+    companyAddress = json['CompanyAddress'];
     if (json['BillofLadingItems'] != null) {
       billofLadingItems = <BillofLadingItems>[];
       json['BillofLadingItems'].forEach((v) {
@@ -100,6 +106,8 @@ class Billdata {
     data['orderDate'] = this.orderDate;
     data['terms'] = this.terms;
     data['shipVia'] = this.shipVia;
+    data['CompanyName'] = this.companyName;
+    data['CompanyAddress'] = this.companyAddress;
     if (this.billofLadingItems != null) {
       data['BillofLadingItems'] =
           this.billofLadingItems!.map((v) => v.toJson()).toList();
@@ -111,21 +119,15 @@ class Billdata {
 class BillofLadingItems {
   int? quantity;
   String? fabricatedItems;
-  String? companyName;
   String? fax;
   String? phone;
 
   BillofLadingItems(
-      {this.quantity,
-      this.fabricatedItems,
-      this.companyName,
-      this.fax,
-      this.phone});
+      {this.quantity, this.fabricatedItems, this.fax, this.phone});
 
   BillofLadingItems.fromJson(Map<String, dynamic> json) {
     quantity = json['Quantity'];
     fabricatedItems = json['FabricatedItems'];
-    companyName = json['CompanyName'];
     fax = json['Fax'];
     phone = json['Phone'];
   }
@@ -134,7 +136,6 @@ class BillofLadingItems {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Quantity'] = this.quantity;
     data['FabricatedItems'] = this.fabricatedItems;
-    data['CompanyName'] = this.companyName;
     data['Fax'] = this.fax;
     data['Phone'] = this.phone;
     return data;
