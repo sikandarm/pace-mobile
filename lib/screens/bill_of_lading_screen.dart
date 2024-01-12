@@ -263,7 +263,7 @@ class BillOfLading extends StatelessWidget {
         String formattedTime = DateFormat('h:mm a').format(DateTime.now());
         return pw.Column(children: [
           pw.Center(
-              child: pw.Text('Bill of Lading Report',
+              child: pw.Text('Bill of Lading',
                   style: pw.TextStyle(
                       fontWeight: pw.FontWeight.bold, fontSize: 19))),
           pw.SizedBox(height: 50),
