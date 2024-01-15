@@ -57,6 +57,7 @@ class _TaskCardState extends State<TaskCard> {
       //     });
       //   }
       // },
+
       // onLongPressMoveUpdate: (details) {
       //   if (_isDragging) {
       //     setState(() {
@@ -178,6 +179,8 @@ class TaskWidget extends StatelessWidget {
     return GestureDetector(
       onTap: hasPermissionToGoToTaskDetailScreen == true
           ? () {
+              print('start date in task_list_card: ' + startDate.toString());
+
               Navigator.push(
                 context,
                 MaterialPageRoute(

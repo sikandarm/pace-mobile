@@ -1126,6 +1126,8 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                           child: Text('Pause'),
                         ),
                       ),
+
+                      ///////////////////  2nd button also here
                       SizedBox(
                         width: 130,
                         height: 50.0,
@@ -1214,7 +1216,29 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                             ),
                                           ),
                                         )
-                                      : SizedBox.shrink(),
+                                      : ElevatedButton(
+                                          onPressed: () =>
+                                              buttonAction(context, widget.id),
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                    Color>(Colors.blue),
+                                            shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            setSelfApprovedText(
+                                                widget.status!, widget.userId!),
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
                         ),
                       ),
                     ],
@@ -1371,6 +1395,8 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                               child: Text('Resume'),
                             ),
                           ),
+
+                          /////////////////////////////////////////////  2nd complete button creating isssue here
                           SizedBox(
                             width: 130,
                             height: 50.0,
@@ -1462,7 +1488,35 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                                 ),
                                               ),
                                             )
-                                          : SizedBox.shrink(),
+                                          // : SizedBox.shrink(
+                                          //     child: Text('data'),
+                                          //   ),
+                                          : ElevatedButton(
+                                              onPressed: () => buttonAction(
+                                                  context, widget.id),
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all<
+                                                        Color>(Colors.blue),
+                                                shape:
+                                                    MaterialStateProperty.all<
+                                                        RoundedRectangleBorder>(
+                                                  RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                  ),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                setSelfApprovedText(
+                                                    widget.status!,
+                                                    widget.userId!),
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
                             ),
                           ),
                         ],
@@ -1568,19 +1622,19 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                               : _blApprovedTask &&
                                                       widget.status ==
                                                           "rejected"
-
-
-
-                                  
                                                   ? ElevatedButton(
                                                       onPressed: () =>
                                                           buttonAction(context,
                                                               widget.id),
                                                       style: ButtonStyle(
                                                         backgroundColor:
-                                                            MaterialStateProperty
-                                                                .all<Color>(
-                                                                    Colors.red),
+                                                            MaterialStateProperty.all<
+                                                                Color>(widget
+                                                                        .status!
+                                                                        .toLowerCase() ==
+                                                                    'rejected'
+                                                                ? Colors.blue
+                                                                : Colors.red),
                                                         shape: MaterialStateProperty
                                                             .all<
                                                                 RoundedRectangleBorder>(
@@ -1611,10 +1665,11 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                                         backgroundColor:
                                                             MaterialStateProperty
                                                                 .all<Color>(
-                                                          widget.status ==
+                                                          widget.status!
+                                                                      .toLowerCase() ==
                                                                   'rejected'
                                                               ? Colors.blue
-                                                              : Colors.red,
+                                                              : Colors.green,
                                                         ),
                                                         shape: MaterialStateProperty
                                                             .all<

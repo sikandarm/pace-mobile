@@ -431,8 +431,13 @@ class _TaskListState extends State<TaskList> {
                                           description: sequencesList[i]
                                               .tasks[j]['description']
                                               .toString(),
-                                          endDate: DateTime.now(),
-                                          startDate: DateTime.now(),
+                                          endDate: DateTime.parse(
+                                              sequencesList[i].tasks[j]
+                                                  ['completedAt']),
+                                          startDate: DateTime.parse(
+                                              sequencesList[i].tasks[j]
+                                                  ['startedAt']),
+
                                           status: sequencesList[i]
                                               .tasks[j]['status']
                                               .toString(),
@@ -535,8 +540,13 @@ class _TaskListState extends State<TaskList> {
                                               description: sequencesList[i]
                                                   .tasks[j]['description']
                                                   .toString(),
-                                              endDate: DateTime.now(),
-                                              startDate: DateTime.now(),
+                                              endDate: DateTime.parse(
+                                                  sequencesList[i].tasks[j]
+                                                      ['completedAt']),
+
+                                              startDate: DateTime.parse(
+                                                  sequencesList[i].tasks[j]
+                                                      ['startedAt']),
                                               status: sequencesList[i]
                                                   .tasks[j]['status']
                                                   .toString(),
@@ -1086,6 +1096,7 @@ class _TaskListState extends State<TaskList> {
               //                     statusColor: statusColor,
               //                     onSelected: (index) {}),
               //               ),
+
               //               childWhenDragging: Container(
               //                 width: MediaQuery.of(context).size.width,
               //                 //  height: 120,
