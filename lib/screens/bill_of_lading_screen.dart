@@ -564,7 +564,7 @@ class BillOfLading extends StatelessWidget {
                               height: 20,
                               decoration: pw.BoxDecoration(
                                   border: pw.Border.all(width: 1))),
-                          pw.SizedBox(width: 20),
+                          pw.SizedBox(width: 10),
                           pw.Text(
                               billData.billofLadingItems![i].quantity
                                   .toString(),
