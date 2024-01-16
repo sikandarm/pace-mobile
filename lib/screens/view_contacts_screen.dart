@@ -34,9 +34,13 @@ class _ViewContactsScreenState extends State<ViewContactsScreen> {
     setState(() {});
   }
 
+  GlobalKey<ScaffoldState> viewContactsScreenScaffoldKey =
+      GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: viewContactsScreenScaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -46,8 +50,12 @@ class _ViewContactsScreenState extends State<ViewContactsScreen> {
           onPressed: () {
             // Navigate to the last screen in the stack
 
-            Navigator.popUntil(context, (route) => route.isFirst);
+            //  if ( viewContactsScreenScaffoldKey.currentState != null && viewContactsScreenScaffoldKey.currentState!.isDrawerOpen) {
+            //   Navigator.popUntil(context, (route) => route.isFirst);
+            //   Navigator.pop(context);
+            // } else {
             Navigator.pop(context);
+            //  }
           },
         ),
         title: Text(

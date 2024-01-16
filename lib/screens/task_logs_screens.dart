@@ -39,7 +39,8 @@ class _TaskLogsScreenState extends State<TaskLogsScreen> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // Navigate to the last screen in the stack
-            Navigator.popUntil(context, (route) => route.isFirst);
+            //   Navigator.popUntil(context, (route) => route.isFirst);
+            Navigator.pop(context);
           },
         ),
         title: Text(

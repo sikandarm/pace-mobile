@@ -519,6 +519,11 @@ Widget _buildSideDrawer(BuildContext context) {
                             return;
                           }
 
+
+                          ///////////////////////////////
+
+                          Navigator.pop(context); 
+////////////////////////////////
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -539,10 +544,12 @@ Widget _buildSideDrawer(BuildContext context) {
                             return;
                           }
 
+                          Navigator.pop(context); // closes the drawer
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ViewContactsScreen(),
+                              builder: (context) => const ViewContactsScreen(),
                             ),
                           );
                         },
