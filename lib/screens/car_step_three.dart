@@ -23,6 +23,8 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
   var companyIsTo = TextEditingController();
   var nameStepThree = TextEditingController();
   var stepThreeDate = TextEditingController();
+  bool nameBorderShowRed = false;
+  bool companyIsToBorderShowRed = false;
 
   @override
   void initState() {
@@ -97,13 +99,16 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const DashboardScreen(),
-              ),
-            );
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => const DashboardScreen(),
+            //   ),
+            // );
+
             // Navigator.popUntil(context, ModalRoute.withName('/dashboard'));
+
+            Navigator.pop(context);
           },
         ),
         title: const Text(
@@ -121,10 +126,10 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
               padding: const EdgeInsets.all(25),
               child: Column(
                 children: [
-                   SizedBox(
+                  const SizedBox(
                     width: double.infinity,
                     child: Column(
-                      children: const [
+                      children: [
                         SizedBox(height: 10),
                         Padding(
                           padding: EdgeInsets.all(10.0),
@@ -152,7 +157,11 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                       textAlignVertical: TextAlignVertical.center,
                       controller: companyIsTo,
                       keyboardType: TextInputType.name,
-                      decoration: textFieldDecoration("Company is to", false),
+                      decoration: textFieldDecoration(
+                        "Company is to",
+                        false,
+                        isRedColorBorder: companyIsToBorderShowRed,
+                      ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(
                             100), // Restrict input to 10 characters
@@ -160,10 +169,10 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                   SizedBox(
+                  const SizedBox(
                     width: double.infinity,
                     child: Column(
-                      children: const [
+                      children: [
                         SizedBox(height: 10),
                         Padding(
                           padding: EdgeInsets.all(10.0),
@@ -191,7 +200,8 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                       textAlignVertical: TextAlignVertical.center,
                       controller: nameStepThree,
                       keyboardType: TextInputType.name,
-                      decoration: textFieldDecoration("Name", false),
+                      decoration: textFieldDecoration("Name", false,
+                          isRedColorBorder: nameBorderShowRed),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(
                             100), // Restrict input to 10 characters
@@ -236,6 +246,48 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                       ]),
                       child: ElevatedButton(
                         onPressed: () async {
+                          if (nameStepThree.text.trim().isEmpty) {
+                            nameBorderShowRed = true;
+                            setState(() {});
+                          } else {
+                            nameBorderShowRed = false;
+                            setState(() {});
+                          }
+
+                          if (companyIsTo.text.trim().isEmpty) {
+                            companyIsToBorderShowRed = true;
+                            setState(() {});
+                          } else {
+                            companyIsToBorderShowRed = false;
+                            setState(() {});
+                          }
+
+                          if (nameStepThree.text.trim().isEmpty) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Enter a name!')));
+                            return;
+                          }
+
+                          if (companyIsTo.text.trim().isEmpty) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text('Enter Company is to field!')));
+                            return;
+                          }
+
+                          if (stepThreeDate.text.trim() == '' ||
+                              stepThreeDate.text.trim() == null.toString() ||
+                              stepThreeDate.text.trim().isEmpty) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Select a date!')));
+                            return;
+                          }
+
                           // Call API here to create CAR
 
                           int? userId = await getIntFromSF('UserId');

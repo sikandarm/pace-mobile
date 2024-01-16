@@ -164,7 +164,10 @@ class CARDetailWidget extends StatelessWidget {
             buildGradeRow("Originator Name", originatorName!),
             buildGradeRow("Contractor/Supplier", contractorSupplier!),
             buildGradeRow(
-                "Date", DateFormat(US_DATE_FORMAT).format(caReportDate!)),
+                "Date",
+                caReportDate != null
+                    ? DateFormat(US_DATE_FORMAT).format(caReportDate!)
+                    : 'N/A'),
             buildGradeRow("NC#", ncNo!),
             buildGradeRow("Purchase Order#", purchaseOrderNo!),
             buildGradeRow("Quantity", quantity.toString()),
@@ -215,7 +218,10 @@ class CARDetailWidget extends StatelessWidget {
             const SizedBox(height: 10),
             buildGradeRow("Name", approvalName!),
             buildGradeRow(
-                "Date", DateFormat(US_DATE_FORMAT).format(approvalDate!)),
+                "Date",
+                approvalDate != null
+                    ? DateFormat(US_DATE_FORMAT).format(approvalDate!)
+                    : 'N/A'),
             Row(
               children: [
                 Expanded(

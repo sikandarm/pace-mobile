@@ -431,12 +431,18 @@ class _TaskListState extends State<TaskList> {
                                           description: sequencesList[i]
                                               .tasks[j]['description']
                                               .toString(),
-                                          endDate: DateTime.parse(
-                                              sequencesList[i].tasks[j]
-                                                  ['completedAt']),
-                                          startDate: DateTime.parse(
-                                              sequencesList[i].tasks[j]
-                                                  ['startedAt']),
+                                          // endDate: DateTime.parse(
+                                          //     sequencesList[i].tasks[j]
+                                          //         ['completedAt']),
+                                          endDate: DateTime.now(),
+
+                                          startDate: sequencesList[i].tasks[j]
+                                                      ['startedAt'] !=
+                                                  null
+                                              ? DateTime.parse(sequencesList[i]
+                                                  .tasks[j]['startedAt'])
+                                              : DateTime.now(),
+                                          //   startDate: DateTime.now(),
 
                                           status: sequencesList[i]
                                               .tasks[j]['status']
@@ -540,13 +546,24 @@ class _TaskListState extends State<TaskList> {
                                               description: sequencesList[i]
                                                   .tasks[j]['description']
                                                   .toString(),
-                                              endDate: DateTime.parse(
-                                                  sequencesList[i].tasks[j]
-                                                      ['completedAt']),
+                                              // endDate: DateTime.parse(
+                                              //     sequencesList[i].tasks[j]
+                                              //         ['completedAt']),
+                                              endDate: DateTime.now(),
 
-                                              startDate: DateTime.parse(
-                                                  sequencesList[i].tasks[j]
-                                                      ['startedAt']),
+                                              // startDate: DateTime.parse(
+                                              //     sequencesList[i].tasks[j]
+                                              //         ['startedAt']),
+
+                                              startDate: sequencesList[i]
+                                                              .tasks[j]
+                                                          ['startedAt'] !=
+                                                      null
+                                                  ? DateTime.parse(
+                                                      sequencesList[i].tasks[j]
+                                                          ['startedAt'])
+                                                  : DateTime.now(),
+                                              //   startDate: DateTime.now(),
                                               status: sequencesList[i]
                                                   .tasks[j]['status']
                                                   .toString(),

@@ -21,6 +21,7 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
 
   int? _selectedOption;
   String _rbDispositionTitle = "";
+  bool nameBorderShowRed = false;
 
   @override
   void initState() {
@@ -37,13 +38,16 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const DashboardScreen(),
-              ),
-            );
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => const DashboardScreen(),
+            //   ),
+            // );
+
             // Navigator.popUntil(context, ModalRoute.withName('/dashboard'));
+
+            Navigator.pop(context);
           },
         ),
         title: const Text(
@@ -66,10 +70,12 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                     child: Column(
                       children: [
                         RadioListTile(
-                          title: const Text("Use-as-is"),
+                          title: const Text(
+                            "Use-as-is",
+                          ),
                           value: 1,
                           groupValue: _selectedOption,
-                          dense: true,
+                          dense: false,
                           contentPadding: EdgeInsets.zero,
                           onChanged: (value) {
                             setState(() {
@@ -82,7 +88,7 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                           title: const Text("Rework"),
                           value: 2,
                           groupValue: _selectedOption,
-                          dense: true,
+                          dense: false,
                           contentPadding: EdgeInsets.zero,
                           onChanged: (value) {
                             setState(() {
@@ -95,7 +101,7 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                           title: const Text("Repair"),
                           value: 3,
                           groupValue: _selectedOption,
-                          dense: true,
+                          dense: false,
                           contentPadding: EdgeInsets.zero,
                           onChanged: (value) {
                             setState(() {
@@ -108,7 +114,7 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                           title: const Text("Reject"),
                           value: 4,
                           groupValue: _selectedOption,
-                          dense: true,
+                          dense: false,
                           contentPadding: EdgeInsets.zero,
                           onChanged: (value) {
                             setState(() {
@@ -121,7 +127,7 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                           title: const Text("Return to Supplier"),
                           value: 5,
                           groupValue: _selectedOption,
-                          dense: true,
+                          dense: false,
                           contentPadding: EdgeInsets.zero,
                           onChanged: (value) {
                             setState(() {
@@ -155,7 +161,11 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                       textAlignVertical: TextAlignVertical.center,
                       controller: name,
                       keyboardType: TextInputType.name,
-                      decoration: textFieldDecoration("Name", false),
+                      decoration: textFieldDecoration(
+                        "Name",
+                        false,
+                        isRedColorBorder: nameBorderShowRed,
+                      ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(
                             100), // Restrict input to 10 characters
@@ -174,7 +184,10 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                         textAlignVertical: TextAlignVertical.center,
                         controller: stepTwoDate,
                         keyboardType: TextInputType.datetime,
-                        decoration: textFieldDecoration("Date", false),
+                        decoration: textFieldDecoration(
+                          "Date",
+                          false,
+                        ),
                         inputFormatters: [
                           LengthLimitingTextInputFormatter(100),
                         ],
@@ -200,6 +213,41 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                       ]),
                       child: ElevatedButton(
                         onPressed: () {
+                          if (name.text.trim().isEmpty) {
+                            nameBorderShowRed = true;
+                            setState(() {});
+                          } else {
+                            nameBorderShowRed = false;
+                            setState(() {});
+                          }
+
+                          if (name.text.trim().isEmpty) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Enter a name!')));
+                            return;
+                          }
+                          if (stepTwoDate.text.trim() == '' ||
+                              stepTwoDate.text.trim() == null.toString() ||
+                              stepTwoDate.text.trim().isEmpty) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Select a date!')));
+                            return;
+                          }
+
+                          if (_rbDispositionTitle.trim() == '' ||
+                              _rbDispositionTitle.trim() == null.toString() ||
+                              _rbDispositionTitle.trim().isEmpty) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text('Select a disposition option!')));
+                            return;
+                          }
+
                           widget.addCarModel.responsiblePartyName = name.text;
                           widget.addCarModel.responsiblePartyDate =
                               stepTwoDate.text;

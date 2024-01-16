@@ -126,8 +126,6 @@ class TaskListHeader extends StatelessWidget {
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
-
-
           ),
         ],
       ),
@@ -196,7 +194,9 @@ class CARListItemWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        DateFormat(US_DATE_FORMAT).format(caReportDate!),
+                        caReportDate != null
+                            ? DateFormat(US_DATE_FORMAT).format(caReportDate!)
+                            : 'N/A',
                         style: const TextStyle(
                           fontSize: 11.0,
                           color: Color(0xFF77838F),

@@ -27,6 +27,18 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
   var descOne = TextEditingController();
   var descTwo = TextEditingController();
 
+  bool orgNameBorderShowRed = false;
+  bool contractorNameBorderShowRed = false;
+  bool stepOneDateBorderShowRed = false;
+  bool nicNoBorderShowRed = false;
+  bool purchaseOrderBorderShowRed = false;
+  bool partDescBorderShowRed = false;
+  bool partIdBorderShowRed = false;
+  bool qtyBorderShowRed = false;
+  bool dwgNoBorderShowRed = false;
+  bool descOneBorderShowRed = false;
+  bool descTwoBorderShowRed = false;
+
   bool _cbIncoming = false;
   bool _cbInprocess = false;
   bool _cbFinalInspection = false;
@@ -87,7 +99,11 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(50),
                       ],
-                      decoration: textFieldDecoration("Originator Name", false),
+                      decoration: textFieldDecoration(
+                        "Originator Name",
+                        false,
+                        isRedColorBorder: orgNameBorderShowRed,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -98,8 +114,11 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                       textAlignVertical: TextAlignVertical.center,
                       controller: contractorName,
                       keyboardType: TextInputType.name,
-                      decoration:
-                          textFieldDecoration("Contractor/Supplier", false),
+                      decoration: textFieldDecoration(
+                        "Contractor/Supplier",
+                        false,
+                        isRedColorBorder: contractorNameBorderShowRed,
+                      ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(50),
                       ],
@@ -107,8 +126,8 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(
-                    onTap: () {
-                      _selectDate(context);
+                    onTap: () async {
+                      await _selectDate(context);
                     },
                     child: SizedBox(
                       width: double.infinity,
@@ -117,7 +136,11 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         textAlignVertical: TextAlignVertical.center,
                         controller: stepOneDate,
                         keyboardType: TextInputType.datetime,
-                        decoration: textFieldDecoration("Date", false),
+                        decoration: textFieldDecoration(
+                          "Date",
+                          false,
+                          isRedColorBorder: stepOneDateBorderShowRed,
+                        ),
                         enabled: false,
                         onTap: () {
                           _selectDate(context);
@@ -133,7 +156,11 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                       textAlignVertical: TextAlignVertical.center,
                       controller: nicNo,
                       keyboardType: TextInputType.phone,
-                      decoration: textFieldDecoration("NIC No", false),
+                      decoration: textFieldDecoration(
+                        "NIC No",
+                        false,
+                        isRedColorBorder: nicNoBorderShowRed,
+                      ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(15),
                       ],
@@ -147,8 +174,11 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                       textAlignVertical: TextAlignVertical.center,
                       controller: purchaseOrder,
                       keyboardType: TextInputType.phone,
-                      decoration:
-                          textFieldDecoration("Purchase Order #", false),
+                      decoration: textFieldDecoration(
+                        "Purchase Order #",
+                        false,
+                        isRedColorBorder: purchaseOrderBorderShowRed,
+                      ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(11),
                       ],
@@ -162,8 +192,11 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                       textAlignVertical: TextAlignVertical.center,
                       controller: partDesc,
                       keyboardType: TextInputType.name,
-                      decoration:
-                          textFieldDecoration("Part Description", false),
+                      decoration: textFieldDecoration(
+                        "Part Description",
+                        false,
+                        isRedColorBorder: partDescBorderShowRed,
+                      ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(50),
                       ],
@@ -177,7 +210,11 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                       textAlignVertical: TextAlignVertical.center,
                       controller: partId,
                       keyboardType: TextInputType.phone,
-                      decoration: textFieldDecoration("Part ID", false),
+                      decoration: textFieldDecoration(
+                        "Part ID",
+                        false,
+                        isRedColorBorder: partIdBorderShowRed,
+                      ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(11),
                       ],
@@ -191,7 +228,11 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                       textAlignVertical: TextAlignVertical.center,
                       controller: qty,
                       keyboardType: TextInputType.number,
-                      decoration: textFieldDecoration("Qty", false),
+                      decoration: textFieldDecoration(
+                        "Qty",
+                        false,
+                        isRedColorBorder: qtyBorderShowRed,
+                      ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(3),
                       ],
@@ -205,7 +246,11 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                       textAlignVertical: TextAlignVertical.center,
                       controller: dwgNo,
                       keyboardType: TextInputType.phone,
-                      decoration: textFieldDecoration("Dwg No", false),
+                      decoration: textFieldDecoration(
+                        "Dwg No",
+                        false,
+                        isRedColorBorder: dwgNoBorderShowRed,
+                      ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(11),
                       ],
@@ -217,7 +262,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Found During what activity',
+                        'Found during what activity',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20.0,
@@ -230,17 +275,23 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                     width: double.infinity,
                     child: Column(
                       children: [
-                        ListTile(
-                          title: const Text("Incoming Inspection"),
-                          dense: true,
-                          contentPadding: EdgeInsets.zero,
-                          leading: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _cbIncoming = !_cbIncoming;
-                              });
-                            },
-                            child: Container(
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _cbIncoming = !_cbIncoming;
+                            });
+                          },
+                          child: ListTile(
+                            title: const Text(
+                              "Incoming Inspection",
+                              style: TextStyle(
+                                fontSize: 14.5,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            dense: false,
+                            contentPadding: EdgeInsets.zero,
+                            leading: Container(
                               width: 24,
                               height: 24,
                               decoration: BoxDecoration(
@@ -261,17 +312,23 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                             ),
                           ),
                         ),
-                        ListTile(
-                          title: const Text("In-process Inspection"),
-                          dense: true,
-                          contentPadding: EdgeInsets.zero,
-                          leading: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _cbInprocess = !_cbInprocess;
-                              });
-                            },
-                            child: Container(
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _cbInprocess = !_cbInprocess;
+                            });
+                          },
+                          child: ListTile(
+                            title: const Text(
+                              "In-process Inspection",
+                              style: TextStyle(
+                                fontSize: 14.5,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            dense: false,
+                            contentPadding: EdgeInsets.zero,
+                            leading: Container(
                               width: 24,
                               height: 24,
                               decoration: BoxDecoration(
@@ -293,17 +350,23 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                           ),
                         ),
 
-                        ListTile(
-                          title: const Text("Final Inspection"),
-                          dense: true,
-                          contentPadding: EdgeInsets.zero,
-                          leading: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _cbFinalInspection = !_cbFinalInspection;
-                              });
-                            },
-                            child: Container(
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _cbFinalInspection = !_cbFinalInspection;
+                            });
+                          },
+                          child: ListTile(
+                            title: const Text(
+                              "Final Inspection",
+                              style: TextStyle(
+                                fontSize: 14.5,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            dense: false,
+                            contentPadding: EdgeInsets.zero,
+                            leading: Container(
                               width: 24,
                               height: 24,
                               decoration: BoxDecoration(
@@ -329,17 +392,23 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         Row(
                           children: [
                             Expanded(
-                              child: ListTile(
-                                title: const Text("Shop"),
-                                dense: true,
-                                contentPadding: EdgeInsets.zero,
-                                leading: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _cbShop = !_cbShop;
-                                    });
-                                  },
-                                  child: Container(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _cbShop = !_cbShop;
+                                  });
+                                },
+                                child: ListTile(
+                                  title: const Text(
+                                    "Shop",
+                                    style: TextStyle(
+                                      fontSize: 14.5,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  dense: false,
+                                  contentPadding: EdgeInsets.zero,
+                                  leading: Container(
                                     width: 24,
                                     height: 24,
                                     decoration: BoxDecoration(
@@ -362,17 +431,23 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                               ),
                             ),
                             Expanded(
-                              child: ListTile(
-                                title: const Text("Critical"),
-                                dense: true,
-                                contentPadding: EdgeInsets.zero,
-                                leading: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _cbCritical = !_cbCritical;
-                                    });
-                                  },
-                                  child: Container(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _cbCritical = !_cbCritical;
+                                  });
+                                },
+                                child: ListTile(
+                                  title: const Text(
+                                    "Critical",
+                                    style: TextStyle(
+                                      fontSize: 14.5,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  dense: false,
+                                  contentPadding: EdgeInsets.zero,
+                                  leading: Container(
                                     width: 24,
                                     height: 24,
                                     decoration: BoxDecoration(
@@ -401,17 +476,23 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         Row(
                           children: [
                             Expanded(
-                              child: ListTile(
-                                title: const Text("Field"),
-                                dense: true,
-                                contentPadding: EdgeInsets.zero,
-                                leading: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _cbField = !_cbField;
-                                    });
-                                  },
-                                  child: Container(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _cbField = !_cbField;
+                                  });
+                                },
+                                child: ListTile(
+                                  title: const Text(
+                                    "Field",
+                                    style: TextStyle(
+                                      fontSize: 14.5,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  dense: false,
+                                  contentPadding: EdgeInsets.zero,
+                                  leading: Container(
                                     width: 24,
                                     height: 24,
                                     decoration: BoxDecoration(
@@ -435,17 +516,23 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                               ),
                             ),
                             Expanded(
-                              child: ListTile(
-                                title: const Text("NON Critical"),
-                                dense: true,
-                                contentPadding: EdgeInsets.zero,
-                                leading: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _cbNonCritical = !_cbNonCritical;
-                                    });
-                                  },
-                                  child: Container(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _cbNonCritical = !_cbNonCritical;
+                                  });
+                                },
+                                child: ListTile(
+                                  title: const Text(
+                                    "NON Critical",
+                                    style: TextStyle(
+                                      fontSize: 14.5,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  dense: false,
+                                  contentPadding: EdgeInsets.zero,
+                                  leading: Container(
                                     width: 24,
                                     height: 24,
                                     decoration: BoxDecoration(
@@ -484,7 +571,10 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                       controller: descOne,
                       keyboardType: TextInputType.multiline,
                       decoration: textFieldDecoration(
-                          "Description of nonconformance", false),
+                        "Description of nonconformance",
+                        false,
+                        isRedColorBorder: descOneBorderShowRed,
+                      ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(
                             100), // Restrict input to 10 characters
@@ -500,7 +590,10 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                       controller: descTwo,
                       keyboardType: TextInputType.multiline,
                       decoration: textFieldDecoration(
-                          "Action taken to prevent misuse", false),
+                        "Action taken to prevent misuse",
+                        false,
+                        isRedColorBorder: descTwoBorderShowRed,
+                      ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(100),
                       ],
@@ -520,11 +613,132 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         )
                       ]),
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          if (orgName.text.trim().isEmpty) {
+                            orgNameBorderShowRed = true;
+                            setState(() {});
+                          } else {
+                            orgNameBorderShowRed = false;
+                            setState(() {});
+                          }
+
+                          if (contractorName.text.trim().isEmpty) {
+                            contractorNameBorderShowRed = true;
+                            setState(() {});
+                          } else {
+                            contractorNameBorderShowRed = false;
+                            setState(() {});
+                          }
+
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+                          print('Date in Value: ' + stepOneDate.text.trim());
+                          if ((stepOneDate.text.trim().isEmpty ||
+                              stepOneDate.text.trim() == '')) {
+                            stepOneDateBorderShowRed = true;
+                            setState(() {});
+                          }
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+
+                          if (nicNo.text.trim().isEmpty) {
+                            nicNoBorderShowRed = true;
+                            setState(() {});
+                          } else {
+                            nicNoBorderShowRed = false;
+                            setState(() {});
+                          }
+
+                          if (purchaseOrder.text.trim().isEmpty) {
+                            purchaseOrderBorderShowRed = true;
+                            setState(() {});
+                          } else {
+                            purchaseOrderBorderShowRed = false;
+                            setState(() {});
+                          }
+
+                          if (partDesc.text.trim().isEmpty) {
+                            partDescBorderShowRed = true;
+                            setState(() {});
+                          } else {
+                            partDescBorderShowRed = false;
+                            setState(() {});
+                          }
+
+                          if (partId.text.trim().isEmpty) {
+                            partIdBorderShowRed = true;
+                            setState(() {});
+                          } else {
+                            partIdBorderShowRed = false;
+                            setState(() {});
+                          }
+
+                          if (qty.text.trim().isEmpty) {
+                            qtyBorderShowRed = true;
+                            setState(() {});
+                          } else {
+                            qtyBorderShowRed = false;
+                            setState(() {});
+                          }
+
+                          if (dwgNo.text.trim().isEmpty) {
+                            dwgNoBorderShowRed = true;
+                            setState(() {});
+                          } else {
+                            dwgNoBorderShowRed = false;
+                            setState(() {});
+                          }
+
+                          if (descOne.text.trim().isEmpty) {
+                            descOneBorderShowRed = true;
+                            setState(() {});
+                          } else {
+                            descOneBorderShowRed = false;
+                            setState(() {});
+                          }
+
+                          if (descTwo.text.trim().isEmpty) {
+                            descTwoBorderShowRed = true;
+                            setState(() {});
+                          } else {
+                            descTwoBorderShowRed = false;
+                            setState(() {});
+                          }
+
                           // int finalQty = 0;
                           // if (qty.text.isNotEmpty) {
                           //   finalQty = int.parse(qty.text);
                           // }
+
+                          if (orgName.text.trim().isEmpty ||
+                              contractorName.text.trim().isEmpty ||
+                              nicNo.text.trim().isEmpty ||
+                              purchaseOrder.text.trim().isEmpty ||
+                              partDesc.text.trim().isEmpty ||
+                              partId.text.trim().isEmpty ||
+                              qty.text.trim().isEmpty ||
+                              dwgNo.text.trim().isEmpty ||
+                              descOne.text.trim().isEmpty ||
+                              descTwo.text.trim().isEmpty) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content:
+                                        Text('Fill all the given fields!')));
+                            return;
+                          }
+
+                          if (stepOneDate.text.trim() == '' ||
+                              stepOneDate.text.trim() == null.toString() ||
+                              stepOneDate.text.trim().isEmpty) {
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Select a date!')));
+                            return;
+                          }
 
                           AddCARObj addCarModel = AddCARObj(
                             originatorName: orgName.text,
@@ -588,6 +802,11 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
 
       // Update the TextField's value
       stepOneDate.text = formattedDate;
+    } else {
+      // ScaffoldMessenger.of(context).clearSnackBars();
+      // ScaffoldMessenger.of(context)
+      //     .showSnackBar(SnackBar(content: Text('Select a date!')));
+      // return;
     }
   }
 }

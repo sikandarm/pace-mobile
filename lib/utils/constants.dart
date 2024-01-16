@@ -108,17 +108,29 @@ const List<String> LS_PERMISSIONS = [
   'View Task Detail',
 ];
 
-InputDecoration textFieldDecoration(String title, bool ifPassword,
-    {bool enabled = true}) {
+InputDecoration textFieldDecoration(
+  String title,
+  bool ifPassword, {
+  bool enabled = true,
+  bool isRedColorBorder = false,
+}) {
   var outlineInputBorder = OutlineInputBorder(
-    borderSide: const BorderSide(color: Colors.transparent),
+    //  borderSide: const BorderSide(color: Colors.transparent),
+    borderSide: isRedColorBorder
+        ? BorderSide(color: Colors.red.withOpacity(0.7))
+        : BorderSide(color: Colors.grey.withOpacity(0.5)),
     borderRadius: BorderRadius.circular(10.0),
   );
   return InputDecoration(
     enabled: enabled,
     filled: true,
-    fillColor: const Color(0xffF8F9FD),
+    //  fillColor: const Color(0xffF8F9FD),
+    fillColor: Colors.grey.withOpacity(0.13),
     hintText: title,
+    hintStyle: TextStyle(
+      color: Colors.black.withOpacity(0.65),
+      fontWeight: FontWeight.w500,
+    ),
     suffixIcon: !ifPassword
         ? null
         : const Icon(

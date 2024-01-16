@@ -283,7 +283,7 @@ class _InventoryListState extends State<InventoryList> {
                               children: [
                                 //Initialize the chart widget
                                 SfCartesianChart(
-                                  legend: Legend(isVisible: false),
+                                  legend: const Legend(isVisible: false),
                                   tooltipBehavior: _tooltipBehavior,
                                   series: <RangeColumnSeries>[
                                     RangeColumnSeries<ChartSampleData,
@@ -317,12 +317,11 @@ class _InventoryListState extends State<InventoryList> {
                                     rangePadding: ChartRangePadding.normal,
                                     axisLine: const AxisLine(width: 0),
                                   ),
-                                  primaryYAxis: NumericAxis(
+                                  primaryYAxis: const NumericAxis(
                                       borderWidth: 0.0,
                                       labelFormat: '\${value}',
-                                      axisLine: const AxisLine(width: 0),
-                                      majorTickLines:
-                                          const MajorTickLines(width: 0),
+                                      axisLine: AxisLine(width: 0),
+                                      majorTickLines: MajorTickLines(width: 0),
                                       axisBorderType:
                                           AxisBorderType.withoutTopAndBottom),
                                 ),
@@ -338,24 +337,20 @@ class _InventoryListState extends State<InventoryList> {
                           child: Container(
                             child: SfCartesianChart(
                               plotAreaBorderWidth: 0.0,
-                              primaryXAxis: CategoryAxis(
+                              primaryXAxis: const CategoryAxis(
                                   labelRotation: -90,
                                   borderWidth: 0.0,
-                                  majorGridLines:
-                                      const MajorGridLines(width: 0),
+                                  majorGridLines: MajorGridLines(width: 0),
                                   axisBorderType:
                                       AxisBorderType.withoutTopAndBottom,
-                                  axisLine: const AxisLine(width: 0),
-                                  majorTickLines:
-                                      const MajorTickLines(width: 0)),
-                              primaryYAxis: NumericAxis(
+                                  axisLine: AxisLine(width: 0),
+                                  majorTickLines: MajorTickLines(width: 0)),
+                              primaryYAxis: const NumericAxis(
                                   borderWidth: 0.0,
                                   labelFormat: '\${value}',
-                                  majorGridLines:
-                                      const MajorGridLines(width: 0),
-                                  axisLine: const AxisLine(width: 0),
-                                  majorTickLines:
-                                      const MajorTickLines(width: 0),
+                                  majorGridLines: MajorGridLines(width: 0),
+                                  axisLine: AxisLine(width: 0),
+                                  majorTickLines: MajorTickLines(width: 0),
                                   axisBorderType:
                                       AxisBorderType.withoutTopAndBottom),
                               series: [
@@ -386,18 +381,15 @@ class _InventoryListState extends State<InventoryList> {
                                   const EdgeInsets.symmetric(horizontal: 8),
                               child: SfCartesianChart(
                                   plotAreaBorderWidth: 0.0,
-                                  primaryXAxis: NumericAxis(
-                                    majorTickLines:
-                                        const MajorTickLines(width: 0),
-                                    majorGridLines:
-                                        const MajorGridLines(width: 0),
+                                  primaryXAxis: const NumericAxis(
+                                    majorTickLines: MajorTickLines(width: 0),
+                                    majorGridLines: MajorGridLines(width: 0),
                                   ),
-                                  primaryYAxis: NumericAxis(
+                                  primaryYAxis: const NumericAxis(
                                       borderWidth: 0.0,
                                       labelFormat: '\${value}',
-                                      axisLine: const AxisLine(width: 0),
-                                      majorTickLines:
-                                          const MajorTickLines(width: 0),
+                                      axisLine: AxisLine(width: 0),
+                                      majorTickLines: MajorTickLines(width: 0),
                                       axisBorderType:
                                           AxisBorderType.withoutTopAndBottom),
                                   series: [
@@ -495,7 +487,7 @@ Widget _buildAppBar(
           return Text(
             "Inventory",
             style: TextStyle(
-              color: Color(0xff1E2022),
+              color: const Color(0xff1E2022),
               fontWeight: FontWeight.bold,
               fontSize: appBarTiltleSize,
             ),
@@ -538,7 +530,7 @@ Widget _buildAppBar(
                   ),
                 ),
                 !hasNewNotifiaction
-                    ? SizedBox()
+                    ? const SizedBox()
                     : Positioned(
                         top: 5,
                         right: 0,
@@ -566,10 +558,10 @@ Widget _buildAppBar(
               );
             },
             child: Padding(
-              padding: EdgeInsets.only(right: 10.0, left: 5.0),
+              padding: const EdgeInsets.only(right: 10.0, left: 5.0),
               child: CircleAvatar(
                 backgroundImage: userProfileImage == null
-                    ? AssetImage('assets/images/ic_profile.png')
+                    ? const AssetImage('assets/images/ic_profile.png')
                     : NetworkImage(userProfileImage) as ImageProvider,
                 radius: 15,
               ),
@@ -708,7 +700,7 @@ BarChartData randomData() {
     barTouchData: BarTouchData(
       enabled: false,
     ),
-    titlesData: FlTitlesData(
+    titlesData: const FlTitlesData(
       show: true,
       bottomTitles: AxisTitles(
         sideTitles: SideTitles(
@@ -784,7 +776,7 @@ BarChartData randomData() {
           return throw Error();
       }
     }),
-    gridData: FlGridData(show: false),
+    gridData: const FlGridData(show: false),
   );
 }
 
@@ -933,19 +925,19 @@ LineChartData mainData() {
       horizontalInterval: 1,
       verticalInterval: 1,
       getDrawingHorizontalLine: (value) {
-        return FlLine(
+        return const FlLine(
           color: AppColors.mainGridLineColor,
           strokeWidth: 1,
         );
       },
       getDrawingVerticalLine: (value) {
-        return FlLine(
+        return const FlLine(
           color: AppColors.mainGridLineColor,
           strokeWidth: 1,
         );
       },
     ),
-    titlesData: FlTitlesData(
+    titlesData: const FlTitlesData(
       show: true,
       rightTitles: AxisTitles(
         sideTitles: SideTitles(showTitles: false),
@@ -995,7 +987,7 @@ LineChartData mainData() {
         ),
         barWidth: 5,
         isStrokeCapRound: true,
-        dotData: FlDotData(
+        dotData: const FlDotData(
           show: false,
         ),
         belowBarData: BarAreaData(
@@ -1012,26 +1004,26 @@ LineChartData mainData() {
 
 LineChartData avgData() {
   return LineChartData(
-    lineTouchData: LineTouchData(enabled: false),
+    lineTouchData: const LineTouchData(enabled: false),
     gridData: FlGridData(
       show: true,
       drawHorizontalLine: true,
       verticalInterval: 1,
       horizontalInterval: 1,
       getDrawingVerticalLine: (value) {
-        return FlLine(
-          color: const Color(0xff37434d),
+        return const FlLine(
+          color: Color(0xff37434d),
           strokeWidth: 1,
         );
       },
       getDrawingHorizontalLine: (value) {
-        return FlLine(
-          color: const Color(0xff37434d),
+        return const FlLine(
+          color: Color(0xff37434d),
           strokeWidth: 1,
         );
       },
     ),
-    titlesData: FlTitlesData(
+    titlesData: const FlTitlesData(
       show: true,
       bottomTitles: AxisTitles(
         sideTitles: SideTitles(
@@ -1086,7 +1078,7 @@ LineChartData avgData() {
         ),
         barWidth: 5,
         isStrokeCapRound: true,
-        dotData: FlDotData(
+        dotData: const FlDotData(
           show: false,
         ),
         belowBarData: BarAreaData(
