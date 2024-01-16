@@ -73,12 +73,21 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
             .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
 
         // ignore: use_build_context_synchronously
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const DeptList(),
-          ),
-        );
+
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => const DeptList(),
+        //   ),
+        // );
+
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const DashboardScreen(),
+            ),
+            (route) => false);
+
       } else {
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context)
