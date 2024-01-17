@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pace_application_fb/screens/facebook_email_screen.dart';
 
@@ -138,7 +139,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         useMaterial3: true,
+        // fontFamily: 'Manrope',
+        //  fontFamily: 'Montserrat',
+        //  textTheme: GoogleFonts.nunitoSansTextTheme(),
+        // textTheme: GoogleFonts.nunitoTextTheme(),
+        //  textTheme: GoogleFonts.montserratTextTheme(),
+        //    textTheme: GoogleFonts.instrumentSansTextTheme(),  looks somewhat better
+        // textTheme: GoogleFonts.merriweatherTextTheme(),     looks somewhat better
+        //  textTheme: GoogleFonts.robotoSlabTextTheme(),  looks somewhata better and close to professional
+        // textTheme: GoogleFonts.ptSansTextTheme(),  looks somewhata better and close to professional
+        // textTheme: GoogleFonts.kanitTextTheme(), looks somewhata better and close to professional
+        // textTheme: GoogleFonts.firaSansTextTheme(),
+        //  looks MOST better and close to professional
+        fontFamily: 'FiraSans',
       ),
+
       //     home: SplashScreen(),
       initialRoute: '/',
       //  home: FacebookEmailScreen(fbID: ''),

@@ -328,7 +328,13 @@ class _TaskListState extends State<TaskList> {
                                       Navigator.of(context).pop();
                                       await callApiMethods();
                                     },
-                                    child: const Text('Create'),
+                                    child: const Text(
+                                      'Create',
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               );
