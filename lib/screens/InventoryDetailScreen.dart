@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/inventory_detail_service.dart';
 import '../utils/constants.dart';
@@ -25,6 +26,7 @@ class _InventoryDetailState extends State<InventoryDetailScreen> {
 
   @override
   void initState() {
+    getProfileImageToSharedPrefs();
     FirebaseMessaging.onMessage.listen((event) {
       hasNewNotifiaction = true;
       setState(() {});
@@ -38,14 +40,26 @@ class _InventoryDetailState extends State<InventoryDetailScreen> {
     });
   }
 
-  void checkPermissionAndUpdateBool(
-      String permValue, Function(bool) boolUpdater) async {
+  void checkPermissionAndUpdateBool(String permValue,
+      Function(bool) boolUpdater) async {
     var localBool = await hasPermission(permValue);
 
     setState(() {
       boolUpdater(localBool);
     });
   }
+
+
+  String? userProfileImage;
+
+  Future<void> getProfileImageToSharedPrefs() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    userProfileImage =
+    await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
+    print('user profile image: $userProfileImage');
+    setState(() {});
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +68,7 @@ class _InventoryDetailState extends State<InventoryDetailScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildAppBar(context, scaffoldKey),
+          _buildAppBar(context, scaffoldKey, userProfileImage,),
           Expanded(
             child: FutureBuilder<List<InventoryDetailModel>>(
               future: _futureTask,
@@ -111,7 +125,8 @@ class _InventoryDetailState extends State<InventoryDetailScreen> {
   }
 }
 
-Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey) {
+Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey,
+    String? userProfileImage,) {
   return AppBar(
     backgroundColor: Colors.white,
     leading: IconButton(
@@ -176,16 +191,16 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey) {
                 ),
                 hasNewNotifiaction
                     ? Positioned(
-                        top: 5,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      )
+                  top: 5,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                )
                     : SizedBox(),
               ],
             ),
@@ -197,12 +212,14 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey) {
                 MaterialPageRoute(builder: (context) => const ProfileScreen()),
               );
             },
-            child: const Padding(
-              padding: EdgeInsets.only(right: 10.0, left: 5.0),
-              child: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/ic_profile.png'),
-                radius: 15,
-              ),
+            child: Padding(
+                padding: EdgeInsets.only(right: 10.0, left: 5.0),
+                child: CircleAvatar(
+                  backgroundImage: userProfileImage == null
+                      ? AssetImage('assets/images/ic_profile.png')
+                      : NetworkImage(userProfileImage) as ImageProvider,
+                  radius: 15,
+                ),
             ),
           ),
         ],
