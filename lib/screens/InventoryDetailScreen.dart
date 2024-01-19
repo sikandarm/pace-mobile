@@ -25,6 +25,7 @@ class _InventoryDetailState extends State<InventoryDetailScreen> {
   Future<List<InventoryDetailModel>> _futureTask = Future.value([]);
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
+
   @override
   void initState() {
     getProfileImageToSharedPrefs();
