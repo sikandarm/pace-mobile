@@ -1,3 +1,4 @@
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -66,7 +67,11 @@ class _SharedListState extends State<SharedCARList> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              ? Colors.white
+              : Colors.black,
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -112,6 +117,10 @@ class _SharedListState extends State<SharedCARList> {
                         "assets/images/ic_bell.png",
                         width: 32,
                         height: 32,
+                        color: EasyDynamicTheme.of(context).themeMode ==
+                                ThemeMode.dark
+                            ? Colors.white
+                            : Colors.black,
                       ),
                     ),
                     !hasNewNotifiaction
@@ -264,7 +273,9 @@ class CARListItemWidget extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
-          color: Colors.white,
+          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              ? Colors.white.withOpacity(0.92)
+              : Colors.white,
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),

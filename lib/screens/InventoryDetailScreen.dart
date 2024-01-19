@@ -1,3 +1,4 @@
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,8 +41,8 @@ class _InventoryDetailState extends State<InventoryDetailScreen> {
     });
   }
 
-  void checkPermissionAndUpdateBool(String permValue,
-      Function(bool) boolUpdater) async {
+  void checkPermissionAndUpdateBool(
+      String permValue, Function(bool) boolUpdater) async {
     var localBool = await hasPermission(permValue);
 
     setState(() {
@@ -49,17 +50,15 @@ class _InventoryDetailState extends State<InventoryDetailScreen> {
     });
   }
 
-
   String? userProfileImage;
 
   Future<void> getProfileImageToSharedPrefs() async {
     final sharedPrefs = await SharedPreferences.getInstance();
     userProfileImage =
-    await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
+        await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
     print('user profile image: $userProfileImage');
     setState(() {});
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +67,11 @@ class _InventoryDetailState extends State<InventoryDetailScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildAppBar(context, scaffoldKey, userProfileImage,),
+          _buildAppBar(
+            context,
+            scaffoldKey,
+            userProfileImage,
+          ),
           Expanded(
             child: FutureBuilder<List<InventoryDetailModel>>(
               future: _futureTask,
@@ -125,12 +128,22 @@ class _InventoryDetailState extends State<InventoryDetailScreen> {
   }
 }
 
-Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey,
-    String? userProfileImage,) {
+Widget _buildAppBar(
+  context,
+  GlobalKey<ScaffoldState> scaffoldKey,
+  String? userProfileImage,
+) {
   return AppBar(
-    backgroundColor: Colors.white,
+    // backgroundColor: Colors.white,
+    backgroundColor: Colors.transparent,
+
     leading: IconButton(
-      icon: const Icon(Icons.arrow_back),
+      icon: Icon(
+        Icons.arrow_back,
+        color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            ? Colors.white
+            : Colors.black,
+      ),
       onPressed: () {
         Navigator.pushReplacement(
           context,
@@ -148,7 +161,11 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey,
           return Text(
             "Inventory Detail",
             style: TextStyle(
-              color: Color(0xff1E2022),
+              // color: Color(0xff1E2022),
+              color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                  ? Colors.white
+                  : Colors.black,
+
               fontWeight: FontWeight.bold,
               fontSize: appBarTiltleSize,
             ),
@@ -187,20 +204,24 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey,
                     "assets/images/ic_bell.png",
                     width: 32,
                     height: 32,
+                    color:
+                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                            ? Colors.white
+                            : Colors.black,
                   ),
                 ),
                 hasNewNotifiaction
                     ? Positioned(
-                  top: 5,
-                  right: 0,
-                  child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                )
+                        top: 5,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      )
                     : SizedBox(),
               ],
             ),
@@ -213,13 +234,13 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey,
               );
             },
             child: Padding(
-                padding: EdgeInsets.only(right: 10.0, left: 5.0),
-                child: CircleAvatar(
-                  backgroundImage: userProfileImage == null
-                      ? AssetImage('assets/images/ic_profile.png')
-                      : NetworkImage(userProfileImage) as ImageProvider,
-                  radius: 15,
-                ),
+              padding: EdgeInsets.only(right: 10.0, left: 5.0),
+              child: CircleAvatar(
+                backgroundImage: userProfileImage == null
+                    ? AssetImage('assets/images/ic_profile.png')
+                    : NetworkImage(userProfileImage) as ImageProvider,
+                radius: 15,
+              ),
             ),
           ),
         ],
@@ -289,7 +310,10 @@ class TaskDetailWidget extends StatelessWidget {
         // );
       },
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 0,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

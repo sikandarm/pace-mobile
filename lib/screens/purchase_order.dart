@@ -1,3 +1,4 @@
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -41,7 +42,11 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              ? Colors.white
+              : Colors.black,
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -60,7 +65,9 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
           style: TextStyle(
             fontSize: appBarTiltleSize,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                ? Colors.white
+                : Colors.black,
           ),
         ),
         actions: [
@@ -131,14 +138,18 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
         // margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
-          color: Colors.white,
+          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              ? Color.fromARGB(255, 7, 21, 32)
+              : Colors.white,
           boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 1,
-              blurRadius: 3,
-              offset: const Offset(0, 3),
-            ),
+            (EasyDynamicTheme.of(context).themeMode != ThemeMode.dark)
+                ? BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3), // changes position of shadow
+                  )
+                : const BoxShadow(),
           ],
         ),
 

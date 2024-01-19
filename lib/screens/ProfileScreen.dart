@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -64,8 +65,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              ? Colors.white
+              : Colors.black,
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -111,6 +115,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         "assets/images/ic_bell.png",
                         width: 32,
                         height: 32,
+                        color: EasyDynamicTheme.of(context).themeMode ==
+                                ThemeMode.dark
+                            ? Colors.white
+                            : Colors.black,
                       ),
                     ),
                     !hasNewNotifiaction
@@ -336,12 +344,15 @@ class userProfileWidget extends StatelessWidget {
             // height: 50.0,
             child: Container(
               decoration: BoxDecoration(boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3),
-                )
+                (EasyDynamicTheme.of(context).themeMode != ThemeMode.dark)
+                    ? BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
+                      )
+                    : const BoxShadow(),
               ]),
               child: ElevatedButton(
                 onPressed: () {

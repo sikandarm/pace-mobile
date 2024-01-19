@@ -1,3 +1,4 @@
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -44,7 +45,11 @@ class _ViewContactsScreenState extends State<ViewContactsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              ? Colors.white
+              : Colors.black,
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -193,22 +198,31 @@ class _ViewContactsScreenState extends State<ViewContactsScreen> {
                                 const SizedBox(
                                   height: 25,
                                 ),
-                                ElevatedButton.icon(
-                                    style: const ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStatePropertyAll(Colors.blue),
-                                      foregroundColor: MaterialStatePropertyAll(
-                                          Colors.white),
-                                    ),
-                                    onPressed: () async {
-                                      await launchDialer(contactApiData!
-                                          .data!.users![i].phone!);
-                                    },
-                                    icon: const Icon(
-                                      Icons.call,
-                                      size: 18,
-                                    ),
-                                    label: const Text('Call')),
+                                Container(
+                                  width: double.infinity,
+                                  child: ElevatedButton.icon(
+                                      style: const ButtonStyle(
+                                        shape: MaterialStatePropertyAll(
+                                            RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(8)))),
+                                        backgroundColor:
+                                            MaterialStatePropertyAll(
+                                                Colors.blue),
+                                        foregroundColor:
+                                            MaterialStatePropertyAll(
+                                                Colors.white),
+                                      ),
+                                      onPressed: () async {
+                                        await launchDialer(contactApiData!
+                                            .data!.users![i].phone!);
+                                      },
+                                      icon: const Icon(
+                                        Icons.call,
+                                        size: 18,
+                                      ),
+                                      label: const Text('Call')),
+                                ),
                               ],
                             ),
                           ),

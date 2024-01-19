@@ -6,9 +6,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 bool hasNewNotifiaction = false;
 // ignore: constant_identifier_names/
-//const String BASE_URL = "http://206.81.5.26:3500/api"; // live ip
-String ipPart = '';
-String BASE_URL = "http://$ipPart:3500/api"; // local ip
+const String BASE_URL = "http://206.81.5.26:3500/api"; // live ip
+
+////////////////////////////////////////////////////////////////////  this is dynamic part
+//  String ipPart = '';
+//String BASE_URL = "http://$ipPart:3500/api"; // local ip
+////////////////////////////////////////////////////////////////////  this is dynamic part end here
 
 // http://206.81.5.26/inventory
 // ignore: constant_identifier_names
@@ -127,10 +130,10 @@ InputDecoration textFieldDecoration(
     //  fillColor: const Color(0xffF8F9FD),
     fillColor: Colors.grey.withOpacity(0.13),
     hintText: title,
-    hintStyle: TextStyle(
-      color: Colors.black.withOpacity(0.65),
-      fontWeight: FontWeight.w500,
-    ),
+    // hintStyle: TextStyle(
+    //   color: Colors.black.withOpacity(0.65),
+    //   fontWeight: FontWeight.w500,
+    // ),
     suffixIcon: !ifPassword
         ? null
         : const Icon(

@@ -1,3 +1,4 @@
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:expandable_datatable/expandable_datatable.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -42,6 +43,9 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+          ? Color.fromARGB(255, 7, 21, 32)
+          : Colors.white,
       // floatingActionButton: FloatingActionButton(onPressed: () async {
       //   final result = await fetchPurchaseOrderItemsDetailListData(
       //       id: widget.purchaseOrder.id!);
@@ -64,7 +68,10 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
               width: MediaQuery.of(context).size.width,
               // height: MediaQuery.of(context).size.height * 0.74,
               // height: MediaQuery.of(context).size.height * 0.4,
-              color: Colors.white,
+//              color: Colors.white,
+              //  color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              //    ? Colors.black
+              //  : Colors.white,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -340,7 +347,6 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ],
                   )
                 : Container(
-                    color: Colors.white,
                     width: MediaQuery.of(context).size.width,
                     // height: MediaQuery.of(context).size.height * 0.4,
 
@@ -369,7 +375,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                                   vertical: 4, horizontal: 7),
                               width: MediaQuery.of(context).size.width,
                               child: Card(
-                                color: Colors.white,
+                                //   color: Colors.white,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4)),
                                 child: Column(
@@ -554,9 +560,18 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
 
 AppBar _buildAppBar(context) {
   return AppBar(
-    backgroundColor: Colors.white,
+    //   backgroundColor: Colors.white,
+    backgroundColor: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+        ? Color.fromARGB(255, 7, 21, 32)
+        : Colors.white,
+
     leading: IconButton(
-      icon: const Icon(Icons.arrow_back),
+      icon: Icon(
+        Icons.arrow_back,
+        color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            ? Colors.white
+            : Colors.black,
+      ),
       onPressed: () {
         Navigator.pop(context);
         // Navigator.pushReplacement(
@@ -575,7 +590,11 @@ AppBar _buildAppBar(context) {
           return Text(
             "Purchase Order Detail",
             style: TextStyle(
-              color: Color(0xff1E2022),
+              // color: Color(0xff1E2022),
+              color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                  ? Colors.white
+                  : Color(0xff1E2022),
+
               fontWeight: FontWeight.bold,
               fontSize: appBarTiltleSize,
             ),

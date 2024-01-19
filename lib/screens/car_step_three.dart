@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -87,7 +88,6 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
               builder: (context) => const DashboardScreen(),
             ),
             (route) => false);
-
       } else {
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context)
@@ -104,7 +104,11 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              ? Colors.white
+              : Colors.black,
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -246,12 +250,16 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                     height: 50.0,
                     child: Container(
                       decoration: BoxDecoration(boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        )
+                        (EasyDynamicTheme.of(context).themeMode !=
+                                ThemeMode.dark)
+                            ? BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(
+                                    0, 3), // changes position of shadow
+                              )
+                            : const BoxShadow(),
                       ]),
                       child: ElevatedButton(
                         onPressed: () async {

@@ -1,3 +1,4 @@
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -79,7 +80,11 @@ class _NotificationListState extends State<NotificationsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              ? Colors.white
+              : Colors.black,
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -241,9 +246,14 @@ class ListItemWidget extends StatelessWidget {
                   children: [
                     Text(
                       body.toString(),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14.0,
-                        color: Color(0xFF1E2022),
+                        //     color: Color(0xFF1E2022),
+                        color: EasyDynamicTheme.of(context).themeMode ==
+                                ThemeMode.dark
+                            ? Colors.white
+                            : Color(0xFF1E2022),
+
                         fontWeight: FontWeight.normal,
                       ),
                       maxLines: 3,

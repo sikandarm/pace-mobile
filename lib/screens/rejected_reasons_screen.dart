@@ -1,3 +1,4 @@
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,11 +29,10 @@ class _RejectedReasonsListState extends State<RejectedReasonsScreen> {
   Future<void> getProfileImageToSharedPrefs() async {
     final sharedPrefs = await SharedPreferences.getInstance();
     userProfileImage =
-    await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
+        await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
     print('user profile image: ' + userProfileImage.toString());
     setState(() {});
   }
-
 
   Future<void> fetchReasonCategories() async {
     try {
@@ -51,7 +51,11 @@ class _RejectedReasonsListState extends State<RejectedReasonsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              ? Colors.white
+              : Colors.black,
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -79,7 +83,7 @@ class _RejectedReasonsListState extends State<RejectedReasonsScreen> {
                 MaterialPageRoute(builder: (context) => const ProfileScreen()),
               );
             },
-            child:  Padding(
+            child: Padding(
               padding: EdgeInsets.only(right: 20.0),
               child: CircleAvatar(
                 backgroundImage: userProfileImage == null
@@ -113,10 +117,17 @@ class _RejectedReasonsListState extends State<RejectedReasonsScreen> {
                   //   );
                   // },
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 5.0, top: 10.0),
-                    child: Text(
-                      category.name,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    // padding: const EdgeInsets.only(left: 5.0, top: 10.0), // old one
+                    padding: const EdgeInsets.only(left: 5.0, top: 13.0),
+                    child: Center(
+                      child: Text(
+                        category.name.toUpperCase(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                          fontSize: 19,
+                        ),
+                      ),
                     ),
                   ),
                 ),

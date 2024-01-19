@@ -1,3 +1,4 @@
+import 'package:path/path.dart' as path;
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -5,13 +6,19 @@ import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:dio/dio.dart';
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
+import 'package:flutter_file_saver/flutter_file_saver.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_downloader/image_downloader.dart';
 import 'package:intl/intl.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:open_file/open_file.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -118,8 +125,7 @@ class _TaskDetailState extends State<TaskDetail> {
   Future<void> callApiMethods() async {
     taskPayOrPauseStatus =
         await getTaskPlayOrPauseStatus(taskId: widget.taskId.toString());
-    print('init method value taskPayOrPauseStatus: ' +
-        taskPayOrPauseStatus.toString());
+    print('init method value taskPayOrPauseStatus: $taskPayOrPauseStatus');
     taskDetailObj = await _futureTask;
     setState(() {});
   }
@@ -139,7 +145,7 @@ class _TaskDetailState extends State<TaskDetail> {
     final sharedPrefs = await SharedPreferences.getInstance();
     userProfileImage =
         await sharedPrefs.getString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE);
-    print('user profile image: ' + userProfileImage.toString());
+    print('user profile image: $userProfileImage');
     setState(() {});
   }
 
@@ -329,7 +335,11 @@ class _TaskDetailState extends State<TaskDetail> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          iconTheme: const IconThemeData(color: Colors.black),
+          iconTheme: IconThemeData(
+            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                ? Colors.white
+                : Colors.black,
+          ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -386,6 +396,10 @@ class _TaskDetailState extends State<TaskDetail> {
                           "assets/images/ic_bell.png",
                           width: 32,
                           height: 32,
+                          color: EasyDynamicTheme.of(context).themeMode ==
+                                  ThemeMode.dark
+                              ? Colors.white
+                              : Colors.black,
                         ),
                       ),
                       !hasNewNotifiaction
@@ -556,8 +570,7 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
   Future<void> callApiMethods() async {
     taskPayOrPauseStatus =
         await getTaskPlayOrPauseStatus(taskId: widget.id.toString());
-    print('init method 222 value taskPayOrPauseStatus: ' +
-        taskPayOrPauseStatus.toString());
+    print('init method 222 value taskPayOrPauseStatus: $taskPayOrPauseStatus');
     //  taskDetailObj = await _futureTask;
     setState(() {});
   }
@@ -588,7 +601,7 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
         String isoDate = startDate.toIso8601String();
         // String isoDate = utcDateTime.toIso8601String().substring(0, 23);
 
-        print('isoDate:' + isoDate);
+        print('isoDate:$isoDate');
         if (status == "to_inspect") {
           request.fields['completedAt'] = isoDate;
         }
@@ -605,7 +618,7 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
         // print(responseString);
         Map<String, dynamic> jsonMap = jsonDecode(responseString);
 
-        print('jsonMap: ' + jsonMap.toString());
+        print('jsonMap: $jsonMap');
 
         // print(response.body);
         // Map<String, dynamic> jsonMap = jsonDecode(response.body);
@@ -629,7 +642,7 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
             .showSnackBar(const SnackBar(content: Text('User ID not found')));
       }
     } catch (e) {
-      print('e: ' + e.toString());
+      print('e: $e');
     }
   }
 
@@ -864,7 +877,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                     child: GestureDetector(
                       onTap: () async {
                         await downloadImage(
-                            widget.imageUrl!, "TaskDiagram.png");
+                            widget.imageUrl!, "TaskDiagram.jpg");
+
+                        //  await downloadImage('123', "TaskDiagram.png");
                       },
                       child: CircleAvatar(
                         backgroundColor: Colors.transparent,
@@ -926,7 +941,10 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                     child: CachedNetworkImage(
                       width: 285.0,
                       height: 145.0,
+
                       imageUrl: widget.imageUrl!,
+                      //   imageUrl:
+                      //     'http://206.81.5.26:3500/uploads/task_images/image%20(7)_1705576583697.jpeg',
                       progressIndicatorBuilder:
                           (context, url, downloadProgress) => Center(
                         child: CircularProgressIndicator(
@@ -1133,13 +1151,16 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                         height: 50.0,
                         child: Container(
                           decoration: BoxDecoration(boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: const Offset(
-                                  0, 3), // changes position of shadow
-                            )
+                            (EasyDynamicTheme.of(context).themeMode !=
+                                    ThemeMode.dark)
+                                ? BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 2,
+                                    blurRadius: 5,
+                                    offset: const Offset(
+                                        0, 3), // changes position of shadow
+                                  )
+                                : const BoxShadow(),
                           ]),
                           child: _blApprovedTask && _blSelfAssignATask
                               ? ElevatedButton(
@@ -1402,13 +1423,16 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                             height: 50.0,
                             child: Container(
                               decoration: BoxDecoration(boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset: const Offset(
-                                      0, 3), // changes position of shadow
-                                )
+                                (EasyDynamicTheme.of(context).themeMode !=
+                                        ThemeMode.dark)
+                                    ? BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 2,
+                                        blurRadius: 5,
+                                        offset: const Offset(
+                                            0, 3), // changes position of shadow
+                                      )
+                                    : const BoxShadow(),
                               ]),
                               child: _blApprovedTask && _blSelfAssignATask
                                   ? ElevatedButton(
@@ -1529,13 +1553,16 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                               height: 50.0,
                               child: Container(
                                   decoration: BoxDecoration(boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 2,
-                                      blurRadius: 5,
-                                      offset: const Offset(
-                                          0, 3), // changes position of shadow
-                                    )
+                                    (EasyDynamicTheme.of(context).themeMode !=
+                                            ThemeMode.dark)
+                                        ? BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 2,
+                                            blurRadius: 5,
+                                            offset: const Offset(0,
+                                                3), // changes position of shadow
+                                          )
+                                        : const BoxShadow(),
                                   ]),
                                   child: _blApprovedTask && _blSelfAssignATask
                                       ? ElevatedButton(
@@ -1696,7 +1723,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                   ),
                             ),
                           )
-                        : SizedBox(child: Text('222'))
+                        : SizedBox(
+                            child: Text(''),
+                          ),
           ],
         ),
       ),
@@ -1867,67 +1896,194 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
     return '';
   }
 
-  // bool showHideButton(String? value, int? userIdValue) {
+  // // bool showHideButton(String? value, int? userIdValue) {
+  // Future<void> downloadImage(String imageUrl, String fileName) async {
+  //   var dio = Dio();
+
+  //   // Directory? externalDir = await getExternalStorageDirectory();
+
+  //   //  Directory? externalDir = await getApplicationDocumentsDirectory();
+
+  //   Directory? externalDir = await getTemporaryDirectory();
+
+  //   if (externalDir != null) {
+  //     print('External Dir path: ${externalDir.path}');
+  //     // Ensure the file name has a valid image file extension, like .jpg or .png
+  //     if (!fileName.toLowerCase().endsWith('.jpg') &&
+  //         !fileName.toLowerCase().endsWith('.png')) {
+  //       debugPrint('Invalid image file extension.');
+  //       return;
+  //     }
+
+  //     // Ensure the downloads directory exists
+  //     final p = await Directory(externalDir.path).create(recursive: true);
+  //     print('p: ${p.path}');
+
+  //     String filePath = '${externalDir.path}/$fileName';
+  //     //  String filePath = '/storage/emulated/0/DCIM/$fileName';
+
+  //     print('filePath: $filePath');
+
+  //     final downloadRespnse = await dio.download(
+  //       imageUrl,
+  //       '/storage/emulated/0/Android/data/com.example.pace_application_fb/files/TaskImage.png',
+  //       onReceiveProgress: (received, total) {
+  //         if (total != -1) {
+  //           // Calculate the download percentage
+  //           double percentage = (received / total) * 100;
+  //           debugPrint('Downloaded: ${percentage.toStringAsFixed(2)}%');
+
+  //           Fluttertoast.cancel();
+  //           showOverlayFileDownload(percentage.toString());
+
+  //           //     showToast(percentage.toString());
+
+  //           // showSimpleNotification(
+  //           //     Column(
+  //           //       children: [
+  //           //         CircularProgressIndicator(),
+  //           //         Text(percentage.toString())
+  //           //       ],
+  //           //     ),
+  //           //     background: Colors.green,
+  //           //     position: NotificationPosition.bottom);
+  //           debugPrint(
+  //               'imageUrl.replaceAll: ${imageUrl.replaceAll(' ', '%20')}');
+  //           debugPrint('fileName: $fileName');
+
+  //           if (percentage == 100) {
+  //             context.loaderOverlay.hide();
+  //             // debugPrint('File download complete');
+  //             showToast('File download complete');
+
+  //             // if (_blCollaborate) {
+  //             //   _openExternalLink(
+  //             //       "https://play.google.com/store/apps/details?id=com.microsoft.whiteboard.publicpreview");
+  //             // }
+  //           }
+  //         }
+  //       },
+  //     );
+
+  //     print('=============================================');
+  //     print(downloadRespnse.statusCode.toString());
+  //     print('download Respone:${downloadRespnse.data}');
+  //     print('=============================================');
+  //   } else {
+  //     debugPrint('External storage directory not available.');
+  //   }
+  // }
+
   Future<void> downloadImage(String imageUrl, String fileName) async {
-    var dio = Dio();
+    // final dio = Dio();
 
-    // Directory? externalDir = await getExternalStorageDirectory();
+    // // Get downloads directory path
+    // final downloadsDir = await getExternalStorageDirectory();
+    // final filePath = '${downloadsDir!.path}/$fileName';
 
-    Directory? externalDir = await getApplicationDocumentsDirectory();
+    // // Download the image
+    // try {
+    //   await dio.download(imageUrl, filePath,
+    //       onReceiveProgress: (received, total) {
+    //     // Show download progress if needed
+    //     print('progress of file  ${imageUrl}: ' +
+    //         ((received / total) * 100).toString());
+    //   });
+    //   print('Image downloaded successfully!');
+    // } on DioError catch (e) {
+    //   print('Error downloading image: ${e.message}');
+    // }
+    //You can download a single file
 
-    if (externalDir != null) {
-      // Ensure the file name has a valid image file extension, like .jpg or .png
-      if (!fileName.toLowerCase().endsWith('.jpg') &&
-          !fileName.toLowerCase().endsWith('.png')) {
-        debugPrint('Invalid image file extension.');
+    // print('imageUrl: $imageUrl');
+    // print('fileName: $fileName');
+
+    // final a = await FileDownloader.downloadFile(
+
+    //     //    downloadDestination: DownloadDestinations.appFiles,
+    //     notificationType: NotificationType.all,
+    //     url:
+    //         'http://206.81.5.26:3500/uploads/task_images/image%20(7)_1705576583697.jpeg',
+
+    //     //     name: fileName, //(optional)
+    //     onProgress: (fileName, progress) {
+    //       print('FILE fileName HAS PROGRESS $progress');
+    //     },
+    //     onDownloadCompleted: (String path) {
+    //       print('FILE DOWNLOADED TO PATH: $path');
+    //     },
+    //     onDownloadError: (String error) {
+    //       print('DOWNLOAD ERROR: $error');
+    //     });
+
+    // print('a is: ' + a.toString());
+
+    //  final dio = Dio();
+
+    // Ensure the file name has a valid image file extension, like .jpg or .png
+    // if (!fileName.toLowerCase().endsWith('.jpg') &&
+    //     !fileName.toLowerCase().endsWith('.png')) {
+    //   debugPrint('Invalid image file extension.');
+    //   return;
+    // }
+
+    print(imageUrl);
+    String fileExtension = path.extension(imageUrl).toLowerCase();
+
+    print("File Extension: $fileExtension");
+
+    String fileNameWithExtension = path.basename(imageUrl);
+
+    print("File Name: $fileName");
+
+    final response = await http.get(Uri.parse(imageUrl));
+    print(response.bodyBytes);
+
+    final result = await FlutterFileSaver().writeFileAsBytes(
+// fileName: 'Task Image$fileExtension',
+      fileName: fileNameWithExtension,
+      bytes: response.bodyBytes,
+    );
+
+    print(result.toString());
+    return;
+
+//You can download a single file
+    await FileDownloader.downloadFile(
+        notificationType: NotificationType.all,
+        url: widget.imageUrl!,
+        name: "THE FILE NAME AFTER DOWNLOADING", //(optional)
+        onProgress: (fileName, double progress) {
+          print('FILE fileName HAS PROGRESS $progress');
+        },
+        onDownloadCompleted: (String path) {
+          print('FILE DOWNLOADED TO PATH: $path');
+        },
+        onDownloadError: (String error) {
+          print('DOWNLOAD ERROR: $error');
+        });
+
+    return;
+
+    try {
+      // Saved with this method.
+      var imageId = await ImageDownloader.downloadImage(
+        //   "https://raw.githubusercontent.com/wiki/ko2ic/image_downloader/images/flutter.png",
+        widget.imageUrl!,
+        // 'http://206.81.5.26:3500/uploads/task_images/image(7)_1705576583697.jpeg',
+      );
+
+      if (imageId == null) {
         return;
       }
 
-      String filePath = '${externalDir.path}/$fileName';
-      //  String filePath = '/storage/emulated/0/DCIM/$fileName';
-
-      await dio.download(
-        imageUrl,
-        filePath,
-        onReceiveProgress: (received, total) {
-          if (total != -1) {
-            // Calculate the download percentage
-            double percentage = (received / total) * 100;
-            debugPrint('Downloaded: ${percentage.toStringAsFixed(2)}%');
-
-            Fluttertoast.cancel();
-            showOverlayFileDownload(percentage.toString());
-
-            //     showToast(percentage.toString());
-
-            // showSimpleNotification(
-            //     Column(
-            //       children: [
-            //         CircularProgressIndicator(),
-            //         Text(percentage.toString())
-            //       ],
-            //     ),
-            //     background: Colors.green,
-            //     position: NotificationPosition.bottom);
-            debugPrint(
-                'imageUrl.replaceAll: ' + imageUrl.replaceAll(' ', '%20'));
-            debugPrint('fileName: ' + fileName);
-
-            if (percentage == 100) {
-              context.loaderOverlay.hide();
-              // debugPrint('File download complete');
-              showToast('File download complete');
-
-              // if (_blCollaborate) {
-              //   _openExternalLink(
-              //       "https://play.google.com/store/apps/details?id=com.microsoft.whiteboard.publicpreview");
-              // }
-            }
-          }
-        },
-      );
-    } else {
-      debugPrint('External storage directory not available.');
+      // Below is a method of obtaining saved image information.
+      var fileName = await ImageDownloader.findName(imageId);
+      var path = await ImageDownloader.findPath(imageId);
+      var size = await ImageDownloader.findByteSize(imageId);
+      var mimeType = await ImageDownloader.findMimeType(imageId);
+    } on PlatformException catch (error) {
+      print(error);
     }
   }
 
@@ -1948,7 +2104,7 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                 height: 100,
                 child: Center(
                   child: Text(
-                    double.parse(progress.toString()).toInt().toString() + '%',
+                    '${double.parse(progress.toString()).toInt()}%',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 17,

@@ -1,3 +1,4 @@
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -38,72 +39,103 @@ class JobList extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
         decoration: BoxDecoration(
+          //   color: Colors.red,
           borderRadius: BorderRadius.circular(8.0),
-          color: Colors.white,
+          //  color: Colors.white,
+          //   color: Colors.white.withOpacity(0.8),
+
           boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 1,
-              blurRadius: 3,
-              offset: const Offset(0, 3),
-            ),
+            // BoxShadow(
+            //   color: Colors.grey.withOpacity(0.5),
+
+            //   spreadRadius: 1,
+            //   blurRadius: 3,
+            //   offset: const Offset(0, 3),
+            // ),
           ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "#$jobId",
-                    style: const TextStyle(
-                      color: Color(0xFF1E2022),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14.0,
+        child: Card(
+          // color: Colors.white.withOpacity(0.92),
+
+          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              ? Colors.white.withOpacity(0.92)
+              : Colors.white,
+
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "#$jobId",
+                      style: const TextStyle(
+                        color: Color(0xFF1E2022),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14.0,
+                      ),
                     ),
-                  ),
-                  Text(
-                    DateFormat(US_DATE_FORMAT).format(startDate),
-                    style: const TextStyle(
-                      fontSize: 11.0,
-                      color: Color(0xFF77838F),
-                      fontWeight: FontWeight.w400,
+                    Text(
+                      DateFormat(US_DATE_FORMAT).format(startDate),
+                      style: const TextStyle(
+                        fontSize: 11.0,
+                        color: Color(0xFF77838F),
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    status[0].toUpperCase() + status.substring(1),
-                    style: TextStyle(
-                      color: getProgressColor(status),
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.w500,
+                  ],
+                ),
+                const SizedBox(height: 8.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      status[0].toUpperCase() + status.substring(1),
+                      style: TextStyle(
+                        color: status[0].toUpperCase() + status.substring(1) ==
+                                'In_process'
+                            ? Color(0xFFF4BE4F)
+                            : status[0].toUpperCase() + status.substring(1) ==
+                                    'Completed'
+                                ? Color(0xFF63C556)
+                                : getProgressColor(status),
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                  // const Spacer(),
-                  Text(
-                    "$completedTasks/$totalTasks",
-                    style: const TextStyle(
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.w500,
+                    // const Spacer(),
+                    Text(
+                      "$completedTasks/$totalTasks",
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w500,
+                        color: EasyDynamicTheme.of(context).themeMode ==
+                                ThemeMode.dark
+                            ? Colors.black
+                            : Colors.black,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8.0),
-              LinearProgressIndicator(
-                value: calculatePercentage(completedTasks, totalTasks),
-                backgroundColor: const Color(0xFFF5F5F5),
-                valueColor: AlwaysStoppedAnimation<Color>(progressDoneColor),
-              ),
-            ],
+                  ],
+                ),
+                const SizedBox(height: 8.0),
+                LinearProgressIndicator(
+                  value: calculatePercentage(completedTasks, totalTasks),
+                  //  backgroundColor: const Color(0xFFF5F5F5),
+                  backgroundColor:
+                      status[0].toUpperCase() + status.substring(1) ==
+                              'In_process'
+                          ? Color(0xFFF4BE4F)
+                          : status[0].toUpperCase() + status.substring(1) ==
+                                  'Completed'
+                              ? Color(0xFF63C556)
+                              : getProgressColor(status),
+
+                  valueColor: AlwaysStoppedAnimation<Color>(progressDoneColor),
+                ),
+              ],
+            ),
           ),
         ),
       ),

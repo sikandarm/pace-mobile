@@ -1,3 +1,4 @@
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../components/job_list_card.dart';
@@ -42,10 +43,17 @@ class _ViewAllJobsScreenState extends State<ViewAllJobsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: EasyDynamicTheme.of(context).themeMode != ThemeMode.dark
+          ? Colors.white.withOpacity(0.92)
+          : const Color.fromARGB(255, 7, 21, 32),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              ? Colors.white
+              : Colors.black,
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

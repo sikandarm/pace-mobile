@@ -1,3 +1,4 @@
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -180,7 +181,11 @@ class _DeptListState extends State<DeptList> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              ? Colors.white
+              : Colors.black,
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -226,6 +231,10 @@ class _DeptListState extends State<DeptList> {
                         "assets/images/ic_bell.png",
                         width: 32,
                         height: 32,
+                        color: EasyDynamicTheme.of(context).themeMode ==
+                                ThemeMode.dark
+                            ? Colors.white
+                            : Colors.black,
                       ),
                     ),
                     hasNewNotifiaction
@@ -410,7 +419,8 @@ class TaskListHeader extends StatelessWidget {
                     );
                   },
                   child: Container(
-                      height: 50.0,
+                      // height: 50.0,
+                      height: 43,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8.0),
                         border: Border.all(
@@ -454,7 +464,12 @@ class TaskListHeader extends StatelessWidget {
                               return Align(
                                 alignment: Alignment.center,
                                 child: Text(
-                                  snapshot.data ?? "Select Rejected Reason",
+                                  //   snapshot.data ?? "Select Rejected Reason",
+                                  (snapshot.data == 'Select Rejected Reason' ||
+                                          snapshot.data == null)
+                                      ? 'Rejected Reason'
+                                      : 'Rejected Reason',
+
                                   style: const TextStyle(
                                     fontSize: 16.0,
                                     color: Color(0xff06A3F6),

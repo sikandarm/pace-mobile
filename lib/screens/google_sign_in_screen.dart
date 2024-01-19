@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -92,9 +93,26 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.arrow_back_ios_new,
+            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                ? Colors.white.withOpacity(0.92)
+                : Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.transparent,
         title: Text(
           'Google Sign In',
-          style: TextStyle(fontSize: appBarTiltleSize),
+          style: TextStyle(
+            fontSize: appBarTiltleSize,
+            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                ? Colors.white
+                : Colors.black,
+          ),
         ),
       ),
       body: Padding(
@@ -167,8 +185,6 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                     visible: !checkUserRoleModel!.data!,
                     child: SizedBox(
                       height: 100,
-
-
                       child: CupertinoPicker(
                         scrollController: FixedExtentScrollController(
                             initialItem: _selectedRoleIndex),
@@ -204,12 +220,15 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
               height: 50.0,
               child: Container(
                 decoration: BoxDecoration(boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3), // changes position of shadow
-                  )
+                  (EasyDynamicTheme.of(context).themeMode != ThemeMode.dark)
+                      ? BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
+                        )
+                      : const BoxShadow(),
                 ]),
                 child: ElevatedButton(
                   onPressed: () async {

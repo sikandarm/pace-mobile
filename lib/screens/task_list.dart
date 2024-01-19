@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -219,7 +220,11 @@ class _TaskListState extends State<TaskList> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              ? Colors.white
+              : Colors.black,
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -595,8 +600,13 @@ class _TaskListState extends State<TaskList> {
                           ],
                         ),
                         // controller: ExpandableController(),
-                        //      controller: _expandableController,
+                        //      controller: _expandableCo
+                        // ntroller,
                         theme: ExpandableThemeData(
+                          iconColor: EasyDynamicTheme.of(context).themeMode ==
+                                  ThemeMode.dark
+                              ? Colors.white
+                              : Colors.black,
                           hasIcon:
                               sequencesList[i].tasks.isNotEmpty ? true : false,
                           inkWellBorderRadius: BorderRadius.zero,
@@ -1268,30 +1278,78 @@ class TaskListHeader extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.center,
                       child: DropdownButton<String>(
-                        items: const [
+                        items: [
                           DropdownMenuItem(
                             value: "all",
-                            child: Text("All Tasks"),
+                            child: Text(
+                              "All Tasks",
+                              style: TextStyle(
+                                color: EasyDynamicTheme.of(context).themeMode ==
+                                        ThemeMode.dark
+                                    ? Colors.grey
+                                    : Colors.black,
+                              ),
+                            ),
                           ),
                           DropdownMenuItem(
                             value: "approved",
-                            child: Text("Approved"),
+                            child: Text(
+                              "Approved",
+                              style: TextStyle(
+                                color: EasyDynamicTheme.of(context).themeMode ==
+                                        ThemeMode.dark
+                                    ? Colors.grey
+                                    : Colors.black,
+                              ),
+                            ),
                           ),
                           DropdownMenuItem(
                             value: "rejected",
-                            child: Text("Rejected"),
+                            child: Text(
+                              "Rejected",
+                              style: TextStyle(
+                                color: EasyDynamicTheme.of(context).themeMode ==
+                                        ThemeMode.dark
+                                    ? Colors.grey
+                                    : Colors.black,
+                              ),
+                            ),
                           ),
                           DropdownMenuItem(
                             value: "pending",
-                            child: Text("Pending"),
+                            child: Text(
+                              "Pending",
+                              style: TextStyle(
+                                color: EasyDynamicTheme.of(context).themeMode ==
+                                        ThemeMode.dark
+                                    ? Colors.grey
+                                    : Colors.black,
+                              ),
+                            ),
                           ),
                           DropdownMenuItem(
                             value: "to_inspect",
-                            child: Text("To Inspect"),
+                            child: Text(
+                              "To Inspect",
+                              style: TextStyle(
+                                color: EasyDynamicTheme.of(context).themeMode ==
+                                        ThemeMode.dark
+                                    ? Colors.grey
+                                    : Colors.black,
+                              ),
+                            ),
                           ),
                           DropdownMenuItem(
                             value: "in_process",
-                            child: Text("In Process"),
+                            child: Text(
+                              "In Process",
+                              style: TextStyle(
+                                color: EasyDynamicTheme.of(context).themeMode ==
+                                        ThemeMode.dark
+                                    ? Colors.grey
+                                    : Colors.black,
+                              ),
+                            ),
                           ),
                         ],
                         onChanged: onDropdownChanged,

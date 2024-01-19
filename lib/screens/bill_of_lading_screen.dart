@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -25,7 +26,7 @@ class BillOfLading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       // floatingActionButton: FloatingActionButton(onPressed: () async {
       //   final billOfLading = await getBillOfLading();
       //   print(billOfLading.data.dataList.toList());
@@ -33,7 +34,11 @@ class BillOfLading extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(
+          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              ? Colors.white
+              : Colors.black,
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -102,7 +107,7 @@ class BillOfLading extends StatelessWidget {
 
   Container LadingContainer(Billdata billdata, BuildContext context) {
     return Container(
-      color: Colors.white,
+      //  color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 21.0, vertical: 3),
         child: Column(

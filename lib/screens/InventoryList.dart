@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
@@ -229,28 +230,59 @@ class _InventoryListState extends State<InventoryList> {
             child: CustomSlidingSegmentedControl<int>(
               isStretch: true,
               initialValue: 1,
-              children: const {
-                1: Text('Month'),
-                2: Text('Process'),
-                3: Text('YOY'),
+              children: {
+                1: Text(
+                  'Month',
+                  style: TextStyle(
+                    color:
+                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                            ? Colors.black
+                            : Colors.black,
+                  ),
+                ),
+                2: Text(
+                  'Process',
+                  style: TextStyle(
+                    color:
+                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                            ? Colors.black
+                            : Colors.black,
+                  ),
+                ),
+                3: Text(
+                  'YOY',
+                  style: TextStyle(
+                    color:
+                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                            ? Colors.black
+                            : Colors.black,
+                  ),
+                ),
               },
               decoration: BoxDecoration(
-                color: CupertinoColors.lightBackgroundGray,
+                //  color: CupertinoColors.lightBackgroundGray,
+                color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                    ? Colors.white.withOpacity(0.92)
+                    : CupertinoColors.lightBackgroundGray,
+
                 borderRadius: BorderRadius.circular(8),
               ),
               thumbDecoration: BoxDecoration(
-                color: Colors.white,
+                //  color: Colors.white,
+                color: Colors.grey,
                 borderRadius: BorderRadius.circular(6),
                 boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(.3),
-                    blurRadius: 4.0,
-                    spreadRadius: 1.0,
-                    offset: const Offset(
-                      0.0,
-                      2.0,
-                    ),
-                  ),
+                  EasyDynamicTheme.of(context).themeMode != ThemeMode.dark
+                      ? BoxShadow(
+                          color: Colors.black.withOpacity(.3),
+                          blurRadius: 4.0,
+                          spreadRadius: 1.0,
+                          offset: const Offset(
+                            0.0,
+                            2.0,
+                          ),
+                        )
+                      : BoxShadow(),
                 ],
               ),
               duration: const Duration(milliseconds: 300),
@@ -467,9 +499,14 @@ Widget _buildAppBar(
   bool isShowProfile,
 ) {
   return AppBar(
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.transparent,
     leading: IconButton(
-      icon: const Icon(Icons.arrow_back),
+      icon: Icon(
+        Icons.arrow_back,
+        color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            ? Colors.white
+            : Colors.black,
+      ),
       onPressed: () {
         Navigator.pushReplacement(
           context,
@@ -487,7 +524,10 @@ Widget _buildAppBar(
           return Text(
             "Inventory",
             style: TextStyle(
-              color: const Color(0xff1E2022),
+              //    color: const Color(0xff1E2022),
+              color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                  ? Colors.white
+                  : Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: appBarTiltleSize,
             ),
@@ -527,6 +567,10 @@ Widget _buildAppBar(
                     "assets/images/ic_bell.png",
                     width: 32,
                     height: 32,
+                    color:
+                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                            ? Colors.white
+                            : Colors.black,
                   ),
                 ),
                 !hasNewNotifiaction
@@ -608,7 +652,11 @@ class InventoryListItemWidget extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
-          color: Colors.white,
+          //    color: Colors.white,
+          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              ? Colors.white.withOpacity(0.92)
+              : Colors.white,
+
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
@@ -652,18 +700,26 @@ class InventoryListItemWidget extends StatelessWidget {
                   Text(
                     ediStdNomenclature![0].toUpperCase() +
                         ediStdNomenclature!.substring(1),
-                    style: const TextStyle(
+                    style: TextStyle(
                       // color: getProgressColor(status),
                       fontSize: 12.0,
                       fontWeight: FontWeight.w500,
+                      color: EasyDynamicTheme.of(context).themeMode ==
+                              ThemeMode.dark
+                          ? Colors.grey
+                          : Colors.white,
                     ),
                   ),
                   // const Spacer(),
                   Text(
                     "Shape:$shape",
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12.0,
                       fontWeight: FontWeight.w500,
+                      color: EasyDynamicTheme.of(context).themeMode ==
+                              ThemeMode.dark
+                          ? Colors.black
+                          : Colors.white,
                     ),
                   ),
                 ],

@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> getIPLocally() async {
     final ipBox = await Hive.openBox('ipBox');
-    BASE_URL = await ipBox.get('ip').toString();
+    // BASE_URL = await ipBox.get('ip').toString();
     setState(() {});
   }
 
@@ -224,83 +225,89 @@ class _LoginScreenState extends State<LoginScreen> {
                           'assets/images/ic_back.png',
                           width: 20,
                           height: 20,
+                          color: EasyDynamicTheme.of(context).themeMode ==
+                                  ThemeMode.dark
+                              ? Colors.white
+                              : Colors.black,
                         ),
                       ),
                     ),
                   ),
                   Spacer(),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 0.0, horizontal: 20.0),
-                      child: GestureDetector(
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text('Change IP'),
-                                  content: TextFormField(
-                                    key: ipFormKey,
-                                    keyboardType:
-                                        TextInputType.numberWithOptions(
-                                            decimal: true),
-                                    validator: (value) {
-                                      if (value!.trim().isEmpty) {
-                                        return 'Enter an IP address!';
-                                      }
-                                      return null;
-                                    },
-                                    onChanged: (value) async {
-                                      ipPart = value.trim();
-                                      print("IP :" + ipPart);
-                                      BASE_URL = 'http://$ipPart:3500/api';
+                  // Align(
+                  //   alignment: Alignment.topRight,
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.symmetric(
+                  //         vertical: 0.0, horizontal: 20.0),
+                  //     child: GestureDetector(
+                  //         onTap: () {
+                  //           showDialog(
+                  //             context: context,
+                  //             builder: (context) {
+                  //               return AlertDialog(
+                  //                 title: Text('Change IP'),
+                  //                 content: TextFormField(
+                  //                   key: ipFormKey,
+                  //                   keyboardType:
+                  //                       TextInputType.numberWithOptions(
+                  //                           decimal: true),
+                  //                   validator: (value) {
+                  //                     if (value!.trim().isEmpty) {
+                  //                       return 'Enter an IP address!';
+                  //                     }
+                  //                     return null;
+                  //                   },
+                  //                   onChanged: (value) async {
+                  //                     ////////////////////////////////////////////////////////////////////  this is dynamic part start here
+                  //                     //  ipPart = value.trim();
+                  //                     //   print("IP :" + ipPart);
+                  //                     //  BASE_URL = 'http://$ipPart:3500/api';
 
-                                      final ipBox = await Hive.openBox('ipBox');
-                                      await ipBox.put('ip', BASE_URL);
-                                    },
-                                    decoration:
-                                        InputDecoration(hintText: 'IP address'),
-                                  ),
-                                  actions: [
-                                    ElevatedButton(
-                                        onPressed: () async {
-                                          ScaffoldMessenger.of(context)
-                                              .clearSnackBars();
-                                          if (!ipFormKey.currentState!
-                                              .validate()) return;
-                                          //    Navigator.pop(context);
-                                          //  BASE_URL=
+                  //                     final ipBox = await Hive.openBox('ipBox');
+                  //                     await ipBox.put('ip', BASE_URL);
+                  //                     ////////////////////////////////////////////////////////////////////  this is dynamic part end here
+                  //                   },
+                  //                   decoration:
+                  //                       InputDecoration(hintText: 'IP address'),
+                  //                 ),
+                  //                 actions: [
+                  //                   ElevatedButton(
+                  //                       onPressed: () async {
+                  //                         ScaffoldMessenger.of(context)
+                  //                             .clearSnackBars();
+                  //                         if (!ipFormKey.currentState!
+                  //                             .validate()) return;
+                  //                         //    Navigator.pop(context);
+                  //                         //  BASE_URL=
 
-                                          print('ipPart on Submit: ' + ipPart);
-                                          print('BASE_url on Submit: ' +
-                                              BASE_URL);
-                                          Navigator.pop(context);
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                      'oops IP updated!')));
-                                          //    setState(() {});
-                                        },
-                                        child: Text('Update'))
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          child: Chip(
-                            label: Text('Update Server IP'),
-                          )),
-                      // child: Container(
-                      //   padding: EdgeInsets.all(7),
-                      //   color: Colors.red,
-                      //   child: Text(
-                      //     'Update Server IP',
-                      //     style: TextStyle(color: Colors.white),
-                      //   )),
-                    ),
-                  ),
+                  //                         print('ipPart on Submit: ' + ipPart);
+                  //                         print('BASE_url on Submit: ' +
+                  //                             BASE_URL);
+                  //                         Navigator.pop(context);
+                  //                         ScaffoldMessenger.of(context)
+                  //                             .showSnackBar(SnackBar(
+                  //                                 content: Text(
+                  //                                     'oops IP updated!')));
+                  //                         //    setState(() {});
+                  //                       },
+                  //                       child: Text('Update'))
+                  //                 ],
+                  //               );
+                  //             },
+                  //           );
+                  //         },
+                  //         child: Chip(
+                  //           label: Text('Update Server IP'),
+                  //         )),
+                  //     // child: Container(
+                  //     //   padding: EdgeInsets.all(7),
+                  //     //   color: Colors.red,
+                  //     //   child: Text(
+                  //     //     'Update Server IP',
+                  //     //     style: TextStyle(color: Colors.white),
+                  //     //   )),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -310,11 +317,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const SizedBox(
+                    SizedBox(
                       width: double.infinity,
                       child: Text("Login",
                           style: TextStyle(
-                            color: Colors.black,
+                            //    color: Colors.black,
+                            color: EasyDynamicTheme.of(context).themeMode ==
+                                    ThemeMode.dark
+                                ? Colors.white
+                                : Colors.black,
                             fontSize: 30,
                           )),
                     ),
@@ -371,10 +382,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             Navigator.pushReplacementNamed(
                                 context, '/resetpassword');
                           },
-                          child: const Text("Forgot Password",
+                          child: Text("Forgot Password",
                               textAlign: TextAlign.end,
                               style: TextStyle(
-                                color: Colors.black,
+                                //  color: Colors.black,
+                                color: EasyDynamicTheme.of(context).themeMode ==
+                                        ThemeMode.dark
+                                    ? Colors.white
+                                    : Colors.black,
+
                                 fontSize: 10,
                               )),
                         ),
@@ -386,13 +402,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 50.0,
                       child: Container(
                         decoration: BoxDecoration(boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(
-                                0, 3), // changes position of shadow
-                          )
+                          (EasyDynamicTheme.of(context).themeMode !=
+                                  ThemeMode.dark)
+                              ? BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(
+                                      0, 3), // changes position of shadow
+                                )
+                              : const BoxShadow(),
                         ]),
                         child: ElevatedButton(
                           onPressed: () {

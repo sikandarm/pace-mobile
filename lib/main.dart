@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pace_application_fb/screens/facebook_email_screen.dart';
+import 'package:pace_application_fb/theme/darkTheme.dart';
 
 import 'api/firebase_api.dart';
 import 'firebase_options.dart';
@@ -124,7 +126,11 @@ void main() async {
   });
 
 // Required for handling messages in the background
-  runApp(const MyApp());
+  runApp(
+    EasyDynamicThemeWidget(
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -136,6 +142,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'KEFC',
       debugShowCheckedModeBanner: false,
+      themeMode: EasyDynamicTheme.of(context).themeMode,
+      darkTheme: DarkTheme.themeData(context),
       theme: ThemeData(
         primarySwatch: Colors.blue,
         useMaterial3: true,

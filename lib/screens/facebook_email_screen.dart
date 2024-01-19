@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -107,6 +108,18 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
       // }),
 
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.arrow_back_ios_new,
+            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                ? Colors.white.withOpacity(0.92)
+                : Colors.white,
+          ),
+        ),
         title: Text(
           'Facebook Email Screen',
           style: TextStyle(fontSize: appBarTiltleSize),
@@ -170,7 +183,6 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                 } else if (snapshot.hasData) {
                   _lsRoles = snapshot.data!.map((role) => role.name!).toList();
 
-
                   return Visibility(
                     visible: !checkUserFbData!.data!.assignrole!,
                     child: SizedBox(
@@ -211,12 +223,15 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
               height: 50.0,
               child: Container(
                 decoration: BoxDecoration(boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3), // changes position of shadow
-                  )
+                  (EasyDynamicTheme.of(context).themeMode != ThemeMode.dark)
+                      ? BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
+                        )
+                      : const BoxShadow(),
                 ]),
                 child: ElevatedButton(
                   onPressed: () async {

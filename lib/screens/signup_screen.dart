@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String _selectedRoleName = "";
   int _selectedRoleId = 1;
   late List<String> _lsRoles; // List to store role names
-
 
   @override
   void initState() {
@@ -136,6 +136,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     'assets/images/ic_back.png',
                     width: 20,
                     height: 20,
+                    color:
+                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                            ? Colors.white
+                            : Colors.black,
                   ),
                 ),
               ),
@@ -144,11 +148,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
               padding: const EdgeInsets.all(25),
               child: Column(
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     width: double.infinity,
                     child: Text("Sign Up",
                         style: TextStyle(
-                          color: Colors.black,
+                          //    color: Colors.black,
+                          color: EasyDynamicTheme.of(context).themeMode ==
+                                  ThemeMode.dark
+                              ? Colors.white
+                              : Colors.black,
+
                           fontSize: 30,
                         )),
                   ),
@@ -312,13 +321,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: 50.0,
                     child: Container(
                       decoration: BoxDecoration(boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
-                        )
+                        (EasyDynamicTheme.of(context).themeMode !=
+                                ThemeMode.dark)
+                            ? BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(
+                                    0, 3), // changes position of shadow
+                              )
+                            : const BoxShadow(),
                       ]),
                       child: ElevatedButton(
                         onPressed: () {
@@ -398,8 +410,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 }
 
-
-
 class _PhoneNumberFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
@@ -423,10 +433,3 @@ class _PhoneNumberFormatter extends TextInputFormatter {
     }
   }
 }
-
-
-
-
-
-
-

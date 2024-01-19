@@ -1,3 +1,4 @@
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -212,9 +213,13 @@ class TaskWidget extends StatelessWidget {
                     children: [
                       Text(
                         "Pmk# $taskName",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14.0,
+                          color: EasyDynamicTheme.of(context).themeMode ==
+                                  ThemeMode.dark
+                              ? Colors.black
+                              : Colors.black,
                         ),
                       ),
                       Text(
@@ -257,6 +262,10 @@ class TaskWidget extends StatelessWidget {
                               visualDensity: VisualDensity.compact,
                               onPressed: onPressedDelete2,
                               icon: Icon(Icons.delete),
+                              color: EasyDynamicTheme.of(context).themeMode ==
+                                      ThemeMode.dark
+                                  ? Colors.redAccent
+                                  : Colors.red,
                             ),
                     ],
                   ),

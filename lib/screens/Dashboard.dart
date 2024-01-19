@@ -1,3 +1,4 @@
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -25,6 +26,8 @@ bool blShowSharedCAR = false;
 bool blShowCAR = false;
 bool b1ShowPurchaseOrder = false;
 bool blShowInventory = false;
+
+ValueNotifier<bool> isDarkMode = ValueNotifier(false);
 
 bool b1ViewDashBoardWithGraphs =
     false; // not used yet as was found b1ShowInventoryList
@@ -77,7 +80,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     final ip = await ipBox.get('ip');
     print('ip in dashboard screen: $ip');
-    BASE_URL = ip;
+    // BASE_URL = ip;
     setState(() {});
   }
 
@@ -161,12 +164,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Colors.white.withOpacity(0.92),
+      backgroundColor: EasyDynamicTheme.of(context).themeMode != ThemeMode.dark
+          ? Colors.white.withOpacity(0.92)
+          : const Color.fromARGB(255, 7, 21, 32),
       // floatingActionButton: FloatingActionButton(onPressed: () async {
       //   final items = await fetchPurchaseOrderItemsDataList();
       //   print(items.length);
       // }),
       key: scaffoldKey,
       drawer: _buildSideDrawer(context),
+
       appBar: _buildAppBar(context, scaffoldKey, userProfileImage),
       body: RefreshIndicator(
         onRefresh: _refreshData,
@@ -260,13 +268,20 @@ PreferredSizeWidget _buildAppBar(
   String? userProfileImage,
 ) {
   return AppBar(
-    backgroundColor: Colors.white,
+    // backgroundColor: Colors.white,
+
+    backgroundColor: Colors.transparent,
+
     leading: IconButton(
+      color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+          ? Colors.white
+          : Colors.black,
       icon: const Icon(Icons.menu),
       onPressed: () {
         scaffoldKey.currentState?.openDrawer(); // Open the side drawer
       },
     ),
+
     title: FutureBuilder<String?>(
       future: getStringFromSF(BL_USER_FULL_NAME),
       builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
@@ -275,7 +290,9 @@ PreferredSizeWidget _buildAppBar(
           return Text(
             "Hi, ${title ?? ''}",
             style: TextStyle(
-              color: Color(0xff1E2022),
+              color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                  ? Colors.white
+                  : Color(0xff1E2022),
               fontWeight: FontWeight.bold,
               fontSize: appBarTiltleSize,
             ),
@@ -320,6 +337,10 @@ PreferredSizeWidget _buildAppBar(
                       "assets/images/ic_bell.png",
                       width: 32,
                       height: 32,
+                      color: EasyDynamicTheme.of(context).themeMode ==
+                              ThemeMode.dark
+                          ? Colors.white
+                          : Color(0xff1E2022),
                     ),
                   ),
                   !hasNewNotifiaction
@@ -519,10 +540,9 @@ Widget _buildSideDrawer(BuildContext context) {
                             return;
                           }
 
-
                           ///////////////////////////////
 
-                          Navigator.pop(context); 
+                          Navigator.pop(context);
 ////////////////////////////////
                           Navigator.push(
                             context,
@@ -577,6 +597,74 @@ Widget _buildSideDrawer(BuildContext context) {
                         },
                       ),
                     ),
+
+                    // Visibility(
+                    //   //  visible: blShowSharedCAR,
+                    //   child: ListTile(
+                    //     title: const Text('Dark Theme'),
+                    //     leading: const Icon(Icons.dark_mode),
+                    //     trailing: Switch.adaptive(
+                    //       value: isDarkMode,
+                    //       onChanged: (value) {
+                    //         isDarkMode = !isDarkMode;
+                    //       },
+                    //     ),
+                    //     onTap: () {
+                    //       // if (!b1ViewContacts) {
+                    //       //   showToast('You do not have permissions.');
+                    //       //   return;
+                    //       // }
+                    //     },
+                    //   ),
+                    // ),
+
+                    ValueListenableBuilder(
+                      valueListenable: isDarkMode,
+                      builder: (context, value, child) {
+                        return ListTile(
+                          title: const Text('Dark Theme'),
+                          leading: const Icon(Icons.dark_mode),
+                          trailing: Switch.adaptive(
+                            value: isDarkMode.value,
+                            onChanged: (value) async {
+                              //   isDarkMode.value = !isDarkMode.value;
+
+                              //    EasyDynamicTheme.of(context).themeMode =
+                              //      ThemeMode.light;
+
+                              EasyDynamicTheme.of(context).changeTheme(
+                                  //    dynamic: true,
+                                  //   dark: true,
+                                  );
+
+                              print(EasyDynamicTheme.of(context)
+                                  .themeMode
+                                  .toString());
+
+                              if (EasyDynamicTheme.of(context).themeMode ==
+                                      ThemeMode.light ||
+                                  EasyDynamicTheme.of(context).themeMode ==
+                                      ThemeMode.system) {
+                                isDarkMode.value = false;
+                                //
+                                if (EasyDynamicTheme.of(context).themeMode ==
+                                    ThemeMode.light) {
+                                  showToast('Theme changed to light mode');
+                                }
+
+                                if (EasyDynamicTheme.of(context).themeMode ==
+                                    ThemeMode.system) {
+                                  showToast('Theme changed to system mode');
+                                }
+                              } else {
+                                isDarkMode.value = true;
+                                showToast('Theme Changed To Dark');
+                              }
+                            },
+                          ),
+                        );
+                      },
+                    )
                   ],
                 ),
               ),

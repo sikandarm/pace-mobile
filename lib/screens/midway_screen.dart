@@ -134,8 +134,9 @@ class _MidwayScreenScreenState extends State<MidwayScreen> {
                                       '/signup'); // move to login screen
                                 },
                                 style: ButtonStyle(
-                                  // backgroundColor:
-                                  //     MaterialStateProperty.all<Color>(Colors.blue),
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.white),
                                   shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                     RoundedRectangleBorder(

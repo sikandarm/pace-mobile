@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../services/user_list_service.dart';
@@ -125,9 +126,18 @@ class _UserListState extends State<UserList> {
 
 Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey, int carId) {
   return AppBar(
-    backgroundColor: Colors.white,
+    //   backgroundColor: Colors.white,
+    backgroundColor: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+        ? Color.fromARGB(255, 7, 21, 32)
+        : Colors.black,
+
     leading: IconButton(
-      icon: const Icon(Icons.arrow_back),
+      icon: Icon(
+        Icons.arrow_back,
+        color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            ? Colors.white
+            : Colors.black,
+      ),
       onPressed: () {
         Navigator.pushReplacement(
           context,
@@ -145,7 +155,10 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey, int carId) {
           return Text(
             "User List",
             style: TextStyle(
-              color: Color(0xff1E2022),
+              //   color: Color(0xff1E2022),
+              color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                  ? Colors.white
+                  : Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: appBarTiltleSize,
             ),
@@ -241,7 +254,10 @@ class _UserListItemWidgetState extends State<UserListItemWidget> {
         margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
-          color: Colors.white,
+          //   color: Colors.white,
+          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              ? Colors.white.withOpacity(0.92)
+              : Colors.white,
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
@@ -269,10 +285,6 @@ class _UserListItemWidgetState extends State<UserListItemWidget> {
                         fontSize: 17,
                         fontWeight: FontWeight.normal,
                       ),
-
-
-
-
                     ),
                   ),
                 ),
