@@ -227,7 +227,10 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
                                     purchaseOrder: purchaseOrdersList[index])));
                       },
                       child: purchaseOrderCard(
-                          color: index % 2 == 0
+                          // color: index % 2 == 0
+                          //     ? Colors.redAccent
+                          //     : Colors.green.withOpacity(0.8),
+                          color: item.status?.toLowerCase() == 'pending'
                               ? Colors.redAccent
                               : Colors.green.withOpacity(0.8),
                           companyName: item.company!.name.toString(),

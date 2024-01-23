@@ -467,7 +467,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                             builder: (BuildContext context) {
                               return AlertDialog(
                                 title: const Text(
-                                  'Your Recieved Status',
+                                  'Your Received Status',
                                   style: TextStyle(
                                     fontSize: 15,
                                     color: Colors.deepPurple,
@@ -475,8 +475,8 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                                   ),
                                 ),
                                 content: Text(isRecievied
-                                    ? 'Purchase order successfully recieved'
-                                    : 'Failed to purchase order recieved'),
+                                    ? 'Purchase order successfully received'
+                                    : 'Failed to purchase order received'),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
