@@ -20,11 +20,11 @@ class InventoryDetailScreen extends StatefulWidget {
 }
 
 bool _blShowNotificationsList = false;
+bool blShowProfile = false;
 
 class _InventoryDetailState extends State<InventoryDetailScreen> {
   Future<List<InventoryDetailModel>> _futureTask = Future.value([]);
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
 
   @override
   void initState() {
@@ -39,6 +39,10 @@ class _InventoryDetailState extends State<InventoryDetailScreen> {
 
     checkPermissionAndUpdateBool("view_notifications", (localBool) {
       _blShowNotificationsList = localBool;
+    });
+
+    checkPermissionAndUpdateBool("view_profile", (localBool) {
+      blShowProfile = localBool;
     });
   }
 
@@ -183,64 +187,72 @@ Widget _buildAppBar(
     actions: [
       Row(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10.0),
-            child: Stack(
-              children: [
-                InkWell(
-                  onTap: () {
-                    hasNewNotifiaction = false;
-                    if (_blShowNotificationsList) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const NotificationsScreen()),
-                      );
-                    } else {
-                      showToast(
-                          "You do not have permission to see notifications.");
-                    }
-                  },
-                  child: Image.asset(
-                    "assets/images/ic_bell.png",
-                    width: 32,
-                    height: 32,
-                    color:
-                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                            ? Colors.white
-                            : Colors.black,
+          Visibility(
+            visible: _blShowNotificationsList,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 10.0),
+              child: Stack(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      hasNewNotifiaction = false;
+                      if (_blShowNotificationsList) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const NotificationsScreen()),
+                        );
+                      } else {
+                        showToast(
+                            "You do not have permission to see notifications.");
+                      }
+                    },
+                    child: Image.asset(
+                      "assets/images/ic_bell.png",
+                      width: 32,
+                      height: 32,
+                      color: EasyDynamicTheme.of(context).themeMode ==
+                              ThemeMode.dark
+                          ? Colors.white
+                          : Colors.black,
+                    ),
                   ),
-                ),
-                hasNewNotifiaction
-                    ? Positioned(
-                        top: 5,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(12),
+                  hasNewNotifiaction
+                      ? Positioned(
+                          top: 5,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
-                        ),
-                      )
-                    : SizedBox(),
-              ],
+                        )
+                      : SizedBox(),
+                ],
+              ),
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ProfileScreen()),
-              );
-            },
-            child: Padding(
-              padding: EdgeInsets.only(right: 10.0, left: 5.0),
-              child: CircleAvatar(
-                backgroundImage: userProfileImage == null
-                    ? AssetImage('assets/images/ic_profile.png')
-                    : NetworkImage(userProfileImage) as ImageProvider,
-                radius: 15,
+          Visibility(
+            visible: blShowProfile,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ProfileScreen()),
+                );
+              },
+              child: Padding(
+                padding: EdgeInsets.only(right: 10.0, left: 5.0),
+                child: CircleAvatar(
+                  backgroundImage: userProfileImage == null
+                      ? AssetImage('assets/images/ic_profile.png')
+                      : NetworkImage(userProfileImage) as ImageProvider,
+                  radius: 15,
+                ),
               ),
             ),
           ),

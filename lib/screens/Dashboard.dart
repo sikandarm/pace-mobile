@@ -751,7 +751,7 @@ Widget _buildSideDrawer(BuildContext context) {
 Widget _buildDashboardCard(BuildContext context) {
   return GestureDetector(
     onTap: () {
-      if (blShowInventory) {
+      if (blShowInventory || b1ViewDashBoardWithGraphs) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

@@ -1044,11 +1044,12 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(9)))),
                           onPressed: () async {
+                            print('this button pressed 1111');
                             commentController.clear();
                             print('pause button pressed');
 
                             if (taskPayOrPauseStatus != null &&
-                                taskPayOrPauseStatus == false) {
+                                taskPayOrPauseStatus == true) {
                               final dialogResult = await showDialog<bool?>(
                                 context: context,
                                 builder: (BuildContext context) {
@@ -1068,6 +1069,10 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                           ),
                                           TextFormField(
                                             controller: commentController,
+                                            onChanged: (value) {
+                                              commentController.text =
+                                                  value.trim();
+                                            },
                                             decoration: const InputDecoration(
                                               hintStyle:
                                                   TextStyle(fontSize: 13),
@@ -1089,6 +1094,7 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                     actions: [
                                       TextButton(
                                         onPressed: () async {
+                                          print('this button pressed 2222');
                                           //  sequenceNameController.clear();
                                           ScaffoldMessenger.of(context)
                                               .clearSnackBars();
@@ -1112,14 +1118,20 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                   );
                                 },
                               );
-
+                              print('Common Controller: ' +
+                                  commentController.text.trim());
                               if (dialogResult == true) {
-                                if (!taskPayOrPauseStatus!) {
+                                print('taskPayOrPauseStatus: ' +
+                                    taskPayOrPauseStatus.toString());
+                                if (taskPayOrPauseStatus!) {
                                   final response1 = await playAndPauseTaskApi(
                                     taskId: widget.id.toString(),
-                                    break_start_as_DateTime:
+                                    // break_start_as_DateTime:
+                                    //     DateTime.now().toString(),
+                                    // break_end_as_DateTime: null,
+                                    break_start_as_DateTime: null,
+                                    break_end_as_DateTime:
                                         DateTime.now().toString(),
-                                    break_end_as_DateTime: null,
                                     comment: commentController.text.trim(),
                                     //  comment: '111'
                                   );
@@ -1163,6 +1175,7 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                   await getTaskPlayOrPauseStatus(
                                       taskId: widget.id.toString());
                             }
+                            print('task id: ' + widget.id.toString());
 
                             setState(() {});
                             return;
@@ -1199,8 +1212,10 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                           ]),
                           child: _blApprovedTask && _blSelfAssignATask
                               ? ElevatedButton(
-                                  onPressed: () =>
-                                      buttonAction(context, widget.id),
+                                  onPressed: () {
+                                    print('this button pressed 3333');
+                                    buttonAction(context, widget.id);
+                                  },
                                   style: ButtonStyle(
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
@@ -1215,7 +1230,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                   ),
                                   child: Text(
                                     setButtonText(
-                                        widget.status!, widget.userId!),
+                                      widget.status!,
+                                      widget.userId!,
+                                    ),
                                     style: const TextStyle(
                                       color: Colors.white,
                                     ),
@@ -1225,8 +1242,10 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                       (widget.status == "in_process" ||
                                           widget.status == "pending"))
                                   ? ElevatedButton(
-                                      onPressed: () =>
-                                          buttonAction(context, widget.id),
+                                      onPressed: () {
+                                        print('this button pressed 4444');
+                                        buttonAction(context, widget.id);
+                                      },
                                       style: ButtonStyle(
                                         backgroundColor:
                                             MaterialStateProperty.all<Color>(
@@ -1250,8 +1269,10 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                   : _blApprovedTask &&
                                           widget.status == "to_inspect"
                                       ? ElevatedButton(
-                                          onPressed: () =>
-                                              buttonAction(context, widget.id),
+                                          onPressed: () {
+                                            print('this button pressed 5555');
+                                            buttonAction(context, widget.id);
+                                          },
                                           style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty.all<
@@ -1273,8 +1294,10 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                           ),
                                         )
                                       : ElevatedButton(
-                                          onPressed: () =>
-                                              buttonAction(context, widget.id),
+                                          onPressed: () {
+                                            print('this button pressed 6666');
+                                            buttonAction(context, widget.id);
+                                          },
                                           style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty.all<
@@ -1315,13 +1338,15 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                           Colors.white),
                                   backgroundColor: MaterialStatePropertyAll(
                                       taskLogsList.isEmpty
-                                          ? Colors.amber
+                                          ? Color.fromARGB(205, 255, 193, 7)
                                           : Colors.green),
                                   shape: MaterialStatePropertyAll(
                                       RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(9)))),
                               onPressed: () async {
+                                print('this button pressed 7777');
+                                setState(() {});
                                 commentController.clear();
                                 print('resume button pressed');
 
@@ -1368,6 +1393,7 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                         actions: [
                                           TextButton(
                                             onPressed: () async {
+                                              print('this button pressed 8888');
                                               //  sequenceNameController.clear();
                                               ScaffoldMessenger.of(context)
                                                   .clearSnackBars();
@@ -1401,8 +1427,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                         break_start_as_DateTime:
                                             DateTime.now().toString(),
                                         break_end_as_DateTime: null,
-                                        comment: commentController.text.trim(),
+                                        //  comment: commentController.text.trim(),
                                         //  comment: '111',
+                                        comment: '',
                                       );
                                     } else {
                                       final response1 =
@@ -1411,8 +1438,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                         break_start_as_DateTime: null,
                                         break_end_as_DateTime:
                                             DateTime.now().toString(),
-                                        comment: commentController.text.trim(),
-                                        //  comment: '222',
+
+                                        ///  comment: commentController.text.trim(),
+                                        comment: '222',
                                       );
                                     }
                                     taskPayOrPauseStatus =
@@ -1425,21 +1453,20 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                 } else {
                                   if (!taskPayOrPauseStatus!) {
                                     final response1 = await playAndPauseTaskApi(
-                                      taskId: widget.id.toString(),
-                                      break_start_as_DateTime:
-                                          DateTime.now().toString(),
-                                      break_end_as_DateTime: null,
-                                      comment: commentController.text.trim(),
-                                      //                                    comment: '333'
-                                    );
+                                        taskId: widget.id.toString(),
+                                        break_start_as_DateTime:
+                                            DateTime.now().toString(),
+                                        break_end_as_DateTime: null,
+                                        //  comment: commentController.text.trim(),
+                                        comment: '333');
                                   } else {
                                     final response1 = await playAndPauseTaskApi(
                                       taskId: widget.id.toString(),
                                       break_start_as_DateTime: null,
                                       break_end_as_DateTime:
                                           DateTime.now().toString(),
-                                      comment: commentController.text.trim(),
-                                      // comment: '444',
+                                      //  comment: commentController.text.trim(),
+                                      comment: '444',
                                     );
                                   }
                                   taskPayOrPauseStatus =
@@ -1475,8 +1502,10 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                               ]),
                               child: _blApprovedTask && _blSelfAssignATask
                                   ? ElevatedButton(
-                                      onPressed: () =>
-                                          buttonAction(context, widget.id),
+                                      onPressed: () {
+                                        print('this button pressed 9999');
+                                        buttonAction(context, widget.id);
+                                      },
                                       style: ButtonStyle(
                                         backgroundColor:
                                             MaterialStateProperty.all<Color>(
@@ -1501,8 +1530,11 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                           (widget.status == "in_process" ||
                                               widget.status == "pending"))
                                       ? ElevatedButton(
-                                          onPressed: () =>
-                                              buttonAction(context, widget.id),
+                                          onPressed: () {
+                                            print(
+                                                'this button pressed 11112222');
+                                            buttonAction(context, widget.id);
+                                          },
                                           style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty.all<
@@ -1526,8 +1558,12 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                       : _blApprovedTask &&
                                               widget.status == "to_inspect"
                                           ? ElevatedButton(
-                                              onPressed: () => buttonAction(
-                                                  context, widget.id),
+                                              onPressed: () {
+                                                print(
+                                                    'this button pressed 11113333');
+                                                buttonAction(
+                                                    context, widget.id);
+                                              },
                                               style: ButtonStyle(
                                                 backgroundColor:
                                                     MaterialStateProperty.all<
@@ -1555,8 +1591,12 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                           //     child: Text('data'),
                                           //   ),
                                           : ElevatedButton(
-                                              onPressed: () => buttonAction(
-                                                  context, widget.id),
+                                              onPressed: () {
+                                                print(
+                                                    'this button pressed 11115555');
+                                                buttonAction(
+                                                    context, widget.id);
+                                              },
                                               style: ButtonStyle(
                                                 backgroundColor:
                                                     MaterialStateProperty.all<
@@ -1586,180 +1626,216 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                       )
                     : setButtonText(widget.status!, widget.userId!) !=
                             'Complete'
-                        ? Center(
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              height: 50.0,
-                              child: Container(
-                                  decoration: BoxDecoration(boxShadow: [
-                                    (EasyDynamicTheme.of(context).themeMode !=
-                                            ThemeMode.dark)
-                                        ? BoxShadow(
-                                            color: Colors.grey.withOpacity(0.5),
-                                            spreadRadius: 2,
-                                            blurRadius: 5,
-                                            offset: const Offset(0,
-                                                3), // changes position of shadow
-                                          )
-                                        : const BoxShadow(),
-                                  ]),
-                                  child: _blApprovedTask && _blSelfAssignATask
-                                      ? ElevatedButton(
-                                          onPressed: () =>
-                                              buttonAction(context, widget.id),
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all<
-                                                    Color>(Colors.blue),
-                                            shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
+                        ? Visibility(
+                            visible: _blSelfAssignATask,
+                            child: Center(
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                height: 50.0,
+                                child: Container(
+                                    decoration: BoxDecoration(boxShadow: [
+                                      (EasyDynamicTheme.of(context).themeMode !=
+                                              ThemeMode.dark)
+                                          ? BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.5),
+                                              spreadRadius: 2,
+                                              blurRadius: 5,
+                                              offset: const Offset(0,
+                                                  3), // changes position of shadow
+                                            )
+                                          : const BoxShadow(),
+                                    ]),
+                                    child: _blApprovedTask && _blSelfAssignATask
+                                        ? ElevatedButton(
+                                            onPressed: () {
+                                              print(
+                                                  'this button pressed 11119999');
+                                              buttonAction(context, widget.id);
+                                            },
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all<
+                                                      Color>(Colors.blue),
+                                              shape: MaterialStateProperty.all<
+                                                  RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          child: Text(
-                                            setButtonText(
-                                                widget.status!, widget.userId!),
-                                            style: const TextStyle(
-                                              color: Colors.white,
+                                            child: Text(
+                                              setButtonText(widget.status!,
+                                                  widget.userId!),
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                              ),
                                             ),
-                                          ),
-                                        )
-                                      : (_blSelfAssignATask &&
-                                              (widget.status == "in_process" ||
-                                                  widget.status == "pending"))
-                                          ? ElevatedButton(
-                                              onPressed: () => buttonAction(
-                                                  context, widget.id),
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all<
-                                                        Color>(Colors.blue),
-                                                shape:
-                                                    MaterialStateProperty.all<
-                                                        RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0),
+                                          )
+                                        : (_blSelfAssignATask &&
+                                                (widget.status ==
+                                                        "in_process" ||
+                                                    widget.status == "pending"))
+                                            ? ElevatedButton(
+                                                onPressed: () {
+                                                  print(
+                                                      'this button pressed 33333333333333');
+                                                  buttonAction(
+                                                      context, widget.id);
+                                                },
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all<
+                                                          Color>(Colors.blue),
+                                                  shape:
+                                                      MaterialStateProperty.all<
+                                                          RoundedRectangleBorder>(
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              child: Text(
-                                                setSelfApprovedText(
-                                                    widget.status!,
-                                                    widget.userId!),
-                                                style: const TextStyle(
-                                                  color: Colors.white,
+                                                child: Text(
+                                                  setSelfApprovedText(
+                                                      widget.status!,
+                                                      widget.userId!),
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                  ),
                                                 ),
-                                              ),
-                                            )
-                                          : _blApprovedTask &&
-                                                  widget.status == "to_inspect"
-                                              ? ElevatedButton(
-                                                  onPressed: () => buttonAction(
-                                                      context, widget.id),
-                                                  style: ButtonStyle(
-                                                    backgroundColor:
-                                                        MaterialStateProperty
-                                                            .all<Color>(
-                                                                Colors.blue),
-                                                    shape: MaterialStateProperty
-                                                        .all<
-                                                            RoundedRectangleBorder>(
-                                                      RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
+                                              )
+                                            : _blApprovedTask &&
+                                                    widget.status ==
+                                                        "to_inspect"
+                                                ? ElevatedButton(
+                                                    onPressed: () {
+                                                      print(
+                                                          'this button pressed 9393939');
+                                                      buttonAction(
+                                                          context, widget.id);
+                                                    },
+                                                    style: ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStateProperty
+                                                              .all<Color>(
+                                                                  Colors.blue),
+                                                      shape: MaterialStateProperty
+                                                          .all<
+                                                              RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.0),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  child: Text(
-                                                    setInspectionText(
-                                                        widget.status!,
-                                                        widget.userId!),
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
+                                                    child: Text(
+                                                      setInspectionText(
+                                                          widget.status!,
+                                                          widget.userId!),
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                      ),
                                                     ),
-                                                  ),
-                                                )
-                                              : _blApprovedTask &&
-                                                      widget.status ==
-                                                          "rejected"
-                                                  ? ElevatedButton(
-                                                      onPressed: () =>
+                                                  )
+                                                : _blApprovedTask &&
+                                                        widget.status ==
+                                                            "rejected"
+                                                    ? ElevatedButton(
+                                                        onPressed: () {
+                                                          print(
+                                                              'this button pressed 12341241434312');
                                                           buttonAction(context,
-                                                              widget.id),
-                                                      style: ButtonStyle(
-                                                        backgroundColor:
-                                                            MaterialStateProperty.all<
-                                                                Color>(widget
-                                                                        .status!
+                                                              widget.id);
+                                                        },
+                                                        style: ButtonStyle(
+                                                          backgroundColor:
+                                                              MaterialStateProperty.all<
+                                                                  Color>(widget
+                                                                          .status!
+                                                                          .toLowerCase() ==
+                                                                      'rejected'
+                                                                  ? Colors.blue
+                                                                  : Colors.red),
+                                                          shape: MaterialStateProperty
+                                                              .all<
+                                                                  RoundedRectangleBorder>(
+                                                            RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10.0),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        child: Text(
+                                                          setInspectionText(
+                                                              widget.status!,
+                                                              widget.userId!),
+                                                          style:
+                                                              const TextStyle(
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      )
+
+                                                    /// this button is now diaplay all the time if not complete button
+                                                    : ElevatedButton(
+                                                        onPressed: () {
+                                                          print(
+                                                              'this button pressed 8120944928');
+                                                          buttonAction(context,
+                                                              widget.id);
+                                                        },
+                                                        style: ButtonStyle(
+                                                          backgroundColor:
+                                                              MaterialStateProperty
+                                                                  .all<Color>(
+                                                            widget.status!
                                                                         .toLowerCase() ==
                                                                     'rejected'
-                                                                ? Colors.blue
-                                                                : Colors.red),
-                                                        shape: MaterialStateProperty
-                                                            .all<
-                                                                RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
+                                                                ? Colors.green
+                                                                : widget.status!
+                                                                            .toLowerCase() ==
+                                                                        'pending'
+                                                                    ? Colors.red
+                                                                    : widget.status!.toLowerCase() ==
+                                                                            'to_inspect'
+                                                                        ? Colors
+                                                                            .green
+                                                                        : Colors
+                                                                            .red,
+                                                          ),
+                                                          shape: MaterialStateProperty
+                                                              .all<
+                                                                  RoundedRectangleBorder>(
+                                                            RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10.0),
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      child: Text(
-                                                        setInspectionText(
-                                                            widget.status!,
-                                                            widget.userId!),
-                                                        style: const TextStyle(
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    )
-
-                                                  /// this button is now diaplay all the time if not complete button
-                                                  : ElevatedButton(
-                                                      onPressed: () =>
-                                                          buttonAction(context,
-                                                              widget.id),
-                                                      style: ButtonStyle(
-                                                        backgroundColor:
-                                                            MaterialStateProperty
-                                                                .all<Color>(
-                                                          widget.status!
-                                                                      .toLowerCase() ==
-                                                                  'rejected'
-                                                              ? Colors.blue
-                                                              : Colors.green,
-                                                        ),
-                                                        shape: MaterialStateProperty
-                                                            .all<
-                                                                RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
+                                                        child: Text(
+                                                          setButtonText(
+                                                              widget.status!,
+                                                              widget.userId!),
+                                                          style:
+                                                              const TextStyle(
+                                                            color: Colors.white,
                                                           ),
                                                         ),
-                                                      ),
-                                                      child: Text(
-                                                        setButtonText(
-                                                            widget.status!,
-                                                            widget.userId!),
-                                                        style: const TextStyle(
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    )
-                                  //  SizedBox.shrink(
-                                  //     child: Text('111')),
-                                  ),
+                                                      )
+                                    //  SizedBox.shrink(
+                                    //     child: Text('111')),
+                                    ),
+                              ),
                             ),
                           )
                         : const SizedBox(

@@ -17,8 +17,23 @@ class RejectedReasonsScreen extends StatefulWidget {
 }
 
 class _RejectedReasonsListState extends State<RejectedReasonsScreen> {
+  bool blShowProfile = false;
+
+  void checkPermissionAndUpdateBool(
+      String permValue, Function(bool) boolUpdater) async {
+    var localBool = await hasPermission(permValue);
+
+    setState(() {
+      boolUpdater(localBool);
+    });
+  }
+
   @override
   void initState() {
+    checkPermissionAndUpdateBool("view_profile", (localBool) {
+      blShowProfile = localBool;
+    });
+
     getProfileImageToSharedPrefs();
     super.initState();
     fetchReasonCategories();
@@ -76,20 +91,24 @@ class _RejectedReasonsListState extends State<RejectedReasonsScreen> {
           ),
         ),
         actions: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ProfileScreen()),
-              );
-            },
-            child: Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: CircleAvatar(
-                backgroundImage: userProfileImage == null
-                    ? AssetImage('assets/images/ic_profile.png')
-                    : NetworkImage(userProfileImage!) as ImageProvider,
-                radius: 15,
+          Visibility(
+            visible: blShowProfile,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ProfileScreen()),
+                );
+              },
+              child: Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: CircleAvatar(
+                  backgroundImage: userProfileImage == null
+                      ? AssetImage('assets/images/ic_profile.png')
+                      : NetworkImage(userProfileImage!) as ImageProvider,
+                  radius: 15,
+                ),
               ),
             ),
           ),

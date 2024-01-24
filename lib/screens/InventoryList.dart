@@ -118,6 +118,10 @@ class _InventoryListState extends State<InventoryList> {
     checkPermissionAndUpdateBool("view_notifications", (localBool) {
       _blShowNotifications = localBool;
     });
+
+    checkPermissionAndUpdateBool("view_dashboard_with_graphs", (localBool) {
+      b1ViewDashBoardWithGraphs = localBool;
+    }); // not used yet
   }
 
   List<ChartSampleData> getChartData(Map data) {
@@ -223,230 +227,247 @@ class _InventoryListState extends State<InventoryList> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildAppBar(context, scaffoldKey, userProfileImage, blShowProfile),
-          const SizedBox(height: 10),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16.0),
-            width: double.infinity,
-            child: CustomSlidingSegmentedControl<int>(
-              isStretch: true,
-              initialValue: 1,
-              children: {
-                1: Text(
-                  'Month',
-                  style: TextStyle(
-                    color:
-                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                            ? Colors.black
-                            : Colors.black,
+          Visibility(
+              visible: b1ViewDashBoardWithGraphs,
+              child: const SizedBox(height: 10)),
+          Visibility(
+            visible: b1ViewDashBoardWithGraphs,
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16.0),
+              width: double.infinity,
+              child: CustomSlidingSegmentedControl<int>(
+                isStretch: true,
+                initialValue: 1,
+                children: {
+                  1: Text(
+                    'Month',
+                    style: TextStyle(
+                      color: EasyDynamicTheme.of(context).themeMode ==
+                              ThemeMode.dark
+                          ? Colors.black
+                          : Colors.black,
+                    ),
                   ),
-                ),
-                2: Text(
-                  'Process',
-                  style: TextStyle(
-                    color:
-                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                            ? Colors.black
-                            : Colors.black,
+                  2: Text(
+                    'Process',
+                    style: TextStyle(
+                      color: EasyDynamicTheme.of(context).themeMode ==
+                              ThemeMode.dark
+                          ? Colors.black
+                          : Colors.black,
+                    ),
                   ),
-                ),
-                3: Text(
-                  'YOY',
-                  style: TextStyle(
-                    color:
-                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                            ? Colors.black
-                            : Colors.black,
+                  3: Text(
+                    'YOY',
+                    style: TextStyle(
+                      color: EasyDynamicTheme.of(context).themeMode ==
+                              ThemeMode.dark
+                          ? Colors.black
+                          : Colors.black,
+                    ),
                   ),
-                ),
-              },
-              decoration: BoxDecoration(
-                //  color: CupertinoColors.lightBackgroundGray,
-                color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                    ? Colors.white.withOpacity(0.92)
-                    : CupertinoColors.lightBackgroundGray,
+                },
+                decoration: BoxDecoration(
+                  //  color: CupertinoColors.lightBackgroundGray,
+                  color:
+                      EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                          ? Colors.white.withOpacity(0.92)
+                          : CupertinoColors.lightBackgroundGray,
 
-                borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                thumbDecoration: BoxDecoration(
+                  //  color: Colors.white,
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(6),
+                  boxShadow: [
+                    EasyDynamicTheme.of(context).themeMode != ThemeMode.dark
+                        ? BoxShadow(
+                            color: Colors.black.withOpacity(.3),
+                            blurRadius: 4.0,
+                            spreadRadius: 1.0,
+                            offset: const Offset(
+                              0.0,
+                              2.0,
+                            ),
+                          )
+                        : BoxShadow(),
+                  ],
+                ),
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInToLinear,
+                onValueChanged: (v) {
+                  print(v);
+                  setState(() {
+                    _selectedSegment = v;
+                  });
+                },
               ),
-              thumbDecoration: BoxDecoration(
-                //  color: Colors.white,
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(6),
-                boxShadow: [
-                  EasyDynamicTheme.of(context).themeMode != ThemeMode.dark
-                      ? BoxShadow(
-                          color: Colors.black.withOpacity(.3),
-                          blurRadius: 4.0,
-                          spreadRadius: 1.0,
-                          offset: const Offset(
-                            0.0,
-                            2.0,
-                          ),
-                        )
-                      : BoxShadow(),
-                ],
-              ),
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInToLinear,
-              onValueChanged: (v) {
-                print(v);
-                setState(() {
-                  _selectedSegment = v;
-                });
-              },
             ),
           ),
           const SizedBox(height: 10),
-          SizedBox(
-            height: 300,
-            child: FutureBuilder(
-              future: fetchGraphData(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  // Data is available, fill the TextField
-                  return Column(
-                    children: [
-                      Visibility(
-                        visible: _selectedSegment == 1,
-                        child: SizedBox(
-                          height: 300,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Column(
-                              children: [
-                                //Initialize the chart widget
-                                SfCartesianChart(
-                                  legend: const Legend(isVisible: false),
-                                  tooltipBehavior: _tooltipBehavior,
-                                  series: <RangeColumnSeries>[
-                                    RangeColumnSeries<ChartSampleData,
-                                            DateTime>(
-                                        dataSource: getChartData(snapshot.data),
-                                        // enableTooltip: false,
-                                        name: 'Month',
-                                        xValueMapper:
-                                            (ChartSampleData data, _) => data.x,
-                                        highValueMapper:
-                                            (ChartSampleData data, _) =>
-                                                data.high,
-                                        lowValueMapper:
-                                            (ChartSampleData data, _) =>
-                                                data.low,
-                                        dataLabelSettings:
-                                            const DataLabelSettings(
-                                                isVisible: false),
-                                        width: 0.5,
-                                        borderRadius: BorderRadius.circular(10),
-                                        spacing: 0.5),
-                                  ],
-                                  plotAreaBorderWidth: 0.0,
-                                  primaryXAxis: DateTimeAxis(
-                                    majorTickLines:
-                                        const MajorTickLines(width: 0),
-                                    majorGridLines:
-                                        const MajorGridLines(width: 0),
-                                    dateFormat: DateFormat.MMM(),
-                                    intervalType: DateTimeIntervalType.months,
-                                    rangePadding: ChartRangePadding.normal,
-                                    axisLine: const AxisLine(width: 0),
-                                  ),
-                                  primaryYAxis: const NumericAxis(
-                                      borderWidth: 0.0,
-                                      labelFormat: '\${value}',
-                                      axisLine: AxisLine(width: 0),
-                                      majorTickLines: MajorTickLines(width: 0),
-                                      axisBorderType:
-                                          AxisBorderType.withoutTopAndBottom),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        visible: _selectedSegment == 2,
-                        child: SizedBox(
-                          height: 300,
-                          child: Container(
-                            child: SfCartesianChart(
-                              plotAreaBorderWidth: 0.0,
-                              primaryXAxis: const CategoryAxis(
-                                  labelRotation: -90,
-                                  borderWidth: 0.0,
-                                  majorGridLines: MajorGridLines(width: 0),
-                                  axisBorderType:
-                                      AxisBorderType.withoutTopAndBottom,
-                                  axisLine: AxisLine(width: 0),
-                                  majorTickLines: MajorTickLines(width: 0)),
-                              primaryYAxis: const NumericAxis(
-                                  borderWidth: 0.0,
-                                  labelFormat: '\${value}',
-                                  majorGridLines: MajorGridLines(width: 0),
-                                  axisLine: AxisLine(width: 0),
-                                  majorTickLines: MajorTickLines(width: 0),
-                                  axisBorderType:
-                                      AxisBorderType.withoutTopAndBottom),
-                              series: [
-                                StackedColumnSeries<ChartData, String>(
-                                    dataSource: chartData,
-                                    width: 0.2,
-                                    xValueMapper: (ChartData data, _) => data.x,
-                                    yValueMapper: (ChartData data, _) =>
-                                        data.y1),
-                                StackedColumnSeries<ChartData, String>(
-                                    dataSource: chartData,
-                                    width: 0.2,
-                                    color: Colors.grey.shade300,
-                                    xValueMapper: (ChartData data, _) => data.x,
-                                    yValueMapper: (ChartData data, _) =>
-                                        data.y4),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        visible: _selectedSegment == 3,
-                        child: SizedBox(
-                          height: 300,
-                          child: Padding(
+          Visibility(
+            visible: b1ViewDashBoardWithGraphs,
+            child: SizedBox(
+              height: 325,
+              child: FutureBuilder(
+                future: fetchGraphData(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    // Data is available, fill the TextField
+                    return Column(
+                      children: [
+                        Visibility(
+                          visible: _selectedSegment == 1,
+                          child: SizedBox(
+                            height: 325,
+                            child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8),
-                              child: SfCartesianChart(
-                                  plotAreaBorderWidth: 0.0,
-                                  primaryXAxis: const NumericAxis(
-                                    majorTickLines: MajorTickLines(width: 0),
-                                    majorGridLines: MajorGridLines(width: 0),
+                              child: Column(
+                                children: [
+                                  //Initialize the chart widget
+                                  SfCartesianChart(
+                                    legend: const Legend(isVisible: false),
+                                    tooltipBehavior: _tooltipBehavior,
+                                    series: <RangeColumnSeries>[
+                                      RangeColumnSeries<ChartSampleData,
+                                              DateTime>(
+                                          dataSource:
+                                              getChartData(snapshot.data),
+                                          // enableTooltip: false,
+                                          name: 'Month',
+                                          xValueMapper:
+                                              (ChartSampleData data, _) =>
+                                                  data.x,
+                                          highValueMapper:
+                                              (ChartSampleData data, _) =>
+                                                  data.high,
+                                          lowValueMapper:
+                                              (ChartSampleData data, _) =>
+                                                  data.low,
+                                          dataLabelSettings:
+                                              const DataLabelSettings(
+                                                  isVisible: false),
+                                          width: 0.5,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          spacing: 0.5),
+                                    ],
+                                    plotAreaBorderWidth: 0.0,
+                                    primaryXAxis: DateTimeAxis(
+                                      majorTickLines:
+                                          const MajorTickLines(width: 0),
+                                      majorGridLines:
+                                          const MajorGridLines(width: 0),
+                                      dateFormat: DateFormat.MMM(),
+                                      intervalType: DateTimeIntervalType.months,
+                                      rangePadding: ChartRangePadding.normal,
+                                      axisLine: const AxisLine(width: 0),
+                                    ),
+                                    primaryYAxis: const NumericAxis(
+                                        borderWidth: 0.0,
+                                        labelFormat: '\${value}',
+                                        axisLine: AxisLine(width: 0),
+                                        majorTickLines:
+                                            MajorTickLines(width: 0),
+                                        axisBorderType:
+                                            AxisBorderType.withoutTopAndBottom),
                                   ),
-                                  primaryYAxis: const NumericAxis(
-                                      borderWidth: 0.0,
-                                      labelFormat: '\${value}',
-                                      axisLine: AxisLine(width: 0),
-                                      majorTickLines: MajorTickLines(width: 0),
-                                      axisBorderType:
-                                          AxisBorderType.withoutTopAndBottom),
-                                  series: [
-                                    SplineAreaSeries<SyncLineChartData, int>(
-                                        dataSource: lineChartData,
-                                        splineType: SplineType.cardinal,
-                                        cardinalSplineTension: 0.9,
-                                        xValueMapper:
-                                            (SyncLineChartData data, _) =>
-                                                data.x,
-                                        yValueMapper:
-                                            (SyncLineChartData data, _) =>
-                                                data.y)
-                                  ])),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                } else if (snapshot.hasError) {
-                  // Error occurred while fetching data
-                  return Text("Error: ${snapshot.error}");
-                }
-                // Data is still loading
-                return const Center(child: CircularProgressIndicator());
-              },
+                        Visibility(
+                          visible: _selectedSegment == 2,
+                          child: SizedBox(
+                            height: 325,
+                            child: Container(
+                              child: SfCartesianChart(
+                                plotAreaBorderWidth: 0.0,
+                                primaryXAxis: const CategoryAxis(
+                                    labelRotation: -90,
+                                    borderWidth: 0.0,
+                                    majorGridLines: MajorGridLines(width: 0),
+                                    axisBorderType:
+                                        AxisBorderType.withoutTopAndBottom,
+                                    axisLine: AxisLine(width: 0),
+                                    majorTickLines: MajorTickLines(width: 0)),
+                                primaryYAxis: const NumericAxis(
+                                    borderWidth: 0.0,
+                                    labelFormat: '\${value}',
+                                    majorGridLines: MajorGridLines(width: 0),
+                                    axisLine: AxisLine(width: 0),
+                                    majorTickLines: MajorTickLines(width: 0),
+                                    axisBorderType:
+                                        AxisBorderType.withoutTopAndBottom),
+                                series: [
+                                  StackedColumnSeries<ChartData, String>(
+                                      dataSource: chartData,
+                                      width: 0.2,
+                                      xValueMapper: (ChartData data, _) =>
+                                          data.x,
+                                      yValueMapper: (ChartData data, _) =>
+                                          data.y1),
+                                  StackedColumnSeries<ChartData, String>(
+                                      dataSource: chartData,
+                                      width: 0.2,
+                                      color: Colors.grey.shade300,
+                                      xValueMapper: (ChartData data, _) =>
+                                          data.x,
+                                      yValueMapper: (ChartData data, _) =>
+                                          data.y4),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Visibility(
+                          visible: _selectedSegment == 3,
+                          child: SizedBox(
+                            height: 325,
+                            child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child: SfCartesianChart(
+                                    plotAreaBorderWidth: 0.0,
+                                    primaryXAxis: const NumericAxis(
+                                      majorTickLines: MajorTickLines(width: 0),
+                                      majorGridLines: MajorGridLines(width: 0),
+                                    ),
+                                    primaryYAxis: const NumericAxis(
+                                        borderWidth: 0.0,
+                                        labelFormat: '\${value}',
+                                        axisLine: AxisLine(width: 0),
+                                        majorTickLines:
+                                            MajorTickLines(width: 0),
+                                        axisBorderType:
+                                            AxisBorderType.withoutTopAndBottom),
+                                    series: [
+                                      SplineAreaSeries<SyncLineChartData, int>(
+                                          dataSource: lineChartData,
+                                          splineType: SplineType.cardinal,
+                                          cardinalSplineTension: 0.9,
+                                          xValueMapper:
+                                              (SyncLineChartData data, _) =>
+                                                  data.x,
+                                          yValueMapper:
+                                              (SyncLineChartData data, _) =>
+                                                  data.y)
+                                    ])),
+                          ),
+                        ),
+                      ],
+                    );
+                  } else if (snapshot.hasError) {
+                    // Error occurred while fetching data
+                    return Text("Error: ${snapshot.error}");
+                  }
+                  // Data is still loading
+                  return const Center(child: CircularProgressIndicator());
+                },
+              ),
             ),
           ),
           const SizedBox(height: 10),
@@ -594,7 +615,7 @@ Widget _buildAppBar(
             ),
           ),
           Visibility(
-            visible: blShowProfile,
+            visible: isShowProfile,
             child: GestureDetector(
               onTap: () {
                 if (!isShowProfile) {
@@ -644,10 +665,8 @@ class InventoryListItemWidget extends StatelessWidget {
     // Color progressDoneColor = Color(int.parse(getProgressColorHex(status)));
 
     return Visibility(
-      visible: _blShowInventoryDetail,
       child: GestureDetector(
         onTap: () {
-          ScaffoldMessenger.of(context).clearSnackBars();
           if (_blShowInventoryDetail) {
             Navigator.push(
               context,
