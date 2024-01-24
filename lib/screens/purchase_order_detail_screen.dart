@@ -116,7 +116,14 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ),
                     ListTileItem(
                       label: 'Phone',
-                      value: widget.purchaseOrder.phone.toString(),
+                      //   value: widget.purchaseOrder.phone.toString(),
+                      value: '(' +
+                          widget.purchaseOrder.phone!.substring(0, 3) +
+                          ')' +
+                          '-' +
+                          widget.purchaseOrder.phone!.substring(3, 6) +
+                          '-' +
+                          widget.purchaseOrder.phone!.substring(6),
                     ),
                     const Padding(
                       padding:

@@ -544,70 +544,78 @@ Widget _buildAppBar(
     actions: [
       Row(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10.0),
-            child: Stack(
-              children: [
-                InkWell(
-                  onTap: () {
-                    hasNewNotifiaction = false;
+          Visibility(
+            visible: _blShowNotifications,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 10.0),
+              child: Stack(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      hasNewNotifiaction = false;
 
-                    if (_blShowNotifications) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const NotificationsScreen()),
-                      );
-                    } else {
-                      showToast(
-                          "You do not have permission to see notifications.");
-                    }
-                  },
-                  child: Image.asset(
-                    "assets/images/ic_bell.png",
-                    width: 32,
-                    height: 32,
-                    color:
-                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                            ? Colors.white
-                            : Colors.black,
+                      if (_blShowNotifications) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const NotificationsScreen()),
+                        );
+                      } else {
+                        showToast(
+                            "You do not have permission to see notifications.");
+                      }
+                    },
+                    child: Image.asset(
+                      "assets/images/ic_bell.png",
+                      width: 32,
+                      height: 32,
+                      color: EasyDynamicTheme.of(context).themeMode ==
+                              ThemeMode.dark
+                          ? Colors.white
+                          : Colors.black,
+                    ),
                   ),
-                ),
-                !hasNewNotifiaction
-                    ? const SizedBox()
-                    : Positioned(
-                        top: 5,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(12),
+                  !hasNewNotifiaction
+                      ? const SizedBox()
+                      : Positioned(
+                          top: 5,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
                         ),
-                      ),
-              ],
+                ],
+              ),
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              if (!isShowProfile) {
-                showToast('You do not have permissions.');
+          Visibility(
+            visible: blShowProfile,
+            child: GestureDetector(
+              onTap: () {
+                if (!isShowProfile) {
+                  showToast('You do not have permissions.');
 
-                return;
-              }
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ProfileScreen()),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(right: 10.0, left: 5.0),
-              child: CircleAvatar(
-                backgroundImage: userProfileImage == null
-                    ? const AssetImage('assets/images/ic_profile.png')
-                    : NetworkImage(userProfileImage) as ImageProvider,
-                radius: 15,
+                  return;
+                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ProfileScreen()),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 10.0, left: 5.0),
+                child: CircleAvatar(
+                  backgroundImage: userProfileImage == null
+                      ? const AssetImage('assets/images/ic_profile.png')
+                      : NetworkImage(userProfileImage) as ImageProvider,
+                  radius: 15,
+                ),
               ),
             ),
           ),
@@ -635,114 +643,118 @@ class InventoryListItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // Color progressDoneColor = Color(int.parse(getProgressColorHex(status)));
 
-    return GestureDetector(
-      onTap: () {
-        if (_blShowInventoryDetail) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => InventoryDetailScreen(itemId: id),
-            ),
-          );
-        } else {
-          showSnackbar(context, "You do not have permission");
-        }
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          //    color: Colors.white,
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? Colors.white.withOpacity(0.92)
-              : Colors.white,
-
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 1,
-              blurRadius: 3,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "#$id",
-                    style: const TextStyle(
-                      color: Color(0xFF1E2022),
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14.0,
-                    ),
-                  ),
-                  Text(
-                    DateFormat(US_DATE_FORMAT).format(createdAt!),
-                    style: const TextStyle(
-                      fontSize: 11.0,
-                      color: Color(0xFF77838F),
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
+    return Visibility(
+      visible: _blShowInventoryDetail,
+      child: GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          if (_blShowInventoryDetail) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => InventoryDetailScreen(itemId: id),
               ),
+            );
+          } else {
+            showSnackbar(context, "You do not have permission");
+          }
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            //    color: Colors.white,
+            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                ? Colors.white.withOpacity(0.92)
+                : Colors.white,
 
-              const SizedBox(height: 8.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    ediStdNomenclature![0].toUpperCase() +
-                        ediStdNomenclature!.substring(1),
-                    style: TextStyle(
-                      // color: getProgressColor(status),
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.w500,
-                      color: EasyDynamicTheme.of(context).themeMode ==
-                              ThemeMode.dark
-                          ? Colors.grey
-                          : Colors.white,
-                    ),
-                  ),
-                  // const Spacer(),
-                  Text(
-                    "Shape:$shape",
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.w500,
-                      color: EasyDynamicTheme.of(context).themeMode ==
-                              ThemeMode.dark
-                          ? Colors.black
-                          : Colors.white,
-                    ),
-                  ),
-                ],
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 1,
+                blurRadius: 3,
+                offset: const Offset(0, 3),
               ),
-              // const SizedBox(height: 8.0),
-              // Container(
-              //   width: double.infinity,
-              //   height: 6,
-              //   decoration: BoxDecoration(
-              //       color: Colors.grey.shade300,
-              //       borderRadius: BorderRadius.circular(12)),
-              //   child: Row(
-              //     children: [
-              //       Container(
-              //         width: MediaQuery.of(context).size.width * 0.5,
-              //         decoration: BoxDecoration(
-              //             color: const Color(0xFFF4BE4F),
-              //             borderRadius: BorderRadius.circular(12)),
-              //       ),
-              //     ],
-              //   ),
-              // ),
             ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "#$id",
+                      style: const TextStyle(
+                        color: Color(0xFF1E2022),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14.0,
+                      ),
+                    ),
+                    Text(
+                      DateFormat(US_DATE_FORMAT).format(createdAt!),
+                      style: const TextStyle(
+                        fontSize: 11.0,
+                        color: Color(0xFF77838F),
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 8.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      ediStdNomenclature![0].toUpperCase() +
+                          ediStdNomenclature!.substring(1),
+                      style: TextStyle(
+                        // color: getProgressColor(status),
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w500,
+                        color: EasyDynamicTheme.of(context).themeMode ==
+                                ThemeMode.dark
+                            ? Colors.grey
+                            : Colors.white,
+                      ),
+                    ),
+                    // const Spacer(),
+                    Text(
+                      "Shape:$shape",
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w500,
+                        color: EasyDynamicTheme.of(context).themeMode ==
+                                ThemeMode.dark
+                            ? Colors.black
+                            : Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+                // const SizedBox(height: 8.0),
+                // Container(
+                //   width: double.infinity,
+                //   height: 6,
+                //   decoration: BoxDecoration(
+                //       color: Colors.grey.shade300,
+                //       borderRadius: BorderRadius.circular(12)),
+                //   child: Row(
+                //     children: [
+                //       Container(
+                //         width: MediaQuery.of(context).size.width * 0.5,
+                //         decoration: BoxDecoration(
+                //             color: const Color(0xFFF4BE4F),
+                //             borderRadius: BorderRadius.circular(12)),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+              ],
+            ),
           ),
         ),
       ),

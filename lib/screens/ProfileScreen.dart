@@ -90,61 +90,64 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
         actions: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 10.0),
-                child: Stack(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        hasNewNotifiaction = false;
-                        if (_blShowNotificationsList) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const NotificationsScreen()),
-                          );
-                        } else {
-                          showToast(
-                              "You do not have permission to see notifications.");
-                        }
-                      },
-                      child: Image.asset(
-                        "assets/images/ic_bell.png",
-                        width: 32,
-                        height: 32,
-                        color: EasyDynamicTheme.of(context).themeMode ==
-                                ThemeMode.dark
-                            ? Colors.white
-                            : Colors.black,
+          Visibility(
+            visible: _blShowNotificationsList,
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: Stack(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          hasNewNotifiaction = false;
+                          if (_blShowNotificationsList) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const NotificationsScreen()),
+                            );
+                          } else {
+                            showToast(
+                                "You do not have permission to see notifications.");
+                          }
+                        },
+                        child: Image.asset(
+                          "assets/images/ic_bell.png",
+                          width: 32,
+                          height: 32,
+                          color: EasyDynamicTheme.of(context).themeMode ==
+                                  ThemeMode.dark
+                              ? Colors.white
+                              : Colors.black,
+                        ),
                       ),
-                    ),
-                    !hasNewNotifiaction
-                        ? SizedBox()
-                        : Positioned(
-                            top: 5,
-                            right: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(12),
+                      !hasNewNotifiaction
+                          ? SizedBox()
+                          : Positioned(
+                              top: 5,
+                              right: 0,
+                              child: Container(
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
                               ),
                             ),
-                          ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              // const Padding(
-              //   padding: EdgeInsets.only(right: 10.0, left: 5.0),
-              //   child: CircleAvatar(
-              //     backgroundImage: AssetImage('assets/images/ic_profile.png'),
-              //     radius: 15,
-              //   ),
-              // ),
-            ],
+                // const Padding(
+                //   padding: EdgeInsets.only(right: 10.0, left: 5.0),
+                //   child: CircleAvatar(
+                //     backgroundImage: AssetImage('assets/images/ic_profile.png'),
+                //     radius: 15,
+                //   ),
+                // ),
+              ],
+            ),
           )
         ],
       ),
@@ -339,45 +342,49 @@ class userProfileWidget extends StatelessWidget {
             ),
           ),
           // ),
-          SizedBox(
-            width: double.infinity,
-            // height: 50.0,
-            child: Container(
-              decoration: BoxDecoration(boxShadow: [
-                (EasyDynamicTheme.of(context).themeMode != ThemeMode.dark)
-                    ? BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
-                      )
-                    : const BoxShadow(),
-              ]),
-              child: ElevatedButton(
-                onPressed: () {
-                  if (_blEditProfile) {
-                    String fName = firstNameController.text;
-                    String lName = lastNameController.text;
-                    String email = emailController.text;
-                    String phone = phoneController.text;
+          Visibility(
+            visible: _blEditProfile,
+            child: SizedBox(
+              width: double.infinity,
+              // height: 50.0,
+              child: Container(
+                decoration: BoxDecoration(boxShadow: [
+                  (EasyDynamicTheme.of(context).themeMode != ThemeMode.dark)
+                      ? BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
+                        )
+                      : const BoxShadow(),
+                ]),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    ScaffoldMessenger.of(context).clearSnackBars();
+                    if (_blEditProfile) {
+                      String fName = firstNameController.text;
+                      String lName = lastNameController.text;
+                      String email = emailController.text;
+                      String phone = phoneController.text;
 
-                    callUpdateUser(context, fName, lName, email, phone);
-                  } else {
-                    showSnackbar(context, "You do not have permission");
-                  }
-                },
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                      callUpdateUser(context, fName, lName, email, phone);
+                    } else {
+                      showSnackbar(context, "You do not have permission");
+                    }
+                  },
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
                   ),
+                  child: const Text("Update",
+                      style: TextStyle(color: Colors.white)),
                 ),
-                child:
-                    const Text("Update", style: TextStyle(color: Colors.white)),
               ),
             ),
           ),

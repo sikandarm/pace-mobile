@@ -25,6 +25,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../services/check_task_play_or_pause_status.dart';
+import '../services/get_task_logs.dart';
 import '../services/play_pause_task.dart';
 import '../services/task_detail_service.dart';
 import '../utils/constants.dart';
@@ -40,6 +41,8 @@ bool _blShowNotificationsList = false;
 bool _blApprovedTask = false;
 bool _blSelfAssignATask = false;
 bool _b1ShowProfile = false;
+bool b1ViewContacts = false;
+bool b1DownloadDiagram = false;
 
 class TaskDetail extends StatefulWidget {
   final int taskId;
@@ -102,6 +105,14 @@ class _TaskDetailState extends State<TaskDetail> {
     callApiMethods();
     checkPermissionAndUpdateBool("view_profile", (localBool) {
       _b1ShowProfile = localBool;
+    });
+
+    checkPermissionAndUpdateBool("view_contact", (localBool) {
+      b1ViewContacts = localBool;
+    });
+
+    checkPermissionAndUpdateBool("download_diagram", (localBool) {
+      b1DownloadDiagram = localBool;
     });
 
     checkPermissionAndUpdateBool("collaborate_on_microsoft_whiteboard",
@@ -372,72 +383,78 @@ class _TaskDetailState extends State<TaskDetail> {
                       );
                     },
                     icon: const Icon(Icons.view_kanban_outlined)),
-                Padding(
-                  padding: const EdgeInsets.only(right: 10.0),
-                  child: Stack(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          hasNewNotifiaction = false;
-                          setState(() {});
-                          if (_blShowNotificationsList) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const NotificationsScreen()),
-                            );
-                          } else {
-                            showToast(
-                                "You do not have permission to see notifications.");
-                          }
-                        },
-                        child: Image.asset(
-                          "assets/images/ic_bell.png",
-                          width: 32,
-                          height: 32,
-                          color: EasyDynamicTheme.of(context).themeMode ==
-                                  ThemeMode.dark
-                              ? Colors.white
-                              : Colors.black,
+                Visibility(
+                  visible: _blShowNotificationsList,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: Stack(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            hasNewNotifiaction = false;
+                            setState(() {});
+                            if (_blShowNotificationsList) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const NotificationsScreen()),
+                              );
+                            } else {
+                              showToast(
+                                  "You do not have permission to see notifications.");
+                            }
+                          },
+                          child: Image.asset(
+                            "assets/images/ic_bell.png",
+                            width: 32,
+                            height: 32,
+                            color: EasyDynamicTheme.of(context).themeMode ==
+                                    ThemeMode.dark
+                                ? Colors.white
+                                : Colors.black,
+                          ),
                         ),
-                      ),
-                      !hasNewNotifiaction
-                          ? const SizedBox()
-                          : Positioned(
-                              top: 5,
-                              right: 0,
-                              child: Container(
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.circular(12),
+                        !hasNewNotifiaction
+                            ? const SizedBox()
+                            : Positioned(
+                                top: 5,
+                                right: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
                                 ),
                               ),
-                            ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    if (!_b1ShowProfile) {
-                      showToast('You do not have permissions.');
-                      return;
-                    }
+                Visibility(
+                  visible: _b1ShowProfile,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (!_b1ShowProfile) {
+                        showToast('You do not have permissions.');
+                        return;
+                      }
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ProfileScreen()),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 10.0, left: 5.0),
-                    child: CircleAvatar(
-                      backgroundImage: userProfileImage == null
-                          ? const AssetImage('assets/images/ic_profile.png')
-                          : NetworkImage(userProfileImage!) as ImageProvider,
-                      radius: 15,
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ProfileScreen()),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 10.0, left: 5.0),
+                      child: CircleAvatar(
+                        backgroundImage: userProfileImage == null
+                            ? const AssetImage('assets/images/ic_profile.png')
+                            : NetworkImage(userProfileImage!) as ImageProvider,
+                        radius: 15,
+                      ),
                     ),
                   ),
                 ),
@@ -567,7 +584,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
 
   bool? taskPayOrPauseStatus = null;
 
+  List<TasklogModel> taskLogsList = [];
   Future<void> callApiMethods() async {
+    taskLogsList = await getTaskLogs(taskId: widget.id);
     taskPayOrPauseStatus =
         await getTaskPlayOrPauseStatus(taskId: widget.id.toString());
     print('init method 222 value taskPayOrPauseStatus: $taskPayOrPauseStatus');
@@ -852,58 +871,75 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(33)),
-                    child: GestureDetector(
-                      //  splashColor: Colors.transparent,
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ViewContactsScreen(),
-                            ));
-                      },
-                      child: const CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        radius: 26,
-                        child: Icon(Icons.phone),
+                  Visibility(
+                    visible: b1ViewContacts,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(33)),
+                      child: GestureDetector(
+                        //  splashColor: Colors.transparent,
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ViewContactsScreen(),
+                              ));
+                        },
+                        child: const CircleAvatar(
+                          backgroundColor: Colors.transparent,
+                          radius: 26,
+                          child: Icon(Icons.phone),
+                        ),
                       ),
                     ),
                   ),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(33)),
-                    child: GestureDetector(
-                      onTap: () async {
-                        await downloadImage(widget.imageUrl!);
+                  Visibility(visible: b1DownloadDiagram, child: Spacer()),
+                  Visibility(
+                    visible: b1DownloadDiagram,
+                    // visible: true,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(33)),
+                      child: GestureDetector(
+                        onTap: () async {
+                          await downloadImage(widget.imageUrl!);
 
-                        //  await downloadImage('123', "TaskDiagram.png");
-                      },
-                      child: const CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        radius: 26,
-                        child: Icon(Icons.download),
+                          //  await downloadImage('123', "TaskDiagram.png");
+                        },
+                        child: const CircleAvatar(
+                          backgroundColor: Colors.transparent,
+                          radius: 26,
+                          child: Icon(Icons.download),
+                        ),
                       ),
                     ),
                   ),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(33)),
-                    child: GestureDetector(
-                      onTap: () async {
-                        if (Platform.isAndroid) {
-                          _openExternalLink(
-                              "https://play.google.com/store/apps/details?id=com.microsoft.whiteboard.publicpreview");
-                        } else if (Platform.isIOS) {
-                          _openExternalLink(
-                              "https://apps.apple.com/us/app/microsoft-whiteboard/id1352499399");
-                        }
-                      },
-                      child: const CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        radius: 26,
-                        child: Icon(Icons.edit_note),
+                  Visibility(
+                    visible: b1DownloadDiagram,
+                    // visible: _blCollaborate,
+                    child: Spacer(),
+                  ),
+                  Visibility(
+                    visible: _blCollaborate,
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(33)),
+                      child: GestureDetector(
+                        onTap: () async {
+                          if (Platform.isAndroid) {
+                            _openExternalLink(
+                                "https://play.google.com/store/apps/details?id=com.microsoft.whiteboard.publicpreview");
+                          } else if (Platform.isIOS) {
+                            _openExternalLink(
+                                "https://apps.apple.com/us/app/microsoft-whiteboard/id1352499399");
+                          }
+                        },
+                        child: const CircleAvatar(
+                          backgroundColor: Colors.transparent,
+                          radius: 26,
+                          child: Icon(Icons.edit_note),
+                        ),
                       ),
                     ),
                   ),
@@ -1277,9 +1313,10 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                   foregroundColor:
                                       const MaterialStatePropertyAll(
                                           Colors.white),
-                                  backgroundColor:
-                                      const MaterialStatePropertyAll(
-                                          Colors.green),
+                                  backgroundColor: MaterialStatePropertyAll(
+                                      taskLogsList.isEmpty
+                                          ? Colors.amber
+                                          : Colors.green),
                                   shape: MaterialStatePropertyAll(
                                       RoundedRectangleBorder(
                                           borderRadius:
@@ -1414,7 +1451,8 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                 return;
                                 setState(() {});
                               },
-                              child: const Text('Resume'),
+                              child: Text(
+                                  taskLogsList.isEmpty ? 'Start' : 'Resume'),
                             ),
                           ),
 

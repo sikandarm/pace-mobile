@@ -361,7 +361,7 @@ PreferredSizeWidget _buildAppBar(
             ),
           ),
           Visibility(
-            // visible: blShowProfile,
+            visible: blShowProfile,
             child: GestureDetector(
               onTap: () {
                 // showModalBottomSheet(
@@ -489,7 +489,7 @@ Widget _buildSideDrawer(BuildContext context) {
                   padding: EdgeInsets.zero,
                   children: <Widget>[
                     Visibility(
-                      //   visible: blShowProfile,
+                      visible: blShowProfile,
                       child: ListTile(
                         leading: const Icon(Icons.person),
                         title: const Text('Profile'),
@@ -509,7 +509,7 @@ Widget _buildSideDrawer(BuildContext context) {
                       ),
                     ),
                     Visibility(
-                      // visible: blShowSharedCAR,
+                      visible: blShowSharedCAR,
                       child: ListTile(
                         title: const Text('View Shared CAR'),
                         leading: const Icon(Icons.share),
@@ -530,7 +530,7 @@ Widget _buildSideDrawer(BuildContext context) {
                       ),
                     ),
                     Visibility(
-                      //     visible: blShowSharedCAR,
+                      visible: b1ShowPurchaseOrder,
                       child: ListTile(
                         title: const Text('Purchase Orders'),
                         leading: const Icon(Icons.inventory),
@@ -554,7 +554,7 @@ Widget _buildSideDrawer(BuildContext context) {
                       ),
                     ),
                     Visibility(
-                      //  visible: blShowSharedCAR,
+                      visible: b1ViewContacts,
                       child: ListTile(
                         title: const Text('View Contacts'),
                         leading: const Icon(Icons.call),
