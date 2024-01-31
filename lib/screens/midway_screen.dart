@@ -1,3 +1,4 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 
 import '../services/purchase_order_items_list.dart';
@@ -10,10 +11,30 @@ class MidwayScreen extends StatefulWidget {
 }
 
 class _MidwayScreenScreenState extends State<MidwayScreen> {
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
   }
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +94,11 @@ class _MidwayScreenScreenState extends State<MidwayScreen> {
                         children: [
                           const SizedBox(height: 20),
                           SizedBox(
-                            width: 340,
-                            height: 50.0,
+                            //   width: 340,
+                            width: MediaQuery.of(context).size.width * 0.95,
+
+                            //  height: 50.0,
+                            height: MediaQuery.of(context).size.height * 0.07,
                             child: Container(
                               decoration: BoxDecoration(boxShadow: [
                                 BoxShadow(
@@ -101,17 +125,21 @@ class _MidwayScreenScreenState extends State<MidwayScreen> {
                                     ),
                                   ),
                                 ),
-                                child: const Text("Login",
+                                child: Text("Login",
                                     style: TextStyle(
                                       color: Colors.white,
+                                      fontSize: isTablet ? 30 : 14,
                                     )),
                               ),
                             ),
                           ),
                           const SizedBox(height: 10),
                           SizedBox(
-                            width: 340,
-                            height: 50.0,
+                            //   width: 340,
+                            width: MediaQuery.of(context).size.width * 0.95,
+
+                            //  height: 50.0,
+                            height: MediaQuery.of(context).size.height * 0.07,
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(
@@ -129,7 +157,7 @@ class _MidwayScreenScreenState extends State<MidwayScreen> {
                                     )
                                   ]),
                               child: ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   Navigator.pushReplacementNamed(context,
                                       '/signup'); // move to login screen
                                 },
@@ -144,9 +172,10 @@ class _MidwayScreenScreenState extends State<MidwayScreen> {
                                     ),
                                   ),
                                 ),
-                                child: const Text("Register",
+                                child: Text("Register",
                                     style: TextStyle(
                                       color: Colors.blue,
+                                      fontSize: isTablet ? 30 : 14,
                                     )),
                               ),
                             ),

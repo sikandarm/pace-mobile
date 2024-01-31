@@ -149,7 +149,7 @@ class _TaskCardClipper extends CustomClipper<Path> {
   bool shouldReclip(_TaskCardClipper oldClipper) => true;
 }
 
-class TaskWidget extends StatelessWidget {
+class TaskWidget extends StatefulWidget {
   final int taskId;
   final String taskName;
   final String description;
@@ -174,18 +174,43 @@ class TaskWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<TaskWidget> createState() => _TaskWidgetState();
+}
+
+class _TaskWidgetState extends State<TaskWidget> {
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     // final borderColor = statusColor.withOpacity(0.5);
     // final bgColor = statusColor.withOpacity(0.1);
     return GestureDetector(
-      onTap: hasPermissionToGoToTaskDetailScreen == true
+      onTap: widget.hasPermissionToGoToTaskDetailScreen == true
           ? () {
-              print('start date in task_list_card: ' + startDate.toString());
+              print('start date in task_list_card: ' +
+                  widget.startDate.toString());
 
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TaskDetail(taskId: taskId),
+                  builder: (context) => TaskDetail(taskId: widget.taskId),
                 ),
               );
             }
@@ -196,9 +221,10 @@ class TaskWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: setCardColor(status),
+          color: setCardColor(widget.status),
           border: Border(
-            left: BorderSide(color: setCardBorderColor(status), width: 8),
+            left:
+                BorderSide(color: setCardBorderColor(widget.status), width: 8),
           ),
         ),
         child: Row(
@@ -212,10 +238,10 @@ class TaskWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Pmk# $taskName",
+                        "Pmk# ${widget.taskName}",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 14.0,
+                          fontSize: isTablet ? 25 : 14.0,
                           color: EasyDynamicTheme.of(context).themeMode ==
                                   ThemeMode.dark
                               ? Colors.black
@@ -223,11 +249,12 @@ class TaskWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        startDate == null
+                        widget.startDate == null
                             ? "N/A"
-                            : DateFormat(US_DATE_FORMAT).format(startDate!),
-                        style: const TextStyle(
-                          fontSize: 11.0,
+                            : DateFormat(US_DATE_FORMAT)
+                                .format(widget.startDate!),
+                        style: TextStyle(
+                          fontSize: isTablet ? 20 : 11.0,
                           color: Color(0xFF77838F),
                           fontWeight: FontWeight.w400,
                         ),
@@ -236,8 +263,9 @@ class TaskWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    description,
+                    widget.description,
                     style: TextStyle(
+                      fontSize: isTablet ? 27 : 14.0,
                       color: Colors.grey[600],
                     ),
                   ),
@@ -247,21 +275,24 @@ class TaskWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        setStatusText(status),
+                        setStatusText(widget.status),
                         style: TextStyle(
-                          color: setCardBorderColor(status),
+                          color: setCardBorderColor(widget.status),
                           fontWeight: FontWeight.bold,
+                          fontSize: isTablet ? 23 : 14.0,
                         ),
                       ),
-                      showDeleteIcon2 == false
+                      widget.showDeleteIcon2 == false
                           ? SizedBox()
                           : IconButton(
                               //  splashRadius: 2,
                               iconSize: 21,
                               padding: EdgeInsets.zero,
                               visualDensity: VisualDensity.compact,
-                              onPressed: onPressedDelete2,
-                              icon: Icon(Icons.delete),
+                              onPressed: widget.onPressedDelete2,
+                              icon: Icon(
+                                Icons.delete,
+                              ),
                               color: EasyDynamicTheme.of(context).themeMode ==
                                       ThemeMode.dark
                                   ? Colors.redAccent

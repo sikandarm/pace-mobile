@@ -11,6 +11,7 @@ import 'package:googleapis/admob/v1.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:pace_application_fb/screens/Dashboard.dart';
+import 'package:pace_application_fb/screens/welcome_screen.dart';
 import 'package:pace_application_fb/services/checkFBData.dart' as checkFbData;
 import 'package:pace_application_fb/services/facbook_api_model.dart';
 import 'package:http/http.dart' as http;
@@ -101,6 +102,25 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       // floatingActionButton: FloatingActionButton(onPressed: () async {
@@ -117,12 +137,14 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
             Icons.arrow_back_ios_new,
             color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
                 ? Colors.white.withOpacity(0.92)
-                : Colors.white,
+                : Colors.black,
           ),
         ),
         title: Text(
           'Facebook Email Screen',
-          style: TextStyle(fontSize: appBarTiltleSize),
+          style: TextStyle(
+            fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
+          ),
         ),
       ),
       body: Padding(
@@ -135,28 +157,48 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
               height: 11,
             ),
             TextField(
+              style: TextStyle(
+                fontSize: isTablet ? 24 : 15,
+                color: Colors.black.withOpacity(0.65),
+                fontWeight: FontWeight.w500,
+              ),
               controller: nameController,
               keyboardType: TextInputType.text,
               decoration: textFieldDecoration(
                 this.widget.facebookLoginModel.name!,
                 false,
                 enabled: false,
+                isTablet: isTablet,
               ),
             ),
             SizedBox(
               height: 11,
             ),
             TextField(
+              style: TextStyle(
+                fontSize: isTablet ? 24 : 15,
+                color: Colors.black.withOpacity(0.65),
+                fontWeight: FontWeight.w500,
+              ),
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
-              decoration: textFieldDecoration("Email", false,
-                  enabled: checkUserFbData!.data!.assignrole! ? false : true),
+              decoration: textFieldDecoration(
+                "Email",
+                false,
+                enabled: checkUserFbData!.data!.assignrole! ? false : true,
+                isTablet: isTablet,
+              ),
             ),
             const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
               height: 100,
               child: TextField(
+                style: TextStyle(
+                  fontSize: isTablet ? 24 : 15,
+                  color: Colors.black.withOpacity(0.65),
+                  fontWeight: FontWeight.w500,
+                ),
                 textAlignVertical: TextAlignVertical.center,
                 controller: phone,
                 keyboardType: TextInputType.phone,
@@ -166,10 +208,14 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                   PhoneNumberFormatter(),
                   // Only allow digits
                 ],
-                decoration: textFieldDecoration("Phone", false,
-                    enabled: checkUserFbData!.data!.fbdata!.phone != null
-                        ? false
-                        : true),
+                decoration: textFieldDecoration(
+                  "Phone",
+                  false,
+                  enabled: checkUserFbData!.data!.fbdata!.phone != null
+                      ? false
+                      : true,
+                  isTablet: isTablet,
+                ),
               ),
             ),
             const SizedBox(height: 10),
@@ -190,7 +236,8 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                       child: CupertinoPicker(
                         scrollController: FixedExtentScrollController(
                             initialItem: _selectedRoleIndex),
-                        itemExtent: 32,
+                        // itemExtent: 32,
+                        itemExtent: isTablet ? 65 : 32,
                         onSelectedItemChanged: (index) {
                           setState(() {
                             _selectedRoleIndex = index;
@@ -219,8 +266,12 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
               height: 50,
             ),
             SizedBox(
-              width: double.infinity,
-              height: 50.0,
+              // width: double.infinity,
+              // height: 50.0,
+              width: MediaQuery.of(context).size.width * 0.95,
+
+              //  height: 50.0,
+              height: MediaQuery.of(context).size.height * 0.066,
               child: Container(
                 decoration: BoxDecoration(boxShadow: [
                   (EasyDynamicTheme.of(context).themeMode != ThemeMode.dark)
@@ -319,10 +370,16 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                       //     MaterialPageRoute(
                       //         builder: (context) => DashboardScreen()));
 
+                      // Navigator.pushAndRemoveUntil(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => DashboardScreen()),
+                      //     (route) => false);  it is exactly correct
+
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => DashboardScreen()),
+                              builder: (context) => WelcomeScreen()),
                           (route) => false);
                     }
 

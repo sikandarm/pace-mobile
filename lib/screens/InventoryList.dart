@@ -67,6 +67,25 @@ class _InventoryListState extends State<InventoryList> {
   late TooltipBehavior _tooltipBehavior;
 
   @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
   void initState() {
     FirebaseMessaging.onMessage.listen((event) {
       hasNewNotifiaction = true;
@@ -226,16 +245,20 @@ class _InventoryListState extends State<InventoryList> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildAppBar(context, scaffoldKey, userProfileImage, blShowProfile),
+          _buildAppBar(
+              context, scaffoldKey, userProfileImage, blShowProfile, isTablet),
           Visibility(
               visible: b1ViewDashBoardWithGraphs,
               child: const SizedBox(height: 10)),
           Visibility(
             visible: b1ViewDashBoardWithGraphs,
             child: Container(
+              height: isTablet ? 75 : 45,
+              //   color: Colors.green,
               margin: const EdgeInsets.symmetric(horizontal: 16.0),
               width: double.infinity,
               child: CustomSlidingSegmentedControl<int>(
+                height: isTablet ? 75 : 45,
                 isStretch: true,
                 initialValue: 1,
                 children: {
@@ -246,6 +269,7 @@ class _InventoryListState extends State<InventoryList> {
                               ThemeMode.dark
                           ? Colors.black
                           : Colors.black,
+                      fontSize: isTablet ? 28 : 14,
                     ),
                   ),
                   2: Text(
@@ -255,6 +279,7 @@ class _InventoryListState extends State<InventoryList> {
                               ThemeMode.dark
                           ? Colors.black
                           : Colors.black,
+                      fontSize: isTablet ? 28 : 14,
                     ),
                   ),
                   3: Text(
@@ -264,6 +289,7 @@ class _InventoryListState extends State<InventoryList> {
                               ThemeMode.dark
                           ? Colors.black
                           : Colors.black,
+                      fontSize: isTablet ? 28 : 14,
                     ),
                   ),
                 },
@@ -308,8 +334,9 @@ class _InventoryListState extends State<InventoryList> {
           const SizedBox(height: 10),
           Visibility(
             visible: b1ViewDashBoardWithGraphs,
-            child: SizedBox(
-              height: 325,
+            child: Container(
+              // color: Colors.amber,
+              height: isTablet ? 420 : 325,
               child: FutureBuilder(
                 future: fetchGraphData(),
                 builder: (context, snapshot) {
@@ -319,60 +346,65 @@ class _InventoryListState extends State<InventoryList> {
                       children: [
                         Visibility(
                           visible: _selectedSegment == 1,
-                          child: SizedBox(
-                            height: 325,
+                          child: Container(
+                            //  color: Colors.red,
+                            height: isTablet ? 420 : 325,
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8),
                               child: Column(
                                 children: [
                                   //Initialize the chart widget
-                                  SfCartesianChart(
-                                    legend: const Legend(isVisible: false),
-                                    tooltipBehavior: _tooltipBehavior,
-                                    series: <RangeColumnSeries>[
-                                      RangeColumnSeries<ChartSampleData,
-                                              DateTime>(
-                                          dataSource:
-                                              getChartData(snapshot.data),
-                                          // enableTooltip: false,
-                                          name: 'Month',
-                                          xValueMapper:
-                                              (ChartSampleData data, _) =>
-                                                  data.x,
-                                          highValueMapper:
-                                              (ChartSampleData data, _) =>
-                                                  data.high,
-                                          lowValueMapper:
-                                              (ChartSampleData data, _) =>
-                                                  data.low,
-                                          dataLabelSettings:
-                                              const DataLabelSettings(
-                                                  isVisible: false),
-                                          width: 0.5,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          spacing: 0.5),
-                                    ],
-                                    plotAreaBorderWidth: 0.0,
-                                    primaryXAxis: DateTimeAxis(
-                                      majorTickLines:
-                                          const MajorTickLines(width: 0),
-                                      majorGridLines:
-                                          const MajorGridLines(width: 0),
-                                      dateFormat: DateFormat.MMM(),
-                                      intervalType: DateTimeIntervalType.months,
-                                      rangePadding: ChartRangePadding.normal,
-                                      axisLine: const AxisLine(width: 0),
-                                    ),
-                                    primaryYAxis: const NumericAxis(
-                                        borderWidth: 0.0,
-                                        labelFormat: '\${value}',
-                                        axisLine: AxisLine(width: 0),
+                                  Container(
+                                    height: isTablet ? 420 : 325,
+                                    child: SfCartesianChart(
+                                      legend: const Legend(isVisible: false),
+                                      tooltipBehavior: _tooltipBehavior,
+                                      series: <RangeColumnSeries>[
+                                        RangeColumnSeries<ChartSampleData,
+                                                DateTime>(
+                                            dataSource:
+                                                getChartData(snapshot.data),
+                                            // enableTooltip: false,
+                                            name: 'Month',
+                                            xValueMapper:
+                                                (ChartSampleData data, _) =>
+                                                    data.x,
+                                            highValueMapper:
+                                                (ChartSampleData data, _) =>
+                                                    data.high,
+                                            lowValueMapper:
+                                                (ChartSampleData data, _) =>
+                                                    data.low,
+                                            dataLabelSettings:
+                                                const DataLabelSettings(
+                                                    isVisible: false),
+                                            width: 0.5,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            spacing: 0.5),
+                                      ],
+                                      plotAreaBorderWidth: 0.0,
+                                      primaryXAxis: DateTimeAxis(
                                         majorTickLines:
-                                            MajorTickLines(width: 0),
-                                        axisBorderType:
-                                            AxisBorderType.withoutTopAndBottom),
+                                            const MajorTickLines(width: 0),
+                                        majorGridLines:
+                                            const MajorGridLines(width: 0),
+                                        dateFormat: DateFormat.MMM(),
+                                        intervalType:
+                                            DateTimeIntervalType.months,
+                                        rangePadding: ChartRangePadding.normal,
+                                        axisLine: const AxisLine(width: 0),
+                                      ),
+                                      primaryYAxis: const NumericAxis(
+                                          borderWidth: 0.0,
+                                          labelFormat: '\${value}',
+                                          axisLine: AxisLine(width: 0),
+                                          majorTickLines:
+                                              MajorTickLines(width: 0),
+                                          axisBorderType: AxisBorderType
+                                              .withoutTopAndBottom),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -381,9 +413,11 @@ class _InventoryListState extends State<InventoryList> {
                         ),
                         Visibility(
                           visible: _selectedSegment == 2,
-                          child: SizedBox(
-                            height: 325,
+                          child: Container(
+                            //  color: Colors.purpleAccent,
+                            height: isTablet ? 420 : 325,
                             child: Container(
+                              height: isTablet ? 420 : 325,
                               child: SfCartesianChart(
                                 plotAreaBorderWidth: 0.0,
                                 primaryXAxis: const CategoryAxis(
@@ -425,37 +459,44 @@ class _InventoryListState extends State<InventoryList> {
                         ),
                         Visibility(
                           visible: _selectedSegment == 3,
-                          child: SizedBox(
-                            height: 325,
+                          child: Container(
+                            //   color: Colors.pinkAccent,
+                            height: isTablet ? 420 : 325,
                             child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 8),
-                                child: SfCartesianChart(
-                                    plotAreaBorderWidth: 0.0,
-                                    primaryXAxis: const NumericAxis(
-                                      majorTickLines: MajorTickLines(width: 0),
-                                      majorGridLines: MajorGridLines(width: 0),
-                                    ),
-                                    primaryYAxis: const NumericAxis(
-                                        borderWidth: 0.0,
-                                        labelFormat: '\${value}',
-                                        axisLine: AxisLine(width: 0),
+                                child: Container(
+                                  height: isTablet ? 420 : 325,
+                                  child: SfCartesianChart(
+                                      plotAreaBorderWidth: 0.0,
+                                      primaryXAxis: const NumericAxis(
                                         majorTickLines:
                                             MajorTickLines(width: 0),
-                                        axisBorderType:
-                                            AxisBorderType.withoutTopAndBottom),
-                                    series: [
-                                      SplineAreaSeries<SyncLineChartData, int>(
-                                          dataSource: lineChartData,
-                                          splineType: SplineType.cardinal,
-                                          cardinalSplineTension: 0.9,
-                                          xValueMapper:
-                                              (SyncLineChartData data, _) =>
-                                                  data.x,
-                                          yValueMapper:
-                                              (SyncLineChartData data, _) =>
-                                                  data.y)
-                                    ])),
+                                        majorGridLines:
+                                            MajorGridLines(width: 0),
+                                      ),
+                                      primaryYAxis: const NumericAxis(
+                                          borderWidth: 0.0,
+                                          labelFormat: '\${value}',
+                                          axisLine: AxisLine(width: 0),
+                                          majorTickLines:
+                                              MajorTickLines(width: 0),
+                                          axisBorderType: AxisBorderType
+                                              .withoutTopAndBottom),
+                                      series: [
+                                        SplineAreaSeries<SyncLineChartData,
+                                                int>(
+                                            dataSource: lineChartData,
+                                            splineType: SplineType.cardinal,
+                                            cardinalSplineTension: 0.9,
+                                            xValueMapper:
+                                                (SyncLineChartData data, _) =>
+                                                    data.x,
+                                            yValueMapper:
+                                                (SyncLineChartData data, _) =>
+                                                    data.y)
+                                      ]),
+                                )),
                           ),
                         ),
                       ],
@@ -513,12 +554,8 @@ class _InventoryListState extends State<InventoryList> {
   }
 }
 
-Widget _buildAppBar(
-  context,
-  GlobalKey<ScaffoldState> scaffoldKey,
-  String? userProfileImage,
-  bool isShowProfile,
-) {
+Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey,
+    String? userProfileImage, bool isShowProfile, bool isTablet) {
   return AppBar(
     backgroundColor: Colors.transparent,
     leading: IconButton(
@@ -550,7 +587,7 @@ Widget _buildAppBar(
                   ? Colors.white
                   : Colors.black,
               fontWeight: FontWeight.bold,
-              fontSize: appBarTiltleSize,
+              fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             ),
           );
         } else if (snapshot.hasError) {
@@ -589,8 +626,8 @@ Widget _buildAppBar(
                     },
                     child: Image.asset(
                       "assets/images/ic_bell.png",
-                      width: 32,
-                      height: 32,
+                      width: isTablet ? 45 : 32,
+                      height: isTablet ? 45 : 32,
                       color: EasyDynamicTheme.of(context).themeMode ==
                               ThemeMode.dark
                           ? Colors.white
@@ -635,7 +672,7 @@ Widget _buildAppBar(
                   backgroundImage: userProfileImage == null
                       ? const AssetImage('assets/images/ic_profile.png')
                       : NetworkImage(userProfileImage) as ImageProvider,
-                  radius: 15,
+                  radius: isTablet ? 25 : 15,
                 ),
               ),
             ),
@@ -646,7 +683,7 @@ Widget _buildAppBar(
   );
 }
 
-class InventoryListItemWidget extends StatelessWidget {
+class InventoryListItemWidget extends StatefulWidget {
   final int? id;
   final String? ediStdNomenclature;
   final String? shape;
@@ -661,6 +698,31 @@ class InventoryListItemWidget extends StatelessWidget {
   });
 
   @override
+  State<InventoryListItemWidget> createState() =>
+      _InventoryListItemWidgetState();
+}
+
+class _InventoryListItemWidgetState extends State<InventoryListItemWidget> {
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Color progressDoneColor = Color(int.parse(getProgressColorHex(status)));
 
@@ -671,7 +733,7 @@ class InventoryListItemWidget extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => InventoryDetailScreen(itemId: id),
+                builder: (context) => InventoryDetailScreen(itemId: widget.id),
               ),
             );
           } else {
@@ -679,6 +741,7 @@ class InventoryListItemWidget extends StatelessWidget {
           }
         },
         child: Container(
+          height: isTablet ? 130 : 80,
           margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
@@ -705,17 +768,17 @@ class InventoryListItemWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "#$id",
-                      style: const TextStyle(
+                      "#${widget.id}",
+                      style: TextStyle(
                         color: Color(0xFF1E2022),
                         fontWeight: FontWeight.w600,
-                        fontSize: 14.0,
+                        fontSize: isTablet ? 24 : 14.0,
                       ),
                     ),
                     Text(
-                      DateFormat(US_DATE_FORMAT).format(createdAt!),
-                      style: const TextStyle(
-                        fontSize: 11.0,
+                      DateFormat(US_DATE_FORMAT).format(widget.createdAt!),
+                      style: TextStyle(
+                        fontSize: isTablet ? 21 : 11.0,
                         color: Color(0xFF77838F),
                         fontWeight: FontWeight.w400,
                       ),
@@ -728,8 +791,8 @@ class InventoryListItemWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      ediStdNomenclature![0].toUpperCase() +
-                          ediStdNomenclature!.substring(1),
+                      widget.ediStdNomenclature![0].toUpperCase() +
+                          widget.ediStdNomenclature!.substring(1),
                       style: TextStyle(
                         // color: getProgressColor(status),
                         fontSize: 12.0,
@@ -742,7 +805,7 @@ class InventoryListItemWidget extends StatelessWidget {
                     ),
                     // const Spacer(),
                     Text(
-                      "Shape:$shape",
+                      "Shape:${widget.shape}",
                       style: TextStyle(
                         fontSize: 12.0,
                         fontWeight: FontWeight.w500,

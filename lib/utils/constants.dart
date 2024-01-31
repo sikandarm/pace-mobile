@@ -40,6 +40,7 @@ const String US_DATE_FORMAT = 'MMMM dd yyyy';
 const String NOTIFICATION_DATE_FORMAT = 'MMMM dd, yyyy - hh:mm aa';
 
 double appBarTiltleSize = 20.0;
+double appBarTiltleSizeTablet = 35.0;
 
 const List<String> LS_PERMISSIONS = [
   'view_job',
@@ -116,6 +117,7 @@ InputDecoration textFieldDecoration(
   bool ifPassword, {
   bool enabled = true,
   bool isRedColorBorder = false,
+  bool isTablet = false,
 }) {
   var outlineInputBorder = OutlineInputBorder(
     //  borderSide: const BorderSide(color: Colors.transparent),
@@ -127,13 +129,16 @@ InputDecoration textFieldDecoration(
   return InputDecoration(
     enabled: enabled,
     filled: true,
+    contentPadding: EdgeInsets.all(isTablet ? 27 : 13),
+
     //  fillColor: const Color(0xffF8F9FD),
     fillColor: Colors.grey.withOpacity(0.13),
     hintText: title,
-    // hintStyle: TextStyle(
-    //   color: Colors.black.withOpacity(0.65),
-    //   fontWeight: FontWeight.w500,
-    // ),
+    hintStyle: TextStyle(
+      fontSize: isTablet ? 24 : 15,
+      color: Colors.black.withOpacity(0.65),
+      fontWeight: FontWeight.w500,
+    ),
     suffixIcon: !ifPassword
         ? null
         : const Icon(

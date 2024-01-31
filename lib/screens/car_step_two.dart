@@ -29,6 +29,26 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
     super.initState();
   }
 
+  bool isTablet = false;
+
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,10 +75,10 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
             Navigator.pop(context);
           },
         ),
-        title: const Text(
+        title: Text(
           "Disposition",
           style: TextStyle(
-            fontSize: 18,
+            fontSize: isTablet ? appBarTiltleSizeTablet : 18,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -75,8 +95,11 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                     child: Column(
                       children: [
                         RadioListTile(
-                          title: const Text(
+                          title: Text(
                             "Use-as-is",
+                            style: TextStyle(
+                              fontSize: isTablet ? 24 : 16,
+                            ),
                           ),
                           value: 1,
                           groupValue: _selectedOption,
@@ -90,7 +113,12 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                           },
                         ),
                         RadioListTile(
-                          title: const Text("Rework"),
+                          title: Text(
+                            "Rework",
+                            style: TextStyle(
+                              fontSize: isTablet ? 24 : 16,
+                            ),
+                          ),
                           value: 2,
                           groupValue: _selectedOption,
                           dense: false,
@@ -103,7 +131,12 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                           },
                         ),
                         RadioListTile(
-                          title: const Text("Repair"),
+                          title: Text(
+                            "Repair",
+                            style: TextStyle(
+                              fontSize: isTablet ? 24 : 16,
+                            ),
+                          ),
                           value: 3,
                           groupValue: _selectedOption,
                           dense: false,
@@ -116,7 +149,12 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                           },
                         ),
                         RadioListTile(
-                          title: const Text("Reject"),
+                          title: Text(
+                            "Reject",
+                            style: TextStyle(
+                              fontSize: isTablet ? 24 : 16,
+                            ),
+                          ),
                           value: 4,
                           groupValue: _selectedOption,
                           dense: false,
@@ -129,7 +167,12 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                           },
                         ),
                         RadioListTile(
-                          title: const Text("Return to Supplier"),
+                          title: Text(
+                            "Return to Supplier",
+                            style: TextStyle(
+                              fontSize: isTablet ? 24 : 16,
+                            ),
+                          ),
                           value: 5,
                           groupValue: _selectedOption,
                           dense: false,
@@ -145,7 +188,7 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.all(10.0),
                     child: Align(
                       alignment: Alignment.centerLeft,
@@ -153,7 +196,7 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                         'Responsible Party',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20.0,
+                          fontSize: isTablet ? 30 : 20.0,
                         ),
                       ),
                     ),
@@ -161,8 +204,13 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
-                    height: 50,
+                    // height: 50,
                     child: TextField(
+                      style: TextStyle(
+                        fontSize: isTablet ? 24 : 15,
+                        color: Colors.black.withOpacity(0.65),
+                        fontWeight: FontWeight.w500,
+                      ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: name,
                       keyboardType: TextInputType.name,
@@ -170,6 +218,7 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                         "Name",
                         false,
                         isRedColorBorder: nameBorderShowRed,
+                        isTablet: isTablet,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(
@@ -184,14 +233,20 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                     },
                     child: SizedBox(
                       width: double.infinity,
-                      height: 50,
+                      //   height: 50,
                       child: TextField(
+                        style: TextStyle(
+                          fontSize: isTablet ? 24 : 15,
+                          color: Colors.black.withOpacity(0.65),
+                          fontWeight: FontWeight.w500,
+                        ),
                         textAlignVertical: TextAlignVertical.center,
                         controller: stepTwoDate,
                         keyboardType: TextInputType.datetime,
                         decoration: textFieldDecoration(
                           "Date",
                           false,
+                          isTablet: isTablet,
                         ),
                         inputFormatters: [
                           LengthLimitingTextInputFormatter(100),
@@ -205,8 +260,12 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                   ),
                   const SizedBox(height: 50),
                   SizedBox(
-                    width: double.infinity,
-                    height: 50.0,
+                    //  width: double.infinity,
+                    //  height: 50.0,
+                    width: MediaQuery.of(context).size.width * 0.95,
+
+                    //  height: 50.0,
+                    height: MediaQuery.of(context).size.height * 0.067,
                     child: Container(
                       decoration: BoxDecoration(boxShadow: [
                         (EasyDynamicTheme.of(context).themeMode !=
@@ -280,9 +339,10 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                             ),
                           ),
                         ),
-                        child: const Text("Next",
+                        child: Text("Next",
                             style: TextStyle(
                               color: Colors.white,
+                              fontSize: isTablet ? 30 : 17,
                             )),
                       ),
                     ),
@@ -306,7 +366,9 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
 
     if (picked != null) {
       // Format the picked date to the desired format
-      final formattedDate = DateFormat('yyyy-MM-dd').format(picked);
+      // final formattedDate = DateFormat('yyyy-MM-dd').format(picked);
+
+      final formattedDate = DateFormat('MM-dd-yyyy').format(picked);
 
       // Update the TextField's value
       stepTwoDate.text = formattedDate;

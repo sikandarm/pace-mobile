@@ -20,11 +20,39 @@ class _TaskLogsScreenState extends State<TaskLogsScreen> {
     super.initState();
   }
 
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  List<TasklogModel> taskLogsListRemovedNullComment = [];
   List<TasklogModel> taskLogsList = [];
   bool isLoading = false;
   Future<void> callApiMethods() async {
     isLoading = true;
     taskLogsList = await getTaskLogs(taskId: widget.taskId);
+    //  taskLogsListRemovedNullComment.add(Task)
+
+    for (var taskLog in taskLogsList) {
+      if (taskLog.comment != 'null' && taskLog.comment != null) {
+        taskLogsListRemovedNullComment.add(taskLog);
+      }
+    }
+
     isLoading = false;
     setState(() {});
   }
@@ -51,7 +79,7 @@ class _TaskLogsScreenState extends State<TaskLogsScreen> {
         title: Text(
           "Task Logs",
           style: TextStyle(
-            fontSize: appBarTiltleSize,
+            fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -127,7 +155,7 @@ class _TaskLogsScreenState extends State<TaskLogsScreen> {
           ? Center(
               child: Column(
                 children: [
-                  SizedBox(height: 150),
+                  SizedBox(height: isTablet ? 400 : 150),
                   CircularProgressIndicator(),
                 ],
               ),
@@ -139,138 +167,182 @@ class _TaskLogsScreenState extends State<TaskLogsScreen> {
                   style: TextStyle(),
                 ))
               : SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 11),
-                      Scrollbar(
-                        scrollbarOrientation: ScrollbarOrientation.top,
-                        thumbVisibility: true,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Container(
-                            //  margin: EdgeInsets.symmetric(horizontal: 7),
-                            child: DataTable(
-                              headingRowColor: MaterialStatePropertyAll(
-                                  Colors.grey.withOpacity(0.3)),
-                              dataRowHeight: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.withOpacity(0.1),
-                              ),
-                              rows: [
-                                for (int i = 0;
-                                    i < taskLogsList.length;
-                                    i++) ...{
-                                  DataRow(cells: [
-                                    // DataCell(
-                                    //   Text(
-                                    //     taskLogsList[i].id.toString(),
-                                    //     style: TextStyle(
-                                    //       fontSize: 12,
-                                    //     ),
-                                    //     softWrap: true,
-                                    //   ),
-                                    // ),
-                                    // DataCell(
-                                    //   Text(
-                                    //     taskLogsList[i].taskId.toString(),
-                                    //     style: TextStyle(
-                                    //       fontSize: 12,
-                                    //     ),
-                                    //     softWrap: true,
-                                    //   ),
-                                    // ),
-                                    DataCell(
-                                      Text(
-                                        formatDateTime(
-                                          DateTime.parse(
-                                            taskLogsList[i].breakStart!,
+                  child: Container(
+                    //   width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 11),
+                        SizedBox(height: isTablet ? 13 : 0),
+                        Scrollbar(
+                          scrollbarOrientation: ScrollbarOrientation.top,
+                          thumbVisibility: true,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Container(
+                              //  margin: EdgeInsets.symmetric(horizontal: 7),
+                              //  width: MediaQuery.of(context).size.width,
+                              child: DataTable(
+                                headingRowColor: MaterialStatePropertyAll(
+                                    Colors.grey.withOpacity(0.3)),
+                                //    dataRowHeight: 40,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(0.1),
+                                ),
+                                rows: [
+                                  for (int i = 0;
+                                      i < taskLogsListRemovedNullComment.length;
+                                      i++) ...{
+                                    DataRow(cells: [
+                                      // DataCell(
+                                      //   Text(
+                                      //     taskLogsList[i].id.toString(),
+                                      //     style: TextStyle(
+                                      //       fontSize: 12,
+                                      //     ),
+                                      //     softWrap: true,
+                                      //   ),
+                                      // ),
+                                      // DataCell(
+                                      //   Text(
+                                      //     taskLogsList[i].taskId.toString(),
+                                      //     style: TextStyle(
+                                      //       fontSize: 12,
+                                      //     ),
+                                      //     softWrap: true,
+                                      //   ),
+                                      // ),
+                                      DataCell(
+                                        Container(
+                                          width: isTablet ? 250 : 120,
+                                          child: Text(
+                                            formatDateTime(
+                                              DateTime.parse(
+                                                taskLogsListRemovedNullComment[
+                                                        i]
+                                                    .breakStart!,
+                                              ),
+                                            ),
+                                            softWrap: true,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                            ),
                                           ),
                                         ),
-                                        softWrap: true,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                        ),
                                       ),
-                                    ),
-                                    DataCell(Text(
-                                      taskLogsList[i].breakEnd == null
-                                          ? 'waiting for task end!'
-                                          : formatDateTime(DateTime.parse(
-                                              taskLogsList[i].breakEnd!)),
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                      ),
-                                      softWrap: true,
-                                    )),
-                                    DataCell(
-                                      Container(
-                                        // width: 250,
-                                        // height: 1100,
+                                      DataCell(Container(
+                                        width: isTablet ? 250 : 120,
                                         child: Text(
-                                          taskLogsList[i].comment.toString(),
+                                          taskLogsListRemovedNullComment[i]
+                                                      .breakEnd ==
+                                                  null
+                                              ? 'waiting for task end!'
+                                              : formatDateTime(DateTime.parse(
+                                                  taskLogsList[i].breakEnd!)),
                                           style: TextStyle(
                                             fontSize: 12,
                                           ),
                                           softWrap: true,
                                         ),
+                                      )),
+                                      DataCell(
+                                        Container(
+                                          width: isTablet ? 290 : 120,
+                                          // width: 250,
+                                          // height: 1100,
+                                          child: Text(
+                                            taskLogsListRemovedNullComment[i]
+                                                .comment
+                                                .toString(),
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                            ),
+                                            softWrap: true,
+                                          ),
+                                        ),
+                                      ),
+                                      // DataCell(
+                                      //   Container(
+                                      //     width: isTablet ? 200 : 120,
+                                      //     // width: 250,
+                                      //     // height: 1100,
+                                      //     child: Text(
+                                      //       taskLogsListRemovedNullComment[i]
+                                      //           .iteration
+                                      //           .toString(),
+                                      //       style: TextStyle(
+                                      //         fontSize: 12,
+                                      //       ),
+                                      //       softWrap: true,
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                    ]),
+                                  }
+                                ],
+                                columns: [
+                                  // DataColumn(
+                                  //   label: Text(
+                                  //     'ID',
+                                  //     style: TextStyle(
+                                  //       fontWeight: FontWeight.bold,
+                                  //       fontSize: 14,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  // DataColumn(
+                                  //   label: Text(
+                                  //     'Task ID',
+                                  //     style: TextStyle(
+                                  //       fontWeight: FontWeight.bold,
+                                  //       fontSize: 14,
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Break Start',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
                                       ),
                                     ),
-                                  ]),
-                                }
-                              ],
-                              columns: [
-                                // DataColumn(
-                                //   label: Text(
-                                //     'ID',
-                                //     style: TextStyle(
-                                //       fontWeight: FontWeight.bold,
-                                //       fontSize: 14,
-                                //     ),
-                                //   ),
-                                // ),
-                                // DataColumn(
-                                //   label: Text(
-                                //     'Task ID',
-                                //     style: TextStyle(
-                                //       fontWeight: FontWeight.bold,
-                                //       fontSize: 14,
-                                //     ),
-                                //   ),
-                                // ),
-                                DataColumn(
-                                  label: Text(
-                                    'Break Start',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
+                                  ),
+                                  DataColumn(
+                                    label: Text(
+                                      'Break End',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Break End',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
+                                  DataColumn(
+                                    label: Text(
+                                      'Comment',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
+                                      softWrap: true,
                                     ),
                                   ),
-                                ),
-                                DataColumn(
-                                  label: Text(
-                                    'Comment',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                    softWrap: true,
-                                  ),
-                                ),
-                              ],
+                                  // DataColumn(
+                                  //   label: Text(
+                                  //     'Iteration',
+                                  //     style: TextStyle(
+                                  //       fontWeight: FontWeight.bold,
+                                  //       fontSize: 14,
+                                  //     ),
+                                  //     softWrap: true,
+                                  //   ),
+                                  // ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
     );

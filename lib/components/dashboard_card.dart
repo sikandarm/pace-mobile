@@ -4,7 +4,7 @@ import '../screens/department_list.dart';
 import '../screens/view_all_jobs_screen.dart';
 import '../utils/constants.dart';
 
-class DashboardCard extends StatelessWidget {
+class DashboardCard extends StatefulWidget {
   final String title;
   final bool showList;
   final String subtitle;
@@ -21,11 +21,35 @@ class DashboardCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<DashboardCard> createState() => _DashboardCardState();
+}
+
+class _DashboardCardState extends State<DashboardCard> {
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (title == "Departments") {
-          if (showList) {
+        if (widget.title == "Departments") {
+          if (widget.showList) {
             saveStringToSP("Select Rejected Reason", BL_REJECTED_REASON);
 
             Navigator.push(
@@ -39,8 +63,8 @@ class DashboardCard extends StatelessWidget {
           }
         }
 
-        if (title == "Jobs") {
-          if (showList) {
+        if (widget.title == "Jobs") {
+          if (widget.showList) {
             //   saveStringToSP("Select Rejected Reason", BL_REJECTED_REASON);
 
             // Navigator.push(
@@ -74,7 +98,7 @@ class DashboardCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            gradient: gradient,
+            gradient: widget.gradient,
           ),
           child: Padding(
             padding: const EdgeInsets.all(3.0),
@@ -86,9 +110,9 @@ class DashboardCard extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Image.asset(
-                        icon,
-                        width: 24,
-                        height: 24,
+                        widget.icon,
+                        width: isTablet ? 40 : 24,
+                        height: isTablet ? 40 : 24,
                         color: Colors.white,
                       ),
                     ),
@@ -100,9 +124,9 @@ class DashboardCard extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 15,
+                      widget.title,
+                      style: TextStyle(
+                        fontSize: isTablet ? 35 : 15,
                         color: Colors.white,
                       ),
                     ),
@@ -114,9 +138,9 @@ class DashboardCard extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      subtitle,
-                      style: const TextStyle(
-                        fontSize: 12,
+                      widget.subtitle,
+                      style: TextStyle(
+                        fontSize: isTablet ? 22 : 12,
                         color: Colors.white,
                       ),
                     ),

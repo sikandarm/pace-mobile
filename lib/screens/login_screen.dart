@@ -71,6 +71,33 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
   }
 
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+
+    if (screenWidth >= 768 &&
+        (screenHeight >= 1024
+        // || screenHeight >= 950
+
+        )) {
+      setState(() {
+        isTablet = true;
+      });
+
+      print('screen widht: ' + MediaQuery.of(context).size.width.toString());
+      print('screen height: ' + MediaQuery.of(context).size.height.toString());
+    }
+  }
+
   Future<void> tryAutoLogin() async {
     final autologinBool = await getBoolFromSF(BL_USER_LOGGED_IN);
     if (autologinBool) {
@@ -313,7 +340,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Center(
               child: SizedBox(
-                width: 300,
+                // width: 300,
+                width: MediaQuery.of(context).size.width * 0.83,
+
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -326,16 +355,34 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ThemeMode.dark
                                 ? Colors.white
                                 : Colors.black,
-                            fontSize: 30,
+                            fontSize: isTablet ? 45 : 30,
                           )),
                     ),
+
                     const SizedBox(height: 40),
-                    TextField(
-                      controller: emailText,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: textFieldDecoration("Email", false),
+                    Container(
+                      // color: Colors.red,
+
+                      //  width: isTablet ?  : 22,
+                      width: MediaQuery.of(context).size.width * 0.83,
+                      // width: 300,
+                      // height: 150,
+                      //   height: 300,
+                      // color: Colors.red,
+                      child: TextField(
+                        style: TextStyle(
+                          fontSize: isTablet ? 24 : 15,
+                          color: Colors.black.withOpacity(0.65),
+                          fontWeight: FontWeight.w500,
+                        ),
+                        controller: emailText,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: textFieldDecoration("Email", false,
+                            isTablet: isTablet),
+                      ),
                     ),
                     const SizedBox(height: 10),
+
                     // TextField(
                     //     controller: passwordText,
                     //     obscureText: true,
@@ -345,15 +392,25 @@ class _LoginScreenState extends State<LoginScreen> {
                       alignment: Alignment.centerRight,
                       children: [
                         SizedBox(
-                          width: double.infinity,
-                          height: 50,
+                          //  width: double.infinity,
+                          width: MediaQuery.of(context).size.width * 0.83,
+                          //  height: 50,
                           child: TextField(
+                            style: TextStyle(
+                              fontSize: isTablet ? 24 : 15,
+                              color: Colors.black.withOpacity(0.65),
+                              fontWeight: FontWeight.w500,
+                            ),
                             controller: passwordText,
                             textAlignVertical: TextAlignVertical.center,
                             obscureText: !_passwordVisible,
                             obscuringCharacter: '*',
                             keyboardType: TextInputType.visiblePassword,
-                            decoration: textFieldDecoration("Password", true),
+                            decoration: textFieldDecoration(
+                              "Password",
+                              true,
+                              isTablet: isTablet,
+                            ),
                           ),
                         ),
                         IconButton(
@@ -391,15 +448,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ? Colors.white
                                     : Colors.black,
 
-                                fontSize: 10,
+                                fontSize: isTablet ? 20 : 10,
                               )),
                         ),
                       ),
                     ),
                     const SizedBox(height: 20),
                     SizedBox(
-                      width: double.infinity,
-                      height: 50.0,
+                      //  width: double.infinity,
+                      // height: 50.0,
+                      //   width: 340,
+                      width: MediaQuery.of(context).size.width * 0.95,
+
+                      //  height: 50.0,
+                      height: MediaQuery.of(context).size.height * 0.07,
                       child: Container(
                         decoration: BoxDecoration(boxShadow: [
                           (EasyDynamicTheme.of(context).themeMode !=
@@ -437,9 +499,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                           ),
-                          child: const Text("Login",
+                          child: Text("Login",
                               style: TextStyle(
                                 color: Colors.white,
+                                fontSize: isTablet ? 30 : 19,
                               )),
                         ),
                       ),
@@ -453,9 +516,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         child: RichText(
                           textAlign: TextAlign.center,
-                          text: const TextSpan(
+                          text: TextSpan(
                             text: 'Dont have an account?',
-                            style: TextStyle(color: Colors.grey),
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: isTablet ? 28 : 14,
+                            ),
                             children: <TextSpan>[
                               TextSpan(
                                 text: ' Register',
@@ -467,27 +533,28 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const SizedBox(
+                    SizedBox(
                       width: double.maxFinite,
                       child: Padding(
-                        padding: EdgeInsets.only(right: 20.0),
+                        padding: const EdgeInsets.only(right: 20.0),
                         child: Text("OR",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 15,
+                              fontSize: isTablet ? 25 : 15,
                             )),
                       ),
                     ),
                     const SizedBox(height: 20),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _buildSocialIcon(
-                            context, 'assets/images/google.png', true, false),
-                        _buildSocialIcon(
-                            context, 'assets/images/apple.png', false, false),
-                        _buildSocialIcon(
-                            context, 'assets/images/facebook.png', false, true),
+                        _buildSocialIcon(context, 'assets/images/google.png',
+                            true, false, isTablet),
+                        _buildSocialIcon(context, 'assets/images/apple.png',
+                            false, false, isTablet),
+                        _buildSocialIcon(context, 'assets/images/facebook.png',
+                            false, true, isTablet),
                       ],
                     ),
 
@@ -509,8 +576,10 @@ class _LoginScreenState extends State<LoginScreen> {
 }
 
 Widget _buildSocialIcon(BuildContext context, String imagePath,
-    bool isForGoogle, bool isForFacebook) {
-  return Expanded(
+    bool isForGoogle, bool isForFacebook, bool isTablet) {
+  return Container(
+    width: isTablet ? 75 : 45,
+    height: isTablet ? 75 : 45,
     child: InkWell(
       onTap: () async {
         print('button pressed');

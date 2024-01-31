@@ -60,6 +60,26 @@ class _RejectedReasonsListState extends State<RejectedReasonsScreen> {
     }
   }
 
+  bool isTablet = false;
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,7 +106,7 @@ class _RejectedReasonsListState extends State<RejectedReasonsScreen> {
         title: Text(
           "Rejected Reasons",
           style: TextStyle(
-            fontSize: appBarTiltleSize,
+            fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -107,7 +127,7 @@ class _RejectedReasonsListState extends State<RejectedReasonsScreen> {
                   backgroundImage: userProfileImage == null
                       ? AssetImage('assets/images/ic_profile.png')
                       : NetworkImage(userProfileImage!) as ImageProvider,
-                  radius: 15,
+                  radius: isTablet ? 25 : 15,
                 ),
               ),
             ),
@@ -141,10 +161,10 @@ class _RejectedReasonsListState extends State<RejectedReasonsScreen> {
                     child: Center(
                       child: Text(
                         category.name.toUpperCase(),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.grey,
-                          fontSize: 19,
+                          fontSize: isTablet ? 28 : 19,
                         ),
                       ),
                     ),
@@ -171,7 +191,9 @@ class _RejectedReasonsListState extends State<RejectedReasonsScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Text(reason.name,
-                            style: const TextStyle(fontSize: 14)),
+                            style: TextStyle(
+                              fontSize: isTablet ? 28 : 14,
+                            )),
                       ),
                     );
                   }).toList(),

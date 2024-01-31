@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import '../screens/task_list.dart';
 import '../utils/constants.dart';
 
-class JobList extends StatelessWidget {
+class JobList extends StatefulWidget {
   final int jobId;
   final String status;
   final int totalTasks;
@@ -22,8 +22,33 @@ class JobList extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<JobList> createState() => _JobListState();
+}
+
+class _JobListState extends State<JobList> {
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Color progressDoneColor = Color(int.parse(getProgressColorHex(status)));
+    Color progressDoneColor =
+        Color(int.parse(getProgressColorHex(widget.status)));
 
     return GestureDetector(
       onTap: () {
@@ -32,11 +57,12 @@ class JobList extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => TaskList(jobId: jobId),
+            builder: (context) => TaskList(jobId: widget.jobId),
           ),
         );
       },
       child: Container(
+        height: isTablet ? 145 : 100,
         margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
         decoration: BoxDecoration(
           //   color: Colors.red,
@@ -70,17 +96,18 @@ class JobList extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "#$jobId",
-                      style: const TextStyle(
+                      "#${widget.jobId}",
+                      style: TextStyle(
                         color: Color(0xFF1E2022),
                         fontWeight: FontWeight.w600,
-                        fontSize: 14.0,
+                        fontSize: isTablet ? 22 : 14.0,
                       ),
                     ),
                     Text(
-                      DateFormat(US_DATE_FORMAT).format(startDate),
-                      style: const TextStyle(
-                        fontSize: 11.0,
+                      DateFormat(US_DATE_FORMAT).format(widget.startDate),
+                      style: TextStyle(
+                        // fontSize: 11.0,
+                        fontSize: isTablet ? 18 : 11.0,
                         color: Color(0xFF77838F),
                         fontWeight: FontWeight.w400,
                       ),
@@ -92,24 +119,29 @@ class JobList extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      status[0].toUpperCase() + status.substring(1),
+                      widget.status[0].toUpperCase() +
+                          widget.status.substring(1),
                       style: TextStyle(
-                        color: status[0].toUpperCase() + status.substring(1) ==
+                        color: widget.status[0].toUpperCase() +
+                                    widget.status.substring(1) ==
                                 'In_process'
                             ? Color(0xFFF4BE4F)
-                            : status[0].toUpperCase() + status.substring(1) ==
+                            : widget.status[0].toUpperCase() +
+                                        widget.status.substring(1) ==
                                     'Completed'
                                 ? Color(0xFF63C556)
-                                : getProgressColor(status),
-                        fontSize: 12.0,
+                                : getProgressColor(widget.status),
+                        // fontSize: 12.0,
+                        fontSize: isTablet ? 20 : 12.0,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     // const Spacer(),
                     Text(
-                      "$completedTasks/$totalTasks",
+                      "${widget.completedTasks}/${widget.totalTasks}",
                       style: TextStyle(
-                        fontSize: 12.0,
+                        //  fontSize: 12.0,
+                        fontSize: isTablet ? 19 : 12.0,
                         fontWeight: FontWeight.w500,
                         color: EasyDynamicTheme.of(context).themeMode ==
                                 ThemeMode.dark
@@ -119,18 +151,21 @@ class JobList extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8.0),
+                SizedBox(height: isTablet ? 20 : 8.0),
                 LinearProgressIndicator(
-                  value: calculatePercentage(completedTasks, totalTasks),
+                  minHeight: isTablet ? 7 : 3.5,
+                  value: calculatePercentage(
+                      widget.completedTasks, widget.totalTasks),
                   //  backgroundColor: const Color(0xFFF5F5F5),
-                  backgroundColor:
-                      status[0].toUpperCase() + status.substring(1) ==
-                              'In_process'
-                          ? Color(0xFFF4BE4F)
-                          : status[0].toUpperCase() + status.substring(1) ==
-                                  'Completed'
-                              ? Color(0xFF63C556)
-                              : getProgressColor(status),
+                  backgroundColor: widget.status[0].toUpperCase() +
+                              widget.status.substring(1) ==
+                          'In_process'
+                      ? Color(0xFFF4BE4F)
+                      : widget.status[0].toUpperCase() +
+                                  widget.status.substring(1) ==
+                              'Completed'
+                          ? Color(0xFF63C556)
+                          : getProgressColor(widget.status),
 
                   valueColor: AlwaysStoppedAnimation<Color>(progressDoneColor),
                 ),

@@ -40,6 +40,25 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
 
   ScrollController? controller = ScrollController();
 
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +70,10 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
       //       id: widget.purchaseOrder.id!);
       //   print('result:${result.first.inventoryItem}');
       // }),
-      appBar: _buildAppBar(context),
+      appBar: _buildAppBar(
+        context,
+        isTablet,
+      ),
       body: Container(
         child: ListView(
           children: [
@@ -78,6 +100,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ListTileItem(
                       label: 'ID',
                       value: widget.purchaseOrder.id.toString(),
+                      isTablet: isTablet,
                     ),
 
                     // ListTileItem(
@@ -98,6 +121,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ListTileItem(
                       label: 'PO Number',
                       value: widget.purchaseOrder.poNumber.toString(),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -108,6 +132,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ListTileItem(
                       label: 'Address',
                       value: widget.purchaseOrder.address.toString(),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -124,6 +149,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                           widget.purchaseOrder.phone!.substring(3, 6) +
                           '-' +
                           widget.purchaseOrder.phone!.substring(6),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -133,6 +159,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ListTileItem(
                       label: 'Fax',
                       value: widget.purchaseOrder.fax.toString(),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -142,6 +169,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ListTileItem(
                       label: 'Email',
                       value: widget.purchaseOrder.email.toString(),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -151,6 +179,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ListTileItem(
                       label: 'Status',
                       value: widget.purchaseOrder.status.toString(),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -169,8 +198,12 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ListTileItem(
                       label: 'Order Date',
                       // value: purchaseOrder.orderDate.toString(),
-                      value: DateFormat(US_DATE_FORMAT).format(DateTime.parse(
-                          widget.purchaseOrder.orderDate.toString())),
+                      value: DateFormat(US_DATE_FORMAT).format(
+                        DateTime.parse(
+                          widget.purchaseOrder.orderDate.toString(),
+                        ),
+                      ),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -182,6 +215,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                       //  value: purchaseOrder.deliveryDate.toString(),
                       value: DateFormat(US_DATE_FORMAT).format(DateTime.parse(
                           widget.purchaseOrder.deliveryDate.toString())),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -191,6 +225,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ListTileItem(
                       label: 'Vender Name',
                       value: widget.purchaseOrder.vendorName.toString(),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -200,6 +235,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ListTileItem(
                       label: 'Ship To',
                       value: widget.purchaseOrder.shipTo.toString(),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -209,6 +245,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ListTileItem(
                       label: 'Ship Via',
                       value: widget.purchaseOrder.shipVia.toString(),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -218,6 +255,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ListTileItem(
                       label: 'Term',
                       value: widget.purchaseOrder.term.toString(),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -227,6 +265,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ListTileItem(
                       label: 'Order By',
                       value: widget.purchaseOrder.orderBy.toString(),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -236,6 +275,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ListTileItem(
                       label: 'Confirm With',
                       value: widget.purchaseOrder.confirmWith.toString(),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -245,6 +285,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ListTileItem(
                       label: 'Placed Via',
                       value: widget.purchaseOrder.placedVia.toString(),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -286,6 +327,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ListTileItem(
                       label: 'Created At',
                       value: widget.purchaseOrder.createdAt.toString(),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -303,6 +345,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ListTileItem(
                       label: 'Company',
                       value: widget.purchaseOrder.company!.name.toString(),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -312,6 +355,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ListTileItem(
                       label: 'Vendor',
                       value: widget.purchaseOrder.vendorName.toString(),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -322,6 +366,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                       label: 'First Name',
                       value:
                           widget.purchaseOrder.firstName!.firstName.toString(),
+                      isTablet: isTablet,
                     ),
                     const Padding(
                       padding:
@@ -392,10 +437,13 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                                       height: 9,
                                     ),
                                     ListTileItem(
-                                        label: 'ID',
-                                        value: purchaseOrderItemsList[i]
-                                            .id
-                                            .toString()),
+                                      label: 'ID',
+                                      value: purchaseOrderItemsList[i]
+                                          .id
+                                          .toString(),
+                                      isTablet: isTablet,
+                                    ),
+
                                     const Padding(
                                       padding: EdgeInsets.symmetric(
                                           vertical: 3, horizontal: 20),
@@ -414,10 +462,12 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                                     // ),
 
                                     ListTileItem(
-                                        label: 'Inventory Item',
-                                        value: purchaseOrderItemsList[i]
-                                            .inventoryItem
-                                            .toString()),
+                                      label: 'Inventory Item',
+                                      value: purchaseOrderItemsList[i]
+                                          .inventoryItem
+                                          .toString(),
+                                      isTablet: isTablet,
+                                    ),
                                     const Padding(
                                       padding: EdgeInsets.symmetric(
                                           vertical: 3, horizontal: 20),
@@ -425,10 +475,12 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                                     ),
 
                                     ListTileItem(
-                                        label: 'Quantity',
-                                        value: purchaseOrderItemsList[i]
-                                            .quantity
-                                            .toString()),
+                                      label: 'Quantity',
+                                      value: purchaseOrderItemsList[i]
+                                          .quantity
+                                          .toString(),
+                                      isTablet: isTablet,
+                                    ),
                                     const Padding(
                                       padding: EdgeInsets.symmetric(
                                           vertical: 3, horizontal: 20),
@@ -449,19 +501,25 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     'received'.toLowerCase()
                 ? SizedBox()
                 : SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    //  width: 100,
-                    height: 50.0,
+                    // width: MediaQuery.of(context).size.width,
+                    // //  width: 100,
+                    // height: 50.0,
+                    width: MediaQuery.of(context).size.width * 0.95,
+
+                    //  height: 50.0,
+                    height: MediaQuery.of(context).size.height * 0.066,
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 23),
                       decoration: BoxDecoration(boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
-                        )
+                        EasyDynamicTheme.of(context).themeMode != ThemeMode.dark
+                            ? BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(
+                                    0, 3), // changes position of shadow
+                              )
+                            : BoxShadow(),
                       ]),
                       child: ElevatedButton(
                         onPressed: () async {
@@ -514,21 +572,25 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                             ),
                           ),
                         ),
-                        child: const Text("Received",
-                            style: TextStyle(
-                              color: Colors.white,
-                            )),
+                        child: Text(
+                          "Received",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: isTablet ? 27 : 14,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-            const SizedBox(height: 11),
+            const SizedBox(height: 15),
           ],
         ),
       ),
     );
   }
 
-  Padding ListTileItem({required String label, required String value}) {
+  Padding ListTileItem(
+      {required String label, required String value, required bool isTablet}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 20),
       child: Row(
@@ -536,9 +598,9 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
         children: [
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 15.0,
+              fontSize: isTablet ? 27 : 15.0,
             ),
           ),
           if (value.length > 25) ...{
@@ -553,8 +615,11 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                 value,
                 //    softWrap: true,
                 style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 14.0,
+                  color: Colors.grey[
+                      EasyDynamicTheme.of(context).themeMode != ThemeMode.dark
+                          ? 600
+                          : 300],
+                  fontSize: isTablet ? 24 : 14.0,
                 ),
               ),
             ),
@@ -565,7 +630,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
   }
 }
 
-AppBar _buildAppBar(context) {
+AppBar _buildAppBar(context, bool isTablet) {
   return AppBar(
     //   backgroundColor: Colors.white,
     backgroundColor: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
@@ -603,7 +668,7 @@ AppBar _buildAppBar(context) {
                   : Color(0xff1E2022),
 
               fontWeight: FontWeight.bold,
-              fontSize: appBarTiltleSize,
+              fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             ),
           );
         } else if (snapshot.hasError) {

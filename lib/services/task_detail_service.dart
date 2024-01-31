@@ -24,6 +24,7 @@ class TaskDetailObj {
   final String? welder;
   final String? painter;
   final String? foreman;
+  final int task_iteration;
 
   TaskDetailObj({
     required this.id,
@@ -45,6 +46,7 @@ class TaskDetailObj {
     required this.welder,
     required this.painter,
     required this.foreman,
+    required this.task_iteration,
   });
 }
 
@@ -60,6 +62,7 @@ Future<List<TaskDetailObj>> fetchTaskDetail(int taskId) async {
 
       if (taskData != null && taskData is Map<String, dynamic>) {
         final TaskDetailObj task = TaskDetailObj(
+          task_iteration: taskData['task_iteration'],
           id: taskData['id'],
           pmkNumber: taskData['pmkNumber'] ??
               '', // Use null-coalescing operator to provide a default value

@@ -88,7 +88,7 @@ Future<NotificationModel> fetchAllNotifications() async {
   var requestUrl = url.replace(queryParameters: {'userId': userId.toString()});
 
   var response = await http.get(requestUrl);
-//  var response = await http.get(url);
+  // var response = await http.get(url);
 
   var responseString = response.body;
   print(responseString);

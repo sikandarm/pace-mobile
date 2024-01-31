@@ -64,6 +64,7 @@ class Billdata {
   String? shipVia;
   String? companyName;
   String? companyAddress;
+  String? receivedStatus;
   List<BillofLadingItems>? billofLadingItems;
 
   Billdata(
@@ -79,6 +80,7 @@ class Billdata {
       this.shipVia,
       this.companyName,
       this.companyAddress,
+      this.receivedStatus,
       this.billofLadingItems});
 
   Billdata.fromJson(Map<String, dynamic> json) {
@@ -93,6 +95,7 @@ class Billdata {
     terms = json['terms'];
     shipVia = json['shipVia'];
     companyName = json['CompanyName'];
+    receivedStatus = json['receivedStatus'];
     companyAddress = json['CompanyAddress'];
     if (json['BillofLadingItems'] != null) {
       billofLadingItems = <BillofLadingItems>[];
@@ -116,6 +119,7 @@ class Billdata {
     data['shipVia'] = this.shipVia;
     data['CompanyName'] = this.companyName;
     data['CompanyAddress'] = this.companyAddress;
+    data['receivedStatus'] = this.receivedStatus;
     if (this.billofLadingItems != null) {
       data['BillofLadingItems'] =
           this.billofLadingItems!.map((v) => v.toJson()).toList();
@@ -127,12 +131,14 @@ class Billdata {
 class BillofLadingItems {
   int? quantity;
   String? fabricatedItems;
+  int? id;
 //  String? fax;
   // String? phone;
 
   BillofLadingItems({
     this.quantity,
     this.fabricatedItems,
+    this.id,
     // this.fax,
     //  this.phone,
   });
@@ -140,6 +146,7 @@ class BillofLadingItems {
   BillofLadingItems.fromJson(Map<String, dynamic> json) {
     quantity = json['Quantity'];
     fabricatedItems = json['FabricatedItems'];
+    id = json['id'];
     //  fax = json['Fax'];
     //  phone = json['Phone'];
   }
@@ -148,6 +155,7 @@ class BillofLadingItems {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Quantity'] = this.quantity;
     data['FabricatedItems'] = this.fabricatedItems;
+    data['id'] = this.id;
     //  data['Fax'] = this.fax;
     //  data['Phone'] = this.phone;
     return data;

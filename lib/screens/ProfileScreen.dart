@@ -14,10 +14,10 @@ import 'notification.dart';
 bool _blEditProfile = false;
 bool _blShowNotificationsList = false;
 
-TextEditingController firstNameController = TextEditingController();
-TextEditingController lastNameController = TextEditingController();
-TextEditingController emailController = TextEditingController();
-TextEditingController phoneController = TextEditingController();
+// TextEditingController firstNameController = TextEditingController();
+// TextEditingController lastNameController = TextEditingController();
+// TextEditingController emailController = TextEditingController();
+// TextEditingController phoneController = TextEditingController();
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({
@@ -58,10 +58,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -85,7 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: Text(
           "Profile",
           style: TextStyle(
-            fontSize: appBarTiltleSize,
+            fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -115,8 +134,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         },
                         child: Image.asset(
                           "assets/images/ic_bell.png",
-                          width: 32,
-                          height: 32,
+                          width: isTablet ? 45 : 32,
+                          height: isTablet ? 45 : 32,
                           color: EasyDynamicTheme.of(context).themeMode ==
                                   ThemeMode.dark
                               ? Colors.white
@@ -202,7 +221,7 @@ Future<void> callUpdateUser(BuildContext context, String fName, String lName,
       Map<String, dynamic> jsonMap = jsonDecode(responseString);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        saveStringToSP(firstNameController.text, BL_USER_FULL_NAME);
+        saveStringToSP(fName, BL_USER_FULL_NAME);
 
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context)
@@ -233,7 +252,7 @@ Future<void> callUpdateUser(BuildContext context, String fName, String lName,
 }
 
 // ignore: camel_case_types
-class userProfileWidget extends StatelessWidget {
+class userProfileWidget extends StatefulWidget {
   final int id;
   final String? firstName;
   final String? lastName;
@@ -255,6 +274,24 @@ class userProfileWidget extends StatelessWidget {
     // required this.roles,
     // required this.permissions,
   }) : super(key: key);
+
+  @override
+  State<userProfileWidget> createState() => _userProfileWidgetState();
+}
+
+class _userProfileWidgetState extends State<userProfileWidget> {
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
 
   Future<List<Widget>> buildRoleChips() async {
     try {
@@ -279,13 +316,31 @@ class userProfileWidget extends StatelessWidget {
     return Chip(
       label: Text(
         role,
-        style: const TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: isTablet ? 30 : 17,
+        ),
       ),
       backgroundColor: Colors.blue,
       shape: const StadiumBorder(
         side: BorderSide.none, // Set the side property to none
       ),
     );
+  }
+
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final emailController = TextEditingController();
+  final phoneController = TextEditingController();
+
+  @override
+  void didChangeDependencies() {
+    firstNameController.text = widget.firstName!;
+    lastNameController.text = widget.lastName!;
+    emailController.text = widget.email!;
+    phoneController.text = widget.phone!;
+    checkTablet();
+    super.didChangeDependencies();
   }
 
   @override
@@ -295,20 +350,166 @@ class userProfileWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          buildElements("First Name", firstName!, firstNameController),
-          buildElements("Last Name", lastName!, lastNameController),
-          buildElements("Email", email!, emailController),
-          buildElements("Phone", phone!, phoneController),
+          Text(
+            'First Name',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: isTablet ? 30 : 17,
+            ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: TextField(
+              style: TextStyle(
+                fontSize: isTablet ? 28 : 16.5,
+              ),
+              controller: firstNameController,
+              textAlignVertical: TextAlignVertical.center,
+              keyboardType: TextInputType.name,
+              decoration: InputDecoration(
+                // hintText: labelText,
+                labelStyle: TextStyle(
+                  fontSize: isTablet ? 40 : 24,
+                ),
+                hintStyle: TextStyle(fontSize: isTablet ? 24 : 15),
+              ),
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(100),
+              ],
+              // onChanged: onChanged,
+            ),
+          ),
+          ////////////////////////////////////////////////////////////////////////////////////////////
+          ///
+          SizedBox(
+            height: 7,
+          ),
+          Text(
+            'Last Name',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: isTablet ? 30 : 17,
+            ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: TextField(
+              style: TextStyle(
+                fontSize: isTablet ? 28 : 16.5,
+              ),
+              controller: lastNameController,
+              textAlignVertical: TextAlignVertical.center,
+              keyboardType: TextInputType.name,
+              decoration: InputDecoration(
+                // hintText: labelText,
+                labelStyle: TextStyle(
+                  fontSize: isTablet ? 40 : 24,
+                ),
+                hintStyle: TextStyle(fontSize: isTablet ? 24 : 15),
+              ),
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(100),
+              ],
+              // onChanged: onChanged,
+            ),
+          ),
+          /////////////////////////////////////////////////////////////////////////////////
+          SizedBox(
+            height: 7,
+          ),
+          Text(
+            'Email',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: isTablet ? 30 : 17,
+            ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: TextField(
+              style: TextStyle(
+                fontSize: isTablet ? 28 : 16.5,
+              ),
+              controller: emailController,
+              textAlignVertical: TextAlignVertical.center,
+              keyboardType: TextInputType.name,
+              decoration: InputDecoration(
+                // hintText: labelText,
+                labelStyle: TextStyle(
+                  fontSize: isTablet ? 40 : 24,
+                ),
+                hintStyle: TextStyle(fontSize: isTablet ? 24 : 15),
+              ),
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(100),
+              ],
+              // onChanged: onChanged,
+            ),
+          ),
+          ////////////////////////////////////////////////////////////////////////////////
+          ///
+          SizedBox(
+            height: 7,
+          ),
+          Text(
+            'Phone',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: isTablet ? 30 : 17,
+            ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: TextField(
+              controller: phoneController,
+
+              style: TextStyle(
+                fontSize: isTablet ? 28 : 16.5,
+              ),
+              //    controller: controller,
+              textAlignVertical: TextAlignVertical.center,
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(
+                // hintText: labelText,
+                labelStyle: TextStyle(
+                  fontSize: isTablet ? 40 : 24,
+                ),
+                hintStyle: TextStyle(fontSize: isTablet ? 24 : 15),
+              ),
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(
+                    14), // including spaces, '- and ()'
+                PhoneNumberFormatter(),
+              ],
+              // onChanged: onChanged,
+            ),
+          ),
+          ////////////////////////////////////////////////////////////////////////////////
+
+          //    buildElements(
+          //      "First Name", widget.firstName!, firstNameController, isTablet),
+          //  buildElements(
+          //      "Last Name", widget.lastName!, lastNameController, isTablet),
+          //   buildElements("Email", widget.email!, emailController, isTablet),
+          //   buildElements("Phone", widget.phone!, phoneController, isTablet),
+          SizedBox(
+            height: 7,
+          ),
           Expanded(
             // SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   "Role(s)",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
+                    fontSize: isTablet ? 27 : 17,
                   ),
                 ),
                 SizedBox(
@@ -341,6 +542,7 @@ class userProfileWidget extends StatelessWidget {
               ],
             ),
           ),
+          //   Spacer(),
           // ),
           Visibility(
             visible: _blEditProfile,
@@ -348,6 +550,11 @@ class userProfileWidget extends StatelessWidget {
               width: double.infinity,
               // height: 50.0,
               child: Container(
+                //   width: 340,
+                width: MediaQuery.of(context).size.width * 0.95,
+
+                //  height: 50.0,
+                height: MediaQuery.of(context).size.height * 0.066,
                 decoration: BoxDecoration(boxShadow: [
                   (EasyDynamicTheme.of(context).themeMode != ThemeMode.dark)
                       ? BoxShadow(
@@ -368,6 +575,12 @@ class userProfileWidget extends StatelessWidget {
                       String email = emailController.text;
                       String phone = phoneController.text;
 
+                      if (phoneController.text.length != 14) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('Invalid phone number entered')));
+                        return;
+                      }
+
                       callUpdateUser(context, fName, lName, email, phone);
                     } else {
                       showSnackbar(context, "You do not have permission");
@@ -382,8 +595,13 @@ class userProfileWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  child: const Text("Update",
-                      style: TextStyle(color: Colors.white)),
+                  child: Text(
+                    "Update",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: isTablet ? 30 : 15.5,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -393,29 +611,40 @@ class userProfileWidget extends StatelessWidget {
     );
   }
 
-  Widget buildElements(
-      String labelText, String value, TextEditingController controller) {
+  Widget buildElements(String labelText, String value,
+      TextEditingController controller, bool isTablet) {
     controller.text = value; // Set the TextField value to the provided string
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        SizedBox(
+          height: isTablet ? 35 : 0,
+        ),
         Text(
           labelText,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
+            fontSize: isTablet ? 30 : 17,
           ),
         ),
         SizedBox(
           width: double.infinity,
           height: 50,
           child: TextField(
+            style: TextStyle(
+              fontSize: isTablet ? 28 : 16.5,
+            ),
             controller: controller,
             textAlignVertical: TextAlignVertical.center,
             keyboardType: TextInputType.name,
             decoration: InputDecoration(
               hintText: labelText,
+              labelStyle: TextStyle(
+                fontSize: isTablet ? 40 : 24,
+              ),
+              hintStyle: TextStyle(fontSize: isTablet ? 24 : 15),
             ),
             inputFormatters: [
               LengthLimitingTextInputFormatter(100),
@@ -428,5 +657,33 @@ class userProfileWidget extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class PhoneNumberFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final newText = _formatPhoneNumber(newValue.text);
+    return TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newText.length),
+    );
+  }
+
+  String _formatPhoneNumber(String input) {
+    // Remove non-numeric characters
+    final digits = input.replaceAll(RegExp(r'\D'), '');
+
+    // Apply phone number formatting (XXX) XXX-XXXX
+    if (digits.length >= 6) {
+      return '(${digits.substring(0, 3)}) ${digits.substring(3, 6)}-${digits.substring(6)}';
+    } else if (digits.length >= 3) {
+      return '(${digits.substring(0, 3)}) ${digits.substring(3)}';
+    } else {
+      return digits;
+    }
   }
 }

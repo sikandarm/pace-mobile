@@ -176,6 +176,25 @@ class _DeptListState extends State<DeptList> {
   }
 
   @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -202,7 +221,7 @@ class _DeptListState extends State<DeptList> {
           // "Dashboard",
           "Departments",
           style: TextStyle(
-            fontSize: appBarTiltleSize,
+            fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -231,8 +250,8 @@ class _DeptListState extends State<DeptList> {
                         },
                         child: Image.asset(
                           "assets/images/ic_bell.png",
-                          width: 32,
-                          height: 32,
+                          width: isTablet ? 45 : 32,
+                          height: isTablet ? 45 : 32,
                           color: EasyDynamicTheme.of(context).themeMode ==
                                   ThemeMode.dark
                               ? Colors.white
@@ -277,7 +296,7 @@ class _DeptListState extends State<DeptList> {
                       backgroundImage: userProfileImage == null
                           ? AssetImage('assets/images/ic_profile.png')
                           : NetworkImage(userProfileImage!) as ImageProvider,
-                      radius: 15,
+                      radius: isTablet ? 25 : 15,
                     ),
                   ),
                 ),
@@ -384,7 +403,7 @@ class _DeptListState extends State<DeptList> {
   }
 }
 
-class TaskListHeader extends StatelessWidget {
+class TaskListHeader extends StatefulWidget {
   final Function(String?) onDropdownChanged;
   final Function() updateCOPQ;
   final String selectedValue; // Add the selectedValue property here
@@ -396,12 +415,36 @@ class TaskListHeader extends StatelessWidget {
       required this.updateCOPQ})
       : super(key: key);
 
+  @override
+  State<TaskListHeader> createState() => _TaskListHeaderState();
+}
+
+class _TaskListHeaderState extends State<TaskListHeader> {
   Future<String> loadReasonText() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token =
         prefs.getString(BL_REJECTED_REASON) ?? "Select Rejected Reason";
     _selectedReason = token;
     return token;
+  }
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
   }
 
   @override
@@ -428,7 +471,7 @@ class TaskListHeader extends StatelessWidget {
                   child: Container(
                       // height: 50.0,
 
-                      height: 43,
+                      height: isTablet ? 70 : 43,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8.0),
                         border: Border.all(
@@ -447,7 +490,7 @@ class TaskListHeader extends StatelessWidget {
                                     const RejectedReasonsScreen()),
                           ).then((value) {
                             print("closed");
-                            updateCOPQ();
+                            widget.updateCOPQ();
                           });
                         },
                         style: ElevatedButton.styleFrom(
@@ -478,8 +521,8 @@ class TaskListHeader extends StatelessWidget {
                                       ? 'Rejected Reason'
                                       : 'Rejected Reason',
 
-                                  style: const TextStyle(
-                                    fontSize: 16.0,
+                                  style: TextStyle(
+                                    fontSize: isTablet ? 24 : 16.0,
                                     color: Color(0xff06A3F6),
                                   ),
                                 ),
@@ -510,10 +553,10 @@ class TaskListHeader extends StatelessWidget {
                 child: Visibility(
                   visible: blAddCar,
                   // visible: true,
-                  child: const Text(
+                  child: Text(
                     "Add CAR",
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: isTablet ? 24 : 16,
                       color: Color(0xff06A3F6),
                       fontWeight: FontWeight.bold,
                     ),
@@ -537,12 +580,12 @@ class TaskListHeader extends StatelessWidget {
                 child: Visibility(
                   visible: blViewCar,
                   // visible: true,
-                  child: const Padding(
+                  child: Padding(
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
                       "View CAR",
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: isTablet ? 24 : 16,
                         color: Color(0xff06A3F6),
                         fontWeight: FontWeight.bold,
                       ),
@@ -554,7 +597,7 @@ class TaskListHeader extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          _buildDashboardCard(),
+          _buildDashboardCard(isTablet),
           const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 2.0),
@@ -595,9 +638,9 @@ class TaskListHeader extends StatelessWidget {
   }
 }
 
-Widget _buildDashboardCard() {
+Widget _buildDashboardCard(bool isTablet) {
   return SizedBox(
-    height: 116.0,
+    height: isTablet ? 170 : 116.0,
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2.0),
       child: Card(
@@ -622,11 +665,11 @@ Widget _buildDashboardCard() {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.only(left: 2.0),
                     child: Icon(
                       Icons.history,
-                      size: 50.0,
+                      size: isTablet ? 90 : 50.0,
                       color: Colors.white,
                     ),
                   ),
@@ -635,18 +678,18 @@ Widget _buildDashboardCard() {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "Monthly Hours",
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: isTablet ? 30 : 15,
                           fontWeight: FontWeight.normal,
                           color: Colors.white,
                         ),
                       ),
                       Text(
                         "$_totalEstimatedHours Hours",
-                        style: const TextStyle(
-                          fontSize: 25,
+                        style: TextStyle(
+                          fontSize: isTablet ? 33 : 25,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),

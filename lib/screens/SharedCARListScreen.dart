@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/get_shared_car.dart';
 import '../utils/constants.dart';
+import 'CAR_Detail.dart';
 import 'Dashboard.dart';
 import 'ProfileScreen.dart';
 import 'notification.dart';
@@ -61,6 +62,26 @@ class _SharedListState extends State<SharedCARList> {
     setState(() {});
   }
 
+  bool isTablet = false;
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,7 +108,7 @@ class _SharedListState extends State<SharedCARList> {
         title: Text(
           "Shared CA Reports",
           style: TextStyle(
-            fontSize: appBarTiltleSize,
+            fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -115,8 +136,8 @@ class _SharedListState extends State<SharedCARList> {
                       },
                       child: Image.asset(
                         "assets/images/ic_bell.png",
-                        width: 32,
-                        height: 32,
+                        width: isTablet ? 45 : 32,
+                        height: isTablet ? 45 : 32,
                         color: EasyDynamicTheme.of(context).themeMode ==
                                 ThemeMode.dark
                             ? Colors.white
@@ -157,7 +178,7 @@ class _SharedListState extends State<SharedCARList> {
                     backgroundImage: userProfileImage == null
                         ? AssetImage('assets/images/ic_profile.png')
                         : NetworkImage(userProfileImage!) as ImageProvider,
-                    radius: 15,
+                    radius: isTablet ? 25 : 15,
                   ),
                 ),
               ),
@@ -268,6 +289,13 @@ class CARListItemWidget extends StatelessWidget {
         //     builder: (context) => InventoryDetailScreen(itemId: id),
         //   ),
         // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                CARDetail(carId: id!, isJustViewingReport: true),
+          ),
+        );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),

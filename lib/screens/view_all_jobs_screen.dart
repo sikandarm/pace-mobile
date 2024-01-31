@@ -31,6 +31,25 @@ class _ViewAllJobsScreenState extends State<ViewAllJobsScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
   void initState() {
     _futureJob = fetchJobs();
     _futureJob.then((jobs) {
@@ -63,7 +82,7 @@ class _ViewAllJobsScreenState extends State<ViewAllJobsScreen> {
         title: Text(
           "All Jobs",
           style: TextStyle(
-            fontSize: appBarTiltleSize,
+            fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),

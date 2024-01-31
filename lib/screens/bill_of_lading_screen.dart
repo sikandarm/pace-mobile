@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
+import 'package:pace_application_fb/screens/submit_received_bill_of_lading_screen.dart';
 
 //import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
 import 'package:pace_application_fb/services/get_bill_of_lading_service.dart';
@@ -15,13 +16,65 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../utils/constants.dart';
 
-class BillOfLading extends StatelessWidget {
+class BillOfLading extends StatefulWidget {
   BillOfLading({super.key});
 
-  final headingStyle = TextStyle(
+  @override
+  State<BillOfLading> createState() => _BillOfLadingState();
+}
+
+class _BillOfLadingState extends State<BillOfLading> {
+  final headingStyle = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 14,
   );
+
+  final headingStyleTablet = const TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 27,
+  );
+
+  //////////////////////////////
+
+  final valueStyle = const TextStyle(
+    //  fontWeight: FontWeight.bold,
+    fontSize: 14,
+  );
+
+  final valueStyleTablet = const TextStyle(
+    // fontWeight: FontWeight.bold,
+    fontSize: 27,
+  );
+
+  List<bool> allBillStatuses = [];
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    callMethodStatus();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  Future<void> callMethodStatus() async {
+    BillOfLadingModel allBills = await getBillOfLading();
+    for (var bill in allBills.data!.billdata!) {
+      allBillStatuses.add(true);
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +102,7 @@ class BillOfLading extends StatelessWidget {
         title: Text(
           "Bill of Lading",
           style: TextStyle(
-            fontSize: appBarTiltleSize,
+            fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -95,7 +148,7 @@ class BillOfLading extends StatelessWidget {
                   child: ListView.builder(
                 itemCount: billList!.length,
                 itemBuilder: (context, index) {
-                  return LadingContainer(billList[index], context);
+                  return LadingContainer(billList[index], context, index);
                 },
               ));
             },
@@ -105,7 +158,8 @@ class BillOfLading extends StatelessWidget {
     );
   }
 
-  Container LadingContainer(Billdata billdata, BuildContext context) {
+  Container LadingContainer(
+      Billdata billdata, BuildContext context, int statusIndex) {
     return Container(
       //  color: Colors.white,
       child: Padding(
@@ -114,92 +168,247 @@ class BillOfLading extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text('PO Number:', style: headingStyle),
+                Text('PO Number:',
+                    style: isTablet ? headingStyleTablet : headingStyle),
                 Spacer(),
-                Text(billdata.poNumber.toString()),
+                Text(
+                  billdata.poNumber.toString(),
+                  style: isTablet ? valueStyleTablet : valueStyle,
+                ),
               ],
             ),
             SizedBox(height: 4),
             Row(
               children: [
-                Text('Bill Title:', style: headingStyle),
+                Text('Bill Title:',
+                    style: isTablet ? headingStyleTablet : headingStyle),
                 Spacer(),
-                Text(billdata.billTitle!.toString()),
+                Text(
+                  billdata.billTitle!.toString(),
+                  style: isTablet ? valueStyleTablet : valueStyle,
+                ),
               ],
             ),
             SizedBox(height: 4),
             Row(
               children: [
-                Text('Address:', style: headingStyle),
+                Text('Address:',
+                    style: isTablet ? headingStyleTablet : headingStyle),
                 Spacer(),
-                Text(billdata.address!.toString()),
+                Text(
+                  billdata.address!.toString(),
+                  style: isTablet ? valueStyleTablet : valueStyle,
+                ),
               ],
             ),
             SizedBox(height: 4),
             Row(
               children: [
-                Text('Company Name:', style: headingStyle),
+                Text('Company Name:',
+                    style: isTablet ? headingStyleTablet : headingStyle),
                 Spacer(),
-                Text(billdata.companyName!.toString()),
+                Text(
+                  billdata.companyName!.toString(),
+                  style: isTablet ? valueStyleTablet : valueStyle,
+                ),
               ],
             ),
             SizedBox(height: 4),
             Row(
               children: [
-                Text('Company Address:', style: headingStyle),
+                Text('Company Address:',
+                    style: isTablet ? headingStyleTablet : headingStyle),
                 Spacer(),
-                Text(billdata.companyAddress!.toString()),
+                Text(
+                  billdata.companyAddress!.toString(),
+                  style: isTablet ? valueStyleTablet : valueStyle,
+                ),
               ],
             ),
             SizedBox(height: 4),
             Row(
               children: [
-                Text('Delivery Date:', style: headingStyle),
+                Text('Delivery Date:',
+                    style: isTablet ? headingStyleTablet : headingStyle),
                 Spacer(),
 
                 // Text(dataList[index].dilveryDate!.toString()),
                 billdata.dilveryDate != null
-                    ? Text(DateFormat('MMMM d, y')
-                        .format(DateTime.parse(billdata.dilveryDate!)))
-                    : Text('NA'),
+                    ? Text(
+                        DateFormat('MMMM d, y')
+                            .format(DateTime.parse(billdata.dilveryDate!)),
+                        style: isTablet ? valueStyleTablet : valueStyle,
+                      )
+                    : Text(
+                        'NA',
+                        style: isTablet ? valueStyleTablet : valueStyle,
+                      ),
               ],
             ),
             SizedBox(height: 4),
             Row(
               children: [
-                Text('Order Date:', style: headingStyle),
+                Text('Order Date:',
+                    style: isTablet ? headingStyleTablet : headingStyle),
                 Spacer(),
                 //  Text(dataList[index].orderDate!.toString()),
                 billdata.orderDate != null
-                    ? Text(DateFormat('MMMM d, y')
-                        .format(DateTime.parse(billdata.orderDate!)))
-                    : Text('NA'),
+                    ? Text(
+                        DateFormat('MMMM d, y')
+                            .format(DateTime.parse(billdata.orderDate!)),
+                        style: isTablet ? valueStyleTablet : valueStyle,
+                      )
+                    : Text(
+                        'NA',
+                        style: isTablet ? valueStyleTablet : valueStyle,
+                      ),
               ],
             ),
             SizedBox(height: 4),
             Row(
               children: [
-                Text('Ship Via:', style: headingStyle),
+                Text('Ship Via:',
+                    style: isTablet ? headingStyleTablet : headingStyle),
                 Spacer(),
-                Text(billdata.shipVia!.toString()),
+                Text(
+                  billdata.shipVia!.toString(),
+                  style: isTablet ? valueStyleTablet : valueStyle,
+                ),
               ],
             ),
             SizedBox(height: 3),
             Row(
               children: [
-                Text('Terms:', style: headingStyle),
+                Text('Terms:',
+                    style: isTablet ? headingStyleTablet : headingStyle),
                 Spacer(),
                 Container(
                   width: billdata.terms!.trim().length <= 50 ? 83 : 140,
                   child: Text(
                     billdata.terms!.trim().toString(),
+                    style: isTablet ? valueStyleTablet : valueStyle,
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 7),
+            SizedBox(height: 13),
+            Visibility(
+              //  visible: allBillStatuses[statusIndex],
+              visible: billdata.receivedStatus != 'Received',
+              child: Container(
+                //  width: double.infinity,
+                width: MediaQuery.of(context).size.width * 0.95,
+
+                //  height: 50.0,
+                height: MediaQuery.of(context).size.height * 0.055,
+                child: ElevatedButton(
+                    style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.green),
+                      foregroundColor: MaterialStatePropertyAll(Colors.white),
+                      shape: MaterialStatePropertyAll(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(7),
+                          ),
+                        ),
+                      ),
+                    ),
+                    onPressed: () async {
+                      print('editing bill');
+
+                      // final dialogResult = await showDialog<bool?>(
+                      //   context: context,
+                      //   builder: (BuildContext context) {
+                      //     return AlertDialog(
+                      //       title: Form(
+                      //       //  key: formkeySequence,
+                      //         child: Column(
+                      //           crossAxisAlignment:
+                      //           CrossAxisAlignment.start,
+                      //           children: [
+                      //             const Text(
+                      //               'Enter Total Quantity',
+                      //               style: TextStyle(
+                      //                 fontSize: 15.5,
+                      //                 fontWeight: FontWeight.bold,
+                      //               ),
+                      //             ),
+                      //             TextFormField(
+                      //           //    controller: sequenceNameController,
+                      //               decoration: const InputDecoration(
+                      //                 hintStyle: TextStyle(fontSize: 13.5),
+                      //                 hintText: 'Enter a sequence title',
+                      //                 labelText: 'Sequence title',
+                      //                 labelStyle: TextStyle(fontSize: 13.5),
+                      //               ),
+                      //               validator: (value) {
+                      //                 if (value == null || value.isEmpty) {
+                      //                   return 'Please enter a sequence title';
+                      //                 }
+                      //
+                      //                 return null;
+                      //               },
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //       actions: [
+                      //         TextButton(
+                      //           onPressed: () async {
+                      //             //  sequenceNameController.clear();
+                      //             ScaffoldMessenger.of(context)
+                      //                 .clearSnackBars();
+                      //
+                      //
+                      //
+                      //
+                      //          //   sequenceNameController.clear();
+                      //             Navigator.of(context).pop();
+                      //        //     await callApiMethods();
+                      //           },
+                      //           child: const Text(
+                      //             'Create',
+                      //             style: TextStyle(
+                      //               color: Colors.blue,
+                      //               fontSize: 16.0,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     );
+                      //   },
+                      // );
+                      //
+
+                      final boolResult = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  SubmitReceivedStatusBillOfLadingScreen(
+                                    billdata: billdata,
+                                  )));
+
+                      print('boolResult:' + boolResult.toString());
+
+                      if (!boolResult) {
+                        allBillStatuses[statusIndex] = false;
+                      }
+
+                      setState(() {});
+                    },
+                    child: Text(
+                      'Submit Receiving Status',
+                      style: TextStyle(fontSize: isTablet ? 24 : 14.5),
+                    )),
+              ),
+            ),
+            SizedBox(height: 4),
             Container(
-              width: double.infinity,
+              //   width: double.infinity,
+              width: MediaQuery.of(context).size.width * 0.95,
+
+              //  height: 50.0,
+              height: MediaQuery.of(context).size.height * 0.055,
               child: ElevatedButton(
                   style: const ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll(Colors.blue),
@@ -212,13 +421,16 @@ class BillOfLading extends StatelessWidget {
                       ),
                     ),
                   ),
-                  onPressed: () {
-                    generateAndViewPdf(
+                  onPressed: () async {
+                    await generateAndViewPdf(
                       context,
                       billdata,
                     );
                   },
-                  child: Text('Generate PDF')),
+                  child: Text(
+                    'Generate PDF',
+                    style: TextStyle(fontSize: isTablet ? 24 : 14.5),
+                  )),
             ),
             Divider(),
           ],
@@ -405,8 +617,10 @@ class BillOfLading extends StatelessWidget {
                             decoration: pw.BoxDecoration(
                                 border: pw.Border.all(width: 1))),
                         pw.SizedBox(width: 10),
-                        pw.Text(DateFormat('MMMM d, y')
-                            .format(DateTime.parse(billData.dilveryDate!))),
+                        pw.Text(billData.dilveryDate == null
+                            ? 'N/A'
+                            : DateFormat('MMMM d, y')
+                                .format(DateTime.parse(billData.dilveryDate!))),
                       ]),
                 ),
                 pw.Divider(height: 0),
@@ -425,8 +639,10 @@ class BillOfLading extends StatelessWidget {
                             decoration: pw.BoxDecoration(
                                 border: pw.Border.all(width: 1))),
                         pw.SizedBox(width: 10),
-                        pw.Text(DateFormat('MMMM d, y')
-                            .format(DateTime.parse(billData.orderDate!))),
+                        pw.Text(billData.orderDate == null
+                            ? 'N/A'
+                            : DateFormat('MMMM d, y')
+                                .format(DateTime.parse(billData.orderDate!))),
                       ]),
                 ),
 

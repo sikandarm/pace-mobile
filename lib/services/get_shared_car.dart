@@ -55,6 +55,8 @@ class CAReportModel {
 
 Future<List<CAReportModel>> fetchSharedCARList() async {
   int? userId = await getIntFromSF('UserId');
+  // userId = 211; // to view data for layout
+  print('userId in shared car api:' + userId.toString());
 
   var request = http.MultipartRequest(
       'GET', Uri.parse('$BASE_URL/CA-report/shared/$userId'));
@@ -62,7 +64,7 @@ Future<List<CAReportModel>> fetchSharedCARList() async {
 
   var response = await request.send();
   var responseString = await response.stream.bytesToString();
-  print(responseString);
+  print('responseString: ' + responseString);
   Map<String, dynamic> jsonMap = jsonDecode(responseString);
 
   if (response.statusCode == 200) {

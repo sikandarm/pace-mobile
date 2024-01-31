@@ -228,6 +228,25 @@ class _TaskListState extends State<TaskList> {
   }
 
   @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       // floatingActionButton: FloatingActionButton(onPressed: () async {
@@ -258,7 +277,7 @@ class _TaskListState extends State<TaskList> {
         title: Text(
           "Tasks List",
           style: TextStyle(
-            fontSize: appBarTiltleSize,
+            fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -284,36 +303,55 @@ class _TaskListState extends State<TaskList> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: Form(
-                                  key: formkeySequence,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        'Create a new sequence',
-                                        style: TextStyle(
-                                          fontSize: 15.5,
-                                          fontWeight: FontWeight.bold,
+                                title: Container(
+                                  width: isTablet
+                                      ? MediaQuery.of(context).size.width * 0.6
+                                      : MediaQuery.of(context).size.width * 0.2,
+                                  height: isTablet
+                                      ? MediaQuery.of(context).size.width * 0.24
+                                      : MediaQuery.of(context).size.width *
+                                          0.31,
+                                  child: Form(
+                                    key: formkeySequence,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Create a new sequence',
+                                          style: TextStyle(
+                                            fontSize: isTablet ? 25 : 15.5,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      TextFormField(
-                                        controller: sequenceNameController,
-                                        decoration: const InputDecoration(
-                                          hintStyle: TextStyle(fontSize: 13.5),
-                                          hintText: 'Enter a sequence title',
-                                          labelText: 'Sequence title',
-                                          labelStyle: TextStyle(fontSize: 13.5),
+                                        SizedBox(
+                                          height: 7,
                                         ),
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'Please enter a sequence title';
-                                          }
+                                        TextFormField(
+                                          controller: sequenceNameController,
+                                          decoration: InputDecoration(
+                                            hintStyle:
+                                                TextStyle(fontSize: 13.5),
+                                            hintText: 'Enter a sequence title',
+                                            labelText: 'Sequence title',
+                                            labelStyle: TextStyle(
+                                              fontSize: isTablet ? 23 : 13.5,
+                                            ),
+                                            errorStyle: TextStyle(
+                                              fontSize: isTablet ? 21 : 11.5,
+                                            ),
+                                          ),
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'Please enter a sequence title';
+                                            }
 
-                                          return null;
-                                        },
-                                      ),
-                                    ],
+                                            return null;
+                                          },
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 actions: [
@@ -352,11 +390,11 @@ class _TaskListState extends State<TaskList> {
                                       Navigator.of(context).pop();
                                       await callApiMethods();
                                     },
-                                    child: const Text(
+                                    child: Text(
                                       'Create',
                                       style: TextStyle(
                                         color: Colors.blue,
-                                        fontSize: 16.0,
+                                        fontSize: isTablet ? 26 : 16.5,
                                       ),
                                     ),
                                   ),
@@ -368,8 +406,9 @@ class _TaskListState extends State<TaskList> {
                             sequenceNameController.clear();
                           }
                         },
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.add_box_outlined,
+                          size: isTablet ? 40 : 24,
                         ),
                       ),
                     ),
@@ -392,7 +431,7 @@ class _TaskListState extends State<TaskList> {
                       backgroundImage: userProfileImage == null
                           ? AssetImage('assets/images/ic_profile.png')
                           : NetworkImage(userProfileImage!) as ImageProvider,
-                      radius: 15,
+                      radius: isTablet ? 25 : 15,
                     ),
                   ),
                 ),
@@ -451,6 +490,8 @@ class _TaskListState extends State<TaskList> {
                                       data: sequencesList[i].tasks[j]['id'],
                                       feedback: Container(
                                           //   height: 120,
+                                          //height: 500,
+                                          height: isTablet ? 185 : 138,
                                           width:
                                               MediaQuery.of(context).size.width,
                                           child: TaskCard(
@@ -493,7 +534,9 @@ class _TaskListState extends State<TaskList> {
                                           List<dynamic> rejected,
                                         ) {
                                           return Container(
-                                              //    height: 120,
+                                              //height: 120,
+                                              //    height: 500,
+                                              height: isTablet ? 185 : 138,
                                               width: MediaQuery.of(context)
                                                   .size
                                                   .width,
@@ -651,53 +694,60 @@ class _TaskListState extends State<TaskList> {
                               List<dynamic> rejected,
                             ) {
                               return Container(
+                                  height: isTablet ? 100 : 55,
                                   child: ListTile(
-                                contentPadding:
-                                    sequencesList[i].tasks.isNotEmpty
-                                        ? EdgeInsets.all(-21)
-                                        : EdgeInsets.only(left: 41),
-                                title: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    //  SizedBox(width: 33),
-                                    Text(
-                                      sequencesList[i].sequenceName.toString(),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                trailing: sequencesList[i].tasks.length < 1
-                                    ? Visibility(
-                                        visible: _b1DeleteSequence,
-                                        child: IconButton(
-                                          onPressed: () async {
-                                            final dialogResult =
-                                                await showDeleteAlertDialog(
-                                                    context: context,
-                                                    content:
-                                                        'Are you sure to delete this sequence?');
-                                            if (dialogResult == true) {
-                                              await deleteSequence(
-                                                  sequenceID: int.parse(
-                                                      sequencesList[i]
-                                                          .SequenceId
-                                                          .toString()));
-
-                                              await callApiMethods();
-                                            }
-                                          },
-                                          icon: Icon(
-                                            Icons.delete,
-                                            color: Colors.red,
-                                            size: 20,
+                                    contentPadding: sequencesList[i]
+                                            .tasks
+                                            .isNotEmpty
+                                        ? EdgeInsets.all(isTablet ? 20 : -21)
+                                        : EdgeInsets.only(
+                                            left: isTablet ? 60 : 41,
+                                            top: isTablet ? 20 : 0,
+                                          ),
+                                    title: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        //  SizedBox(width: 33),
+                                        Text(
+                                          sequencesList[i]
+                                              .sequenceName
+                                              .toString(),
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: isTablet ? 29 : 16,
                                           ),
                                         ),
-                                      )
-                                    : SizedBox(),
-                              ));
+                                      ],
+                                    ),
+                                    trailing: sequencesList[i].tasks.length < 1
+                                        ? Visibility(
+                                            visible: _b1DeleteSequence,
+                                            child: IconButton(
+                                              onPressed: () async {
+                                                final dialogResult =
+                                                    await showDeleteAlertDialog(
+                                                        context: context,
+                                                        content:
+                                                            'Are you sure to delete this sequence?');
+                                                if (dialogResult == true) {
+                                                  await deleteSequence(
+                                                      sequenceID: int.parse(
+                                                          sequencesList[i]
+                                                              .SequenceId
+                                                              .toString()));
+
+                                                  await callApiMethods();
+                                                }
+                                              },
+                                              icon: Icon(
+                                                Icons.delete,
+                                                color: Colors.red,
+                                                size: 20,
+                                              ),
+                                            ),
+                                          )
+                                        : SizedBox(),
+                                  ));
                             },
                             onAccept: (int taskId) async {
                               await updateSequenceTasks(
@@ -793,13 +843,13 @@ class _TaskListState extends State<TaskList> {
                 )
               },
               const SizedBox(height: 40),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.5),
                 child: Text(
                   "Independent Tasks",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 17,
+                    fontSize: isTablet ? 27 : 17,
                   ),
                 ),
               ),
@@ -821,7 +871,21 @@ class _TaskListState extends State<TaskList> {
                                 color: Colors.grey.withOpacity(0.5),
                               ),
                               width: MediaQuery.of(context).size.width,
-                              height: 100,
+                              //  height: 100,
+                              height: isTablet ? 185 : 120,
+                            ),
+                          ),
+                          SizedBox(height: 11),
+
+                          Shimmer(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(7),
+                                color: Colors.grey.withOpacity(0.5),
+                              ),
+                              width: MediaQuery.of(context).size.width,
+                              //  height: 100,
+                              height: isTablet ? 185 : 120,
                             ),
                           ),
                           SizedBox(height: 11),
@@ -832,7 +896,20 @@ class _TaskListState extends State<TaskList> {
                                 color: Colors.grey.withOpacity(0.5),
                               ),
                               width: MediaQuery.of(context).size.width,
-                              height: 100,
+                              //  height: 100,
+                              height: isTablet ? 185 : 120,
+                            ),
+                          ),
+
+                          SizedBox(height: 11),
+                          Shimmer(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(7),
+                                color: Colors.grey.withOpacity(0.5),
+                              ),
+                              width: MediaQuery.of(context).size.width,
+                              height: isTablet ? 185 : 120,
                             ),
                           ),
                           SizedBox(height: 11),
@@ -843,7 +920,7 @@ class _TaskListState extends State<TaskList> {
                                 color: Colors.grey.withOpacity(0.5),
                               ),
                               width: MediaQuery.of(context).size.width,
-                              height: 100,
+                              height: isTablet ? 185 : 120,
                             ),
                           ),
                           SizedBox(height: 11),
@@ -854,7 +931,7 @@ class _TaskListState extends State<TaskList> {
                                 color: Colors.grey.withOpacity(0.5),
                               ),
                               width: MediaQuery.of(context).size.width,
-                              height: 100,
+                              height: isTablet ? 185 : 120,
                             ),
                           ),
                           SizedBox(height: 11),
@@ -865,7 +942,7 @@ class _TaskListState extends State<TaskList> {
                                 color: Colors.grey.withOpacity(0.5),
                               ),
                               width: MediaQuery.of(context).size.width,
-                              height: 100,
+                              height: isTablet ? 185 : 120,
                             ),
                           ),
                         ],
@@ -1035,8 +1112,9 @@ class _TaskListState extends State<TaskList> {
                                         int.parse(_futureTask[i].id.toString()),
                                     feedback: Container(
                                       width: MediaQuery.of(context).size.width,
-                                      //  height: 120,
-
+                                      // height: 120,
+                                      //  height: 500,
+                                      height: isTablet ? 185 : 120,
                                       child: TaskCard(
                                           hasPermissionToGoToTaskDetailScreen:
                                               _bShowTaskDetailScreen,
@@ -1053,6 +1131,9 @@ class _TaskListState extends State<TaskList> {
                                     childWhenDragging: Container(
                                       width: MediaQuery.of(context).size.width,
                                       //  height: 120,
+                                      //   height: 500,
+                                      height: isTablet ? 185 : 120,
+
                                       child: TaskCard(
                                           hasPermissionToGoToTaskDetailScreen:
                                               _bShowTaskDetailScreen,
@@ -1066,18 +1147,21 @@ class _TaskListState extends State<TaskList> {
                                           statusColor: Colors.transparent,
                                           onSelected: (index) {}),
                                     ),
-                                    child: TaskCard(
-                                        hasPermissionToGoToTaskDetailScreen:
-                                            _bShowTaskDetailScreen,
-                                        id: _futureTask[i].id!,
-                                        taskName: _futureTask[i].pmkNumber!,
-                                        description:
-                                            _futureTask[i].description!,
-                                        startDate: _futureTask[i].startedAt,
-                                        endDate: _futureTask[i].completedAt,
-                                        status: _futureTask[i].status!,
-                                        statusColor: Colors.transparent,
-                                        onSelected: (index) {}),
+                                    child: Container(
+                                      height: isTablet ? 185 : 120,
+                                      child: TaskCard(
+                                          hasPermissionToGoToTaskDetailScreen:
+                                              _bShowTaskDetailScreen,
+                                          id: _futureTask[i].id!,
+                                          taskName: _futureTask[i].pmkNumber!,
+                                          description:
+                                              _futureTask[i].description!,
+                                          startDate: _futureTask[i].startedAt,
+                                          endDate: _futureTask[i].completedAt,
+                                          status: _futureTask[i].status!,
+                                          statusColor: Colors.transparent,
+                                          onSelected: (index) {}),
+                                    ),
                                     onDragCompleted: () async {
                                       //  final list = await getIndependentTasks(
                                       //    jobID: widget.jobId.toString());
@@ -1237,11 +1321,19 @@ class _TaskListState extends State<TaskList> {
           //     fontWeight: FontWeight.bold,
           //   ),
           // ),
-          content: Text(
-            content,
-            style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
+          content: Container(
+            width: isTablet
+                ? MediaQuery.of(context).size.width * 0.6
+                : MediaQuery.of(context).size.width * 0.2,
+            height: isTablet
+                ? MediaQuery.of(context).size.width * 0.15
+                : MediaQuery.of(context).size.width * 0.15,
+            child: Text(
+              content,
+              style: TextStyle(
+                fontSize: isTablet ? 26 : 16.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           actions: <Widget>[
@@ -1253,7 +1345,7 @@ class _TaskListState extends State<TaskList> {
                 'Cancel',
                 style: TextStyle(
                   color: Colors.blue,
-                  fontSize: 16.0,
+                  fontSize: isTablet ? 26 : 16.0,
                 ),
               ),
             ),
@@ -1266,7 +1358,7 @@ class _TaskListState extends State<TaskList> {
                 'Yes',
                 style: TextStyle(
                   color: Colors.red,
-                  fontSize: 16.0,
+                  fontSize: isTablet ? 26 : 16.0,
                 ),
               ),
             ),
@@ -1277,7 +1369,7 @@ class _TaskListState extends State<TaskList> {
   }
 }
 
-class TaskListHeader extends StatelessWidget {
+class TaskListHeader extends StatefulWidget {
   final Function(String?) onDropdownChanged;
   final String selectedValue;
 
@@ -1286,6 +1378,30 @@ class TaskListHeader extends StatelessWidget {
     required this.onDropdownChanged,
     required this.selectedValue,
   }) : super(key: key);
+
+  @override
+  State<TaskListHeader> createState() => _TaskListHeaderState();
+}
+
+class _TaskListHeaderState extends State<TaskListHeader> {
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1299,7 +1415,7 @@ class TaskListHeader extends StatelessWidget {
             children: [
               Expanded(
                 child: Container(
-                  height: 50.0,
+                  height: isTablet ? 85 : 50.0,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
                     border: Border.all(
@@ -1322,6 +1438,7 @@ class TaskListHeader extends StatelessWidget {
                                         ThemeMode.dark
                                     ? Colors.grey
                                     : Colors.black,
+                                fontSize: isTablet ? 22 : 15,
                               ),
                             ),
                           ),
@@ -1334,6 +1451,7 @@ class TaskListHeader extends StatelessWidget {
                                         ThemeMode.dark
                                     ? Colors.grey
                                     : Colors.black,
+                                fontSize: isTablet ? 22 : 15,
                               ),
                             ),
                           ),
@@ -1346,6 +1464,7 @@ class TaskListHeader extends StatelessWidget {
                                         ThemeMode.dark
                                     ? Colors.grey
                                     : Colors.black,
+                                fontSize: isTablet ? 22 : 15,
                               ),
                             ),
                           ),
@@ -1358,6 +1477,7 @@ class TaskListHeader extends StatelessWidget {
                                         ThemeMode.dark
                                     ? Colors.grey
                                     : Colors.black,
+                                fontSize: isTablet ? 22 : 15,
                               ),
                             ),
                           ),
@@ -1370,6 +1490,7 @@ class TaskListHeader extends StatelessWidget {
                                         ThemeMode.dark
                                     ? Colors.grey
                                     : Colors.black,
+                                fontSize: isTablet ? 22 : 15,
                               ),
                             ),
                           ),
@@ -1382,12 +1503,13 @@ class TaskListHeader extends StatelessWidget {
                                         ThemeMode.dark
                                     ? Colors.grey
                                     : Colors.black,
+                                fontSize: isTablet ? 22 : 15,
                               ),
                             ),
                           ),
                         ],
-                        onChanged: onDropdownChanged,
-                        value: selectedValue,
+                        onChanged: widget.onDropdownChanged,
+                        value: widget.selectedValue,
                         icon: const Icon(Icons.arrow_drop_down),
                         iconSize: 24.0,
                         elevation: 16,

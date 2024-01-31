@@ -75,6 +75,26 @@ class _UserListState extends State<UserList> {
     _futureInventory = fetchUserList();
   }
 
+  bool isTablet = false;
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,7 +102,7 @@ class _UserListState extends State<UserList> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildAppBar(context, scaffoldKey, widget.carId),
+          _buildAppBar(context, scaffoldKey, widget.carId, isTablet),
           Expanded(
             child: FutureBuilder<List<UserListModel>>(
               future: _futureInventory,
@@ -124,7 +144,8 @@ class _UserListState extends State<UserList> {
   }
 }
 
-Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey, int carId) {
+Widget _buildAppBar(
+    context, GlobalKey<ScaffoldState> scaffoldKey, int carId, bool isTablet) {
   return AppBar(
     //   backgroundColor: Colors.white,
     backgroundColor: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
@@ -186,10 +207,10 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey, int carId) {
         child: Container(
           margin:
               const EdgeInsets.only(right: 20.0), // Adjust the value as needed
-          child: const Text(
+          child: Text(
             "Send",
             style: TextStyle(
-              fontSize: 16,
+              fontSize: isTablet ? 26 : 16,
               color: Color(0xff06A3F6),
               fontWeight: FontWeight.bold,
             ),
@@ -227,6 +248,26 @@ class _UserListItemWidgetState extends State<UserListItemWidget> {
     return pickedIds.length;
   }
 
+  bool isTablet = false;
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -251,6 +292,7 @@ class _UserListItemWidgetState extends State<UserListItemWidget> {
         });
       },
       child: Container(
+        height: isTablet ? MediaQuery.of(context).size.height * 0.12 : 90,
         margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
@@ -274,15 +316,15 @@ class _UserListItemWidgetState extends State<UserListItemWidget> {
               Padding(
                 padding: const EdgeInsets.only(right: 20.0, left: 5.0),
                 child: CircleAvatar(
-                  radius: 25,
+                  radius: isTablet ? 40 : 25,
                   backgroundColor: widget.backgroundColor,
                   child: Container(
                     alignment: Alignment.center,
                     child: Text(
                       widget.firstName![0].toUpperCase(),
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.black,
-                        fontSize: 17,
+                        fontSize: isTablet ? 27 : 17,
                         fontWeight: FontWeight.normal,
                       ),
                     ),
@@ -290,20 +332,21 @@ class _UserListItemWidgetState extends State<UserListItemWidget> {
                 ),
               ),
               Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "${widget.firstName!} ${widget.lastName!}",
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Color(0xFF1E2022),
                       fontWeight: FontWeight.bold,
-                      fontSize: 17.0,
+                      fontSize: isTablet ? 27 : 17.0,
                     ),
                   ),
                   Text(
                     widget.email!,
-                    style: const TextStyle(
-                      fontSize: 13.0,
+                    style: TextStyle(
+                      fontSize: isTablet ? 23 : 13.0,
                       color: Color(0xFF77838F),
                       fontWeight: FontWeight.w400,
                     ),

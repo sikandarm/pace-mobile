@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:pace_application_fb/screens/submit_received_bill_of_lading_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/dashboard_card.dart';
@@ -162,6 +163,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 &&
+        (screenHeight >= 1024
+        // || screenHeight >= 950
+        )) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+    print('screen height is: ' + MediaQuery.of(context).size.height.toString());
+    print('screen width is: ' + MediaQuery.of(context).size.width.toString());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Colors.white.withOpacity(0.92),
@@ -173,20 +198,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
       //   print(items.length);
       // }),
       key: scaffoldKey,
-      drawer: _buildSideDrawer(context),
+      drawer: _buildSideDrawer(context, isTablet),
 
-      appBar: _buildAppBar(context, scaffoldKey, userProfileImage),
+      appBar: _buildAppBar(context, scaffoldKey, userProfileImage, isTablet),
       body: RefreshIndicator(
         onRefresh: _refreshData,
         child: Column(
           children: [
-            _buildDashboardCard(context),
+            _buildDashboardCard(context, isTablet),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
+                    //  width: MediaQuery.of(context).size.width * 0.47,
+                    //   height: isTablet ? 200 : 125,
                     child: DashboardCard(
                       title: 'Jobs',
                       showList: blShowJobList,
@@ -202,6 +229,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                   Expanded(
+                    //  width: isTablet
+                    //      ? MediaQuery.of(context).size.width * 0.5
+                    //      : MediaQuery.of(context).size.width * 0.433,
+                    //  height: isTablet ? 200 : 125,
                     child: DashboardCard(
                       title: 'Departments',
                       showList: blShowCAR,
@@ -262,11 +293,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-PreferredSizeWidget _buildAppBar(
-  context,
-  GlobalKey<ScaffoldState> scaffoldKey,
-  String? userProfileImage,
-) {
+PreferredSizeWidget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey,
+    String? userProfileImage, bool isTablet) {
   return AppBar(
     // backgroundColor: Colors.white,
 
@@ -294,7 +322,7 @@ PreferredSizeWidget _buildAppBar(
                   ? Colors.white
                   : Color(0xff1E2022),
               fontWeight: FontWeight.bold,
-              fontSize: appBarTiltleSize,
+              fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             ),
           );
         } else if (snapshot.hasError) {
@@ -335,8 +363,8 @@ PreferredSizeWidget _buildAppBar(
                     },
                     child: Image.asset(
                       "assets/images/ic_bell.png",
-                      width: 32,
-                      height: 32,
+                      width: isTablet ? 45 : 32,
+                      height: isTablet ? 45 : 32,
                       color: EasyDynamicTheme.of(context).themeMode ==
                               ThemeMode.dark
                           ? Colors.white
@@ -452,7 +480,7 @@ PreferredSizeWidget _buildAppBar(
                   backgroundImage: userProfileImage == null
                       ? AssetImage('assets/images/ic_profile.png')
                       : NetworkImage(userProfileImage) as ImageProvider,
-                  radius: 15,
+                  radius: isTablet ? 25 : 15,
                 ),
               ),
             ),
@@ -463,27 +491,46 @@ PreferredSizeWidget _buildAppBar(
   );
 }
 
-Widget _buildSideDrawer(BuildContext context) {
+Widget _buildSideDrawer(BuildContext context, bool isTablet) {
   return Drawer(
+    width: isTablet
+        ? MediaQuery.of(context).size.width * 0.65
+        : MediaQuery.of(context).size.width * 0.83,
     child: Column(
       children: [
-        DrawerHeader(
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.7),
-          ),
-          child: Center(
-            child: Image.asset(
-              'assets/images/SFM_Logo.png',
-              // width: 120,
-              // height: 120,
-              width: 150,
-              height: 150,
-            ),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: isTablet ? 300 : 200,
+          color: Colors.white,
+          child: Image.asset(
+            'assets/images/SFM_Logo.png',
           ),
         ),
+        // DrawerHeader(
+        //   decoration: BoxDecoration(
+        //     image: DecorationImage(
+        //       image: AssetImage(
+        //         'assets/images/SFM_Logo.png',
+        //       ),
+        //       fit: isTablet ? BoxFit.contain : BoxFit.contain,
+        //     ),
+        //     color: Colors.white.withOpacity(0.7),
+        //   ),
+        //   // child: Image.asset(
+        //   //   'assets/images/SFM_Logo.png',
+        //   //   // width: 120,
+        //   //   // height: 120,
+        //   //   //   width: isTablet ? 1350 : 150,
+        //   //   //   height: isTablet ? 1350 : 150,
+        //   // ),
+        //   child: null,
+        // ),
         Expanded(
           child: Column(
             children: <Widget>[
+              SizedBox(
+                height: 21,
+              ),
               Expanded(
                 child: ListView(
                   padding: EdgeInsets.zero,
@@ -491,8 +538,13 @@ Widget _buildSideDrawer(BuildContext context) {
                     Visibility(
                       visible: blShowProfile,
                       child: ListTile(
-                        leading: const Icon(Icons.person),
-                        title: const Text('Profile'),
+                        leading: Icon(Icons.person, size: isTablet ? 30 : 24),
+                        title: Text(
+                          'Profile',
+                          style: TextStyle(
+                            fontSize: isTablet ? 31 : 17,
+                          ),
+                        ),
                         onTap: () {
                           if (!blShowProfile) {
                             showToast('You do not have permissions.');
@@ -508,11 +560,17 @@ Widget _buildSideDrawer(BuildContext context) {
                         },
                       ),
                     ),
+                    SizedBox(height: isTablet ? 11 : 0),
                     Visibility(
                       visible: blShowSharedCAR,
                       child: ListTile(
-                        title: const Text('View Shared CAR'),
-                        leading: const Icon(Icons.share),
+                        title: Text(
+                          'View Shared CAR',
+                          style: TextStyle(
+                            fontSize: isTablet ? 31 : 17,
+                          ),
+                        ),
+                        leading: Icon(Icons.share, size: isTablet ? 30 : 24),
                         onTap: () {
                           if (!blShowSharedCAR) {
                             showToast('You do not have permissions');
@@ -529,11 +587,18 @@ Widget _buildSideDrawer(BuildContext context) {
                         },
                       ),
                     ),
+                    SizedBox(height: isTablet ? 11 : 0),
                     Visibility(
                       visible: b1ShowPurchaseOrder,
                       child: ListTile(
-                        title: const Text('Purchase Orders'),
-                        leading: const Icon(Icons.inventory),
+                        title: Text(
+                          'Purchase Orders',
+                          style: TextStyle(
+                            fontSize: isTablet ? 31 : 17,
+                          ),
+                        ),
+                        leading:
+                            Icon(Icons.inventory, size: isTablet ? 30 : 24),
                         onTap: () {
                           if (!b1ShowPurchaseOrder) {
                             showToast('You do not have permissions.');
@@ -553,11 +618,20 @@ Widget _buildSideDrawer(BuildContext context) {
                         },
                       ),
                     ),
+                    SizedBox(height: isTablet ? 11 : 0),
                     Visibility(
                       visible: b1ViewContacts,
                       child: ListTile(
-                        title: const Text('View Contacts'),
-                        leading: const Icon(Icons.call),
+                        title: Text(
+                          'View Contacts',
+                          style: TextStyle(
+                            fontSize: isTablet ? 31 : 17,
+                          ),
+                        ),
+                        leading: Icon(
+                          Icons.call,
+                          size: isTablet ? 30 : 24,
+                        ),
                         onTap: () {
                           if (!b1ViewContacts) {
                             showToast('You do not have permissions.');
@@ -575,13 +649,21 @@ Widget _buildSideDrawer(BuildContext context) {
                         },
                       ),
                     ),
-
+                    SizedBox(height: isTablet ? 11 : 0),
                     ////////////////////////////////////////
                     Visibility(
                       //  visible: blShowSharedCAR,
                       child: ListTile(
-                        title: const Text('Bill of lading'),
-                        leading: const Icon(Icons.report),
+                        title: Text(
+                          'Bill of lading',
+                          style: TextStyle(
+                            fontSize: isTablet ? 31 : 17,
+                          ),
+                        ),
+                        leading: Icon(
+                          Icons.report,
+                          size: isTablet ? 30 : 24,
+                        ),
                         onTap: () {
                           // if (!b1ViewContacts) {
                           //   showToast('You do not have permissions.');
@@ -597,7 +679,30 @@ Widget _buildSideDrawer(BuildContext context) {
                         },
                       ),
                     ),
-
+                    SizedBox(height: isTablet ? 11 : 0),
+                    ////////////////////////////////////////
+                    // Visibility(
+                    //   //  visible: blShowSharedCAR,
+                    //   child: ListTile(
+                    //     title: const Text('Update Bill of lading'),
+                    //     leading: const Icon(Icons.update),
+                    //     onTap: () {
+                    //       // if (!b1ViewContacts) {
+                    //       //   showToast('You do not have permissions.');
+                    //       //   return;
+                    //       // }
+                    //
+                    //
+                    //       Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //           builder: (context) => SubmitReceivedStatusBillOfLadingScreen(billdata: null,),
+                    //
+                    //         ),
+                    //       );
+                    //     },
+                    //   ),
+                    // ),
                     // Visibility(
                     //   //  visible: blShowSharedCAR,
                     //   child: ListTile(
@@ -617,13 +722,19 @@ Widget _buildSideDrawer(BuildContext context) {
                     //     },
                     //   ),
                     // ),
-
+                    SizedBox(height: isTablet ? 11 : 0),
                     ValueListenableBuilder(
                       valueListenable: isDarkMode,
                       builder: (context, value, child) {
                         return ListTile(
-                          title: const Text('Dark Theme'),
-                          leading: const Icon(Icons.dark_mode),
+                          title: Text(
+                            'Dark Theme',
+                            style: TextStyle(
+                              fontSize: isTablet ? 31 : 17,
+                            ),
+                          ),
+                          leading:
+                              Icon(Icons.dark_mode, size: isTablet ? 30 : 24),
                           trailing: Switch.adaptive(
                             value: isDarkMode.value,
                             onChanged: (value) async {
@@ -669,24 +780,52 @@ Widget _buildSideDrawer(BuildContext context) {
                 ),
               ),
               ListTile(
-                title: const Text('Logout'),
-                leading: const Icon(Icons.logout),
+                title: Text(
+                  'Logout',
+                  style: TextStyle(
+                    fontSize: isTablet ? 28 : 17,
+                  ),
+                ),
+                leading: Icon(Icons.logout, size: isTablet ? 30 : 24),
                 onTap: () {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: const Text('Logout Confirmation'),
-                        content: const Text('Are you sure you want to logout?'),
+                        title: Container(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            child: Text(
+                              'Logout Confirmation',
+                              style: TextStyle(
+                                fontSize: isTablet ? 30 : 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )),
+                        content: Container(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            child: Text(
+                              'Are you sure you want to logout?',
+                              style: TextStyle(fontSize: isTablet ? 24 : 16),
+                            )),
                         actions: <Widget>[
                           TextButton(
-                            child: const Text('Cancel'),
+                            child: Text(
+                              'Cancel',
+                              style: TextStyle(
+                                fontSize: isTablet ? 26 : 15,
+                                color: Colors.blue,
+                              ),
+                            ),
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
                           ),
                           TextButton(
-                            child: const Text('Logout'),
+                            child: Text('Logout',
+                                style: TextStyle(
+                                  fontSize: isTablet ? 26 : 15,
+                                  color: Colors.red,
+                                )),
                             onPressed: () async {
                               Navigator.of(context).pop();
                               // Handle side drawer item 1 tap
@@ -725,19 +864,19 @@ Widget _buildSideDrawer(BuildContext context) {
         ),
         Container(
           padding: const EdgeInsets.all(16.0),
-          child: const Row(
+          child: Row(
             children: [
               Text(
                 '\u00a9',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: isTablet ? 20 : 12,
                 ),
               ),
               SizedBox(width: 4),
               Text(
                 '2023 SFM by A3 Assurance',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: isTablet ? 20 : 12,
                 ),
               ),
             ],
@@ -748,7 +887,7 @@ Widget _buildSideDrawer(BuildContext context) {
   );
 }
 
-Widget _buildDashboardCard(BuildContext context) {
+Widget _buildDashboardCard(BuildContext context, bool isTablet) {
   return GestureDetector(
     onTap: () {
       if (blShowInventory || b1ViewDashBoardWithGraphs) {
@@ -763,7 +902,7 @@ Widget _buildDashboardCard(BuildContext context) {
       }
     },
     child: SizedBox(
-      height: 116.0,
+      height: isTablet ? 170 : 150.0, // previous was not 170 it was 130
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12.0),
         child: Card(
@@ -780,7 +919,7 @@ Widget _buildDashboardCard(BuildContext context) {
                 colors: [Color(0xff06A3F6), Color(0xff06A3F6)],
               ),
             ),
-            child: const Padding(
+            child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
@@ -789,13 +928,14 @@ Widget _buildDashboardCard(BuildContext context) {
                     child: Icon(
                       Icons.dashboard,
                       color: Colors.white,
+                      size: isTablet ? 45 : 24,
                     ),
                   ),
                   SizedBox(width: 20),
                   Text(
                     "Dashboard",
                     style: TextStyle(
-                      fontSize: 25,
+                      fontSize: isTablet ? 40 : 25,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),

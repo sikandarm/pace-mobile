@@ -32,6 +32,26 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
     super.initState();
   }
 
+  bool isTablet = false;
+
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
   callAddCAR() async {
     try {
       Map<String, dynamic> jsonData = widget.addCarModel.toJson();
@@ -124,10 +144,10 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
             Navigator.pop(context);
           },
         ),
-        title: const Text(
+        title: Text(
           "Corrective/Preventive Action",
           style: TextStyle(
-            fontSize: 18,
+            fontSize: isTablet ? appBarTiltleSizeTablet : 18,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -139,7 +159,7 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
               padding: const EdgeInsets.all(25),
               child: Column(
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     width: double.infinity,
                     child: Column(
                       children: [
@@ -152,7 +172,8 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                               'Description of Proposed Action',
                               style: TextStyle(
                                 fontWeight: FontWeight.normal,
-                                fontSize: 17.0,
+                                //  fontSize: 17.0,
+                                fontSize: isTablet ? 27 : 17.0,
                               ),
                             ),
                           ),
@@ -165,8 +186,13 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
-                    height: 50,
+                    //  height: 50,
                     child: TextField(
+                      style: TextStyle(
+                        fontSize: isTablet ? 24 : 15,
+                        color: Colors.black.withOpacity(0.65),
+                        fontWeight: FontWeight.w500,
+                      ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: companyIsTo,
                       keyboardType: TextInputType.name,
@@ -174,6 +200,7 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                         "Company is to",
                         false,
                         isRedColorBorder: companyIsToBorderShowRed,
+                        isTablet: isTablet,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(
@@ -182,7 +209,7 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  const SizedBox(
+                  SizedBox(
                     width: double.infinity,
                     child: Column(
                       children: [
@@ -195,7 +222,7 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                               'Approval of corrective/preventive action',
                               style: TextStyle(
                                 fontWeight: FontWeight.normal,
-                                fontSize: 17.0,
+                                fontSize: isTablet ? 27 : 17.0,
                               ),
                             ),
                           ),
@@ -208,13 +235,22 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
-                    height: 50,
+                    // height: 50,
                     child: TextField(
+                      style: TextStyle(
+                        fontSize: isTablet ? 24 : 15,
+                        color: Colors.black.withOpacity(0.65),
+                        fontWeight: FontWeight.w500,
+                      ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: nameStepThree,
                       keyboardType: TextInputType.name,
-                      decoration: textFieldDecoration("Name", false,
-                          isRedColorBorder: nameBorderShowRed),
+                      decoration: textFieldDecoration(
+                        "Name",
+                        false,
+                        isRedColorBorder: nameBorderShowRed,
+                        isTablet: isTablet,
+                      ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(
                             100), // Restrict input to 10 characters
@@ -228,12 +264,18 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                     },
                     child: SizedBox(
                       width: double.infinity,
-                      height: 50,
+                      //    height: 50,
                       child: TextField(
+                        style: TextStyle(
+                          fontSize: isTablet ? 24 : 15,
+                          color: Colors.black.withOpacity(0.65),
+                          fontWeight: FontWeight.w500,
+                        ),
                         textAlignVertical: TextAlignVertical.center,
                         controller: stepThreeDate,
                         keyboardType: TextInputType.datetime,
-                        decoration: textFieldDecoration("Date", false),
+                        decoration: textFieldDecoration("Date", false,
+                            isTablet: isTablet),
                         inputFormatters: [
                           LengthLimitingTextInputFormatter(100),
                         ],
@@ -246,8 +288,12 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                   ),
                   const SizedBox(height: 50),
                   SizedBox(
-                    width: double.infinity,
-                    height: 50.0,
+                    // width: double.infinity,
+                    // height: 50.0,
+                    width: MediaQuery.of(context).size.width * 0.95,
+
+                    //  height: 50.0,
+                    height: MediaQuery.of(context).size.height * 0.067,
                     child: Container(
                       decoration: BoxDecoration(boxShadow: [
                         (EasyDynamicTheme.of(context).themeMode !=
@@ -328,9 +374,10 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                             ),
                           ),
                         ),
-                        child: const Text("Submit",
+                        child: Text("Submit",
                             style: TextStyle(
                               color: Colors.white,
+                              fontSize: isTablet ? 30 : 17,
                             )),
                       ),
                     ),
@@ -354,7 +401,9 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
 
     if (picked != null) {
       // Format the picked date to the desired format
-      final formattedDate = DateFormat('yyyy-MM-dd').format(picked);
+      // final formattedDate = DateFormat('yyyy-MM-dd').format(picked);
+
+      final formattedDate = DateFormat('MM-dd-yyyy').format(picked);
 
       // Update the TextField's value
       stepThreeDate.text = formattedDate;

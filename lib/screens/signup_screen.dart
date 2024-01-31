@@ -25,6 +25,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var phone = TextEditingController();
   bool _passwordVisible = false;
   var _fcmToken = "";
+  bool isTablet = false;
 
   late Future<List<allRolesModel>> _futureRoles = Future.value([]);
 
@@ -33,6 +34,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
   int _selectedRoleId = 1;
   late List<String> _lsRoles; // List to store role names
 
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -40,6 +53,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _lsRoles = [];
 
     loadInitialData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
   }
 
   Future<List<allRolesModel>> fetchRoles() async {
@@ -158,22 +177,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ? Colors.white
                               : Colors.black,
 
-                          fontSize: 30,
+                          fontSize: isTablet ? 45 : 28,
                         )),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 30),
                   Row(
                     children: [
                       Expanded(
                         child: SizedBox(
                           width: double.infinity,
-                          height: 55,
+                          // height: 55,
                           child: TextField(
+                            style: TextStyle(
+                              fontSize: isTablet ? 24 : 15,
+                              color: Colors.black.withOpacity(0.65),
+                              fontWeight: FontWeight.w500,
+                            ),
                             controller: fName,
                             keyboardType: TextInputType.name,
                             textAlignVertical: TextAlignVertical.center,
-                            decoration:
-                                textFieldDecoration("First Name", false),
+                            decoration: textFieldDecoration("First Name", false,
+                                isTablet: isTablet),
                           ),
                         ),
                       ),
@@ -181,12 +205,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Expanded(
                         child: SizedBox(
                           width: double.infinity,
-                          height: 55,
+                          //  height: 55,
                           child: TextField(
+                            style: TextStyle(
+                              fontSize: isTablet ? 24 : 15,
+                              color: Colors.black.withOpacity(0.65),
+                              fontWeight: FontWeight.w500,
+                            ),
                             textAlignVertical: TextAlignVertical.center,
                             controller: lName,
                             keyboardType: TextInputType.name,
-                            decoration: textFieldDecoration("Last Name", false),
+                            decoration: textFieldDecoration("Last Name", false,
+                                isTablet: isTablet),
                           ),
                         ),
                       ),
@@ -195,8 +225,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
-                    height: 50,
+                    //   height: 50,
                     child: TextField(
+                      style: TextStyle(
+                        fontSize: isTablet ? 24 : 15,
+                        color: Colors.black.withOpacity(0.65),
+                        fontWeight: FontWeight.w500,
+                      ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: phone,
                       keyboardType: TextInputType.phone,
@@ -205,18 +240,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             12), // Limit input to 12 characters (including mask characters)
                         _PhoneNumberFormatter(), // Only allow digits
                       ],
-                      decoration: textFieldDecoration("Phone", false),
+                      decoration: textFieldDecoration("Phone", false,
+                          isTablet: isTablet),
                     ),
                   ),
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
-                    height: 50,
+                    //  height: 50,
                     child: TextField(
+                      style: TextStyle(
+                        fontSize: isTablet ? 24 : 15,
+                        color: Colors.black.withOpacity(0.65),
+                        fontWeight: FontWeight.w500,
+                      ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: emailText,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: textFieldDecoration("Email", false),
+                      decoration: textFieldDecoration("Email", false,
+                          isTablet: isTablet),
                       onChanged: (value) {
                         validateEmail(value);
                         // Handle the validation result here
@@ -229,14 +271,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     children: [
                       SizedBox(
                         width: double.infinity,
-                        height: 50,
+                        // height: 50,
                         child: TextField(
+                          style: TextStyle(
+                            fontSize: isTablet ? 24 : 15,
+                            color: Colors.black.withOpacity(0.65),
+                            fontWeight: FontWeight.w500,
+                          ),
                           controller: passwordText,
                           textAlignVertical: TextAlignVertical.center,
                           obscureText: !_passwordVisible,
                           obscuringCharacter: '*',
                           keyboardType: TextInputType.visiblePassword,
-                          decoration: textFieldDecoration("Password", true),
+                          decoration: textFieldDecoration("Password", true,
+                              isTablet: isTablet),
                         ),
                       ),
                       IconButton(
@@ -268,10 +316,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                         return SizedBox(
                           height: 100,
+                          //    height: isTablet ? 200 : 100,
                           child: CupertinoPicker(
                             scrollController: FixedExtentScrollController(
                                 initialItem: _selectedRoleIndex),
-                            itemExtent: 32,
+                            itemExtent: isTablet ? 65 : 32,
                             onSelectedItemChanged: (index) {
                               setState(() {
                                 _selectedRoleIndex = index;
@@ -284,7 +333,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             },
                             children: _lsRoles.map((String role) {
                               return Center(
-                                child: Text(role),
+                                child: Text(
+                                  role,
+                                  style:
+                                      TextStyle(fontSize: isTablet ? 33 : 22),
+                                ),
                               );
                             }).toList(),
                           ),
@@ -317,8 +370,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   // ),
                   const SizedBox(height: 30),
                   SizedBox(
-                    width: double.infinity,
-                    height: 50.0,
+                    //    width: double.infinity,
+                    //   height: 50.0,
+                    //  width: MediaQuery.of(context).size.width * 0.95,
+
+                    //  height: 50.0,
+                    //  height: MediaQuery.of(context).size.height * 0.07,
+
+                    width: MediaQuery.of(context).size.width * 0.95,
+
+                    //  height: 50.0,
+                    height: MediaQuery.of(context).size.height * 0.07,
                     child: Container(
                       decoration: BoxDecoration(boxShadow: [
                         (EasyDynamicTheme.of(context).themeMode !=
@@ -372,9 +434,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                         ),
-                        child: const Text("Sign Up",
+                        child: Text("Sign Up",
                             style: TextStyle(
                               color: Colors.white,
+                              fontSize: isTablet ? 33 : 17,
                             )),
                       ),
                     ),
@@ -387,13 +450,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           {Navigator.pushReplacementNamed(context, '/login')},
                       child: RichText(
                         textAlign: TextAlign.center,
-                        text: const TextSpan(
+                        text: TextSpan(
                           text: 'You have an account?',
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: isTablet ? 25 : 14,
+                          ),
                           children: <TextSpan>[
                             TextSpan(
                               text: ' Login',
-                              style: TextStyle(color: Colors.blue),
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: isTablet ? 25 : 14,
+                              ),
                             ),
                           ],
                         ),

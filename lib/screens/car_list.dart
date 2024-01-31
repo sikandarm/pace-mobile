@@ -23,6 +23,34 @@ class _SharedListState extends State<CARList> {
     _futureList = fetchAllCARList();
   }
 
+  bool isTablet = false;
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    getAllPendingCarReports();
+    super.didChangeDependencies();
+  }
+
+  List<CAReportModel> allPendingCarReports = [];
+
+  Future<void> getAllPendingCarReports() async {
+    allPendingCarReports = await fetchAllCARList();
+    setState(() {});
+  }
+
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +80,7 @@ class _SharedListState extends State<CARList> {
         title: Text(
           "CAR List",
           style: TextStyle(
-            fontSize: appBarTiltleSize,
+            fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -138,7 +166,7 @@ class TaskListHeader extends StatelessWidget {
   }
 }
 
-class CARListItemWidget extends StatelessWidget {
+class CARListItemWidget extends StatefulWidget {
   final int? id;
   final String? originatorName;
   final String? description;
@@ -155,17 +183,44 @@ class CARListItemWidget extends StatelessWidget {
   });
 
   @override
+  State<CARListItemWidget> createState() => _CARListItemWidgetState();
+}
+
+class _CARListItemWidgetState extends State<CARListItemWidget> {
+  bool isTablet = false;
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CARDetail(carId: id!),
+            builder: (context) => CARDetail(carId: widget.id!),
           ),
         );
       },
       child: Container(
+        // height: 200,
+        height: isTablet ? 135 : 80,
         margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
@@ -194,19 +249,20 @@ class CARListItemWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "#$id",
-                        style: const TextStyle(
+                        "#${widget.id}",
+                        style: TextStyle(
                           color: Color(0xFF1E2022),
                           fontWeight: FontWeight.bold,
-                          fontSize: 16.0,
+                          fontSize: isTablet ? 26 : 16.0,
                         ),
                       ),
                       Text(
-                        caReportDate != null
-                            ? DateFormat(US_DATE_FORMAT).format(caReportDate!)
+                        widget.caReportDate != null
+                            ? DateFormat(US_DATE_FORMAT)
+                                .format(widget.caReportDate!)
                             : 'N/A',
-                        style: const TextStyle(
-                          fontSize: 11.0,
+                        style: TextStyle(
+                          fontSize: isTablet ? 21 : 11.0,
                           color: Color(0xFF77838F),
                           fontWeight: FontWeight.w400,
                         ),
@@ -214,11 +270,11 @@ class CARListItemWidget extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    status!.substring(0, 1).toUpperCase() +
-                        status!.substring(1),
-                    style: const TextStyle(
+                    widget.status!.substring(0, 1).toUpperCase() +
+                        widget.status!.substring(1),
+                    style: TextStyle(
                       color: AppColors.contentColorYellow,
-                      fontSize: 16.0,
+                      fontSize: isTablet ? 26 : 16.0,
                     ),
                   ),
                 ],

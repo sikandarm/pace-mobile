@@ -37,6 +37,25 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
   }
 
   @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -63,7 +82,7 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
         title: Text(
           "Purchase Orders",
           style: TextStyle(
-            fontSize: appBarTiltleSize,
+            fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             fontWeight: FontWeight.bold,
             color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
                 ? Colors.white
@@ -248,96 +267,99 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
     );
   }
 
-  Card purchaseOrderCard({
+  Widget purchaseOrderCard({
     required String companyName,
     required String poId,
     required String address,
     required String orderDate,
     required Color color,
   }) {
-    return Card(
-      color: color,
-      child: Column(
-        children: [
-          SizedBox(height: 15),
-          Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(width: 13),
-              Text(
-                // "#$id",
-                poId,
+    return Container(
+      height: isTablet ? 170 : 85,
+      child: Card(
+        color: color,
+        child: Column(
+          children: [
+            SizedBox(height: isTablet ? 30 : 15),
+            Row(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(width: 13),
+                Text(
+                  // "#$id",
+                  poId,
 
-                style: const TextStyle(
-                  // color: Color(0xFF1E2022),
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 13.0,
+                  style: TextStyle(
+                    // color: Color(0xFF1E2022),
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: isTablet ? 27 : 13.0,
+                  ),
                 ),
-              ),
-              Spacer(),
-              Text(
-                // DateFormat(US_DATE_FORMAT).format(createdAt!),
-                DateFormat(US_DATE_FORMAT).format(DateTime.parse(orderDate)),
-                style: const TextStyle(
-                  fontSize: 11.0,
-                  //  color: Color(0xFF77838F),
-                  color: Colors.white,
-                  fontWeight: FontWeight.w400,
+                Spacer(),
+                Text(
+                  // DateFormat(US_DATE_FORMAT).format(createdAt!),
+                  DateFormat(US_DATE_FORMAT).format(DateTime.parse(orderDate)),
+                  style: TextStyle(
+                    fontSize: isTablet ? 24 : 11.0,
+                    //  color: Color(0xFF77838F),
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
-              ),
-              SizedBox(width: 13),
-            ],
-          ),
+                SizedBox(width: 13),
+              ],
+            ),
 
-          const SizedBox(height: 8.0),
-          Row(
-            children: [
-              SizedBox(width: 13),
-              Text(
-                // ediStdNomenclature![0].toUpperCase() +
-                //     ediStdNomenclature!.substring(1),
-                address,
-                style: const TextStyle(
-                  // color: getProgressColor(status),
-                  color: Colors.white,
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w500,
+            SizedBox(height: isTablet ? 20 : 8.0),
+            Row(
+              children: [
+                SizedBox(width: 13),
+                Text(
+                  // ediStdNomenclature![0].toUpperCase() +
+                  //     ediStdNomenclature!.substring(1),
+                  address,
+                  style: TextStyle(
+                    // color: getProgressColor(status),
+                    color: Colors.white,
+                    fontSize: isTablet ? 22 : 12.0,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              const Spacer(),
-              Text(
-                // "Shape:$shape",
-                companyName,
-                style: const TextStyle(
-                  fontSize: 12.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
+                const Spacer(),
+                Text(
+                  // "Shape:$shape",
+                  companyName,
+                  style: TextStyle(
+                    fontSize: isTablet ? 22 : 12.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              SizedBox(width: 13),
-            ],
-          ),
-          // const SizedBox(height: 8.0),
-          // Container(
-          //   width: double.infinity,
-          //   height: 6,
-          //   decoration: BoxDecoration(
-          //       color: Colors.grey.shade300,
-          //       borderRadius: BorderRadius.circular(12)),
-          //   child: Row(
-          //     children: [
-          //       Container(
-          //         width: MediaQuery.of(context).size.width * 0.5,
-          //         decoration: BoxDecoration(
-          //             color: const Color(0xFFF4BE4F),
-          //             borderRadius: BorderRadius.circular(12)),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          SizedBox(height: 15),
-        ],
+                SizedBox(width: 13),
+              ],
+            ),
+            // const SizedBox(height: 8.0),
+            // Container(
+            //   width: double.infinity,
+            //   height: 6,
+            //   decoration: BoxDecoration(
+            //       color: Colors.grey.shade300,
+            //       borderRadius: BorderRadius.circular(12)),
+            //   child: Row(
+            //     children: [
+            //       Container(
+            //         width: MediaQuery.of(context).size.width * 0.5,
+            //         decoration: BoxDecoration(
+            //             color: const Color(0xFFF4BE4F),
+            //             borderRadius: BorderRadius.circular(12)),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            SizedBox(height: 15),
+          ],
+        ),
       ),
     );
   }

@@ -66,6 +66,25 @@ class _InventoryDetailState extends State<InventoryDetailScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
@@ -76,6 +95,7 @@ class _InventoryDetailState extends State<InventoryDetailScreen> {
             context,
             scaffoldKey,
             userProfileImage,
+            isTablet,
           ),
           Expanded(
             child: FutureBuilder<List<InventoryDetailModel>>(
@@ -133,11 +153,8 @@ class _InventoryDetailState extends State<InventoryDetailScreen> {
   }
 }
 
-Widget _buildAppBar(
-  context,
-  GlobalKey<ScaffoldState> scaffoldKey,
-  String? userProfileImage,
-) {
+Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey,
+    String? userProfileImage, bool isTablet) {
   return AppBar(
     // backgroundColor: Colors.white,
     backgroundColor: Colors.transparent,
@@ -172,7 +189,7 @@ Widget _buildAppBar(
                   : Colors.black,
 
               fontWeight: FontWeight.bold,
-              fontSize: appBarTiltleSize,
+              fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             ),
           );
         } else if (snapshot.hasError) {
@@ -210,8 +227,8 @@ Widget _buildAppBar(
                     },
                     child: Image.asset(
                       "assets/images/ic_bell.png",
-                      width: 32,
-                      height: 32,
+                      width: isTablet ? 45 : 32,
+                      height: isTablet ? 45 : 32,
                       color: EasyDynamicTheme.of(context).themeMode ==
                               ThemeMode.dark
                           ? Colors.white
@@ -251,7 +268,7 @@ Widget _buildAppBar(
                   backgroundImage: userProfileImage == null
                       ? AssetImage('assets/images/ic_profile.png')
                       : NetworkImage(userProfileImage) as ImageProvider,
-                  radius: 15,
+                  radius: isTablet ? 25 : 15,
                 ),
               ),
             ),
@@ -262,7 +279,7 @@ Widget _buildAppBar(
   );
 }
 
-class TaskDetailWidget extends StatelessWidget {
+class TaskDetailWidget extends StatefulWidget {
   final int? id;
   final String? ediStdNomenclature;
   final String? aiscManualLabel;
@@ -311,6 +328,30 @@ class TaskDetailWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<TaskDetailWidget> createState() => _TaskDetailWidgetState();
+}
+
+class _TaskDetailWidgetState extends State<TaskDetailWidget> {
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -330,26 +371,29 @@ class TaskDetailWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              height: isTablet ? 11 : 0,
+            ),
             Padding(
               padding: const EdgeInsets.only(bottom: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Shape',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 15.0,
+                      fontSize: isTablet ? 27 : 15.0,
                     ),
                   ),
                   Expanded(
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        shape!,
+                        widget.shape!,
                         style: TextStyle(
                           color: Colors.grey[600],
-                          fontSize: 15.0,
+                          fontSize: isTablet ? 27 : 15.0,
                         ),
                       ),
                     ),
@@ -373,21 +417,21 @@ class TaskDetailWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Weight',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 15.0,
+                      fontSize: isTablet ? 27 : 15.0,
                     ),
                   ),
                   Expanded(
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        weight!,
+                        widget.weight!,
                         style: TextStyle(
                           color: Colors.grey[600],
-                          fontSize: 15.0,
+                          fontSize: isTablet ? 27 : 15.0,
                         ),
                       ),
                     ),
@@ -411,21 +455,21 @@ class TaskDetailWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Depth',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 15.0,
+                      fontSize: isTablet ? 27 : 15.0,
                     ),
                   ),
                   Expanded(
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        depth!,
+                        widget.depth!,
                         style: TextStyle(
                           color: Colors.grey[600],
-                          fontSize: 15.0,
+                          fontSize: isTablet ? 27 : 15.0,
                         ),
                       ),
                     ),
@@ -449,21 +493,21 @@ class TaskDetailWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Grade',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 15.0,
+                      fontSize: isTablet ? 27 : 15.0,
                     ),
                   ),
                   Expanded(
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        grade!,
+                        widget.grade!,
                         style: TextStyle(
                           color: Colors.grey[600],
-                          fontSize: 15.0,
+                          fontSize: isTablet ? 27 : 15.0,
                         ),
                       ),
                     ),
@@ -482,28 +526,37 @@ class TaskDetailWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            buildGradeRow("PO#", poNumber!),
-            buildGradeRow("Heat#", heatNumber!),
+            buildGradeRow("PO#", widget.poNumber!, isTablet),
+            buildGradeRow("Heat#", widget.heatNumber!, isTablet),
+            buildGradeRow("Order Arrived in Full",
+                (widget.orderArrivedInFull!) ? "Yes" : "No", isTablet),
+            buildGradeRow("Order Arrived in CMTR",
+                (widget.orderArrivedCMTR!) ? "Yes" : "No", isTablet),
+            buildGradeRow("Stock/Job", widget.itemType!, isTablet),
             buildGradeRow(
-                "Order Arrived in Full", (orderArrivedInFull!) ? "Yes" : "No"),
+                "Length Received",
+                "${widget.lengthReceivedFoot}ft "
+                    "${widget.lengthReceivedInch}in",
+                isTablet),
+            buildGradeRow("Quantity", widget.quantity.toString(), isTablet),
             buildGradeRow(
-                "Order Arrived in CMTR", (orderArrivedCMTR!) ? "Yes" : "No"),
-            buildGradeRow("Stock/Job", itemType!),
-            buildGradeRow("Length Received",
-                "${lengthReceivedFoot}ft " "${lengthReceivedInch}in"),
-            buildGradeRow("Quantity", quantity.toString()),
-            buildGradeRow("PO# Pulled From", poPulledFromNumber!),
+                "PO# Pulled From", widget.poPulledFromNumber!, isTablet),
             buildGradeRow(
-                "Length Used", "${lengthUsedFoot}ft " "${lengthUsedInch}in"),
-            buildGradeRow("Length Remaining in Stock",
-                "${lengthRemainingFoot}ft " "${lengthRemainingInch}in"),
+                "Length Used",
+                "${widget.lengthUsedFoot}ft " "${widget.lengthUsedInch}in",
+                isTablet),
+            buildGradeRow(
+                "Length Remaining in Stock",
+                "${widget.lengthRemainingFoot}ft "
+                    "${widget.lengthRemainingInch}in",
+                isTablet),
           ],
         ),
       ),
     );
   }
 
-  Widget buildGradeRow(String heading, String value) {
+  Widget buildGradeRow(String heading, String value, bool isTablet) {
     return Column(
       children: [
         Padding(
@@ -513,9 +566,9 @@ class TaskDetailWidget extends StatelessWidget {
             children: [
               Text(
                 heading,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 15.0,
+                  fontSize: isTablet ? 27 : 15.0,
                 ),
               ),
               Expanded(
@@ -525,7 +578,7 @@ class TaskDetailWidget extends StatelessWidget {
                     value,
                     style: TextStyle(
                       color: Colors.grey[600],
-                      fontSize: 15.0,
+                      fontSize: isTablet ? 27 : 15.0,
                     ),
                   ),
                 ),

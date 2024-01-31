@@ -53,6 +53,26 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
     super.initState();
   }
 
+  bool isTablet = false;
+
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,10 +99,10 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
             // Navigator.popUntil(context, ModalRoute.withName('/dashboard'));
           },
         ),
-        title: const Text(
+        title: Text(
           "Corrective Action Report",
           style: TextStyle(
-            fontSize: 18,
+            fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -96,8 +116,13 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                 children: [
                   SizedBox(
                     width: double.infinity,
-                    height: 55,
+                    // height: 55,
                     child: TextField(
+                      style: TextStyle(
+                        fontSize: isTablet ? 24 : 15,
+                        color: Colors.black.withOpacity(0.65),
+                        fontWeight: FontWeight.w500,
+                      ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: orgName,
                       keyboardType: TextInputType.name,
@@ -108,14 +133,20 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         "Originator Name",
                         false,
                         isRedColorBorder: orgNameBorderShowRed,
+                        isTablet: isTablet,
                       ),
                     ),
                   ),
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
-                    height: 55,
+                    //  height: 55,
                     child: TextField(
+                      style: TextStyle(
+                        fontSize: isTablet ? 24 : 15,
+                        color: Colors.black.withOpacity(0.65),
+                        fontWeight: FontWeight.w500,
+                      ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: contractorName,
                       keyboardType: TextInputType.name,
@@ -123,6 +154,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         "Contractor/Supplier",
                         false,
                         isRedColorBorder: contractorNameBorderShowRed,
+                        isTablet: isTablet,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(50),
@@ -136,8 +168,13 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                     },
                     child: SizedBox(
                       width: double.infinity,
-                      height: 50,
+                      //    height: 50,
                       child: TextField(
+                        style: TextStyle(
+                          fontSize: isTablet ? 24 : 15,
+                          color: Colors.black.withOpacity(0.65),
+                          fontWeight: FontWeight.w500,
+                        ),
                         textAlignVertical: TextAlignVertical.center,
                         controller: stepOneDate,
                         keyboardType: TextInputType.datetime,
@@ -145,6 +182,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                           "Date",
                           false,
                           isRedColorBorder: stepOneDateBorderShowRed,
+                          isTablet: isTablet,
                         ),
                         enabled: false,
                         onTap: () {
@@ -156,15 +194,21 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
-                    height: 50,
+                    //  height: 50,
                     child: TextField(
+                      style: TextStyle(
+                        fontSize: isTablet ? 24 : 15,
+                        color: Colors.black.withOpacity(0.65),
+                        fontWeight: FontWeight.w500,
+                      ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: nicNo,
                       keyboardType: TextInputType.phone,
                       decoration: textFieldDecoration(
-                        "NIC No",
+                        "NC No",
                         false,
                         isRedColorBorder: nicNoBorderShowRed,
+                        isTablet: isTablet,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(15),
@@ -174,8 +218,13 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
-                    height: 50,
+                    //  height: 50,
                     child: TextField(
+                      style: TextStyle(
+                        fontSize: isTablet ? 24 : 15,
+                        color: Colors.black.withOpacity(0.65),
+                        fontWeight: FontWeight.w500,
+                      ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: purchaseOrder,
                       keyboardType: TextInputType.phone,
@@ -183,6 +232,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         "Purchase Order #",
                         false,
                         isRedColorBorder: purchaseOrderBorderShowRed,
+                        isTablet: isTablet,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(11),
@@ -192,8 +242,13 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
-                    height: 55,
+                    //  height: 55,
                     child: TextField(
+                      style: TextStyle(
+                        fontSize: isTablet ? 24 : 15,
+                        color: Colors.black.withOpacity(0.65),
+                        fontWeight: FontWeight.w500,
+                      ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: partDesc,
                       keyboardType: TextInputType.name,
@@ -201,6 +256,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         "Part Description",
                         false,
                         isRedColorBorder: partDescBorderShowRed,
+                        isTablet: isTablet,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(50),
@@ -210,8 +266,13 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
-                    height: 50,
+                    //  height: 50,
                     child: TextField(
+                      style: TextStyle(
+                        fontSize: isTablet ? 24 : 15,
+                        color: Colors.black.withOpacity(0.65),
+                        fontWeight: FontWeight.w500,
+                      ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: partId,
                       keyboardType: TextInputType.phone,
@@ -219,6 +280,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         "Part ID",
                         false,
                         isRedColorBorder: partIdBorderShowRed,
+                        isTablet: isTablet,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(11),
@@ -228,8 +290,13 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
-                    height: 50,
+                    //  height: 50,
                     child: TextField(
+                      style: TextStyle(
+                        fontSize: isTablet ? 24 : 15,
+                        color: Colors.black.withOpacity(0.65),
+                        fontWeight: FontWeight.w500,
+                      ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: qty,
                       keyboardType: TextInputType.number,
@@ -237,6 +304,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         "Qty",
                         false,
                         isRedColorBorder: qtyBorderShowRed,
+                        isTablet: isTablet,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(3),
@@ -246,8 +314,13 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
-                    height: 50,
+                    // height: 50,
                     child: TextField(
+                      style: TextStyle(
+                        fontSize: isTablet ? 24 : 15,
+                        color: Colors.black.withOpacity(0.65),
+                        fontWeight: FontWeight.w500,
+                      ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: dwgNo,
                       keyboardType: TextInputType.phone,
@@ -255,6 +328,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         "Dwg No",
                         false,
                         isRedColorBorder: dwgNoBorderShowRed,
+                        isTablet: isTablet,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(11),
@@ -262,7 +336,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.all(10.0),
                     child: Align(
                       alignment: Alignment.centerLeft,
@@ -270,7 +344,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         'Found during what activity',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20.0,
+                          fontSize: isTablet ? 30 : 20.0,
                         ),
                       ),
                     ),
@@ -287,18 +361,18 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                             });
                           },
                           child: ListTile(
-                            title: const Text(
+                            title: Text(
                               "Incoming Inspection",
                               style: TextStyle(
-                                fontSize: 14.5,
+                                fontSize: isTablet ? 24 : 14.5,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
                             dense: false,
                             contentPadding: EdgeInsets.zero,
                             leading: Container(
-                              width: 24,
-                              height: 24,
+                              width: isTablet ? 30 : 24,
+                              height: isTablet ? 30 : 24,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
@@ -324,18 +398,18 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                             });
                           },
                           child: ListTile(
-                            title: const Text(
+                            title: Text(
                               "In-process Inspection",
                               style: TextStyle(
-                                fontSize: 14.5,
+                                fontSize: isTablet ? 24 : 14.5,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
                             dense: false,
                             contentPadding: EdgeInsets.zero,
                             leading: Container(
-                              width: 24,
-                              height: 24,
+                              width: isTablet ? 30 : 24,
+                              height: isTablet ? 30 : 24,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
@@ -362,18 +436,18 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                             });
                           },
                           child: ListTile(
-                            title: const Text(
+                            title: Text(
                               "Final Inspection",
                               style: TextStyle(
-                                fontSize: 14.5,
+                                fontSize: isTablet ? 24 : 14.5,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
                             dense: false,
                             contentPadding: EdgeInsets.zero,
                             leading: Container(
-                              width: 24,
-                              height: 24,
+                              width: isTablet ? 30 : 24,
+                              height: isTablet ? 30 : 24,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
@@ -404,18 +478,18 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                                   });
                                 },
                                 child: ListTile(
-                                  title: const Text(
+                                  title: Text(
                                     "Shop",
                                     style: TextStyle(
-                                      fontSize: 14.5,
+                                      fontSize: isTablet ? 24 : 14.5,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
                                   dense: false,
                                   contentPadding: EdgeInsets.zero,
                                   leading: Container(
-                                    width: 24,
-                                    height: 24,
+                                    width: isTablet ? 30 : 24,
+                                    height: isTablet ? 30 : 24,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       border: Border.all(
@@ -443,18 +517,18 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                                   });
                                 },
                                 child: ListTile(
-                                  title: const Text(
+                                  title: Text(
                                     "Critical",
                                     style: TextStyle(
-                                      fontSize: 14.5,
+                                      fontSize: isTablet ? 24 : 14.5,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
                                   dense: false,
                                   contentPadding: EdgeInsets.zero,
                                   leading: Container(
-                                    width: 24,
-                                    height: 24,
+                                    width: isTablet ? 30 : 24,
+                                    height: isTablet ? 30 : 24,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       border: Border.all(
@@ -488,18 +562,18 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                                   });
                                 },
                                 child: ListTile(
-                                  title: const Text(
+                                  title: Text(
                                     "Field",
                                     style: TextStyle(
-                                      fontSize: 14.5,
+                                      fontSize: isTablet ? 24 : 14.5,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
                                   dense: false,
                                   contentPadding: EdgeInsets.zero,
                                   leading: Container(
-                                    width: 24,
-                                    height: 24,
+                                    width: isTablet ? 30 : 24,
+                                    height: isTablet ? 30 : 24,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       border: Border.all(
@@ -528,18 +602,18 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                                   });
                                 },
                                 child: ListTile(
-                                  title: const Text(
+                                  title: Text(
                                     "NON Critical",
                                     style: TextStyle(
-                                      fontSize: 14.5,
+                                      fontSize: isTablet ? 24 : 14.5,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
                                   dense: false,
                                   contentPadding: EdgeInsets.zero,
                                   leading: Container(
-                                    width: 24,
-                                    height: 24,
+                                    width: isTablet ? 30 : 24,
+                                    height: isTablet ? 30 : 24,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       border: Border.all(
@@ -570,8 +644,13 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
-                    height: 100,
+                    // height: 100,
                     child: TextField(
+                      style: TextStyle(
+                        fontSize: isTablet ? 24 : 15,
+                        color: Colors.black.withOpacity(0.65),
+                        fontWeight: FontWeight.w500,
+                      ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: descOne,
                       keyboardType: TextInputType.multiline,
@@ -579,6 +658,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         "Description of nonconformance",
                         false,
                         isRedColorBorder: descOneBorderShowRed,
+                        isTablet: isTablet,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(
@@ -589,8 +669,13 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                   const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
-                    height: 100,
+                    //  height: 100,
                     child: TextField(
+                      style: TextStyle(
+                        fontSize: isTablet ? 24 : 15,
+                        color: Colors.black.withOpacity(0.65),
+                        fontWeight: FontWeight.w500,
+                      ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: descTwo,
                       keyboardType: TextInputType.multiline,
@@ -598,16 +683,21 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         "Action taken to prevent misuse",
                         false,
                         isRedColorBorder: descTwoBorderShowRed,
+                        isTablet: isTablet,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(100),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 17),
                   SizedBox(
-                    width: double.infinity,
-                    height: 50.0,
+                    // width: double.infinity,
+                    // height: 50.0,
+                    width: MediaQuery.of(context).size.width * 0.95,
+
+                    //  height: 50.0,
+                    height: MediaQuery.of(context).size.height * 0.067,
                     child: Container(
                       decoration: BoxDecoration(boxShadow: [
                         (EasyDynamicTheme.of(context).themeMode !=
@@ -781,9 +871,10 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                             ),
                           ),
                         ),
-                        child: const Text("Next",
+                        child: Text("Next",
                             style: TextStyle(
                               color: Colors.white,
+                              fontSize: isTablet ? 30 : 17,
                             )),
                       ),
                     ),
@@ -807,7 +898,8 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
 
     if (picked != null) {
       // Format the picked date to the desired format
-      final formattedDate = DateFormat('yyyy-MM-dd').format(picked);
+      // final formattedDate = DateFormat('yyyy-MM-dd').format(picked);   // was previous and working
+      final formattedDate = DateFormat('MM-dd-yyyy').format(picked);
 
       // Update the TextField's value
       stepOneDate.text = formattedDate;

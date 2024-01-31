@@ -11,8 +11,10 @@ import 'department_list.dart';
 
 class CARDetail extends StatefulWidget {
   final int carId;
+  bool isJustViewingReport;
 
-  const CARDetail({Key? key, required this.carId}) : super(key: key);
+  CARDetail({Key? key, required this.carId, this.isJustViewingReport = false})
+      : super(key: key);
 
   @override
   State<CARDetail> createState() => _CARDetailState();
@@ -25,6 +27,26 @@ class _CARDetailState extends State<CARDetail> {
   void initState() {
     super.initState();
     _futureList = fetchCARDetail(widget.carId);
+  }
+
+  bool isTablet = false;
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
   }
 
   @override
@@ -43,13 +65,14 @@ class _CARDetailState extends State<CARDetail> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // Navigate to the last screen in the stack
-            Navigator.popUntil(context, (route) => route.isFirst);
+            //  Navigator.popUntil(context, (route) => route.isFirst);
+            Navigator.pop(context);
           },
         ),
-        title: const Text(
+        title: Text(
           "Corrective Action Report",
           style: TextStyle(
-            fontSize: 18,
+            fontSize: isTablet ? 28 : 18,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -107,6 +130,9 @@ class _CARDetailState extends State<CARDetail> {
                         correctiveActionDesc: tasks.correctiveActionDesc,
                         approvalName: tasks.approvalName,
                         approvalDate: tasks.approvalDate,
+                        description: tasks.description,
+                        partID: tasks.partId,
+                        isJustViewingReport: widget.isJustViewingReport,
                       );
                     },
                   );
@@ -120,7 +146,8 @@ class _CARDetailState extends State<CARDetail> {
   }
 }
 
-class CARDetailWidget extends StatelessWidget {
+class CARDetailWidget extends StatefulWidget {
+  final bool? isJustViewingReport;
   final int? id;
   final String? originatorName;
   final String? contractorSupplier;
@@ -133,22 +160,52 @@ class CARDetailWidget extends StatelessWidget {
   final String? correctiveActionDesc;
   final String? approvalName;
   final DateTime? approvalDate;
+  final String? description;
+  final String? partID;
 
-  const CARDetailWidget({
-    Key? key,
-    this.id,
-    this.originatorName,
-    this.contractorSupplier,
-    this.caReportDate,
-    this.ncNo,
-    this.status,
-    this.purchaseOrderNo,
-    this.quantity,
-    this.dwgNo,
-    this.correctiveActionDesc,
-    this.approvalName,
-    this.approvalDate,
-  }) : super(key: key);
+  const CARDetailWidget(
+      {Key? key,
+      this.id,
+      this.isJustViewingReport,
+      this.originatorName,
+      this.contractorSupplier,
+      this.caReportDate,
+      this.ncNo,
+      this.status,
+      this.purchaseOrderNo,
+      this.quantity,
+      this.dwgNo,
+      this.correctiveActionDesc,
+      this.approvalName,
+      this.approvalDate,
+      this.description,
+      this.partID})
+      : super(key: key);
+
+  @override
+  State<CARDetailWidget> createState() => _CARDetailWidgetState();
+}
+
+class _CARDetailWidgetState extends State<CARDetailWidget> {
+  bool isTablet = false;
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,36 +224,43 @@ class CARDetailWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildGradeRow("Originator Name", originatorName!),
-            buildGradeRow("Contractor/Supplier", contractorSupplier!),
+            buildGradeRow("Originator Name", widget.originatorName!, isTablet),
+            buildGradeRow(
+                "Contractor/Supplier", widget.contractorSupplier!, isTablet),
             buildGradeRow(
                 "Date",
-                caReportDate != null
-                    ? DateFormat(US_DATE_FORMAT).format(caReportDate!)
-                    : 'N/A'),
-            buildGradeRow("NC#", ncNo!),
-            buildGradeRow("Purchase Order#", purchaseOrderNo!),
-            buildGradeRow("Quantity", quantity.toString()),
-            buildGradeRow("Dwg#", dwgNo!),
+                widget.caReportDate != null
+                    ? DateFormat(US_DATE_FORMAT).format(widget.caReportDate!)
+                    : 'N/A',
+                isTablet),
+            buildGradeRow("NC#", widget.ncNo!, isTablet),
+            buildGradeRow("Purchase Order#", widget.purchaseOrderNo!, isTablet),
+            ////////////////////////////////////////
+            buildGradeRow(
+                "Part Description", widget.description.toString(), isTablet),
+            buildGradeRow("Part ID", widget.partID.toString(), isTablet),
+            ///////////////////////////////////////
+            buildGradeRow("Quantity", widget.quantity.toString(), isTablet),
+            buildGradeRow("Dwg#", widget.dwgNo!, isTablet),
             const SizedBox(height: 20),
-            const Text(
+            Text(
               'Corrective/Preventive Action',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 20.0,
+                fontSize: isTablet ? 33 : 20.0,
               ),
             ),
             const SizedBox(height: 18),
-            const Text(
+            Text(
               'Description of proposed action',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 16.0,
+                fontSize: isTablet ? 26 : 16.0,
               ),
             ),
             const SizedBox(height: 10),
             Text(
-              correctiveActionDesc!,
+              widget.correctiveActionDesc!,
               style: const TextStyle(
                   fontWeight: FontWeight.normal,
                   fontSize: 14.0,
@@ -214,59 +278,77 @@ class CARDetailWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
+            Text(
               'Approval of corrective/preventive action',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 16.0,
+                fontSize: isTablet ? 26 : 16.0,
               ),
             ),
-            const SizedBox(height: 10),
-            buildGradeRow("Name", approvalName!),
+            const SizedBox(height: 15),
+            buildGradeRow("Name", widget.approvalName!, isTablet),
             buildGradeRow(
                 "Date",
-                approvalDate != null
-                    ? DateFormat(US_DATE_FORMAT).format(approvalDate!)
-                    : 'N/A'),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      callUpdateCAR(context, id!, "rejected");
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          Colors.red, // Set button background color to blue
-                    ),
-                    child: const Text(
-                      'Reject',
-                      style: TextStyle(
-                        color: Colors.white, // Set button text color to white
+                widget.approvalDate != null
+                    ? DateFormat(US_DATE_FORMAT).format(widget.approvalDate!)
+                    : 'N/A',
+                isTablet),
+            widget.isJustViewingReport == true
+                ? SizedBox()
+                : Row(
+                    children: [
+                      Expanded(
+                        //   height:
+                        //       isTablet ? MediaQuery.of(context).size.height * 0.06 : 45,
+                        child: Container(
+                          height: isTablet ? 75 : 45,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              callUpdateCAR(context, widget.id!, "rejected");
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors
+                                  .red, // Set button background color to blue
+                            ),
+                            child: Text(
+                              'Reject',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: isTablet ? 27 : 14,
+                                // Set button text color to white
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      callUpdateCAR(context, id!, "approved");
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          Colors.green, // Set button background color to blue
-                    ),
-                    child: const Text(
-                      'Approve',
-                      style: TextStyle(
-                        color: Colors.white, // Set button text color to white
+                      //  const SizedBox(width: 10),
+                      SizedBox(width: 4),
+                      Expanded(
+                        //    height:
+                        //        isTablet ? MediaQuery.of(context).size.height * 0.06 : 45,
+                        child: Container(
+                          height: isTablet ? 75 : 45,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              callUpdateCAR(context, widget.id!, "approved");
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors
+                                  .green, // Set button background color to blue
+                            ),
+                            child: Text(
+                              'Approve',
+                              style: TextStyle(
+                                fontSize: isTablet ? 27 : 14,
+                                color: Colors
+                                    .white, // Set button text color to white
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ),
-              ],
-            ),
           ],
         ),
       ),
@@ -295,12 +377,27 @@ class CARDetailWidget extends StatelessWidget {
               .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
 
           // Navigate to TaskDetail screen
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => UserList(carId: id!),
-            ),
-          );
+
+          if (status == 'approved') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => UserList(carId: widget.id!),
+              ),
+            );
+          }
+          if (status == 'rejected') {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => UserList(carId: widget.id!),
+            //   ),
+            // );
+          }
         } else {
           // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context)
@@ -317,7 +414,7 @@ class CARDetailWidget extends StatelessWidget {
     }
   }
 
-  Widget buildGradeRow(String heading, String value) {
+  Widget buildGradeRow(String heading, String value, bool isTablet) {
     return Column(
       children: [
         Padding(
@@ -327,9 +424,9 @@ class CARDetailWidget extends StatelessWidget {
             children: [
               Text(
                 heading,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 15.0,
+                  fontSize: isTablet ? 25 : 15.0,
                 ),
               ),
               Expanded(
@@ -339,7 +436,7 @@ class CARDetailWidget extends StatelessWidget {
                     value,
                     style: TextStyle(
                       color: Colors.grey[600],
-                      fontSize: 15.0,
+                      fontSize: isTablet ? 25 : 15.0,
                     ),
                   ),
                 ),

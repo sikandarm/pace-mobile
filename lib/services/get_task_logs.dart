@@ -11,9 +11,15 @@ class TasklogModel {
   String? breakStart;
   String? breakEnd;
   String? comment;
+  int? iteration;
 
   TasklogModel(
-      {this.id, this.taskId, this.breakStart, this.breakEnd, this.comment});
+      {this.id,
+      this.taskId,
+      this.breakStart,
+      this.breakEnd,
+      this.comment,
+      this.iteration});
 
   TasklogModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -21,6 +27,7 @@ class TasklogModel {
     breakStart = json['break_start'];
     breakEnd = json['break_end'];
     comment = json['comment'];
+    iteration = json['iteration'];
   }
 
   Map<String, dynamic> toJson() {
@@ -30,6 +37,7 @@ class TasklogModel {
     data['break_start'] = this.breakStart;
     data['break_end'] = this.breakEnd;
     data['comment'] = this.comment;
+    data['iteration'] = this.iteration;
     return data;
   }
 }

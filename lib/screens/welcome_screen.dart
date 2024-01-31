@@ -14,6 +14,25 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
@@ -25,8 +44,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 padding: const EdgeInsets.only(top: 50.0, bottom: 20.0),
                 child: Image.asset(
                   'assets/images/ic_tick.png',
-                  width: 200,
-                  height: 120,
+                  width: isTablet ? 330 : 200,
+                  height: isTablet ? 230 : 120,
                   color: Colors.blue,
                 ),
               ),
@@ -39,14 +58,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   child: Text("Welcome to SFM",
                       style: TextStyle(
                         color: Color(0xff2E2E2E),
-                        fontSize: 30,
+                        fontSize: isTablet ? 45 : 30,
                       )),
                 ),
                 Center(
                   child: Text("Powered by A3 Insurance",
                       style: TextStyle(
                         color: Color(0xff6E80B0),
-                        fontSize: 15,
+                        fontSize: isTablet ? 22 : 15,
                       )),
                 ),
                 SizedBox(height: 100),
@@ -57,7 +76,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Color(0xff2E2E2E),
-                          fontSize: 17,
+                          fontSize: isTablet ? 27 : 17,
                         )),
                   ),
                 ),
@@ -66,8 +85,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           ),
           const SizedBox(height: 145),
           SizedBox(
-            width: 333,
-            height: 58.4,
+            //  width: 333,
+            //  height: 58.4,
+
+            width: MediaQuery.of(context).size.width * 0.9,
+
+            //  height: 50.0,
+            height: MediaQuery.of(context).size.height * 0.07,
             child: Container(
               decoration: BoxDecoration(boxShadow: [
                 BoxShadow(
@@ -101,6 +125,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     Text("Goto Dashboard",
                         style: TextStyle(
                           color: Colors.white,
+                          fontSize: isTablet ? 27 : 17,
                         )),
                   ],
                 ),

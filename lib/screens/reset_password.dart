@@ -16,9 +16,29 @@ class _ResetPassScreenState extends State<ResetPassword> {
   var passwordText = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
+  bool isTablet = false;
+
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
   }
 
   @override
@@ -75,17 +95,17 @@ class _ResetPassScreenState extends State<ResetPassword> {
                                   ThemeMode.dark
                               ? Colors.white
                               : Colors.black,
-                          fontSize: 30,
+                          fontSize: isTablet ? 45 : 28,
                         )),
                   ),
                   const SizedBox(height: 10),
-                  const SizedBox(
+                  SizedBox(
                     width: double.infinity,
                     child: Text(
                         "Please enter your email address to reset your account.",
                         style: TextStyle(
                           color: Colors.grey,
-                          fontSize: 13,
+                          fontSize: isTablet ? 22 : 13,
                         )),
                   ),
                   const SizedBox(height: 30),
@@ -134,8 +154,12 @@ class _ResetPassScreenState extends State<ResetPassword> {
                   ),
                   const SizedBox(height: 30),
                   SizedBox(
-                    width: double.infinity,
-                    height: 50.0,
+                    // width: double.infinity,
+                    // height: 50.0,
+                    width: MediaQuery.of(context).size.width * 0.95,
+
+                    //  height: 50.0,
+                    height: MediaQuery.of(context).size.height * 0.07,
                     child: Container(
                       decoration: BoxDecoration(boxShadow: [
                         BoxShadow(
@@ -180,9 +204,10 @@ class _ResetPassScreenState extends State<ResetPassword> {
                             ),
                           ),
                         ),
-                        child: const Text("Reset",
+                        child: Text("Reset",
                             style: TextStyle(
                               color: Colors.white,
+                              fontSize: isTablet ? 33 : 17,
                             )),
                       ),
                     ),

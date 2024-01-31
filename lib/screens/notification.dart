@@ -16,6 +16,25 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationListState extends State<NotificationsScreen> {
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
   Future<NotificationModel> _futureList = Future.value(NotificationModel());
 
   final groupedNotifications = <String, NotificationModel>{};
@@ -70,6 +89,7 @@ class _NotificationListState extends State<NotificationsScreen> {
               headerText, () => NotificationModel());
         }
       }
+
       setState(() {});
     });
   }
@@ -99,7 +119,7 @@ class _NotificationListState extends State<NotificationsScreen> {
         title: Text(
           "Notifications",
           style: TextStyle(
-            fontSize: appBarTiltleSize,
+            fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -122,7 +142,7 @@ class _NotificationListState extends State<NotificationsScreen> {
                 backgroundImage: userProfileImage == null
                     ? AssetImage('assets/images/ic_profile.png')
                     : NetworkImage(userProfileImage!) as ImageProvider,
-                radius: 15,
+                radius: isTablet ? 25 : 15,
               ),
             ),
           ),
@@ -143,7 +163,12 @@ class _NotificationListState extends State<NotificationsScreen> {
             } else if (snapshot.data!.data!.notifications?.length == 0) {
               print(snapshot.data!.data!.notifications?.length);
               return Center(
-                child: Text("No notifications found !"),
+                child: Text(
+                  "No notifications found !",
+                  style: TextStyle(
+                    fontSize: isTablet ? 27 : 14,
+                  ),
+                ),
               );
             } else if (!snapshot.hasData ||
                 (snapshot.data!.data!.notifications == [] ||
@@ -167,7 +192,7 @@ class _NotificationListState extends State<NotificationsScreen> {
                         child: Text(
                           headerText,
                           style: TextStyle(
-                              fontSize: 18,
+                              fontSize: isTablet ? 30 : 18,
                               fontWeight: FontWeight.bold,
                               color: Colors.grey.shade600),
                         ),
@@ -204,7 +229,7 @@ class _NotificationListState extends State<NotificationsScreen> {
   }
 }
 
-class ListItemWidget extends StatelessWidget {
+class ListItemWidget extends StatefulWidget {
   final int? id;
   final String? title;
   final String? body;
@@ -219,6 +244,30 @@ class ListItemWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<ListItemWidget> createState() => _ListItemWidgetState();
+}
+
+class _ListItemWidgetState extends State<ListItemWidget> {
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -230,13 +279,13 @@ class ListItemWidget extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 backgroundColor: Colors.blue,
-                radius: 20.0,
+                radius: isTablet ? 40.0 : 20,
                 child: Icon(
                   Icons.notifications_on_outlined,
                   color: Colors.white,
-                  size: 24.0,
+                  size: isTablet ? 40 : 24.0,
                 ),
               ),
               const SizedBox(width: 10.0),
@@ -245,9 +294,9 @@ class ListItemWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      body.toString(),
+                      widget.body.toString(),
                       style: TextStyle(
-                        fontSize: 14.0,
+                        fontSize: isTablet ? 24 : 14.0,
                         //     color: Color(0xFF1E2022),
                         color: EasyDynamicTheme.of(context).themeMode ==
                                 ThemeMode.dark
@@ -261,10 +310,10 @@ class ListItemWidget extends StatelessWidget {
                     ),
                     const SizedBox(height: 5.0),
                     Text(
-                      DateFormat(NOTIFICATION_DATE_FORMAT).format(time!),
-                      style: const TextStyle(
+                      DateFormat(NOTIFICATION_DATE_FORMAT).format(widget.time!),
+                      style: TextStyle(
                         color: Color(0xFF77838F),
-                        fontSize: 12.0,
+                        fontSize: isTablet ? 22 : 12.0,
                         fontWeight: FontWeight.normal,
                       ),
                     ),

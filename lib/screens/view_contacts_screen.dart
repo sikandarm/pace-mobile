@@ -19,6 +19,25 @@ class _ViewContactsScreenState extends State<ViewContactsScreen> {
     super.initState();
   }
 
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
   UserContactList? contactApiData;
   bool isLoading = false;
 
@@ -66,7 +85,7 @@ class _ViewContactsScreenState extends State<ViewContactsScreen> {
         title: Text(
           "All Contacts",
           style: TextStyle(
-            fontSize: appBarTiltleSize,
+            fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -146,84 +165,125 @@ class _ViewContactsScreenState extends State<ViewContactsScreen> {
                       for (int i = 0;
                           i < contactApiData!.data!.users!.length;
                           i++) ...{
-                        Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(21.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    const Text(
-                                      'First Name: ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(contactApiData!
-                                        .data!.users![i].firstName!),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    const Text(
-                                      'Last Name: ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(contactApiData!
-                                        .data!.users![i].lastName!),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    const Text(
-                                      'Email: ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                        contactApiData!.data!.users![i].email!),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    const Text(
-                                      'Contact No: ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(contactApiData!.data!.users![i].phone
-                                        .toString()),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 25,
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  child: ElevatedButton.icon(
-                                      style: const ButtonStyle(
-                                        shape: MaterialStatePropertyAll(
-                                            RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(8)))),
-                                        backgroundColor:
-                                            MaterialStatePropertyAll(
-                                                Colors.blue),
-                                        foregroundColor:
-                                            MaterialStatePropertyAll(
-                                                Colors.white),
+                        Container(
+                          height: isTablet ? 310 : 210,
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(21.0),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'First Name: ',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: isTablet ? 27 : 14,
+                                        ),
                                       ),
-                                      onPressed: () async {
-                                        await launchDialer(contactApiData!
-                                            .data!.users![i].phone!);
-                                      },
-                                      icon: const Icon(
-                                        Icons.call,
-                                        size: 18,
+                                      Text(
+                                        contactApiData!
+                                            .data!.users![i].firstName!,
+                                        style: TextStyle(
+                                          fontSize: isTablet ? 27 : 14,
+                                        ),
                                       ),
-                                      label: const Text('Call')),
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Last Name: ',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: isTablet ? 27 : 14,
+                                        ),
+                                      ),
+                                      Text(
+                                        contactApiData!
+                                            .data!.users![i].lastName!,
+                                        style: TextStyle(
+                                          fontSize: isTablet ? 27 : 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Email: ',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: isTablet ? 27 : 14,
+                                        ),
+                                      ),
+                                      Text(
+                                        contactApiData!.data!.users![i].email!,
+                                        style: TextStyle(
+                                          fontSize: isTablet ? 27 : 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Contact No: ',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: isTablet ? 27 : 14,
+                                        ),
+                                      ),
+                                      Text(
+                                        contactApiData!.data!.users![i].phone
+                                            .toString(),
+                                        style: TextStyle(
+                                          fontSize: isTablet ? 27 : 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 25,
+                                  ),
+                                  Container(
+                                    // width: double.infinity,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.95,
+
+                                    height: isTablet ? 70 : 45,
+
+                                    child: ElevatedButton.icon(
+                                        style: const ButtonStyle(
+                                          shape: MaterialStatePropertyAll(
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(8)))),
+                                          backgroundColor:
+                                              MaterialStatePropertyAll(
+                                                  Colors.blue),
+                                          foregroundColor:
+                                              MaterialStatePropertyAll(
+                                                  Colors.white),
+                                        ),
+                                        onPressed: () async {
+                                          await launchDialer(contactApiData!
+                                              .data!.users![i].phone!);
+                                        },
+                                        icon: Icon(
+                                          Icons.call,
+                                          size: isTablet ? 30 : 18,
+                                        ),
+                                        label: Text(
+                                          'Call',
+                                          style: TextStyle(
+                                            fontSize: isTablet ? 27 : 14,
+                                          ),
+                                        )),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

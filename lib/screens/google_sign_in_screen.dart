@@ -11,6 +11,7 @@ import 'package:googleapis/admob/v1.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:pace_application_fb/screens/Dashboard.dart';
+import 'package:pace_application_fb/screens/welcome_screen.dart';
 import 'package:pace_application_fb/services/check_user_phone.dart';
 import 'package:pace_application_fb/services/check_user_role.dart';
 import 'package:pace_application_fb/services/facbook_api_model.dart';
@@ -65,6 +66,25 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
     super.initState();
   }
 
+  @override
+  void didChangeDependencies() {
+    checkTablet();
+    super.didChangeDependencies();
+  }
+
+  bool isTablet = false;
+  void checkTablet() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // You can customize these threshold values based on your criteria
+    if (screenWidth >= 768 && screenHeight >= 1024) {
+      setState(() {
+        isTablet = true;
+      });
+    }
+  }
+
   Future<void> saveProfileImageToSharedPrefs() async {
     final sharedPrefs = await SharedPreferences.getInstance();
     await sharedPrefs.setString(BL_USER_GOOGLE_OR_FACEBOOK_IMAGE,
@@ -101,14 +121,14 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
             Icons.arrow_back_ios_new,
             color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
                 ? Colors.white.withOpacity(0.92)
-                : Colors.white,
+                : Colors.black,
           ),
         ),
         backgroundColor: Colors.transparent,
         title: Text(
           'Google Sign In',
           style: TextStyle(
-            fontSize: appBarTiltleSize,
+            fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
                 ? Colors.white
                 : Colors.black,
@@ -123,36 +143,55 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
               height: 11,
             ),
             CircleAvatar(
-                radius: 45,
+                radius: isTablet ? 70 : 45,
                 backgroundImage:
                     NetworkImage(widget.userCredentials!.user!.photoURL!)),
             SizedBox(
               height: 33,
             ),
             TextField(
+              style: TextStyle(
+                fontSize: isTablet ? 24 : 15,
+                color: Colors.black.withOpacity(0.65),
+                fontWeight: FontWeight.w500,
+              ),
               //   controller: nameController,
               keyboardType: TextInputType.emailAddress,
               decoration: textFieldDecoration(
                 widget.userCredentials!.user!.displayName!,
                 false,
                 enabled: false,
+                isTablet: isTablet,
               ),
             ),
             SizedBox(
               height: 11,
             ),
             TextField(
+              style: TextStyle(
+                fontSize: isTablet ? 24 : 15,
+                color: Colors.black.withOpacity(0.65),
+                fontWeight: FontWeight.w500,
+              ),
               //   controller: emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: textFieldDecoration(
-                  widget.userCredentials!.user!.email!, false,
-                  enabled: false),
+                widget.userCredentials!.user!.email!,
+                false,
+                enabled: false,
+                isTablet: isTablet,
+              ),
             ),
             const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
               height: 100,
               child: TextField(
+                style: TextStyle(
+                  fontSize: isTablet ? 24 : 15,
+                  color: Colors.black.withOpacity(0.65),
+                  fontWeight: FontWeight.w500,
+                ),
                 textAlignVertical: TextAlignVertical.center,
                 controller: phone,
                 keyboardType: TextInputType.phone,
@@ -163,11 +202,13 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                   // Only allow digits
                 ],
                 decoration: textFieldDecoration(
-                    checkUserPhoneModel!.data == null
-                        ? "Phone"
-                        : checkUserPhoneModel!.data.toString(),
-                    false,
-                    enabled: checkUserPhoneModel!.data == null ? true : false),
+                  checkUserPhoneModel!.data == null
+                      ? "Phone"
+                      : checkUserPhoneModel!.data.toString(),
+                  false,
+                  enabled: checkUserPhoneModel!.data == null ? true : false,
+                  isTablet: isTablet,
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -216,8 +257,12 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
               height: 50,
             ),
             SizedBox(
-              width: double.infinity,
-              height: 50.0,
+              // width: double.infinity,
+              // height: 50.0,
+              width: MediaQuery.of(context).size.width * 0.95,
+
+              //  height: 50.0,
+              height: MediaQuery.of(context).size.height * 0.066,
               child: Container(
                 decoration: BoxDecoration(boxShadow: [
                   (EasyDynamicTheme.of(context).themeMode != ThemeMode.dark)
@@ -327,10 +372,16 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                       //     MaterialPageRoute(
                       //         builder: (context) => DashboardScreen()));
 
+                      // Navigator.pushAndRemoveUntil(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => DashboardScreen()),
+                      //     (route) => false);   it is exactly correct
+
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => DashboardScreen()),
+                              builder: (context) => WelcomeScreen()),
                           (route) => false);
                     }
 
@@ -353,9 +404,10 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                       ),
                     ),
                   ),
-                  child: const Text("Submit",
+                  child: Text("Submit",
                       style: TextStyle(
                         color: Colors.white,
+                        fontSize: isTablet ? 30 : 15.5,
                       )),
                 ),
               ),
