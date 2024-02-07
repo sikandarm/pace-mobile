@@ -366,6 +366,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                       isTablet: isTablet,
                     ),
                     const Padding(
+
                       padding:
                           EdgeInsets.symmetric(vertical: 3, horizontal: 20),
                       child: Divider(),
