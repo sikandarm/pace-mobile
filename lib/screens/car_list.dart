@@ -1,4 +1,5 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:dartz/dartz_unsafe.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -97,41 +98,44 @@ class _SharedListState extends State<CARList> {
               future: _futureList,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   print(snapshot.error);
                   return Center(
-                    child: Text("Error : ${snapshot.error}"),
+                    child: Text("Error: ${snapshot.error}"),
                   );
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(
-                    child: Text("No record found"),
+                  return Center(
+                    child: Text("No records found"),
                   );
                 } else {
-                  return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      final item = snapshot.data![index];
+                  List<CAReportModel> pendingList = snapshot.data!
+                      .where((report) => report.status == 'pending')
+                      .toList();
 
-                      if (item.status == "pending") {
-                        return CARListItemWidget(
-                          id: item.id,
-                          originatorName: item.originatorName,
-                          description: item.description!,
-                          caReportDate: item.caReportDate,
-                          status: item.status,
-                        );
-                      } else {
-                        return const SizedBox.shrink();
-                      }
+                  if (pendingList.isEmpty) {
+                    return Center(
+                      child: Text('No pending CAR\'s found.'),
+                    );
+                  }
+
+                  return ListView.builder(
+                    itemCount: pendingList.length,
+                    itemBuilder: (context, index) {
+                      final item = pendingList[index];
+                      return CARListItemWidget(
+                        id: item.id,
+                        originatorName: item.originatorName,
+                        description: item.description!,
+                        caReportDate: item.caReportDate,
+                        status: item.status,
+                      );
                     },
                   );
                 }
               },
             ),
-
-            // chi
-          ),
+          )
         ],
       ),
     );

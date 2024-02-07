@@ -403,8 +403,9 @@ class _CARDetailWidgetState extends State<CARDetailWidget> {
                         child: Container(
                           height: isTablet ? 75 : 45,
                           child: ElevatedButton(
-                            onPressed: () {
-                              callUpdateCAR(context, widget.id!, "rejected");
+                            onPressed: () async {
+                              await callUpdateCAR(
+                                  context, widget.id!, "rejected");
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors
@@ -429,8 +430,12 @@ class _CARDetailWidgetState extends State<CARDetailWidget> {
                         child: Container(
                           height: isTablet ? 75 : 45,
                           child: ElevatedButton(
-                            onPressed: () {
-                              callUpdateCAR(context, widget.id!, "approved");
+                            onPressed: () async {
+                              await callUpdateCAR(
+                                  context, widget.id!, "approved");
+                              //  Navigator.pop(context);
+                              //  Navigator.pop(context);
+                              //  Navigator.pop(context);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors
@@ -489,7 +494,7 @@ class _CARDetailWidgetState extends State<CARDetailWidget> {
           if (status == 'rejected') {
             Navigator.pop(context);
             Navigator.pop(context);
-            Navigator.pop(context);
+            //  Navigator.pop(context);
 
             // Navigator.push(
             //   context,

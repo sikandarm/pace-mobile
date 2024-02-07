@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:custom_sliding_segmented_control/custom_sliding_segmented_control.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -265,8 +266,8 @@ class _InventoryListState extends State<InventoryList> {
                   1: Text(
                     'Month',
                     style: TextStyle(
-                      color: EasyDynamicTheme.of(context).themeMode ==
-                              ThemeMode.dark
+                      color: AdaptiveTheme.of(context).mode ==
+                              AdaptiveThemeMode.light
                           ? Colors.black
                           : Colors.black,
                       fontSize: isTablet ? 28 : 14,
@@ -275,8 +276,8 @@ class _InventoryListState extends State<InventoryList> {
                   2: Text(
                     'Process',
                     style: TextStyle(
-                      color: EasyDynamicTheme.of(context).themeMode ==
-                              ThemeMode.dark
+                      color: AdaptiveTheme.of(context).mode ==
+                              AdaptiveThemeMode.light
                           ? Colors.black
                           : Colors.black,
                       fontSize: isTablet ? 28 : 14,
@@ -285,8 +286,8 @@ class _InventoryListState extends State<InventoryList> {
                   3: Text(
                     'YOY',
                     style: TextStyle(
-                      color: EasyDynamicTheme.of(context).themeMode ==
-                              ThemeMode.dark
+                      color: AdaptiveTheme.of(context).mode ==
+                              AdaptiveThemeMode.light
                           ? Colors.black
                           : Colors.black,
                       fontSize: isTablet ? 28 : 14,
@@ -296,7 +297,7 @@ class _InventoryListState extends State<InventoryList> {
                 decoration: BoxDecoration(
                   //  color: CupertinoColors.lightBackgroundGray,
                   color:
-                      EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+                      AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
                           ? Colors.white.withOpacity(0.92)
                           : CupertinoColors.lightBackgroundGray,
 
@@ -566,9 +567,9 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey,
     leading: IconButton(
       icon: Icon(
         Icons.arrow_back,
-        color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-            ? Colors.white
-            : Colors.black,
+        // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+        //     ? Colors.white
+        //     : Colors.black,
       ),
       onPressed: () {
         Navigator.pushReplacement(
@@ -588,9 +589,9 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey,
             "Inventory",
             style: TextStyle(
               //    color: const Color(0xff1E2022),
-              color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                  ? Colors.white
-                  : Colors.black,
+              // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              //     ? Colors.white
+              //     : Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             ),
@@ -633,10 +634,10 @@ Widget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey,
                       "assets/images/ic_bell.png",
                       width: isTablet ? 45 : 32,
                       height: isTablet ? 45 : 32,
-                      color: EasyDynamicTheme.of(context).themeMode ==
-                              ThemeMode.dark
-                          ? Colors.white
-                          : Colors.black,
+                      color: AdaptiveTheme.of(context).mode ==
+                              AdaptiveThemeMode.light
+                          ? Colors.black
+                          : Colors.white,
                     ),
                   ),
                   !hasNewNotifiaction

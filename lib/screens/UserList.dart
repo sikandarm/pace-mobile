@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -50,8 +51,6 @@ callShareCAR(BuildContext context, int reportId, List<int> userId) async {
       Navigator.pop(context);
       Navigator.pop(context);
       Navigator.pop(context);
-
-      
     } else {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context)
@@ -155,16 +154,16 @@ Widget _buildAppBar(
     context, GlobalKey<ScaffoldState> scaffoldKey, int carId, bool isTablet) {
   return AppBar(
     //   backgroundColor: Colors.white,
-    backgroundColor: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+    backgroundColor: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
         ? Color.fromARGB(255, 7, 21, 32)
         : Colors.black,
 
     leading: IconButton(
       icon: Icon(
         Icons.arrow_back,
-        color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-            ? Colors.white
-            : Colors.black,
+        // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+        //     ? Colors.white
+        //     : Colors.black,
       ),
       onPressed: () {
         Navigator.pushReplacement(
@@ -184,9 +183,9 @@ Widget _buildAppBar(
             "User List",
             style: TextStyle(
               //   color: Color(0xff1E2022),
-              color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                  ? Colors.white
-                  : Colors.black,
+              // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              //     ? Colors.white
+              //     : Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: appBarTiltleSize,
             ),
