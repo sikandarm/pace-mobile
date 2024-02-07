@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -139,46 +140,96 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'KEFC',
-      debugShowCheckedModeBanner: false,
-      themeMode: EasyDynamicTheme.of(context).themeMode,
-      darkTheme: DarkTheme.themeData(context),
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
-        // fontFamily: 'Manrope',
-        //  fontFamily: 'Montserrat',
-        //  textTheme: GoogleFonts.nunitoSansTextTheme(),
-        // textTheme: GoogleFonts.nunitoTextTheme(),
-        //  textTheme: GoogleFonts.montserratTextTheme(),
-        //    textTheme: GoogleFonts.instrumentSansTextTheme(),  looks somewhat better
-        // textTheme: GoogleFonts.merriweatherTextTheme(),     looks somewhat better
-        //  textTheme: GoogleFonts.robotoSlabTextTheme(),  looks somewhata better and close to professional
-        // textTheme: GoogleFonts.ptSansTextTheme(),  looks somewhata better and close to professional
-        // textTheme: GoogleFonts.kanitTextTheme(), looks somewhata better and close to professional
-        // textTheme: GoogleFonts.firaSansTextTheme(),
-        //  looks MOST better and close to professional
-        fontFamily: 'FiraSans',
+    return AdaptiveTheme(
+      light: ThemeData.light(useMaterial3: true),
+      dark: DarkTheme.themeData(context),
+      //  debugShowFloatingThemeButton: true,
+      initial: AdaptiveThemeMode.dark,
+      builder: (theme, darkTheme) => MaterialApp(
+        title: 'KEFC',
+        debugShowCheckedModeBanner: false,
+        //  themeMode: EasyDynamicTheme.of(context).themeMode,
+        darkTheme: darkTheme,
+
+        theme: theme,
+        // ThemeData(
+        //   primarySwatch: Colors.blue,
+        //   useMaterial3: true,
+        //   // fontFamily: 'Manrope',
+        //   //  fontFamily: 'Montserrat',
+        //   //  textTheme: GoogleFonts.nunitoSansTextTheme(),
+        //   // textTheme: GoogleFonts.nunitoTextTheme(),
+        //   //  textTheme: GoogleFonts.montserratTextTheme(),
+        //   //    textTheme: GoogleFonts.instrumentSansTextTheme(),  looks somewhat better
+        //   // textTheme: GoogleFonts.merriweatherTextTheme(),     looks somewhat better
+        //   //  textTheme: GoogleFonts.robotoSlabTextTheme(),  looks somewhata better and close to professional
+        //   // textTheme: GoogleFonts.ptSansTextTheme(),  looks somewhata better and close to professional
+        //   // textTheme: GoogleFonts.kanitTextTheme(), looks somewhata better and close to professional
+        //   // textTheme: GoogleFonts.firaSansTextTheme(),
+        //   //  looks MOST better and close to professional
+        //   fontFamily: 'FiraSans',
+        // ),
+
+        //     home: SplashScreen(),
+        initialRoute: '/',
+        //  home: FacebookEmailScreen(fbID: ''),
+        // home: LoginScreen(),
+
+        routes: {
+          '/': (context) => const SplashScreen(),
+          '/login': (context) => const LoginScreen(),
+          '/resetpassword': (context) => const ResetPassword(),
+          '/midwayscreen': (context) => const MidwayScreen(),
+          '/signup': (context) => const SignUpScreen(),
+          '/dashboard': (context) => const DashboardScreen(),
+          '/notification': (context) => const NotificationsScreen(),
+          '/welcomeScreen': (context) => const WelcomeScreen(),
+
+          // '/testScreen': (context) => const TestScreen(),
+        },
       ),
-
-      //     home: SplashScreen(),
-      initialRoute: '/',
-      //  home: FacebookEmailScreen(fbID: ''),
-      // home: LoginScreen(),
-
-      routes: {
-        '/': (context) => const SplashScreen(),
-        '/login': (context) => const LoginScreen(),
-        '/resetpassword': (context) => const ResetPassword(),
-        '/midwayscreen': (context) => const MidwayScreen(),
-        '/signup': (context) => const SignUpScreen(),
-        '/dashboard': (context) => const DashboardScreen(),
-        '/notification': (context) => const NotificationsScreen(),
-        '/welcomeScreen': (context) => const WelcomeScreen(),
-
-        // '/testScreen': (context) => const TestScreen(),
-      },
     );
   }
+  // );
+  // return MaterialApp(
+  //   title: 'KEFC',
+  //   debugShowCheckedModeBanner: false,
+  //   themeMode: EasyDynamicTheme.of(context).themeMode,
+  //   darkTheme: DarkTheme.themeData(context),
+  //   theme: ThemeData(
+  //     primarySwatch: Colors.blue,
+  //     useMaterial3: true,
+  //     // fontFamily: 'Manrope',
+  //     //  fontFamily: 'Montserrat',
+  //     //  textTheme: GoogleFonts.nunitoSansTextTheme(),
+  //     // textTheme: GoogleFonts.nunitoTextTheme(),
+  //     //  textTheme: GoogleFonts.montserratTextTheme(),
+  //     //    textTheme: GoogleFonts.instrumentSansTextTheme(),  looks somewhat better
+  //     // textTheme: GoogleFonts.merriweatherTextTheme(),     looks somewhat better
+  //     //  textTheme: GoogleFonts.robotoSlabTextTheme(),  looks somewhata better and close to professional
+  //     // textTheme: GoogleFonts.ptSansTextTheme(),  looks somewhata better and close to professional
+  //     // textTheme: GoogleFonts.kanitTextTheme(), looks somewhata better and close to professional
+  //     // textTheme: GoogleFonts.firaSansTextTheme(),
+  //     //  looks MOST better and close to professional
+  //     fontFamily: 'FiraSans',
+  //   ),
+
+  //   //     home: SplashScreen(),
+  //   initialRoute: '/',
+  //   //  home: FacebookEmailScreen(fbID: ''),
+  //   // home: LoginScreen(),
+
+  //   routes: {
+  //     '/': (context) => const SplashScreen(),
+  //     '/login': (context) => const LoginScreen(),
+  //     '/resetpassword': (context) => const ResetPassword(),
+  //     '/midwayscreen': (context) => const MidwayScreen(),
+  //     '/signup': (context) => const SignUpScreen(),
+  //     '/dashboard': (context) => const DashboardScreen(),
+  //     '/notification': (context) => const NotificationsScreen(),
+  //     '/welcomeScreen': (context) => const WelcomeScreen(),
+
+  //     // '/testScreen': (context) => const TestScreen(),
+  //   },
+  // );
 }

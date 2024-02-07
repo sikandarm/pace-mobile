@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
@@ -155,10 +156,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     'assets/images/ic_back.png',
                     width: 20,
                     height: 20,
-                    color:
-                        EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                            ? Colors.white
-                            : Colors.black,
+                    color: AdaptiveTheme.of(context).mode ==
+                            AdaptiveThemeMode.light
+                        ? Colors.black
+                        : Colors.white,
                   ),
                 ),
               ),
@@ -172,10 +173,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: Text("Sign Up",
                         style: TextStyle(
                           //    color: Colors.black,
-                          color: EasyDynamicTheme.of(context).themeMode ==
-                                  ThemeMode.dark
-                              ? Colors.white
-                              : Colors.black,
+                          // color: EasyDynamicTheme.of(context).themeMode ==
+                          //         ThemeMode.dark
+                          //     ? Colors.white
+                          //     : Colors.black,
 
                           fontSize: isTablet ? 45 : 28,
                         )),
@@ -190,14 +191,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: TextField(
                             style: TextStyle(
                               fontSize: isTablet ? 24 : 15,
-                              color: Colors.black.withOpacity(0.65),
+                              //  color: Colors.black.withOpacity(0.65),
                               fontWeight: FontWeight.w500,
                             ),
                             controller: fName,
                             keyboardType: TextInputType.name,
                             textAlignVertical: TextAlignVertical.center,
-                            decoration: textFieldDecoration("First Name", false,
-                                isTablet: isTablet),
+                            decoration: textFieldDecoration(
+                              "First Name",
+                              false,
+                              isTablet: isTablet,
+                              context: context,
+                            ),
                           ),
                         ),
                       ),
@@ -209,14 +214,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: TextField(
                             style: TextStyle(
                               fontSize: isTablet ? 24 : 15,
-                              color: Colors.black.withOpacity(0.65),
+                              //     color: Colors.black.withOpacity(0.65),
                               fontWeight: FontWeight.w500,
                             ),
                             textAlignVertical: TextAlignVertical.center,
                             controller: lName,
                             keyboardType: TextInputType.name,
-                            decoration: textFieldDecoration("Last Name", false,
-                                isTablet: isTablet),
+                            decoration: textFieldDecoration(
+                              "Last Name",
+                              false,
+                              isTablet: isTablet,
+                              context: context,
+                            ),
                           ),
                         ),
                       ),
@@ -229,7 +238,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: TextField(
                       style: TextStyle(
                         fontSize: isTablet ? 24 : 15,
-                        color: Colors.black.withOpacity(0.65),
+                        //  color: Colors.black.withOpacity(0.65),
                         fontWeight: FontWeight.w500,
                       ),
                       textAlignVertical: TextAlignVertical.center,
@@ -240,8 +249,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             12), // Limit input to 12 characters (including mask characters)
                         _PhoneNumberFormatter(), // Only allow digits
                       ],
-                      decoration: textFieldDecoration("Phone", false,
-                          isTablet: isTablet),
+                      decoration: textFieldDecoration(
+                        "Phone",
+                        false,
+                        isTablet: isTablet,
+                        context: context,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -251,14 +264,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: TextField(
                       style: TextStyle(
                         fontSize: isTablet ? 24 : 15,
-                        color: Colors.black.withOpacity(0.65),
+                        //    color: Colors.black.withOpacity(0.65),
                         fontWeight: FontWeight.w500,
                       ),
                       textAlignVertical: TextAlignVertical.center,
                       controller: emailText,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: textFieldDecoration("Email", false,
-                          isTablet: isTablet),
+                      decoration: textFieldDecoration(
+                        "Email",
+                        false,
+                        isTablet: isTablet,
+                        context: context,
+                      ),
                       onChanged: (value) {
                         validateEmail(value);
                         // Handle the validation result here
@@ -275,7 +292,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         child: TextField(
                           style: TextStyle(
                             fontSize: isTablet ? 24 : 15,
-                            color: Colors.black.withOpacity(0.65),
+                            //       color: Colors.black.withOpacity(0.65),
                             fontWeight: FontWeight.w500,
                           ),
                           controller: passwordText,
@@ -283,8 +300,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           obscureText: !_passwordVisible,
                           obscuringCharacter: '*',
                           keyboardType: TextInputType.visiblePassword,
-                          decoration: textFieldDecoration("Password", true,
-                              isTablet: isTablet),
+                          decoration: textFieldDecoration(
+                            "Password",
+                            true,
+                            isTablet: isTablet,
+                            context: context,
+                          ),
                         ),
                       ),
                       IconButton(

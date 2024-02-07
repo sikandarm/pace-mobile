@@ -8,7 +8,7 @@ class AddCARObj {
   String? partId;
   String? quantity;
   String? dwgNo;
-  // List<String>? activityFound;
+  List<String>? activityFound;
   String? description;
   String? actionToPrevent;
   String? disposition;
@@ -29,7 +29,7 @@ class AddCARObj {
     this.partId,
     this.quantity,
     this.dwgNo,
-    // this.activityFound,
+    this.activityFound,
     this.description,
     this.actionToPrevent,
     this.disposition,
@@ -51,7 +51,7 @@ class AddCARObj {
     partId = json['partId'];
     quantity = json['quantity'];
     dwgNo = json['dwgNo'];
-    // activityFound = json['activityFound'].cast<String>();
+    activityFound = json['activityFound'].cast<String>();
     description = json['description'];
     actionToPrevent = json['actionToPrevent'];
     disposition = json['disposition'];
@@ -74,7 +74,7 @@ class AddCARObj {
     data['partId'] = partId;
     data['quantity'] = quantity;
     data['dwgNo'] = dwgNo;
-    // data['activityFound'] = activityFound;
+    data['activityFound'] = activityFound;
     data['description'] = description;
     data['actionToPrevent'] = actionToPrevent;
     data['disposition'] = disposition;

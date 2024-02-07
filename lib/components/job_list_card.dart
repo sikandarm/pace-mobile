@@ -11,15 +11,17 @@ class JobList extends StatefulWidget {
   final int totalTasks;
   final int completedTasks;
   final DateTime startDate;
+  final String jobName;
 
-  const JobList(
-      {Key? key,
-      required this.jobId,
-      required this.status,
-      required this.totalTasks,
-      required this.completedTasks,
-      required this.startDate})
-      : super(key: key);
+  const JobList({
+    Key? key,
+    required this.jobId,
+    required this.status,
+    required this.totalTasks,
+    required this.completedTasks,
+    required this.startDate,
+    required this.jobName,
+  }) : super(key: key);
 
   @override
   State<JobList> createState() => _JobListState();
@@ -95,8 +97,17 @@ class _JobListState extends State<JobList> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    // Text(
+                    //   "#${widget.jobId}" + "   ${widget.jobName}",
+                    //   style: TextStyle(
+                    //     color: Color(0xFF1E2022),
+                    //     fontWeight: FontWeight.w600,
+                    //     fontSize: isTablet ? 22 : 14.0,
+                    //   ),
+                    // ),
+
                     Text(
-                      "#${widget.jobId}",
+                      "${widget.jobName}",
                       style: TextStyle(
                         color: Color(0xFF1E2022),
                         fontWeight: FontWeight.w600,

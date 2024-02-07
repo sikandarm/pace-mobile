@@ -89,6 +89,7 @@ class PurchaseOrderItems {
 
 Future<List<PurchaseOrderItems>> fetchPurchaseOrderItemsDetailListData(
     {required int id}) async {
+  print('po id in API: '+ id.toString());
   List<PurchaseOrderItems> itemsListData = [];
   final tokenBox = await Hive.openBox('tokenBox');
   final token = tokenBox.get('token');

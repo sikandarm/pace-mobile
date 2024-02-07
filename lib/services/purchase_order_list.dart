@@ -35,6 +35,7 @@ class PurchaseOrders {
     required this.vendor,
     required this.firstName,
   });
+
   late final int? id;
   late final int? companyName;
   late final String? address;
@@ -90,7 +91,7 @@ class PurchaseOrders {
     updatedAt = json['updatedAt'];
     company = Company.fromJson(json['company']);
     vendor = Vendor.fromJson(json['vendor']);
-    firstName = FirstName.fromJson(json['firstName']);
+    firstName = json['firstName']!=null?  FirstName.fromJson(json['firstName']):null;
   }
 
   Map<String, dynamic> toJson() {
@@ -130,6 +131,7 @@ class Company {
   Company({
     required this.name,
   });
+
   late final String name;
 
   Company.fromJson(Map<String, dynamic> json) {
@@ -147,6 +149,7 @@ class Vendor {
   Vendor({
     required this.vendorName,
   });
+
   late final String vendorName;
 
   Vendor.fromJson(Map<String, dynamic> json) {
@@ -164,15 +167,16 @@ class FirstName {
   FirstName({
     required this.firstName,
   });
-  late final String firstName;
+
+  late final String? firstName;
 
   FirstName.fromJson(Map<String, dynamic> json) {
-    firstName = json['firstName'];
+    firstName = json['firstName'] ?? null;
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
-    _data['firstName'] = firstName;
+    _data['firstName'] = firstName ?? null;
     return _data;
   }
 }

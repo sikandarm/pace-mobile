@@ -119,9 +119,9 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
           },
           child: Icon(
             Icons.arrow_back_ios_new,
-            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                ? Colors.white.withOpacity(0.92)
-                : Colors.black,
+            // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            //     ? Colors.white.withOpacity(0.92)
+            //     : Colors.black,
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -129,9 +129,9 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
           'Google Sign In',
           style: TextStyle(
             fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
-            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                ? Colors.white
-                : Colors.black,
+            // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            //     ? Colors.white
+            //     : Colors.black,
           ),
         ),
       ),
@@ -152,7 +152,7 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
             TextField(
               style: TextStyle(
                 fontSize: isTablet ? 24 : 15,
-                color: Colors.black.withOpacity(0.65),
+                //   color: Colors.black.withOpacity(0.65),
                 fontWeight: FontWeight.w500,
               ),
               //   controller: nameController,
@@ -162,6 +162,7 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                 false,
                 enabled: false,
                 isTablet: isTablet,
+                context: context,
               ),
             ),
             SizedBox(
@@ -170,7 +171,7 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
             TextField(
               style: TextStyle(
                 fontSize: isTablet ? 24 : 15,
-                color: Colors.black.withOpacity(0.65),
+                //   color: Colors.black.withOpacity(0.65),
                 fontWeight: FontWeight.w500,
               ),
               //   controller: emailController,
@@ -180,6 +181,7 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                 false,
                 enabled: false,
                 isTablet: isTablet,
+                context: context,
               ),
             ),
             const SizedBox(height: 10),
@@ -189,7 +191,7 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
               child: TextField(
                 style: TextStyle(
                   fontSize: isTablet ? 24 : 15,
-                  color: Colors.black.withOpacity(0.65),
+                  // color: Colors.black.withOpacity(0.65),
                   fontWeight: FontWeight.w500,
                 ),
                 textAlignVertical: TextAlignVertical.center,
@@ -208,6 +210,7 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                   false,
                   enabled: checkUserPhoneModel!.data == null ? true : false,
                   isTablet: isTablet,
+                  context: context,
                 ),
               ),
             ),

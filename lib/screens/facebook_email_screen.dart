@@ -135,9 +135,9 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
           },
           child: Icon(
             Icons.arrow_back_ios_new,
-            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                ? Colors.white.withOpacity(0.92)
-                : Colors.black,
+            // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            //     ? Colors.white.withOpacity(0.92)
+            //     : Colors.black,
           ),
         ),
         title: Text(
@@ -159,7 +159,7 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
             TextField(
               style: TextStyle(
                 fontSize: isTablet ? 24 : 15,
-                color: Colors.black.withOpacity(0.65),
+                //  color: Colors.black.withOpacity(0.65),
                 fontWeight: FontWeight.w500,
               ),
               controller: nameController,
@@ -169,6 +169,7 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                 false,
                 enabled: false,
                 isTablet: isTablet,
+                context: context,
               ),
             ),
             SizedBox(
@@ -177,7 +178,7 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
             TextField(
               style: TextStyle(
                 fontSize: isTablet ? 24 : 15,
-                color: Colors.black.withOpacity(0.65),
+                //   color: Colors.black.withOpacity(0.65),
                 fontWeight: FontWeight.w500,
               ),
               controller: emailController,
@@ -187,6 +188,7 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                 false,
                 enabled: checkUserFbData!.data!.assignrole! ? false : true,
                 isTablet: isTablet,
+                context: context,
               ),
             ),
             const SizedBox(height: 10),
@@ -196,7 +198,7 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
               child: TextField(
                 style: TextStyle(
                   fontSize: isTablet ? 24 : 15,
-                  color: Colors.black.withOpacity(0.65),
+                  //    color: Colors.black.withOpacity(0.65),
                   fontWeight: FontWeight.w500,
                 ),
                 textAlignVertical: TextAlignVertical.center,
@@ -215,6 +217,7 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                       ? false
                       : true,
                   isTablet: isTablet,
+                  context: context,
                 ),
               ),
             ),

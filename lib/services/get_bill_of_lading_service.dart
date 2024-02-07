@@ -90,7 +90,7 @@ class Billdata {
     address = json['address'];
     phone = json['phone'];
     fax = json['fax'];
-    dilveryDate = json['dilveryDate'];
+    dilveryDate = json['deliveryDate'];
     orderDate = json['orderDate'];
     terms = json['terms'];
     shipVia = json['shipVia'];
@@ -113,7 +113,7 @@ class Billdata {
     data['address'] = this.address;
     data['phone'] = this.phone;
     data['fax'] = this.fax;
-    data['dilveryDate'] = this.dilveryDate;
+    data['deliveryDate'] = this.dilveryDate;
     data['orderDate'] = this.orderDate;
     data['terms'] = this.terms;
     data['shipVia'] = this.shipVia;

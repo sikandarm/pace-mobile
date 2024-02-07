@@ -59,13 +59,13 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        // backgroundColor: Colors.,
         elevation: 0,
         iconTheme: IconThemeData(
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? Colors.white
-              : Colors.black,
-        ),
+            // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            //     ? Colors.white
+            //     : Colors.black,
+            ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -84,9 +84,7 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
           style: TextStyle(
             fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             fontWeight: FontWeight.bold,
-            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                ? Colors.white
-                : Colors.black,
+            // color:
           ),
         ),
         actions: [
@@ -157,9 +155,9 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
         // margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? Color.fromARGB(255, 7, 21, 32)
-              : Colors.white,
+          // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+          //     ? Color.fromARGB(255, 7, 21, 32)
+          //     : Colors.white,
           boxShadow: [
             (EasyDynamicTheme.of(context).themeMode != ThemeMode.dark)
                 ? BoxShadow(
@@ -246,10 +244,12 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
                                     purchaseOrder: purchaseOrdersList[index])));
                       },
                       child: purchaseOrderCard(
+
                           // color: index % 2 == 0
                           //     ? Colors.redAccent
                           //     : Colors.green.withOpacity(0.8),
-                          color: item.status?.toLowerCase() == 'pending'
+                          color: item.status?.toLowerCase() !=
+                                  'Received'.toLowerCase()
                               ? Colors.redAccent
                               : Colors.green.withOpacity(0.8),
                           companyName: item.company!.name.toString(),

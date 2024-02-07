@@ -62,17 +62,17 @@ class _ViewAllJobsScreenState extends State<ViewAllJobsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: EasyDynamicTheme.of(context).themeMode != ThemeMode.dark
-          ? Colors.white.withOpacity(0.92)
-          : const Color.fromARGB(255, 7, 21, 32),
+      // backgroundColor: EasyDynamicTheme.of(context).themeMode != ThemeMode.dark
+      //     ? Colors.white.withOpacity(0.92)
+      //     : const Color.fromARGB(255, 7, 21, 32),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? Colors.white
-              : Colors.black,
-        ),
+            // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            //     ? Colors.white
+            //     : Colors.black,
+            ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -116,9 +116,14 @@ class _ViewAllJobsScreenState extends State<ViewAllJobsScreen> {
                     return ListView.builder(
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
+                        snapshot.data!.sort(
+                          (a, b) => b.startDate.compareTo(a.startDate),
+                        );
+
                         final task = snapshot.data![index];
 
                         return JobList(
+                          jobName: task.name,
                           jobId: task.id,
                           totalTasks: task.totalTasks,
                           completedTasks: task.completedTasks,

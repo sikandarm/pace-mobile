@@ -57,10 +57,10 @@ class _CARDetailState extends State<CARDetail> {
         elevation: 0,
 
         iconTheme: IconThemeData(
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? Colors.white
-              : Colors.black,
-        ),
+            // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            //     ? Colors.white
+            //     : Colors.black,
+            ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -118,6 +118,9 @@ class _CARDetailState extends State<CARDetail> {
                       final tasks = snapshot.data![index];
 
                       return CARDetailWidget(
+                        partDescription: tasks.partDescription,
+                        activityFound: tasks.activityFound,
+                        disposition: tasks.disposition,
                         id: tasks.id,
                         originatorName: tasks.originatorName,
                         contractorSupplier: tasks.contractorSupplier,
@@ -132,6 +135,8 @@ class _CARDetailState extends State<CARDetail> {
                         approvalDate: tasks.approvalDate,
                         description: tasks.description,
                         partID: tasks.partId,
+                        responsibleDate: tasks.responsiblePartyDate,
+                        responsibleName: tasks.responsiblePartyName,
                         isJustViewingReport: widget.isJustViewingReport,
                       );
                     },
@@ -159,28 +164,42 @@ class CARDetailWidget extends StatefulWidget {
   final String? dwgNo;
   final String? correctiveActionDesc;
   final String? approvalName;
+
   final DateTime? approvalDate;
   final String? description;
+  final String? partDescription;
   final String? partID;
+  final String? responsibleName;
+  final DateTime? responsibleDate;
+  final String? activityFound;
+  final String? disposition;
 
-  const CARDetailWidget(
-      {Key? key,
-      this.id,
-      this.isJustViewingReport,
-      this.originatorName,
-      this.contractorSupplier,
-      this.caReportDate,
-      this.ncNo,
-      this.status,
-      this.purchaseOrderNo,
-      this.quantity,
-      this.dwgNo,
-      this.correctiveActionDesc,
-      this.approvalName,
-      this.approvalDate,
-      this.description,
-      this.partID})
-      : super(key: key);
+  //final String? approvalName;
+  //final String? approvalDate;
+
+  const CARDetailWidget({
+    Key? key,
+    this.id,
+    this.partDescription,
+    this.isJustViewingReport,
+    this.originatorName,
+    this.contractorSupplier,
+    this.caReportDate,
+    this.ncNo,
+    this.status,
+    this.purchaseOrderNo,
+    this.quantity,
+    this.dwgNo,
+    this.correctiveActionDesc,
+    this.approvalName,
+    this.approvalDate,
+    this.description,
+    this.partID,
+    this.responsibleName,
+    this.responsibleDate,
+    this.activityFound,
+    this.disposition,
+  }) : super(key: key);
 
   @override
   State<CARDetailWidget> createState() => _CARDetailWidgetState();
@@ -236,12 +255,39 @@ class _CARDetailWidgetState extends State<CARDetailWidget> {
             buildGradeRow("NC#", widget.ncNo!, isTablet),
             buildGradeRow("Purchase Order#", widget.purchaseOrderNo!, isTablet),
             ////////////////////////////////////////
-            buildGradeRow(
-                "Part Description", widget.description.toString(), isTablet),
+            buildGradeRow("Part Description", widget.partDescription.toString(),
+                isTablet),
             buildGradeRow("Part ID", widget.partID.toString(), isTablet),
             ///////////////////////////////////////
             buildGradeRow("Quantity", widget.quantity.toString(), isTablet),
             buildGradeRow("Dwg#", widget.dwgNo!, isTablet),
+
+            const SizedBox(height: 20),
+            Text(
+              'Found during these activites',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: isTablet ? 33 : 20.0,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text((widget.activityFound != null && widget.activityFound != '')
+                ? widget.activityFound!
+                    .toString()
+                    .substring(1, widget.activityFound!.toString().length - 1)
+                : 'N/A'),
+            const SizedBox(height: 20),
+
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Colors.grey[300]!,
+                    width: 1.0,
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 20),
             Text(
               'Corrective/Preventive Action',
@@ -277,6 +323,60 @@ class _CARDetailWidgetState extends State<CARDetailWidget> {
                 ),
               ),
             ),
+            const SizedBox(height: 20),
+            Text(
+              'Disposition',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: isTablet ? 26 : 16.0,
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            Text(
+              widget.disposition.toString(),
+              style: const TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 14.0,
+                  color: Colors.grey),
+            ),
+            const SizedBox(height: 10),
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Colors.grey[300]!,
+                    width: 1.0,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Responsible Party',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: isTablet ? 26 : 16.0,
+              ),
+            ),
+            const SizedBox(height: 10),
+            // Container(
+            //   decoration: BoxDecoration(
+            //     border: Border(
+            //       bottom: BorderSide(
+            //         color: Colors.grey[300]!,
+            //         width: 1.0,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            buildGradeRow("Name", widget.responsibleName!, isTablet),
+            buildGradeRow(
+                "Date",
+                widget.approvalDate != null
+                    ? DateFormat(US_DATE_FORMAT).format(widget.responsibleDate!)
+                    : 'N/A',
+                isTablet),
             const SizedBox(height: 20),
             Text(
               'Approval of corrective/preventive action',

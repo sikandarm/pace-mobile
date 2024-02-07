@@ -391,6 +391,9 @@ class _InventoryListState extends State<InventoryList> {
                                         majorGridLines:
                                             const MajorGridLines(width: 0),
                                         dateFormat: DateFormat.MMM(),
+                                        // interval: 11,
+                                        desiredIntervals: 12,
+
                                         intervalType:
                                             DateTimeIntervalType.months,
                                         rangePadding: ChartRangePadding.normal,
@@ -439,7 +442,7 @@ class _InventoryListState extends State<InventoryList> {
                                 series: [
                                   StackedColumnSeries<ChartData, String>(
                                       dataSource: chartData,
-                                      width: 0.2,
+                                      width: 0.5,
                                       xValueMapper: (ChartData data, _) =>
                                           data.x,
                                       yValueMapper: (ChartData data, _) =>
@@ -475,6 +478,8 @@ class _InventoryListState extends State<InventoryList> {
                                         majorGridLines:
                                             MajorGridLines(width: 0),
                                       ),
+                                      //    legend: Legend(isVisible: true),
+
                                       primaryYAxis: const NumericAxis(
                                           borderWidth: 0.0,
                                           labelFormat: '\${value}',
@@ -845,90 +850,90 @@ class _InventoryListItemWidgetState extends State<InventoryListItemWidget> {
 }
 
 /// Bar Chart Functions
-BarChartData randomData() {
-  return BarChartData(
-    barTouchData: BarTouchData(
-      enabled: false,
-    ),
-    titlesData: const FlTitlesData(
-      show: true,
-      bottomTitles: AxisTitles(
-        sideTitles: SideTitles(
-          showTitles: true,
-          getTitlesWidget: getTitles,
-          reservedSize: 38,
-        ),
-      ),
-      leftTitles: AxisTitles(
-        sideTitles: SideTitles(
-          showTitles: false,
-        ),
-      ),
-      topTitles: AxisTitles(
-        sideTitles: SideTitles(
-          showTitles: false,
-        ),
-      ),
-      rightTitles: AxisTitles(
-        sideTitles: SideTitles(
-          showTitles: false,
-        ),
-      ),
-    ),
-    borderData: FlBorderData(
-      show: false,
-    ),
-    barGroups: List.generate(7, (i) {
-      switch (i) {
-        case 0:
-          return makeGroupData(
-            0,
-            Random().nextInt(15).toDouble() + 6,
-            barColor: availableColors[Random().nextInt(availableColors.length)],
-          );
-        case 1:
-          return makeGroupData(
-            1,
-            Random().nextInt(15).toDouble() + 6,
-            barColor: availableColors[Random().nextInt(availableColors.length)],
-          );
-        case 2:
-          return makeGroupData(
-            2,
-            Random().nextInt(15).toDouble() + 6,
-            barColor: availableColors[Random().nextInt(availableColors.length)],
-          );
-        case 3:
-          return makeGroupData(
-            3,
-            Random().nextInt(15).toDouble() + 6,
-            barColor: availableColors[Random().nextInt(availableColors.length)],
-          );
-        case 4:
-          return makeGroupData(
-            4,
-            Random().nextInt(15).toDouble() + 6,
-            barColor: availableColors[Random().nextInt(availableColors.length)],
-          );
-        case 5:
-          return makeGroupData(
-            5,
-            Random().nextInt(15).toDouble() + 6,
-            barColor: availableColors[Random().nextInt(availableColors.length)],
-          );
-        case 6:
-          return makeGroupData(
-            6,
-            Random().nextInt(15).toDouble() + 6,
-            barColor: availableColors[Random().nextInt(availableColors.length)],
-          );
-        default:
-          return throw Error();
-      }
-    }),
-    gridData: const FlGridData(show: false),
-  );
-}
+// BarChartData randomData() {
+//   return BarChartData(
+//     barTouchData: BarTouchData(
+//       enabled: false,
+//     ),
+//     titlesData: const FlTitlesData(
+//       show: true,
+//       bottomTitles: AxisTitles(
+//         sideTitles: SideTitles(
+//           showTitles: true,
+//           getTitlesWidget: getTitles,
+//           reservedSize: 38,
+//         ),
+//       ),
+//       leftTitles: AxisTitles(
+//         sideTitles: SideTitles(
+//           showTitles: false,
+//         ),
+//       ),
+//       topTitles: AxisTitles(
+//         sideTitles: SideTitles(
+//           showTitles: false,
+//         ),
+//       ),
+//       rightTitles: AxisTitles(
+//         sideTitles: SideTitles(
+//           showTitles: false,
+//         ),
+//       ),
+//     ),
+//     borderData: FlBorderData(
+//       show: false,
+//     ),
+//     barGroups: List.generate(7, (i) {
+//       switch (i) {
+//         case 0:
+//           return makeGroupData(
+//             0,
+//             Random().nextInt(15).toDouble() + 6,
+//             barColor: availableColors[Random().nextInt(availableColors.length)],
+//           );
+//         case 1:
+//           return makeGroupData(
+//             1,
+//             Random().nextInt(15).toDouble() + 6,
+//             barColor: availableColors[Random().nextInt(availableColors.length)],
+//           );
+//         case 2:
+//           return makeGroupData(
+//             2,
+//             Random().nextInt(15).toDouble() + 6,
+//             barColor: availableColors[Random().nextInt(availableColors.length)],
+//           );
+//         case 3:
+//           return makeGroupData(
+//             3,
+//             Random().nextInt(15).toDouble() + 6,
+//             barColor: availableColors[Random().nextInt(availableColors.length)],
+//           );
+//         case 4:
+//           return makeGroupData(
+//             4,
+//             Random().nextInt(15).toDouble() + 6,
+//             barColor: availableColors[Random().nextInt(availableColors.length)],
+//           );
+//         case 5:
+//           return makeGroupData(
+//             5,
+//             Random().nextInt(15).toDouble() + 6,
+//             barColor: availableColors[Random().nextInt(availableColors.length)],
+//           );
+//         case 6:
+//           return makeGroupData(
+//             6,
+//             Random().nextInt(15).toDouble() + 6,
+//             barColor: availableColors[Random().nextInt(availableColors.length)],
+//           );
+//         default:
+//           return throw Error();
+//       }
+//     }),
+//     gridData: const FlGridData(show: false),
+//   );
+// }
 
 BarChartGroupData makeGroupData(
   int x,
@@ -1013,6 +1018,7 @@ Widget bottomTitleWidgets(double value, TitleMeta meta) {
     fontWeight: FontWeight.bold,
     fontSize: 16,
   );
+
   Widget text;
   switch (value.toInt()) {
     case 1:

@@ -64,10 +64,10 @@ class _TaskLogsScreenState extends State<TaskLogsScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? Colors.white
-              : Colors.black,
-        ),
+            // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            //     ? Colors.white
+            //     : Colors.black,
+            ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -160,7 +160,7 @@ class _TaskLogsScreenState extends State<TaskLogsScreen> {
                 ],
               ),
             )
-          : taskLogsList.isEmpty
+          : taskLogsListRemovedNullComment.isEmpty
               ? Center(
                   child: Text(
                   'No logs found!',
@@ -217,9 +217,7 @@ class _TaskLogsScreenState extends State<TaskLogsScreen> {
                                           child: Text(
                                             formatDateTime(
                                               DateTime.parse(
-                                                taskLogsListRemovedNullComment[
-                                                        i]
-                                                    .breakStart!,
+                                                taskLogsList[i].breakStart!,
                                               ),
                                             ),
                                             softWrap: true,
@@ -237,7 +235,9 @@ class _TaskLogsScreenState extends State<TaskLogsScreen> {
                                                   null
                                               ? 'waiting for task end!'
                                               : formatDateTime(DateTime.parse(
-                                                  taskLogsList[i].breakEnd!)),
+                                                  taskLogsListRemovedNullComment[
+                                                          i]
+                                                      .breakEnd!)),
                                           style: TextStyle(
                                             fontSize: 12,
                                           ),

@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -89,10 +90,10 @@ class _SharedListState extends State<SharedCARList> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? Colors.white
-              : Colors.black,
-        ),
+            // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            //     ? Colors.white
+            //     : Colors.black,
+            ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -138,10 +139,10 @@ class _SharedListState extends State<SharedCARList> {
                         "assets/images/ic_bell.png",
                         width: isTablet ? 45 : 32,
                         height: isTablet ? 45 : 32,
-                        color: EasyDynamicTheme.of(context).themeMode ==
-                                ThemeMode.dark
-                            ? Colors.white
-                            : Colors.black,
+                        color: AdaptiveTheme.of(context).mode ==
+                                AdaptiveThemeMode.light
+                            ? Colors.black
+                            : Colors.white,
                       ),
                     ),
                     !hasNewNotifiaction
@@ -301,7 +302,7 @@ class CARListItemWidget extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+          color: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light
               ? Colors.white.withOpacity(0.92)
               : Colors.white,
           boxShadow: [

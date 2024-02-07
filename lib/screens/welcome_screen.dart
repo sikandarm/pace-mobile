@@ -57,14 +57,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 Center(
                   child: Text("Welcome to SFM",
                       style: TextStyle(
-                        color: Color(0xff2E2E2E),
+                        //   color: Color(0xff2E2E2E),
                         fontSize: isTablet ? 45 : 30,
                       )),
                 ),
                 Center(
                   child: Text("Powered by A3 Insurance",
                       style: TextStyle(
-                        color: Color(0xff6E80B0),
+                        // color: Color(0xff6E80B0),
                         fontSize: isTablet ? 22 : 15,
                       )),
                 ),
@@ -75,7 +75,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     child: Text("Your account has been created successfully",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Color(0xff2E2E2E),
+                          //     color: Color(0xff2E2E2E),
                           fontSize: isTablet ? 27 : 17,
                         )),
                   ),

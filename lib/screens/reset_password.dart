@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -72,10 +73,10 @@ class _ResetPassScreenState extends State<ResetPassword> {
                       'assets/images/ic_back.png',
                       width: 20,
                       height: 20,
-                      color: EasyDynamicTheme.of(context).themeMode ==
-                              ThemeMode.dark
-                          ? Colors.white
-                          : Colors.black,
+                      color: AdaptiveTheme.of(context).mode ==
+                              AdaptiveThemeMode.light
+                          ? Colors.black
+                          : Colors.white,
                     ),
                   ),
                 ),
@@ -91,10 +92,11 @@ class _ResetPassScreenState extends State<ResetPassword> {
                     child: Text("Reset Password",
                         style: TextStyle(
                           //  color: Colors.black,
-                          color: EasyDynamicTheme.of(context).themeMode ==
-                                  ThemeMode.dark
-                              ? Colors.white
-                              : Colors.black,
+                          // color: EasyDynamicTheme.of(context).themeMode ==
+                          //         ThemeMode.dark
+                          //     ? Colors.white
+                          //     : Colors.black,
+
                           fontSize: isTablet ? 45 : 28,
                         )),
                   ),

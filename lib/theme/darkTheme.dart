@@ -9,15 +9,15 @@ class DarkTheme {
       //     : Colors.black,
 
       inputDecorationTheme: const InputDecorationTheme(
-        hintStyle: TextStyle(color: Colors.blueGrey), // Adjust color as needed
+        hintStyle: TextStyle(
+          color: Colors.blueGrey,
+        ),
+
+        // Adjust color as needed
       ),
       brightness: Brightness.dark,
 
-      iconTheme: IconThemeData(
-        color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-            ? Colors.white
-            : Colors.black,
-      ),
+      iconTheme: IconThemeData(color: Colors.white),
       //   primaryColor: Colors.black.withOpacity(0.5),
 //      accentColor: Color(0xFF2196F3),
       //   scaffoldBackgroundColor: Colors.black.withOpacity(0.5),
@@ -30,7 +30,7 @@ class DarkTheme {
       appBarTheme: const AppBarTheme(
         //   color: Color.fromARGB(43, 30, 30, 30),
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: Colors.white),
         foregroundColor: Colors.white,
         color: Colors.white,
 

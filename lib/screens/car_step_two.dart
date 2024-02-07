@@ -56,10 +56,10 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? Colors.white
-              : Colors.black,
-        ),
+            // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            //     ? Colors.white
+            //     : Colors.black,
+            ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -208,7 +208,7 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                     child: TextField(
                       style: TextStyle(
                         fontSize: isTablet ? 24 : 15,
-                        color: Colors.black.withOpacity(0.65),
+                        //   color: Colors.black.withOpacity(0.65),
                         fontWeight: FontWeight.w500,
                       ),
                       textAlignVertical: TextAlignVertical.center,
@@ -219,6 +219,7 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                         false,
                         isRedColorBorder: nameBorderShowRed,
                         isTablet: isTablet,
+                        context: context,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(
@@ -237,7 +238,7 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                       child: TextField(
                         style: TextStyle(
                           fontSize: isTablet ? 24 : 15,
-                          color: Colors.black.withOpacity(0.65),
+                          //   color: Colors.black.withOpacity(0.65),
                           fontWeight: FontWeight.w500,
                         ),
                         textAlignVertical: TextAlignVertical.center,
@@ -247,6 +248,7 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                           "Date",
                           false,
                           isTablet: isTablet,
+                          context: context,
                         ),
                         inputFormatters: [
                           LengthLimitingTextInputFormatter(100),
@@ -315,6 +317,8 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                                         Text('Select a disposition option!')));
                             return;
                           }
+
+                          widget.addCarModel.disposition = _rbDispositionTitle;
 
                           widget.addCarModel.responsiblePartyName = name.text;
                           widget.addCarModel.responsiblePartyDate =

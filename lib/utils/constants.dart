@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:adaptive_theme/adaptive_theme.dart';
+import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,7 +10,10 @@ bool hasNewNotifiaction = false;
 // ignore: constant_identifier_names/
 const String BASE_URL = "http://206.81.5.26:3500/api"; // live ip
 
-////////////////////////////////////////////////////////////////////  this is dynamic part
+// const String BASE_URL = "http://192.168.1.4:3500/api"; // local ip
+
+/////////////////////////////////////////////////////////////////
+//////  this is dynamic part
 //  String ipPart = '';
 //String BASE_URL = "http://$ipPart:3500/api"; // local ip
 ////////////////////////////////////////////////////////////////////  this is dynamic part end here
@@ -118,6 +123,7 @@ InputDecoration textFieldDecoration(
   bool enabled = true,
   bool isRedColorBorder = false,
   bool isTablet = false,
+  required BuildContext context,
 }) {
   var outlineInputBorder = OutlineInputBorder(
     //  borderSide: const BorderSide(color: Colors.transparent),
@@ -136,7 +142,15 @@ InputDecoration textFieldDecoration(
     hintText: title,
     hintStyle: TextStyle(
       fontSize: isTablet ? 24 : 15,
-      color: Colors.black.withOpacity(0.65),
+      // color: (EasyDynamicTheme.of(context).themeMode == ThemeMode.light ||
+      //         EasyDynamicTheme.of(context).themeMode == ThemeMode.system &&
+      //             ThemeMode.system == ThemeMode.light)
+      //     ? Colors.black.withOpacity(0.65)
+      //     : Colors.white.withOpacity(0.65),
+      color: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light
+          ? Colors.black.withOpacity(0.60)
+          : Colors.white.withOpacity(0.55),
+
       fontWeight: FontWeight.w500,
     ),
     suffixIcon: !ifPassword

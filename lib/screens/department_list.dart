@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -149,9 +150,38 @@ class _DeptListState extends State<DeptList> {
           total += double.parse(task.copq);
         }
       }
+
       setState(() {
         _selectedReason = token;
         _totalCOPQ = total;
+      });
+    });
+
+    print('total COPQ final: ' + _totalCOPQ.toString());
+  }
+
+  Future updateMonthlyHours() async {
+    print("update monthly hours called");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token =
+        prefs.getString(BL_REJECTED_REASON) ?? "Select Rejected Reason";
+    _futureTask.then((tasks) {
+      double total = 0.00;
+      for (var task in tasks) {
+        if (token == "Select Rejected Reason") {
+          total += (task.estimatedHour);
+        } else if (task.rejectionReason
+            .toString()
+            .toLowerCase()
+            .contains(token.toString().toLowerCase())) {
+          print("calculate hours");
+          total += (task.estimatedHour);
+        }
+      }
+
+      setState(() {
+        _selectedReason = token;
+        _totalEstimatedHours = total.toInt();
       });
     });
   }
@@ -201,10 +231,10 @@ class _DeptListState extends State<DeptList> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? Colors.white
-              : Colors.black,
-        ),
+            // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            //     ? Colors.white
+            //     : Colors.black,
+            ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -252,10 +282,10 @@ class _DeptListState extends State<DeptList> {
                           "assets/images/ic_bell.png",
                           width: isTablet ? 45 : 32,
                           height: isTablet ? 45 : 32,
-                          color: EasyDynamicTheme.of(context).themeMode ==
-                                  ThemeMode.dark
-                              ? Colors.white
-                              : Colors.black,
+                          color: AdaptiveTheme.of(context).mode ==
+                                  AdaptiveThemeMode.light
+                              ? Colors.black
+                              : Colors.white,
                         ),
                       ),
                       hasNewNotifiaction
@@ -312,6 +342,7 @@ class _DeptListState extends State<DeptList> {
             onDropdownChanged: _onDropdownChanged,
             selectedValue: _selectedValue,
             updateCOPQ: updateCOPQ,
+            updatMonthlyHours: updateMonthlyHours,
           ),
           blRejectedTasks
               ? Expanded(
@@ -406,14 +437,16 @@ class _DeptListState extends State<DeptList> {
 class TaskListHeader extends StatefulWidget {
   final Function(String?) onDropdownChanged;
   final Function() updateCOPQ;
+  final Function()? updatMonthlyHours;
   final String selectedValue; // Add the selectedValue property here
 
-  const TaskListHeader(
-      {Key? key,
-      required this.onDropdownChanged,
-      required this.selectedValue,
-      required this.updateCOPQ})
-      : super(key: key);
+  const TaskListHeader({
+    Key? key,
+    required this.onDropdownChanged,
+    required this.selectedValue,
+    required this.updateCOPQ,
+    required this.updatMonthlyHours,
+  }) : super(key: key);
 
   @override
   State<TaskListHeader> createState() => _TaskListHeaderState();
@@ -491,6 +524,7 @@ class _TaskListHeaderState extends State<TaskListHeader> {
                           ).then((value) {
                             print("closed");
                             widget.updateCOPQ();
+                            widget.updatMonthlyHours!();
                           });
                         },
                         style: ElevatedButton.styleFrom(
@@ -519,7 +553,7 @@ class _TaskListHeaderState extends State<TaskListHeader> {
                                   (snapshot.data == 'Select Rejected Reason' ||
                                           snapshot.data == null)
                                       ? 'Rejected Reason'
-                                      : 'Rejected Reason',
+                                      : snapshot.data.toString(),
 
                                   style: TextStyle(
                                     fontSize: isTablet ? 24 : 16.0,

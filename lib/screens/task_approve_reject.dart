@@ -424,6 +424,14 @@ class _TaskListHeaderState extends State<TaskListHeader> {
                           selectedRejectionValue);
                     } else {
                       print("reject");
+                      if (selectedRejectionValue == null) {
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('Select a reason for rejection'),
+                        ));
+                        return;
+                      }
+
                       callUpdateTask(
                           context,
                           widget.taskId!,

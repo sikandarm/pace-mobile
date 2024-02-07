@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -58,10 +59,10 @@ class _SharedListState extends State<CARList> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? Colors.white
-              : Colors.black,
-        ),
+            // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            //     ? Colors.white
+            //     : Colors.black,
+            ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -225,7 +226,7 @@ class _CARListItemWidgetState extends State<CARListItemWidget> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
           //  color: Colors.white,
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+          color: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light
               ? Colors.white.withOpacity(0.92)
               : Colors.white,
           boxShadow: [

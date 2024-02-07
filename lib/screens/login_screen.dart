@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -252,10 +253,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           'assets/images/ic_back.png',
                           width: 20,
                           height: 20,
-                          color: EasyDynamicTheme.of(context).themeMode ==
-                                  ThemeMode.dark
-                              ? Colors.white
-                              : Colors.black,
+                          color: AdaptiveTheme.of(context).mode ==
+                                  AdaptiveThemeMode.light
+                              ? Colors.black
+                              : Colors.white,
                         ),
                       ),
                     ),
@@ -351,10 +352,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Text("Login",
                           style: TextStyle(
                             //    color: Colors.black,
-                            color: EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.dark
-                                ? Colors.white
-                                : Colors.black,
+                            // color: EasyDynamicTheme.of(context).themeMode ==
+                            //         ThemeMode.dark
+                            //     ? Colors.white
+                            //     : Colors.black,
                             fontSize: isTablet ? 45 : 30,
                           )),
                     ),
@@ -372,13 +373,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: TextField(
                         style: TextStyle(
                           fontSize: isTablet ? 24 : 15,
-                          color: Colors.black.withOpacity(0.65),
+                          // color: Colors.black.withOpacity(0.65),
                           fontWeight: FontWeight.w500,
                         ),
                         controller: emailText,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: textFieldDecoration("Email", false,
-                            isTablet: isTablet),
+                        decoration: textFieldDecoration(
+                          "Email",
+                          false,
+                          isTablet: isTablet,
+                          context: context,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -398,7 +403,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: TextField(
                             style: TextStyle(
                               fontSize: isTablet ? 24 : 15,
-                              color: Colors.black.withOpacity(0.65),
+                              //    color: Colors.black.withOpacity(0.65),
                               fontWeight: FontWeight.w500,
                             ),
                             controller: passwordText,
@@ -410,6 +415,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               "Password",
                               true,
                               isTablet: isTablet,
+                              context: context,
                             ),
                           ),
                         ),
@@ -443,10 +449,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               textAlign: TextAlign.end,
                               style: TextStyle(
                                 //  color: Colors.black,
-                                color: EasyDynamicTheme.of(context).themeMode ==
-                                        ThemeMode.dark
-                                    ? Colors.white
-                                    : Colors.black,
+                                // color: EasyDynamicTheme.of(context).themeMode ==
+                                //         ThemeMode.dark
+                                //     ? Colors.white
+                                //     : Colors.black,
 
                                 fontSize: isTablet ? 20 : 10,
                               )),

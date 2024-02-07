@@ -13,6 +13,7 @@ List<int> pickedIds = [];
 
 class UserList extends StatefulWidget {
   final int carId;
+
   const UserList({Key? key, required this.carId}) : super(key: key);
 
   @override
@@ -39,12 +40,18 @@ callShareCAR(BuildContext context, int reportId, List<int> userId) async {
           .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
 
       // ignore: use_build_context_synchronously
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const DeptList(),
-        ),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => const DeptList(),
+      //   ),
+      // );
+
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pop(context);
+
+      
     } else {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context)
@@ -336,7 +343,11 @@ class _UserListItemWidgetState extends State<UserListItemWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${widget.firstName!} ${widget.lastName!}",
+                    widget.firstName?.trim() == widget.lastName?.trim()
+                        ? '${widget.firstName}'
+                        : widget.firstName!.contains(widget.lastName!)
+                            ? "${widget.firstName!}"
+                            : "${widget.firstName!} ${widget.lastName!}",
                     style: TextStyle(
                       color: Color(0xFF1E2022),
                       fontWeight: FontWeight.bold,

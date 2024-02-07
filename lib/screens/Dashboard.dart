@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,9 @@ bool blShowSharedCAR = false;
 bool blShowCAR = false;
 bool b1ShowPurchaseOrder = false;
 bool blShowInventory = false;
+//////////////////////////////////
+///
+bool b1_bill_of_lading = false;
 
 ValueNotifier<bool> isDarkMode = ValueNotifier(false);
 
@@ -137,6 +141,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       b1ViewContacts = localBool;
     });
 
+    checkPermissionAndUpdateBool("bill_of_lading", (localBool) {
+      b1_bill_of_lading = localBool;
+    });
+
     setState(() {});
   }
 
@@ -190,9 +198,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Colors.white.withOpacity(0.92),
-      backgroundColor: EasyDynamicTheme.of(context).themeMode != ThemeMode.dark
-          ? Colors.white.withOpacity(0.92)
-          : const Color.fromARGB(255, 7, 21, 32),
+      //     backgroundColor: EasyDynamicTheme.of(context).themeMode != ThemeMode.dark
+      //       ? Colors.white.withOpacity(0.92)
+      //     : const Color.fromARGB(255, 7, 21, 32),
       // floatingActionButton: FloatingActionButton(onPressed: () async {
       //   final items = await fetchPurchaseOrderItemsDataList();
       //   print(items.length);
@@ -270,9 +278,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       return ListView.builder(
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
+                          snapshot.data!.sort(
+                            (a, b) => b.startDate.compareTo(a.startDate),
+                          );
+
                           final task = snapshot.data![index];
 
                           return JobList(
+                            jobName: task.name,
                             jobId: task.id,
                             totalTasks: task.totalTasks,
                             completedTasks: task.completedTasks,
@@ -301,9 +314,9 @@ PreferredSizeWidget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey,
     backgroundColor: Colors.transparent,
 
     leading: IconButton(
-      color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-          ? Colors.white
-          : Colors.black,
+      //  color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+      //     ? Colors.white
+      //    : Colors.black,
       icon: const Icon(Icons.menu),
       onPressed: () {
         scaffoldKey.currentState?.openDrawer(); // Open the side drawer
@@ -318,9 +331,9 @@ PreferredSizeWidget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey,
           return Text(
             "Hi, ${title ?? ''}",
             style: TextStyle(
-              color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                  ? Colors.white
-                  : Color(0xff1E2022),
+              //   color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              //     ? Colors.white
+              //   : Color(0xff1E2022),
               fontWeight: FontWeight.bold,
               fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,
             ),
@@ -365,10 +378,15 @@ PreferredSizeWidget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey,
                       "assets/images/ic_bell.png",
                       width: isTablet ? 45 : 32,
                       height: isTablet ? 45 : 32,
-                      color: EasyDynamicTheme.of(context).themeMode ==
-                              ThemeMode.dark
-                          ? Colors.white
-                          : Color(0xff1E2022),
+                      //   color: Colors.white,
+                      //   color: EasyDynamicTheme.of(context).themeMode ==
+                      //         ThemeMode.dark
+                      //   ? Colors.white
+                      // : Color(0xff1E2022),
+                      color: AdaptiveTheme.of(context).mode ==
+                              AdaptiveThemeMode.light
+                          ? Colors.black
+                          : Colors.white,
                     ),
                   ),
                   !hasNewNotifiaction
@@ -652,7 +670,8 @@ Widget _buildSideDrawer(BuildContext context, bool isTablet) {
                     SizedBox(height: isTablet ? 11 : 0),
                     ////////////////////////////////////////
                     Visibility(
-                      //  visible: blShowSharedCAR,
+                      visible: b1_bill_of_lading,
+                      //  visible: true,
                       child: ListTile(
                         title: Text(
                           'Bill of lading',
@@ -738,39 +757,60 @@ Widget _buildSideDrawer(BuildContext context, bool isTablet) {
                           trailing: Switch.adaptive(
                             value: isDarkMode.value,
                             onChanged: (value) async {
-                              //   isDarkMode.value = !isDarkMode.value;
+                              //   AdaptiveTheme.of(context)
+                              //     .toggleThemeMode(useSystem: false);
+                              // AdaptiveTheme.of(context).setDark();
+                              // AdaptiveTheme.of(context).toggleThemeMode(
+                              //   useSystem: false,
+                              // );
+
+                              isDarkMode.value = !isDarkMode.value;
+
+                              // if (AdaptiveTheme.of(context).theme.th==ThemeMode.dark) {
+
+                              // }
+
+                              final savedThemeMode =
+                                  await AdaptiveTheme.getThemeMode();
+                              if (savedThemeMode == AdaptiveThemeMode.dark) {
+                                AdaptiveTheme.of(context).setLight();
+                                isDarkMode.value = false;
+                              } else {
+                                AdaptiveTheme.of(context).setDark();
+                                isDarkMode.value = true;
+                              }
 
                               //    EasyDynamicTheme.of(context).themeMode =
                               //      ThemeMode.light;
 
-                              EasyDynamicTheme.of(context).changeTheme(
-                                  //    dynamic: true,
-                                  //   dark: true,
-                                  );
+                              // EasyDynamicTheme.of(context).changeTheme(
+                              //     //    dynamic: true,
+                              //     //   dark: true,
+                              //     );
 
-                              print(EasyDynamicTheme.of(context)
-                                  .themeMode
-                                  .toString());
+                              // print(EasyDynamicTheme.of(context)
+                              //     .themeMode
+                              //     .toString());
 
-                              if (EasyDynamicTheme.of(context).themeMode ==
-                                      ThemeMode.light ||
-                                  EasyDynamicTheme.of(context).themeMode ==
-                                      ThemeMode.system) {
-                                isDarkMode.value = false;
-                                //
-                                if (EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.light) {
-                                  showToast('Theme changed to light mode');
-                                }
+                              // if (EasyDynamicTheme.of(context).themeMode ==
+                              //         ThemeMode.light ||
+                              //     EasyDynamicTheme.of(context).themeMode ==
+                              //         ThemeMode.system) {
+                              //   isDarkMode.value = false;
+                              //   //
+                              //   if (EasyDynamicTheme.of(context).themeMode ==
+                              //       ThemeMode.light) {
+                              //     showToast('Theme changed to light mode');
+                              //   }
 
-                                if (EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.system) {
-                                  showToast('Theme changed to system mode');
-                                }
-                              } else {
-                                isDarkMode.value = true;
-                                showToast('Theme Changed To Dark');
-                              }
+                              //   if (EasyDynamicTheme.of(context).themeMode ==
+                              //       ThemeMode.system) {
+                              //     showToast('Theme changed to system mode');
+                              //   }
+                              // } else {
+                              //   isDarkMode.value = true;
+                              //   showToast('Theme Changed To Dark');
+                              // }
                             },
                           ),
                         );

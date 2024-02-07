@@ -12,6 +12,7 @@ import 'purchase_order.dart';
 
 class PurchaseOrderDetailScreen extends StatefulWidget {
   const PurchaseOrderDetailScreen({super.key, required this.purchaseOrder});
+
   static const routeName = '/purchase-order-detail-screen';
   final PurchaseOrders purchaseOrder;
 
@@ -22,6 +23,7 @@ class PurchaseOrderDetailScreen extends StatefulWidget {
 
 class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
   List<PurchaseOrderItems> purchaseOrderItemsList = [];
+
   @override
   void initState() {
     callApiMethod();
@@ -29,6 +31,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
   }
 
   bool isApiLoading = false;
+
   Future<void> callApiMethod() async {
     isApiLoading = true;
     purchaseOrderItemsList = await fetchPurchaseOrderItemsDetailListData(
@@ -41,6 +44,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
   ScrollController? controller = ScrollController();
 
   bool isTablet = false;
+
   void checkTablet() {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -62,9 +66,9 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-          ? Color.fromARGB(255, 7, 21, 32)
-          : Colors.white,
+      //  backgroundColor: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+      //      ? Color.fromARGB(255, 7, 21, 32)
+      //      : Colors.white,
       // floatingActionButton: FloatingActionButton(onPressed: () async {
       //   final result = await fetchPurchaseOrderItemsDetailListData(
       //       id: widget.purchaseOrder.id!);
@@ -151,6 +155,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                           widget.purchaseOrder.phone!.substring(6),
                       isTablet: isTablet,
                     ),
+
                     const Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: 3, horizontal: 20),
@@ -158,7 +163,10 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ),
                     ListTileItem(
                       label: 'Fax',
-                      value: widget.purchaseOrder.fax.toString(),
+                      value: widget.purchaseOrder.fax == '' ||
+                              widget.purchaseOrder.fax == null
+                          ? 'N/A'
+                          : widget.purchaseOrder.fax.toString(),
                       isTablet: isTablet,
                     ),
                     const Padding(
@@ -364,10 +372,13 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     ),
                     ListTileItem(
                       label: 'First Name',
-                      value:
-                          widget.purchaseOrder.firstName!.firstName.toString(),
+                      value: widget.purchaseOrder.firstName != null
+                          ? widget.purchaseOrder.firstName!.firstName.toString()
+                          : 'N/A',
                       isTablet: isTablet,
                     ),
+
+                    //
                     const Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: 3, horizontal: 20),
@@ -633,16 +644,16 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
 AppBar _buildAppBar(context, bool isTablet) {
   return AppBar(
     //   backgroundColor: Colors.white,
-    backgroundColor: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-        ? Color.fromARGB(255, 7, 21, 32)
-        : Colors.white,
+    // backgroundColor: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+    //   ? Color.fromARGB(255, 7, 21, 32)
+    //  : Colors.white,
 
     leading: IconButton(
       icon: Icon(
         Icons.arrow_back,
-        color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-            ? Colors.white
-            : Colors.black,
+        // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+        //     ? Colors.white
+        //     : Colors.black,
       ),
       onPressed: () {
         Navigator.pop(context);
@@ -663,9 +674,9 @@ AppBar _buildAppBar(context, bool isTablet) {
             "Purchase Order Detail",
             style: TextStyle(
               // color: Color(0xff1E2022),
-              color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                  ? Colors.white
-                  : Color(0xff1E2022),
+              // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              //     ? Colors.white
+              //     : Color(0xff1E2022),
 
               fontWeight: FontWeight.bold,
               fontSize: isTablet ? appBarTiltleSizeTablet : appBarTiltleSize,

@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:path/path.dart' as path;
 import 'dart:convert';
@@ -48,6 +49,10 @@ bool b1DownloadDiagram = false;
 
 bool isStartButtonVisible = true;
 int startButtonTaskId = -1;
+
+///////////////////////////////////
+bool myRejectedTask = false;
+bool myApprovedTask = false;
 
 class TaskDetail extends StatefulWidget {
   final int taskId;
@@ -167,6 +172,14 @@ class _TaskDetailState extends State<TaskDetail> {
     });
     checkPermissionAndUpdateBool("review_tasks", (localBool) {
       _blApprovedTask = localBool;
+    });
+
+    checkPermissionAndUpdateBool("rejected_task", (localBool) {
+      myRejectedTask = localBool;
+    });
+
+    checkPermissionAndUpdateBool("approved_task", (localBool) {
+      myApprovedTask = localBool;
     });
   }
 
@@ -419,10 +432,10 @@ class _TaskDetailState extends State<TaskDetail> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           iconTheme: IconThemeData(
-            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                ? Colors.white
-                : Colors.black,
-          ),
+              // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+              //     ? Colors.white
+              //     : Colors.black,
+              ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -484,10 +497,10 @@ class _TaskDetailState extends State<TaskDetail> {
                             "assets/images/ic_bell.png",
                             width: isTablet ? 45 : 32,
                             height: isTablet ? 45 : 32,
-                            color: EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.dark
-                                ? Colors.white
-                                : Colors.black,
+                            color: AdaptiveTheme.of(context).mode ==
+                                    AdaptiveThemeMode.light
+                                ? Colors.black
+                                : Colors.white,
                           ),
                         ),
                         !hasNewNotifiaction
@@ -1803,7 +1816,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                         ),
                       )
                     : setButtonText(widget.status!, widget.userId!) !=
-                            'Complete'
+                                'Complete' &&
+                            setButtonText(widget.status!, widget.userId!) ==
+                                'Pick Task'
                         ? Center(
                             child: SizedBox(
                               width: MediaQuery.of(context).size.width * 0.8,
@@ -2038,9 +2053,291 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                                   ),
                             ),
                           )
-                        : const SizedBox(
-                            child: Text(''),
-                          ),
+                        : (setButtonText(widget.status!, widget.userId!) !=
+                                        'Complete' &&
+                                    setButtonText(
+                                            widget.status!, widget.userId!) !=
+                                        'Pick Task') &&
+                                (setButtonText(
+                                            widget.status!, widget.userId!) ==
+                                        'Approve' ||
+                                    setButtonText(
+                                            widget.status!, widget.userId!) ==
+                                        'Reject')
+                            ? Visibility(
+                                visible: (myApprovedTask == true ||
+                                    myRejectedTask == true),
+                                child: Center(
+                                  child: SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    height: 50.0,
+                                    child: Container(
+                                        decoration: BoxDecoration(
+                                            // color: Colors.blue,
+                                            boxShadow: [
+                                              (EasyDynamicTheme.of(context)
+                                                          .themeMode !=
+                                                      ThemeMode.dark)
+                                                  ? BoxShadow(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.5),
+                                                      spreadRadius: 2,
+                                                      blurRadius: 5,
+                                                      offset: const Offset(0,
+                                                          3), // changes position of shadow
+                                                    )
+                                                  : const BoxShadow(),
+                                            ]),
+                                        child: _blApprovedTask &&
+                                                _blSelfAssignATask
+                                            ? ElevatedButton(
+                                                onPressed: () async {
+                                                  final response1 =
+                                                      await playAndPauseTaskApi(
+                                                    taskId:
+                                                        widget.id.toString(),
+                                                    break_start_as_DateTime:
+                                                        DateTime.now()
+                                                            .toString(),
+                                                    break_end_as_DateTime: null,
+                                                    comment: 'null',
+                                                    //  comment: '111'
+                                                  );
+
+                                                  final response2 =
+                                                      await playAndPauseTaskApi(
+                                                    taskId:
+                                                        widget.id.toString(),
+                                                    break_start_as_DateTime:
+                                                        null,
+                                                    break_end_as_DateTime:
+                                                        DateTime.now()
+                                                            .toString(),
+                                                    comment: 'null',
+                                                    //  comment: '111'
+                                                  );
+
+                                                  print(
+                                                      'purple 1 here is the button');
+                                                  // final startButtonBox =
+                                                  //     await Hive.openBox(
+                                                  //         'startButtonBox');
+                                                  //
+                                                  // await startButtonBox.put(
+                                                  //     'isStartButtonVisible', true);
+                                                  //
+                                                  // await startButtonBox.put(
+                                                  //     'taskId', widget.id);
+
+                                                  buttonAction(
+                                                      context, widget.id);
+                                                },
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all<
+                                                          Color>(setButtonText(
+                                                                  widget
+                                                                      .status!,
+                                                                  widget
+                                                                      .userId!) ==
+                                                              'Reject'
+                                                          ? Colors.red
+                                                          : setButtonText(
+                                                                      widget
+                                                                          .status!,
+                                                                      widget
+                                                                          .userId!) ==
+                                                                  'Approve'
+                                                              ? Colors.green
+                                                              : Colors.blue),
+                                                  shape:
+                                                      MaterialStateProperty.all<
+                                                          RoundedRectangleBorder>(
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                    ),
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  setButtonText(widget.status!,
+                                                      widget.userId!),
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              )
+                                            : (_blSelfAssignATask &&
+                                                    (widget.status ==
+                                                            "in_process" ||
+                                                        widget.status ==
+                                                            "pending"))
+                                                ? ElevatedButton(
+                                                    onPressed: () {
+                                                      print('purple 2');
+                                                      buttonAction(
+                                                          context, widget.id);
+                                                    },
+                                                    style: ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStateProperty
+                                                              .all<Color>(
+                                                                  Colors.blue),
+                                                      shape: MaterialStateProperty
+                                                          .all<
+                                                              RoundedRectangleBorder>(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.0),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    child: Text(
+                                                      setSelfApprovedText(
+                                                          widget.status!,
+                                                          widget.userId!),
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : _blApprovedTask &&
+                                                        widget.status ==
+                                                            "to_inspect"
+                                                    ? ElevatedButton(
+                                                        onPressed: () {
+                                                          print('purple 3');
+                                                          buttonAction(context,
+                                                              widget.id);
+                                                        },
+                                                        style: ButtonStyle(
+                                                          backgroundColor:
+                                                              MaterialStateProperty
+                                                                  .all<Color>(
+                                                                      Colors
+                                                                          .blue),
+                                                          shape: MaterialStateProperty
+                                                              .all<
+                                                                  RoundedRectangleBorder>(
+                                                            RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10.0),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        child: Text(
+                                                          setInspectionText(
+                                                              widget.status!,
+                                                              widget.userId!),
+                                                          style:
+                                                              const TextStyle(
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : _blApprovedTask &&
+                                                            widget.status ==
+                                                                "rejected"
+                                                        ? ElevatedButton(
+                                                            onPressed: () {
+                                                              print('purple 4');
+                                                              buttonAction(
+                                                                  context,
+                                                                  widget.id);
+                                                            },
+                                                            style: ButtonStyle(
+                                                              backgroundColor: MaterialStateProperty.all<
+                                                                  Color>(widget
+                                                                          .status!
+                                                                          .toLowerCase() ==
+                                                                      'rejected'
+                                                                  ? Colors.blue
+                                                                  : Colors.red),
+                                                              shape: MaterialStateProperty
+                                                                  .all<
+                                                                      RoundedRectangleBorder>(
+                                                                RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10.0),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            child: Text(
+                                                              setInspectionText(
+                                                                  widget
+                                                                      .status!,
+                                                                  widget
+                                                                      .userId!),
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                          )
+
+                                                        /// this button is now diaplay all the time if not complete button
+                                                        : ElevatedButton(
+                                                            onPressed: () {
+                                                              print('purple 5');
+                                                              buttonAction(
+                                                                  context,
+                                                                  widget.id);
+                                                            },
+                                                            style: ButtonStyle(
+                                                              backgroundColor:
+                                                                  MaterialStateProperty
+                                                                      .all<
+                                                                          Color>(
+                                                                widget.status!
+                                                                            .toLowerCase() ==
+                                                                        'rejected'
+                                                                    ? Colors
+                                                                        .blue
+                                                                    : Colors
+                                                                        .green,
+                                                              ),
+                                                              shape: MaterialStateProperty
+                                                                  .all<
+                                                                      RoundedRectangleBorder>(
+                                                                RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10.0),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            child: Text(
+                                                              setButtonText(
+                                                                  widget
+                                                                      .status!,
+                                                                  widget
+                                                                      .userId!),
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                          )
+                                        //  SizedBox.shrink(
+                                        //     child: Text('111')),
+                                        ),
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(
+                                child: Text(''),
+                              ),
           ],
         ),
       ),
@@ -2129,16 +2426,18 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
         return;
       }
 
-      if (taskPayOrPauseStatus!) {
-        final response1 = await playAndPauseTaskApi(
-          taskId: widget.id.toString(),
-          break_start_as_DateTime: null,
-          break_end_as_DateTime: DateTime.now().toString(),
-          comment: commentController.text.trim(),
-          //  comment: '111'
-        );
-      }
+      // if (taskPayOrPauseStatus!) {
+      //   final response1 = await playAndPauseTaskApi(
+      //     taskId: widget.id.toString(),
+      //     break_start_as_DateTime: null,
+      //     break_end_as_DateTime: DateTime.now().toString(),
+      //     comment: commentController.text.trim(),
+      //     //  comment: '111'
+      //   );
+      // }
+
       // ignore: use_build_context_synchronously
+
       callUpdateTask(
           context, widget.id, widget.jobId!, DateTime.now(), "to_inspect");
     } else if (widget.status == "to_inspect") {

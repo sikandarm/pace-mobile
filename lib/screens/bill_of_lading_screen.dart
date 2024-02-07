@@ -24,6 +24,8 @@ class BillOfLading extends StatefulWidget {
 }
 
 class _BillOfLadingState extends State<BillOfLading> {
+  bool b1_show_submit_received_bill_button = false;
+
   final headingStyle = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 14,
@@ -50,9 +52,23 @@ class _BillOfLadingState extends State<BillOfLading> {
 
   @override
   void didChangeDependencies() {
+    checkPermissionAndUpdateBool("bill_of_lading", (localBool) {
+      b1_show_submit_received_bill_button = localBool;
+    });
+
+    setState(() {});
     checkTablet();
     callMethodStatus();
     super.didChangeDependencies();
+  }
+
+  void checkPermissionAndUpdateBool(
+      String permValue, Function(bool) boolUpdater) async {
+    var localBool = await hasPermission(permValue);
+
+    setState(() {
+      boolUpdater(localBool);
+    });
   }
 
   bool isTablet = false;
@@ -88,10 +104,10 @@ class _BillOfLadingState extends State<BillOfLading> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? Colors.white
-              : Colors.black,
-        ),
+            // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            //     ? Colors.white
+            //     : Colors.black,
+            ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -160,6 +176,7 @@ class _BillOfLadingState extends State<BillOfLading> {
 
   Container LadingContainer(
       Billdata billdata, BuildContext context, int statusIndex) {
+    print('Delivery Date:' + billdata.dilveryDate.toString());
     return Container(
       //  color: Colors.white,
       child: Padding(
@@ -294,7 +311,8 @@ class _BillOfLadingState extends State<BillOfLading> {
             SizedBox(height: 13),
             Visibility(
               //  visible: allBillStatuses[statusIndex],
-              visible: billdata.receivedStatus != 'Received',
+              visible: billdata.receivedStatus != 'Received' &&
+                  b1_show_submit_received_bill_button,
               child: Container(
                 //  width: double.infinity,
                 width: MediaQuery.of(context).size.width * 0.95,

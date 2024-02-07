@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   # background_downloader: ^8.0.5
+  adaptive_theme: ^3.6.0
   cached_network_image: ^3.3.1
   cupertino_icons: ^1.0.6
   custom_sliding_segmented_control: ^1.8.1

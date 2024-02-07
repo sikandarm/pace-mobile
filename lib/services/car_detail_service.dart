@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import '../utils/constants.dart';
 
 class CarDetailObj {
-  final List<String>? activityFound;
+  String? activityFound;
   final int? id;
   String? originatorName;
   String? contractorSupplier;
@@ -55,7 +55,7 @@ class CarDetailObj {
 
 Future<List<CarDetailObj>> fetchCARDetail(int carId) async {
   final response = await http.get(Uri.parse('$BASE_URL/CA-report/$carId'));
-
+  print('car ID: ' + carId.toString());
   if (response.statusCode == 200) {
     final Map<String, dynamic> responseBody = json.decode(response.body);
 
@@ -86,6 +86,7 @@ Future<List<CarDetailObj>> fetchCARDetail(int carId) async {
               ? DateTime.parse(item['responsiblePartyDate'])
               : null,
           correctiveActionDesc: item['correctiveActionDesc'] ?? '',
+          activityFound: item['activityFound'] ?? '',
           approvalName: item['approvalName'] ?? '',
           approvalDate: item['approvalDate'] != null
               ? DateTime.parse(item['approvalDate'])
@@ -94,6 +95,7 @@ Future<List<CarDetailObj>> fetchCARDetail(int carId) async {
               ? DateTime.parse(item['createdAt'])
               : null,
         );
+
 
         return [carObj];
       }

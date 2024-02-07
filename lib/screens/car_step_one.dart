@@ -80,10 +80,10 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? Colors.white
-              : Colors.black,
-        ),
+            // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            //     ? Colors.white
+            //     : Colors.black,
+            ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -120,7 +120,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                     child: TextField(
                       style: TextStyle(
                         fontSize: isTablet ? 24 : 15,
-                        color: Colors.black.withOpacity(0.65),
+                        //   color: Colors.black.withOpacity(0.65),
                         fontWeight: FontWeight.w500,
                       ),
                       textAlignVertical: TextAlignVertical.center,
@@ -134,6 +134,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         false,
                         isRedColorBorder: orgNameBorderShowRed,
                         isTablet: isTablet,
+                        context: context,
                       ),
                     ),
                   ),
@@ -144,7 +145,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                     child: TextField(
                       style: TextStyle(
                         fontSize: isTablet ? 24 : 15,
-                        color: Colors.black.withOpacity(0.65),
+                        //    color: Colors.black.withOpacity(0.65),
                         fontWeight: FontWeight.w500,
                       ),
                       textAlignVertical: TextAlignVertical.center,
@@ -155,6 +156,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         false,
                         isRedColorBorder: contractorNameBorderShowRed,
                         isTablet: isTablet,
+                        context: context,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(50),
@@ -172,7 +174,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                       child: TextField(
                         style: TextStyle(
                           fontSize: isTablet ? 24 : 15,
-                          color: Colors.black.withOpacity(0.65),
+                          //  color: Colors.black.withOpacity(0.65),
                           fontWeight: FontWeight.w500,
                         ),
                         textAlignVertical: TextAlignVertical.center,
@@ -183,6 +185,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                           false,
                           isRedColorBorder: stepOneDateBorderShowRed,
                           isTablet: isTablet,
+                          context: context,
                         ),
                         enabled: false,
                         onTap: () {
@@ -198,7 +201,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                     child: TextField(
                       style: TextStyle(
                         fontSize: isTablet ? 24 : 15,
-                        color: Colors.black.withOpacity(0.65),
+                        //  color: Colors.black.withOpacity(0.65),
                         fontWeight: FontWeight.w500,
                       ),
                       textAlignVertical: TextAlignVertical.center,
@@ -209,6 +212,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         false,
                         isRedColorBorder: nicNoBorderShowRed,
                         isTablet: isTablet,
+                        context: context,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(15),
@@ -222,7 +226,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                     child: TextField(
                       style: TextStyle(
                         fontSize: isTablet ? 24 : 15,
-                        color: Colors.black.withOpacity(0.65),
+                        //    color: Colors.black.withOpacity(0.65),
                         fontWeight: FontWeight.w500,
                       ),
                       textAlignVertical: TextAlignVertical.center,
@@ -233,6 +237,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         false,
                         isRedColorBorder: purchaseOrderBorderShowRed,
                         isTablet: isTablet,
+                        context: context,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(11),
@@ -246,7 +251,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                     child: TextField(
                       style: TextStyle(
                         fontSize: isTablet ? 24 : 15,
-                        color: Colors.black.withOpacity(0.65),
+                        //     color: Colors.black.withOpacity(0.65),
                         fontWeight: FontWeight.w500,
                       ),
                       textAlignVertical: TextAlignVertical.center,
@@ -257,6 +262,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         false,
                         isRedColorBorder: partDescBorderShowRed,
                         isTablet: isTablet,
+                        context: context,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(50),
@@ -270,7 +276,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                     child: TextField(
                       style: TextStyle(
                         fontSize: isTablet ? 24 : 15,
-                        color: Colors.black.withOpacity(0.65),
+                        //   color: Colors.black.withOpacity(0.65),
                         fontWeight: FontWeight.w500,
                       ),
                       textAlignVertical: TextAlignVertical.center,
@@ -281,6 +287,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         false,
                         isRedColorBorder: partIdBorderShowRed,
                         isTablet: isTablet,
+                        context: context,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(11),
@@ -294,7 +301,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                     child: TextField(
                       style: TextStyle(
                         fontSize: isTablet ? 24 : 15,
-                        color: Colors.black.withOpacity(0.65),
+                        //  color: Colors.black.withOpacity(0.65),
                         fontWeight: FontWeight.w500,
                       ),
                       textAlignVertical: TextAlignVertical.center,
@@ -305,6 +312,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         false,
                         isRedColorBorder: qtyBorderShowRed,
                         isTablet: isTablet,
+                        context: context,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(3),
@@ -318,7 +326,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                     child: TextField(
                       style: TextStyle(
                         fontSize: isTablet ? 24 : 15,
-                        color: Colors.black.withOpacity(0.65),
+                        //  color: Colors.black.withOpacity(0.65),
                         fontWeight: FontWeight.w500,
                       ),
                       textAlignVertical: TextAlignVertical.center,
@@ -329,6 +337,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         false,
                         isRedColorBorder: dwgNoBorderShowRed,
                         isTablet: isTablet,
+                        context: context,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(11),
@@ -648,7 +657,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                     child: TextField(
                       style: TextStyle(
                         fontSize: isTablet ? 24 : 15,
-                        color: Colors.black.withOpacity(0.65),
+                        //   color: Colors.black.withOpacity(0.65),
                         fontWeight: FontWeight.w500,
                       ),
                       textAlignVertical: TextAlignVertical.center,
@@ -659,6 +668,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         false,
                         isRedColorBorder: descOneBorderShowRed,
                         isTablet: isTablet,
+                        context: context,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(
@@ -673,7 +683,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                     child: TextField(
                       style: TextStyle(
                         fontSize: isTablet ? 24 : 15,
-                        color: Colors.black.withOpacity(0.65),
+                        //  color: Colors.black.withOpacity(0.65),
                         fontWeight: FontWeight.w500,
                       ),
                       textAlignVertical: TextAlignVertical.center,
@@ -684,6 +694,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                         false,
                         isRedColorBorder: descTwoBorderShowRed,
                         isTablet: isTablet,
+                        context: context,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(100),
@@ -839,6 +850,36 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                             return;
                           }
 
+                          List<String> foundDuringWhatActivityList = [];
+                          if (_cbIncoming) {
+                            foundDuringWhatActivityList
+                                .add('Inconming Inspection');
+                          }
+                          if (_cbInprocess) {
+                            foundDuringWhatActivityList
+                                .add('In-process Inspection');
+                          }
+                          if (_cbFinalInspection) {
+                            foundDuringWhatActivityList.add('Final Inspection');
+                          }
+                          if (_cbShop) {
+                            foundDuringWhatActivityList.add('Shop');
+                          }
+
+                          if (_cbCritical) {
+                            foundDuringWhatActivityList.add('Critical');
+                          }
+
+                          if (_cbField) {
+                            foundDuringWhatActivityList.add('Field');
+                          }
+
+                          if (_cbNonCritical) {
+                            foundDuringWhatActivityList.add('Non Critical');
+                          }
+
+                          ///////////////////////////////////
+
                           AddCARObj addCarModel = AddCARObj(
                             originatorName: orgName.text,
                             contractorSupplier: contractorName.text,
@@ -851,6 +892,7 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                             dwgNo: dwgNo.text,
                             description: descOne.text,
                             actionToPrevent: descTwo.text,
+                            activityFound: foundDuringWhatActivityList,
                           );
 
                           Navigator.push(

@@ -101,10 +101,10 @@ class _NotificationListState extends State<NotificationsScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? Colors.white
-              : Colors.black,
-        ),
+            // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            //     ? Colors.white
+            //     : Colors.black,
+            ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -298,10 +298,10 @@ class _ListItemWidgetState extends State<ListItemWidget> {
                       style: TextStyle(
                         fontSize: isTablet ? 24 : 14.0,
                         //     color: Color(0xFF1E2022),
-                        color: EasyDynamicTheme.of(context).themeMode ==
-                                ThemeMode.dark
-                            ? Colors.white
-                            : Color(0xFF1E2022),
+                        // color: EasyDynamicTheme.of(context).themeMode ==
+                        //         ThemeMode.dark
+                        //     ? Colors.white
+                        //     : Color(0xFF1E2022),
 
                         fontWeight: FontWeight.normal,
                       ),

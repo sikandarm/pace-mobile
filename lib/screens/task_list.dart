@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
@@ -259,10 +260,10 @@ class _TaskListState extends State<TaskList> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? Colors.white
-              : Colors.black,
-        ),
+            //     color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            //       ? Colors.white
+            //     : Colors.black,
+            ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -426,7 +427,7 @@ class _TaskListState extends State<TaskList> {
                     );
                   },
                   child: Padding(
-                    padding: EdgeInsets.only(right: 10.0, left: 5.0),
+                    padding: const EdgeInsets.only(right: 10.0, left: 5.0),
                     child: CircleAvatar(
                       backgroundImage: userProfileImage == null
                           ? AssetImage('assets/images/ic_profile.png')
@@ -674,10 +675,10 @@ class _TaskListState extends State<TaskList> {
                           //      controller: _expandableCo
                           // ntroller,
                           theme: ExpandableThemeData(
-                            iconColor: EasyDynamicTheme.of(context).themeMode ==
-                                    ThemeMode.dark
-                                ? Colors.white
-                                : Colors.black,
+                            iconColor: AdaptiveTheme.of(context).mode ==
+                                    AdaptiveThemeMode.light
+                                ? Colors.black
+                                : Colors.white,
                             hasIcon: sequencesList[i].tasks.isNotEmpty
                                 ? true
                                 : false,
@@ -951,6 +952,8 @@ class _TaskListState extends State<TaskList> {
                   : !isLoading && _futureTask.isEmpty
                       ? Visibility(
                           visible: _b1ShowTask,
+                          // visible: true,
+
                           child: Column(
                             children: [
                               SizedBox(height: 100),
@@ -959,7 +962,9 @@ class _TaskListState extends State<TaskList> {
                           ),
                         )
                       : Visibility(
-                          visible: _b1ShowTask,
+                          // visible: _b1ShowTask,
+                          visible: true,
+
                           child: Container(
                             width: MediaQuery.of(context).size.width,
                             child: Column(
@@ -1434,10 +1439,10 @@ class _TaskListHeaderState extends State<TaskListHeader> {
                             child: Text(
                               "All Tasks",
                               style: TextStyle(
-                                color: EasyDynamicTheme.of(context).themeMode ==
-                                        ThemeMode.dark
-                                    ? Colors.grey
-                                    : Colors.black,
+                                color: AdaptiveTheme.of(context).mode ==
+                                        AdaptiveThemeMode.light
+                                    ? Colors.black
+                                    : Colors.white,
                                 fontSize: isTablet ? 22 : 15,
                               ),
                             ),

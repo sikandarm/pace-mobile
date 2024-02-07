@@ -82,6 +82,7 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
         "approvalName": widget.addCarModel.approvalName,
         "approvalDate": widget.addCarModel.approvalDate,
         "userId": widget.addCarModel.userId.toString(),
+        "activityFound": widget.addCarModel.activityFound!.toList().toString(),
       });
 
       print(response.body);
@@ -125,10 +126,10 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: IconThemeData(
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? Colors.white
-              : Colors.black,
-        ),
+            // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+            //     ? Colors.white
+            //     : Colors.black,
+            ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -190,7 +191,7 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                     child: TextField(
                       style: TextStyle(
                         fontSize: isTablet ? 24 : 15,
-                        color: Colors.black.withOpacity(0.65),
+                        //  color: Colors.black.withOpacity(0.65),
                         fontWeight: FontWeight.w500,
                       ),
                       textAlignVertical: TextAlignVertical.center,
@@ -201,6 +202,7 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                         false,
                         isRedColorBorder: companyIsToBorderShowRed,
                         isTablet: isTablet,
+                        context: context,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(
@@ -239,7 +241,7 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                     child: TextField(
                       style: TextStyle(
                         fontSize: isTablet ? 24 : 15,
-                        color: Colors.black.withOpacity(0.65),
+                        //  color: Colors.black.withOpacity(0.65),
                         fontWeight: FontWeight.w500,
                       ),
                       textAlignVertical: TextAlignVertical.center,
@@ -250,6 +252,7 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                         false,
                         isRedColorBorder: nameBorderShowRed,
                         isTablet: isTablet,
+                        context: context,
                       ),
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(
@@ -268,14 +271,18 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                       child: TextField(
                         style: TextStyle(
                           fontSize: isTablet ? 24 : 15,
-                          color: Colors.black.withOpacity(0.65),
+                          //   color: Colors.black.withOpacity(0.65),
                           fontWeight: FontWeight.w500,
                         ),
                         textAlignVertical: TextAlignVertical.center,
                         controller: stepThreeDate,
                         keyboardType: TextInputType.datetime,
-                        decoration: textFieldDecoration("Date", false,
-                            isTablet: isTablet),
+                        decoration: textFieldDecoration(
+                          "Date",
+                          false,
+                          isTablet: isTablet,
+                          context: context,
+                        ),
                         inputFormatters: [
                           LengthLimitingTextInputFormatter(100),
                         ],
