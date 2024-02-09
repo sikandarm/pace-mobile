@@ -181,6 +181,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> getThemeMode() async {
     currentThemeMode = await AdaptiveTheme.getThemeMode();
+    isDarkMode.value = currentThemeMode!.isDark;
+
     setState(() {});
   }
 

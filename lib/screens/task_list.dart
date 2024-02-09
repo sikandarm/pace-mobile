@@ -1452,9 +1452,9 @@ class _TaskListHeaderState extends State<TaskListHeader> {
                             child: Text(
                               "Approved",
                               style: TextStyle(
-                                color: EasyDynamicTheme.of(context).themeMode ==
-                                        ThemeMode.dark
-                                    ? Colors.grey
+                                color: AdaptiveTheme.of(context).mode ==
+                                        AdaptiveThemeMode.dark
+                                    ? Colors.white
                                     : Colors.black,
                                 fontSize: isTablet ? 22 : 15,
                               ),
@@ -1465,9 +1465,9 @@ class _TaskListHeaderState extends State<TaskListHeader> {
                             child: Text(
                               "Rejected",
                               style: TextStyle(
-                                color: EasyDynamicTheme.of(context).themeMode ==
-                                        ThemeMode.dark
-                                    ? Colors.grey
+                                color: AdaptiveTheme.of(context).mode ==
+                                        AdaptiveThemeMode.dark
+                                    ? Colors.white
                                     : Colors.black,
                                 fontSize: isTablet ? 22 : 15,
                               ),
@@ -1478,9 +1478,9 @@ class _TaskListHeaderState extends State<TaskListHeader> {
                             child: Text(
                               "Pending",
                               style: TextStyle(
-                                color: EasyDynamicTheme.of(context).themeMode ==
-                                        ThemeMode.dark
-                                    ? Colors.grey
+                                color: AdaptiveTheme.of(context).mode ==
+                                        AdaptiveThemeMode.dark
+                                    ? Colors.white
                                     : Colors.black,
                                 fontSize: isTablet ? 22 : 15,
                               ),
@@ -1491,9 +1491,9 @@ class _TaskListHeaderState extends State<TaskListHeader> {
                             child: Text(
                               "To Inspect",
                               style: TextStyle(
-                                color: EasyDynamicTheme.of(context).themeMode ==
-                                        ThemeMode.dark
-                                    ? Colors.grey
+                                color: AdaptiveTheme.of(context).mode ==
+                                        AdaptiveThemeMode.dark
+                                    ? Colors.white
                                     : Colors.black,
                                 fontSize: isTablet ? 22 : 15,
                               ),
@@ -1504,9 +1504,9 @@ class _TaskListHeaderState extends State<TaskListHeader> {
                             child: Text(
                               "In Process",
                               style: TextStyle(
-                                color: EasyDynamicTheme.of(context).themeMode ==
-                                        ThemeMode.dark
-                                    ? Colors.grey
+                                color: AdaptiveTheme.of(context).mode ==
+                                        AdaptiveThemeMode.dark
+                                    ? Colors.white
                                     : Colors.black,
                                 fontSize: isTablet ? 22 : 15,
                               ),
@@ -1523,7 +1523,10 @@ class _TaskListHeaderState extends State<TaskListHeader> {
                           fontSize: 16.0,
                           color: Colors.black,
                         ),
-                        dropdownColor: Colors.white,
+                        dropdownColor: AdaptiveTheme.of(context).mode ==
+                                AdaptiveThemeMode.dark
+                            ? Color.fromARGB(255, 2, 13, 21)
+                            : Colors.white,
                         isDense: true,
                         isExpanded: true,
                       ),

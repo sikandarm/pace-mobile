@@ -470,16 +470,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: MediaQuery.of(context).size.height * 0.07,
                       child: Container(
                         decoration: BoxDecoration(boxShadow: [
-                          (EasyDynamicTheme.of(context).themeMode !=
-                                  ThemeMode.dark)
-                              ? BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset: const Offset(
-                                      0, 3), // changes position of shadow
-                                )
-                              : const BoxShadow(),
+                          // (EasyDynamicTheme.of(context).themeMode !=
+                          //         ThemeMode.dark)
+                          //     ? BoxShadow(
+                          //         color: Colors.grey.withOpacity(0.5),
+                          //         spreadRadius: 2,
+                          //         blurRadius: 5,
+                          //         offset: const Offset(
+                          //             0, 3), // changes position of shadow
+                          //       )
+                          //     : const BoxShadow(),
                         ]),
                         child: ElevatedButton(
                           onPressed: () {
@@ -546,7 +546,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Text("OR",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: Colors.black,
+                              color: AdaptiveTheme.of(context).mode ==
+                                      AdaptiveThemeMode.dark
+                                  ? Colors.white
+                                  : Colors.black,
                               fontSize: isTablet ? 25 : 15,
                             )),
                       ),

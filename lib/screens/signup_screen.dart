@@ -404,16 +404,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: MediaQuery.of(context).size.height * 0.07,
                     child: Container(
                       decoration: BoxDecoration(boxShadow: [
-                        (EasyDynamicTheme.of(context).themeMode !=
-                                ThemeMode.dark)
-                            ? BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: const Offset(
-                                    0, 3), // changes position of shadow
-                              )
-                            : const BoxShadow(),
+                        // (EasyDynamicTheme.of(context).themeMode !=
+                        //         ThemeMode.dark)
+                        //     ? BoxShadow(
+                        //         color: Colors.grey.withOpacity(0.5),
+                        //         spreadRadius: 2,
+                        //         blurRadius: 5,
+                        //         offset: const Offset(
+                        //             0, 3), // changes position of shadow
+                        //       )
+                        //     : const BoxShadow(),
                       ]),
                       child: ElevatedButton(
                         onPressed: () {

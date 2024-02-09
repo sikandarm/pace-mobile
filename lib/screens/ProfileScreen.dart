@@ -356,6 +356,7 @@ class _userProfileWidgetState extends State<userProfileWidget> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: isTablet ? 30 : 17,
+              // color: Colors.blue,
             ),
           ),
           SizedBox(
@@ -364,6 +365,9 @@ class _userProfileWidgetState extends State<userProfileWidget> {
             child: TextField(
               style: TextStyle(
                 fontSize: isTablet ? 28 : 16.5,
+                color: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light
+                    ? Colors.black
+                    : Colors.white.withOpacity(0.55),
               ),
               controller: firstNameController,
               textAlignVertical: TextAlignVertical.center,
@@ -391,6 +395,7 @@ class _userProfileWidgetState extends State<userProfileWidget> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: isTablet ? 30 : 17,
+              //   color: Colors.blue,
             ),
           ),
           SizedBox(
@@ -399,6 +404,9 @@ class _userProfileWidgetState extends State<userProfileWidget> {
             child: TextField(
               style: TextStyle(
                 fontSize: isTablet ? 28 : 16.5,
+                color: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light
+                    ? Colors.black
+                    : Colors.white.withOpacity(0.55),
               ),
               controller: lastNameController,
               textAlignVertical: TextAlignVertical.center,
@@ -425,6 +433,7 @@ class _userProfileWidgetState extends State<userProfileWidget> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: isTablet ? 30 : 17,
+              //  color: Colors.blue,
             ),
           ),
           SizedBox(
@@ -433,6 +442,10 @@ class _userProfileWidgetState extends State<userProfileWidget> {
             child: TextField(
               style: TextStyle(
                 fontSize: isTablet ? 28 : 16.5,
+                // color: Colors.white,
+                color: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light
+                    ? Colors.black
+                    : Colors.white.withOpacity(0.55),
               ),
               controller: emailController,
               textAlignVertical: TextAlignVertical.center,
@@ -470,6 +483,9 @@ class _userProfileWidgetState extends State<userProfileWidget> {
 
               style: TextStyle(
                 fontSize: isTablet ? 28 : 16.5,
+                color: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light
+                    ? Colors.black
+                    : Colors.white.withOpacity(0.55),
               ),
               //    controller: controller,
               textAlignVertical: TextAlignVertical.center,
@@ -512,6 +528,9 @@ class _userProfileWidgetState extends State<userProfileWidget> {
                     fontWeight: FontWeight.bold,
                     fontSize: isTablet ? 27 : 17,
                   ),
+                ),
+                SizedBox(
+                  height: 7,
                 ),
                 SizedBox(
                   width: double.infinity,
@@ -557,15 +576,15 @@ class _userProfileWidgetState extends State<userProfileWidget> {
                 //  height: 50.0,
                 height: MediaQuery.of(context).size.height * 0.066,
                 decoration: BoxDecoration(boxShadow: [
-                  (EasyDynamicTheme.of(context).themeMode != ThemeMode.dark)
-                      ? BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
-                        )
-                      : const BoxShadow(),
+                  // (EasyDynamicTheme.of(context).themeMode != ThemeMode.dark)
+                  //     ? BoxShadow(
+                  //         color: Colors.grey.withOpacity(0.5),
+                  //         spreadRadius: 2,
+                  //         blurRadius: 5,
+                  //         offset:
+                  //             const Offset(0, 3), // changes position of shadow
+                  //       )
+                  //     : const BoxShadow(),
                 ]),
                 child: ElevatedButton(
                   onPressed: () async {
