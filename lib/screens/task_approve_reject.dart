@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -72,7 +73,12 @@ class _TaskApproveRejectState extends State<TaskApproveRejectScreen> {
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(
+            Icons.arrow_back,
+            color: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light
+                ? Colors.black
+                : Colors.white,
+          ),
           onPressed: () {
             Navigator.pushReplacement(
               context,
@@ -213,8 +219,13 @@ class _TaskListHeaderState extends State<TaskListHeader> {
       _items.add(DropdownMenuItem<String>(
         value: null,
         child: Text(
-          reason.name,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          reason.name.toUpperCase(),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
+                ? Colors.blue
+                : Colors.black,
+          ),
         ),
       ));
 
@@ -280,7 +291,10 @@ class _TaskListHeaderState extends State<TaskListHeader> {
                         iconSize: 24.0,
                         elevation: 16,
                         underline: const SizedBox(),
-                        dropdownColor: Colors.white,
+                        dropdownColor: AdaptiveTheme.of(context).mode ==
+                                AdaptiveThemeMode.dark
+                            ? Color.fromARGB(255, 2, 13, 21)
+                            : Colors.white,
                         isExpanded: true, // Set isExpanded to true
                       ),
                     ),
@@ -352,7 +366,11 @@ class _TaskListHeaderState extends State<TaskListHeader> {
                                   iconSize: 24.0,
                                   elevation: 16,
                                   underline: const SizedBox(),
-                                  dropdownColor: Colors.white,
+                                  dropdownColor:
+                                      AdaptiveTheme.of(context).mode ==
+                                              AdaptiveThemeMode.dark
+                                          ? Color.fromARGB(255, 2, 13, 21)
+                                          : Colors.white,
                                   isExpanded: true,
                                 ),
                               ),
@@ -412,7 +430,7 @@ class _TaskListHeaderState extends State<TaskListHeader> {
               // Updating task now
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (selectedStatusValue == "approve") {
                       callUpdateTask(
                           context,
@@ -424,7 +442,9 @@ class _TaskListHeaderState extends State<TaskListHeader> {
                           selectedRejectionValue);
                     } else {
                       print("reject");
-                      if (selectedRejectionValue == null) {
+                      if (selectedRejectionValue == null ||
+                          selectedRejectionValue == '' ||
+                          selectedRejectionValue == 'Select Reason') {
                         ScaffoldMessenger.of(context).clearSnackBars();
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text('Select a reason for rejection'),
@@ -432,7 +452,10 @@ class _TaskListHeaderState extends State<TaskListHeader> {
                         return;
                       }
 
-                      callUpdateTask(
+                      print('Selected Reason here: ' +
+                          selectedRejectionValue.toString());
+
+                      await callUpdateTask(
                           context,
                           widget.taskId!,
                           widget.jobId!,

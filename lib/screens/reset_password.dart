@@ -3,6 +3,7 @@ import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../services/forgot_password.dart';
+import '../utils/constants.dart';
 import 'verify_otp_screen.dart';
 
 class ResetPassword extends StatefulWidget {
@@ -141,17 +142,24 @@ class _ResetPassScreenState extends State<ResetPassword> {
                       },
                       controller: emailText,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: const Color(0xffF8F9FD),
-                          hintText: "Email",
-                          suffixIcon: const Icon(
-                            Icons.email,
-                            color: Colors.grey,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          )),
+                      // decoration: InputDecoration(
+                      //   filled: true,
+                      //   fillColor: const Color(0xffF8F9FD),
+                      //   hintText: "Email",
+                      //   suffixIcon: const Icon(
+                      //     Icons.email,
+                      //     color: Colors.grey,
+                      //   ),
+                      //   border: OutlineInputBorder(
+                      //     borderRadius: BorderRadius.circular(10),
+                      //   ),
+                      // ),
+                      decoration: textFieldDecoration(
+                        "Email",
+                        false,
+                        isTablet: isTablet,
+                        context: context,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -164,13 +172,13 @@ class _ResetPassScreenState extends State<ResetPassword> {
                     height: MediaQuery.of(context).size.height * 0.07,
                     child: Container(
                       decoration: BoxDecoration(boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
-                        )
+                        // BoxShadow(
+                        //   color: Colors.grey.withOpacity(0.5),
+                        //   spreadRadius: 2,
+                        //   blurRadius: 5,
+                        //   offset:
+                        //       const Offset(0, 3), // changes position of shadow
+                        // )
                       ]),
                       child: ElevatedButton(
                         onPressed: () async {
