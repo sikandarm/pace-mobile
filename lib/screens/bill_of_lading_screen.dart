@@ -782,62 +782,72 @@ class _BillOfLadingState extends State<BillOfLading> {
                         pw.SizedBox(width: 10),
                         pw.Text(billData.billofLadingItems![i].fabricatedItems!,
                             style: pw.TextStyle()),
+                        pw.Spacer(),
+                        pw.Text('Quantity :',
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(width: 11),
+                        pw.Text(
+                            billData.billofLadingItems![i].quantity.toString(),
+                            style: pw.TextStyle()),
+                        pw.SizedBox(width: 60),
+
                         // pw.SizedBox(width: 172),
                       ],
                     ),
                   ),
-                  pw.Padding(
-                    padding:
-                        pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),
-                    child: pw.Row(
-                        //    mainAxisAlignment: pw.MainAxisAlignment.center,
-                        children: [
-                          pw.Text('Quantity:',
-                              style:
-                                  pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                          pw.SizedBox(width: 68.52),
+                  // pw.Padding(
+                  //   padding:
+                  //       pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+                  //   child: pw.Row(
+                  //       //    mainAxisAlignment: pw.MainAxisAlignment.center,
+                  //       children: [
+                  //         pw.Text('Quantity:',
+                  //             style:
+                  //                 pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  //         pw.SizedBox(width: 68.52),
 
-                          pw.Container(
+                  //         pw.Container(
 
-                              //  width: MediaQuery.of(Mycontext).size.width,
-                              height: 20,
-                              decoration: pw.BoxDecoration(
-                                  border: pw.Border.all(width: 1))),
-                          pw.SizedBox(width: 10),
-                          pw.Text(
-                              billData.billofLadingItems![i].quantity
-                                  .toString(),
-                              style: pw.TextStyle()),
-                          // pw.Text('Company Name:',
-                          //     style:
-                          //         pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                          // pw.SizedBox(width: 19),
-                          // pw.Container(
-                          //     //  width: MediaQuery.of(Mycontext).size.width,
-                          //     height: 20,
-                          //     decoration: pw.BoxDecoration(
-                          //         border: pw.Border.all(width: 1))),
-                          // pw.SizedBox(width: 10),
-                          // pw.Text(billData.billofLadingItems![i].companyName!,
-                          //     style: pw.TextStyle()),
-                          // pw.SizedBox(width: 90),
-                          // pw.Text('PO Number:',
-                          //     style:
-                          //         pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                          // pw.SizedBox(width: 1),
-                          // pw.Container(
-                          //     //  width: MediaQuery.of(Mycontext).size.width,
-                          //     height: 20,
-                          //     decoration: pw.BoxDecoration(
-                          //         border: pw.Border.all(width: 1))),
-                          // pw.SizedBox(width: 10),
-                          // pw.Text(
-                          //     apiData.data!.billdata![0].billofLadingItems![i]
-                          //         .poNumber
-                          //         .toString(),
-                          //     style: pw.TextStyle()),
-                        ]),
-                  ),
+                  //             //  width: MediaQuery.of(Mycontext).size.width,
+                  //             height: 20,
+                  //             decoration: pw.BoxDecoration(
+                  //                 border: pw.Border.all(width: 1))),
+                  //         pw.SizedBox(width: 10),
+                  //         pw.Text(
+                  //             billData.billofLadingItems![i].quantity
+                  //                 .toString(),
+                  //             style: pw.TextStyle()),
+                  // pw.Text('Company Name:',
+                  //     style:
+                  //         pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  // pw.SizedBox(width: 19),
+                  // pw.Container(
+                  //     //  width: MediaQuery.of(Mycontext).size.width,
+                  //     height: 20,
+                  //     decoration: pw.BoxDecoration(
+                  //         border: pw.Border.all(width: 1))),
+                  // pw.SizedBox(width: 10),
+                  // pw.Text(billData.billofLadingItems![i].companyName!,
+                  //     style: pw.TextStyle()),
+                  // pw.SizedBox(width: 90),
+                  // pw.Text('PO Number:',
+                  //     style:
+                  //         pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  // pw.SizedBox(width: 1),
+                  // pw.Container(
+                  //     //  width: MediaQuery.of(Mycontext).size.width,
+                  //     height: 20,
+                  //     decoration: pw.BoxDecoration(
+                  //         border: pw.Border.all(width: 1))),
+                  // pw.SizedBox(width: 10),
+                  // pw.Text(
+                  //     apiData.data!.billdata![0].billofLadingItems![i]
+                  //         .poNumber
+                  //         .toString(),
+                  //     style: pw.TextStyle()),
+                  //     ]),
+                  // ),
                   // pw.Padding(
                   //   padding:
                   //       pw.EdgeInsets.symmetric(horizontal: 5, vertical: 0),

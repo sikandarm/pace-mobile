@@ -684,6 +684,7 @@ Widget _buildSideDrawer(
                     Visibility(
                       visible: b1_bill_of_lading,
                       //  visible: true,
+
                       child: ListTile(
                         title: Text(
                           'Bill of lading',
