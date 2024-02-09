@@ -42,6 +42,7 @@ class _SharedListState extends State<SharedCARList> {
     checkPermissionAndUpdateBool("view_profile", (localBool) {
       _blShowProfile = localBool;
     });
+    setState(() {});
   }
 
   void checkPermissionAndUpdateBool(
@@ -161,25 +162,28 @@ class _SharedListState extends State<SharedCARList> {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  if (_blShowProfile) {
-                    showToast('You do not have permissions.');
-                    return;
-                  }
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ProfileScreen()),
-                  );
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(right: 10.0, left: 5.0),
-                  child: CircleAvatar(
-                    backgroundImage: userProfileImage == null
-                        ? AssetImage('assets/images/ic_profile.png')
-                        : NetworkImage(userProfileImage!) as ImageProvider,
-                    radius: isTablet ? 25 : 15,
+              Visibility(
+                visible: _blShowProfile,
+                child: GestureDetector(
+                  onTap: () {
+                    if (!_blShowProfile) {
+                      showToast('You do not have permissions.');
+                      return;
+                    }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ProfileScreen()),
+                    );
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 10.0, left: 5.0),
+                    child: CircleAvatar(
+                      backgroundImage: userProfileImage == null
+                          ? AssetImage('assets/images/ic_profile.png')
+                          : NetworkImage(userProfileImage!) as ImageProvider,
+                      radius: isTablet ? 25 : 15,
+                    ),
                   ),
                 ),
               ),
@@ -306,12 +310,12 @@ class CARListItemWidget extends StatelessWidget {
               ? Colors.white.withOpacity(0.92)
               : Colors.white,
           boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 1,
-              blurRadius: 3,
-              offset: const Offset(0, 3),
-            ),
+            // BoxShadow(
+            //   color: Colors.grey.withOpacity(0.5),
+            //   spreadRadius: 1,
+            //   blurRadius: 3,
+            //   offset: const Offset(0, 3),
+            // ),
           ],
         ),
         child: Padding(
