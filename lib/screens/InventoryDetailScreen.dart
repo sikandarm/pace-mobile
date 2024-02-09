@@ -393,7 +393,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                       child: Text(
                         widget.shape!,
                         style: TextStyle(
-                          color: Colors.grey[600],
+                          color: AdaptiveTheme.of(context).mode.isDark
+                              ? Colors.grey[350]
+                              : Colors.grey[600],
                           fontSize: isTablet ? 27 : 15.0,
                         ),
                       ),
@@ -431,7 +433,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                       child: Text(
                         widget.weight!,
                         style: TextStyle(
-                          color: Colors.grey[600],
+                          color: AdaptiveTheme.of(context).mode.isDark
+                              ? Colors.grey[350]
+                              : Colors.grey[600],
                           fontSize: isTablet ? 27 : 15.0,
                         ),
                       ),
@@ -469,7 +473,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                       child: Text(
                         widget.depth!,
                         style: TextStyle(
-                          color: Colors.grey[600],
+                          color: AdaptiveTheme.of(context).mode.isDark
+                              ? Colors.grey[350]
+                              : Colors.grey[600],
                           fontSize: isTablet ? 27 : 15.0,
                         ),
                       ),
@@ -507,7 +513,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                       child: Text(
                         widget.grade!,
                         style: TextStyle(
-                          color: Colors.grey[600],
+                          color: AdaptiveTheme.of(context).mode.isDark
+                              ? Colors.grey[350]
+                              : Colors.grey[600],
                           fontSize: isTablet ? 27 : 15.0,
                         ),
                       ),
@@ -578,7 +586,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                   child: Text(
                     value,
                     style: TextStyle(
-                      color: Colors.grey[600],
+                      color: AdaptiveTheme.of(context).mode.isDark
+                          ? Colors.grey[350]
+                          : Colors.grey[600],
                       fontSize: isTablet ? 27 : 15.0,
                     ),
                   ),

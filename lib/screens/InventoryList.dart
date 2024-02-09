@@ -308,17 +308,17 @@ class _InventoryListState extends State<InventoryList> {
                   color: Colors.grey,
                   borderRadius: BorderRadius.circular(6),
                   boxShadow: [
-                    EasyDynamicTheme.of(context).themeMode != ThemeMode.dark
-                        ? BoxShadow(
-                            color: Colors.black.withOpacity(.3),
-                            blurRadius: 4.0,
-                            spreadRadius: 1.0,
-                            offset: const Offset(
-                              0.0,
-                              2.0,
-                            ),
-                          )
-                        : BoxShadow(),
+                    // EasyDynamicTheme.of(context).themeMode != ThemeMode.dark
+                    //     ? BoxShadow(
+                    //         color: Colors.black.withOpacity(.3),
+                    //         blurRadius: 4.0,
+                    //         spreadRadius: 1.0,
+                    //         offset: const Offset(
+                    //           0.0,
+                    //           2.0,
+                    //         ),
+                    //       )
+                    //     : BoxShadow(),
                   ],
                 ),
                 duration: const Duration(milliseconds: 300),
@@ -746,102 +746,107 @@ class _InventoryListItemWidgetState extends State<InventoryListItemWidget> {
             showSnackbar(context, "You do not have permission");
           }
         },
-        child: Container(
-          height: isTablet ? 130 : 80,
-          margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            //    color: Colors.white,
-            color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-                ? Colors.white.withOpacity(0.92)
-                : Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 7),
+          child: Card(
+            child: Container(
+              height: isTablet ? 130 : 80,
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                //    color: Colors.white,
+                color: AdaptiveTheme.of(context).mode.isDark
+                    ? Colors.white.withOpacity(0.92)
+                    : Colors.white,
 
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 1,
-                blurRadius: 3,
-                offset: const Offset(0, 3),
+                boxShadow: [
+                  // BoxShadow(
+                  //   color: Colors.grey.withOpacity(0.5),
+                  //   spreadRadius: 1,
+                  //   blurRadius: 3,
+                  //   offset: const Offset(0, 3),
+                  // ),
+                ],
               ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "#${widget.id}",
-                      style: TextStyle(
-                        color: Color(0xFF1E2022),
-                        fontWeight: FontWeight.w600,
-                        fontSize: isTablet ? 24 : 14.0,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "#${widget.id}",
+                          style: TextStyle(
+                            color: Color(0xFF1E2022),
+                            fontWeight: FontWeight.w600,
+                            fontSize: isTablet ? 24 : 14.0,
+                          ),
+                        ),
+                        Text(
+                          DateFormat(US_DATE_FORMAT).format(widget.createdAt!),
+                          style: TextStyle(
+                            fontSize: isTablet ? 21 : 11.0,
+                            color: Color(0xFF77838F),
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      DateFormat(US_DATE_FORMAT).format(widget.createdAt!),
-                      style: TextStyle(
-                        fontSize: isTablet ? 21 : 11.0,
-                        color: Color(0xFF77838F),
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
 
-                const SizedBox(height: 8.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      widget.ediStdNomenclature![0].toUpperCase() +
-                          widget.ediStdNomenclature!.substring(1),
-                      style: TextStyle(
-                        // color: getProgressColor(status),
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w500,
-                        color: EasyDynamicTheme.of(context).themeMode ==
-                                ThemeMode.dark
-                            ? Colors.grey
-                            : Colors.white,
-                      ),
+                    const SizedBox(height: 8.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          widget.ediStdNomenclature![0].toUpperCase() +
+                              widget.ediStdNomenclature!.substring(1),
+                          style: TextStyle(
+                            // color: getProgressColor(status),
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w500,
+                            color: AdaptiveTheme.of(context).mode.isDark
+                                ? Colors.grey
+                                : Colors.white,
+                          ),
+                        ),
+                        // const Spacer(),
+                        Text(
+                          "Shape:${widget.shape}",
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w500,
+                            color: EasyDynamicTheme.of(context).themeMode ==
+                                    ThemeMode.dark
+                                ? Colors.black
+                                : Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
-                    // const Spacer(),
-                    Text(
-                      "Shape:${widget.shape}",
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w500,
-                        color: EasyDynamicTheme.of(context).themeMode ==
-                                ThemeMode.dark
-                            ? Colors.black
-                            : Colors.white,
-                      ),
-                    ),
+                    // const SizedBox(height: 8.0),
+                    // Container(
+                    //   width: double.infinity,
+                    //   height: 6,
+                    //   decoration: BoxDecoration(
+                    //       color: Colors.grey.shade300,
+                    //       borderRadius: BorderRadius.circular(12)),
+                    //   child: Row(
+                    //     children: [
+                    //       Container(
+                    //         width: MediaQuery.of(context).size.width * 0.5,
+                    //         decoration: BoxDecoration(
+                    //             color: const Color(0xFFF4BE4F),
+                    //             borderRadius: BorderRadius.circular(12)),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
-                // const SizedBox(height: 8.0),
-                // Container(
-                //   width: double.infinity,
-                //   height: 6,
-                //   decoration: BoxDecoration(
-                //       color: Colors.grey.shade300,
-                //       borderRadius: BorderRadius.circular(12)),
-                //   child: Row(
-                //     children: [
-                //       Container(
-                //         width: MediaQuery.of(context).size.width * 0.5,
-                //         decoration: BoxDecoration(
-                //             color: const Color(0xFFF4BE4F),
-                //             borderRadius: BorderRadius.circular(12)),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-              ],
+              ),
             ),
           ),
         ),
