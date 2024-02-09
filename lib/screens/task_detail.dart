@@ -872,7 +872,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                       child: Text(
                         widget.heatNo!,
                         style: TextStyle(
-                          color: Colors.grey[600],
+                          color: AdaptiveTheme.of(context).mode.isDark
+                              ? Colors.grey[350]
+                              : Colors.grey[600],
                           fontSize: isTablet ? 25 : 15.0,
                         ),
                       ),
@@ -910,7 +912,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                       child: Text(
                         widget.description!,
                         style: TextStyle(
-                          color: Colors.grey[600],
+                          color: AdaptiveTheme.of(context).mode.isDark
+                              ? Colors.grey[350]
+                              : Colors.grey[600],
                           fontSize: isTablet ? 25 : 15.0,
                         ),
                       ),
@@ -951,7 +955,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                             : DateFormat(US_DATE_FORMAT)
                                 .format(widget.startedAt!),
                         style: TextStyle(
-                          color: Colors.grey[600],
+                          color: AdaptiveTheme.of(context).mode.isDark
+                              ? Colors.grey[350]
+                              : Colors.grey[600],
                           fontSize: isTablet ? 25 : 15.0,
                         ),
                       ),
@@ -2478,7 +2484,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
               child: Text(
                 value,
                 style: TextStyle(
-                  color: Colors.grey[600],
+                  color: AdaptiveTheme.of(context).mode.isDark
+                      ? Colors.grey[350]
+                      : Colors.grey[600],
                   fontSize: isTablet ? 25 : 15.0,
                 ),
               ),

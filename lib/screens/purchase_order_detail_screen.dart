@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:expandable_datatable/expandable_datatable.dart';
 import 'package:flutter/material.dart';
@@ -66,9 +67,12 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //  backgroundColor: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-      //      ? Color.fromARGB(255, 7, 21, 32)
-      //      : Colors.white,
+      // backgroundColor: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+      //     ? Color.fromARGB(255, 7, 21, 32)
+      //     : Colors.white,
+      backgroundColor: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
+          ? Color.fromARGB(255, 7, 21, 32)
+          : Colors.white,
       // floatingActionButton: FloatingActionButton(onPressed: () async {
       //   final result = await fetchPurchaseOrderItemsDetailListData(
       //       id: widget.purchaseOrder.id!);
@@ -366,7 +370,6 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                       isTablet: isTablet,
                     ),
                     const Padding(
-
                       padding:
                           EdgeInsets.symmetric(vertical: 3, horizontal: 20),
                       child: Divider(),
@@ -627,10 +630,9 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                 value,
                 //    softWrap: true,
                 style: TextStyle(
-                  color: Colors.grey[
-                      EasyDynamicTheme.of(context).themeMode != ThemeMode.dark
-                          ? 600
-                          : 300],
+                  color: AdaptiveTheme.of(context).mode.isDark
+                      ? Colors.grey[350]
+                      : Colors.grey[600],
                   fontSize: isTablet ? 24 : 14.0,
                 ),
               ),
@@ -645,9 +647,9 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
 AppBar _buildAppBar(context, bool isTablet) {
   return AppBar(
     //   backgroundColor: Colors.white,
-    // backgroundColor: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-    //   ? Color.fromARGB(255, 7, 21, 32)
-    //  : Colors.white,
+    backgroundColor: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
+        ? Color.fromARGB(255, 7, 21, 32)
+        : Colors.white,
 
     leading: IconButton(
       icon: Icon(

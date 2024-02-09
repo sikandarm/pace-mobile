@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -307,10 +308,13 @@ class _CARDetailWidgetState extends State<CARDetailWidget> {
             const SizedBox(height: 10),
             Text(
               widget.correctiveActionDesc!,
-              style: const TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 14.0,
-                  color: Colors.grey),
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 14.0,
+                color: AdaptiveTheme.of(context).mode.isDark
+                    ? Colors.grey[350]
+                    : Colors.grey[600],
+              ),
             ),
             const SizedBox(height: 10),
             Container(
@@ -335,10 +339,13 @@ class _CARDetailWidgetState extends State<CARDetailWidget> {
 
             Text(
               widget.disposition.toString(),
-              style: const TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 14.0,
-                  color: Colors.grey),
+              style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 14.0,
+                color: AdaptiveTheme.of(context).mode.isDark
+                    ? Colors.grey[350]
+                    : Colors.grey[600],
+              ),
             ),
             const SizedBox(height: 10),
             Container(
@@ -540,7 +547,9 @@ class _CARDetailWidgetState extends State<CARDetailWidget> {
                   child: Text(
                     value,
                     style: TextStyle(
-                      color: Colors.grey[600],
+                      color: AdaptiveTheme.of(context).mode.isDark
+                          ? Colors.grey[350]
+                          : Colors.grey[600],
                       fontSize: isTablet ? 25 : 15.0,
                     ),
                   ),

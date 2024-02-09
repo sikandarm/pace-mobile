@@ -115,7 +115,8 @@ class _SharedListState extends State<CARList> {
 
                   if (pendingList.isEmpty) {
                     return Center(
-                      child: Text('No pending CAR\'s found.'),
+                      //    child: Text('No pending CAR\'s found.'),
+                      child: Text('No pending CAR\'s'),
                     );
                   }
 

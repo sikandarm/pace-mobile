@@ -173,7 +173,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void didChangeDependencies() {
     checkTablet();
+    getThemeMode();
     super.didChangeDependencies();
+  }
+
+  AdaptiveThemeMode? currentThemeMode;
+
+  Future<void> getThemeMode() async {
+    currentThemeMode = await AdaptiveTheme.getThemeMode();
+    setState(() {});
   }
 
   bool isTablet = false;
@@ -206,7 +214,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       //   print(items.length);
       // }),
       key: scaffoldKey,
-      drawer: _buildSideDrawer(context, isTablet),
+
+      drawer: _buildSideDrawer(context, isTablet, currentThemeMode),
 
       appBar: _buildAppBar(context, scaffoldKey, userProfileImage, isTablet),
       body: RefreshIndicator(
@@ -509,7 +518,8 @@ PreferredSizeWidget _buildAppBar(context, GlobalKey<ScaffoldState> scaffoldKey,
   );
 }
 
-Widget _buildSideDrawer(BuildContext context, bool isTablet) {
+Widget _buildSideDrawer(
+    BuildContext context, bool isTablet, AdaptiveThemeMode? adaptiveThemeMode) {
   return Drawer(
     width: isTablet
         ? MediaQuery.of(context).size.width * 0.65

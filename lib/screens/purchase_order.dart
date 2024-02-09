@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -60,6 +61,10 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: Colors.,
+        backgroundColor:
+            AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
+                ? Color.fromARGB(255, 7, 21, 32)
+                : Colors.white,
         elevation: 0,
         iconTheme: IconThemeData(
             // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
@@ -158,6 +163,9 @@ class _PurchaseOrderState extends State<PurchaseOrder> {
           // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
           //     ? Color.fromARGB(255, 7, 21, 32)
           //     : Colors.white,
+          color: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
+              ? Color.fromARGB(255, 7, 21, 32)
+              : Colors.white,
           boxShadow: [
             (EasyDynamicTheme.of(context).themeMode != ThemeMode.dark)
                 ? BoxShadow(
