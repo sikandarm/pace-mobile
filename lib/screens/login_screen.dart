@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
@@ -108,10 +109,10 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void showMsgBar(String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
-  }
+  // void showMsgBar(String message) {
+  //   ScaffoldMessenger.of(context)
+  //       .showSnackBar(SnackBar(content: Text(message)));
+  // }
 
   callLoginApi(String uEmail, String uPass) async {
     ScaffoldMessenger.of(context).clearSnackBars();
@@ -152,8 +153,14 @@ class _LoginScreenState extends State<LoginScreen> {
       if (loginRes.statusCode != 200) {
         errorMsg = jsonDecode(loginRes.body)['message'];
         // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(errorMsg)));
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //     content: Text(
+        //   errorMsg,
+        // )));
+        showSnackbar(
+          context,
+          errorMsg,
+        );
         return;
       }
 
@@ -163,8 +170,10 @@ class _LoginScreenState extends State<LoginScreen> {
       print('today login response:' + jsonMap.toString());
       if (loginRes.statusCode == 200) {
         // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+        //   ScaffoldMessenger.of(context)
+        //       .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+
+        showSnackbar(context, jsonMap['message']);
 
         Map<String, dynamic>? decodedToken =
             JwtDecoder.decode(jsonMap['data']['token']);
@@ -193,12 +202,15 @@ class _LoginScreenState extends State<LoginScreen> {
       } else if (loginRes.statusCode != 200) {
         errorMsg = jsonDecode(loginRes.body)['message'];
         // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(errorMsg)));
+        //  ScaffoldMessenger.of(context)
+        //    .showSnackBar(SnackBar(content: Text(errorMsg)));
+
+        showSnackbar(context, errorMsg);
       }
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toString())));
+      //   ScaffoldMessenger.of(context)
+      //     .showSnackBar(SnackBar(content: Text(e.toString())));
+      showSnackbar(context, e.toString());
       print('login api:$e');
     }
   }
@@ -484,6 +496,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             // _validateFields();
+                            ScaffoldMessenger.of(context).clearSnackBars();
 
                             String uEmail = emailText.text;
                             String uPassword = passwordText.text;
@@ -558,12 +571,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _buildSocialIcon(context, 'assets/images/google.png',
-                            true, false, isTablet),
-                        _buildSocialIcon(context, 'assets/images/apple.png',
-                            false, false, isTablet),
-                        _buildSocialIcon(context, 'assets/images/facebook.png',
-                            false, true, isTablet),
+                        if (!Platform.isIOS) ...{
+                          _buildSocialIcon(context, 'assets/images/google.png',
+                              true, false, isTablet),
+                        },
+                        if (Platform.isIOS) ...{
+                          _buildSocialIcon(context, 'assets/images/apple.png',
+                              false, false, isTablet),
+                        },
+                        if (!Platform.isIOS) ...{
+                          _buildSocialIcon(
+                              context,
+                              'assets/images/facebook.png',
+                              false,
+                              true,
+                              isTablet),
+                        },
                       ],
                     ),
 

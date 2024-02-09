@@ -37,9 +37,9 @@ callShareCAR(BuildContext context, int reportId, List<int> userId) async {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
-
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+      showSnackbar(context, jsonMap['message'].toString());
       // ignore: use_build_context_synchronously
       // Navigator.push(
       //   context,
@@ -53,10 +53,13 @@ callShareCAR(BuildContext context, int reportId, List<int> userId) async {
       Navigator.pop(context);
     } else {
       // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+
+      showSnackbar(context, jsonMap['message'].toString());
     }
   } catch (e) {
+    showSnackbar(context, e.toString());
     print(e);
   }
 }
@@ -206,8 +209,10 @@ Widget _buildAppBar(
             callShareCAR(context, carId, pickedIds);
           } else {
             // ignore: use_build_context_synchronously
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text("Please select a user to share CAR.")));
+            //    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            //        content: Text("Please select a user to share CAR.")));
+
+            showSnackbar(context, 'Please select a user to share CAR.');
           }
         },
         child: Container(

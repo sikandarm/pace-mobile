@@ -235,9 +235,14 @@ class _SubmitReceivedStatusBillOfLadingScreenState
 
                       if (int.parse(value) >
                           widget.billdata!.billofLadingItems![i].quantity!) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                '${widget.billdata!.billofLadingItems![i].fabricatedItems} quanity can not exceed ${widget.billdata!.billofLadingItems![i].quantity}')));
+                        // ScaffoldMessenger.of(context).showSnackBar(
+                        //   SnackBar(
+                        //       content: Text(
+                        //           '${widget.billdata!.billofLadingItems![i].fabricatedItems} quanity can not exceed ${widget.billdata!.billofLadingItems![i].quantity}')),
+                        // );
+
+                        showSnackbar(context,
+                            '${widget.billdata!.billofLadingItems![i].fabricatedItems} quanity can not exceed ${widget.billdata!.billofLadingItems![i].quantity}');
                         allControllers[i].clear();
                         value = '';
                       }
@@ -316,8 +321,10 @@ class _SubmitReceivedStatusBillOfLadingScreenState
                           });
 
                       print('bill response:' + response.body.toString());
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Bill status changed to received!')));
+                      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      //       content: Text('Bill status changed to received!')));
+
+                      showSnackbar(context, 'Bill status changed to received!');
                       Navigator.pop(context, false);
                     },
                     child: Text(

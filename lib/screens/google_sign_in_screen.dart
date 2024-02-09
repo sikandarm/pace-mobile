@@ -282,8 +282,10 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                   onPressed: () async {
                     ScaffoldMessenger.of(context).clearSnackBars();
                     if (phone.text.trim().isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Please provide a phone number!')));
+                      //    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      //        content: Text('Please provide a phone number!')));
+
+                      showSnackbar(context, 'Please provide a phone number!');
                       return;
                     }
                     // _validateFields();
@@ -333,8 +335,10 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                         'socialLogin response: ' + decodedResponse.toString());
 
                     if (decodedResponse['success'] == false) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(decodedResponse['message'])));
+                      //    ScaffoldMessenger.of(context).showSnackBar(
+                      //        SnackBar(content: Text(decodedResponse['message'])));
+
+                      showSnackbar(context, decodedResponse['message']);
                     }
 
                     if (decodedResponse['success'] == true) {

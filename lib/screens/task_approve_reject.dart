@@ -189,22 +189,26 @@ class _TaskListHeaderState extends State<TaskListHeader> {
         Map<String, dynamic> jsonMap = jsonDecode(responseString);
 
         if (response.statusCode == 200 || response.statusCode == 201) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+          //   ScaffoldMessenger.of(context)
+          //       .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+          showSnackbar(context, jsonMap['message']);
 
           // Navigate to the last screen in the stack
           // ignore: use_build_context_synchronously
           Navigator.popUntil(context, (route) => route.isFirst);
         } else {
           // ignore: use_build_context_synchronously
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+          //   ScaffoldMessenger.of(context)
+          //       .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+          showSnackbar(context, jsonMap['message']);
         }
       } else {
         // Handle the case where userId is not available
         // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('User ID not found')));
+        //      ScaffoldMessenger.of(context)
+        //          .showSnackBar(const SnackBar(content: Text('User ID not found')));
+
+        showSnackbar(context, 'User ID not found');
       }
     } catch (e) {
       print(e);
@@ -446,9 +450,10 @@ class _TaskListHeaderState extends State<TaskListHeader> {
                           selectedRejectionValue == '' ||
                           selectedRejectionValue == 'Select Reason') {
                         ScaffoldMessenger.of(context).clearSnackBars();
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Select a reason for rejection'),
-                        ));
+                        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        //   content: Text('Select a reason for rejection'),
+                        // ));
+                        showSnackbar(context, 'Select a reason for rejection');
                         return;
                       }
 

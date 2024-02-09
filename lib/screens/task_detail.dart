@@ -805,22 +805,26 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
         // Map<String, dynamic> jsonMap = jsonDecode(response.body);
 
         if (response.statusCode == 200 || response.statusCode == 201) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+          //    ScaffoldMessenger.of(context)
+          //        .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+
+          showSnackbar(context, jsonMap['message']);
 
           // Navigate to the last screen in the stack
           // ignore: use_build_context_synchronously
           Navigator.popUntil(context, (route) => route.isFirst);
         } else {
           // ignore: use_build_context_synchronously
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+          //   ScaffoldMessenger.of(context)
+          //       .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+          showSnackbar(context, jsonMap['message']);
         }
       } else {
         // Handle the case where userId is not available
         // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('User ID not found')));
+        //   ScaffoldMessenger.of(context)
+        //       .showSnackBar(const SnackBar(content: Text('User ID not found')));
+        showSnackbar(context, 'User ID not found');
       }
     } catch (e) {
       print('e: $e');
@@ -2427,8 +2431,9 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
       final boolResult =
           await getTaskPlayOrPauseStatus(taskId: taskId.toString());
       if (boolResult == false) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Task must be paused to proceed for completion!')));
+        //  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        //      content: Text('Task must be paused to proceed for completion!')));
+        showSnackbar(context, 'Task must be paused to proceed for completion!');
         return;
       }
 

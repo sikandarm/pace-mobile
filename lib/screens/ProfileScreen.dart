@@ -225,9 +225,9 @@ Future<void> callUpdateUser(BuildContext context, String fName, String lName,
         saveStringToSP(fName, BL_USER_FULL_NAME);
 
         // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
-
+        //   ScaffoldMessenger.of(context)
+        //      .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+        showSnackbar(context, jsonMap['message']);
         // Navigate to TaskDetail screen
         // ignore: use_build_context_synchronously
         Navigator.push(
@@ -238,14 +238,18 @@ Future<void> callUpdateUser(BuildContext context, String fName, String lName,
         );
       } else {
         // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+        //  ScaffoldMessenger.of(context)
+        //    .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+
+        showSnackbar(context, jsonMap['message']);
       }
     } else {
       // Handle the case where userId is not available
       // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('User ID not found')));
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(const SnackBar(content: Text('User ID not found')));
+
+      showSnackbar(context, 'User ID not found');
     }
   } catch (e) {
     print(e);
@@ -596,8 +600,10 @@ class _userProfileWidgetState extends State<userProfileWidget> {
                       String phone = phoneController.text;
 
                       if (phoneController.text.length != 14) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('Invalid phone number entered')));
+                        //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        //       content: Text('Invalid phone number entered')));
+
+                        showSnackbar(context, 'Invalid phone number entered');
                         return;
                       }
 

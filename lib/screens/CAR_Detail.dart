@@ -485,9 +485,10 @@ class _CARDetailWidgetState extends State<CARDetailWidget> {
         Map<String, dynamic> jsonMap = jsonDecode(responseString);
 
         if (response.statusCode == 200 || response.statusCode == 201) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+          //      ScaffoldMessenger.of(context)
+          //         .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
 
+          showSnackbar(context, jsonMap['message']);
           // Navigate to TaskDetail screen
 
           if (status == 'approved') {
@@ -512,14 +513,17 @@ class _CARDetailWidgetState extends State<CARDetailWidget> {
           }
         } else {
           // ignore: use_build_context_synchronously
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+          //    ScaffoldMessenger.of(context)
+          //      .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+
+          showSnackbar(context, jsonMap['message']);
         }
       } else {
         // Handle the case where userId is not available
         // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('User ID not found')));
+        //   ScaffoldMessenger.of(context)
+        //     .showSnackBar(const SnackBar(content: Text('User ID not found')));
+        showSnackbar(context, 'User ID not found');
       }
     } catch (e) {
       print(e);

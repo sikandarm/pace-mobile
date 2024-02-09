@@ -379,12 +379,14 @@ class _TaskListState extends State<TaskList> {
                                           jsonDecode(response.body);
 
                                       if (decodedResponse['message'] != null) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                              content: Text(
-                                                  decodedResponse['message'])),
-                                        );
+                                        // ScaffoldMessenger.of(context)
+                                        //     .showSnackBar(
+                                        //   SnackBar(
+                                        //       content: Text(
+                                        //           decodedResponse['message'])),
+                                        // );
+                                        showSnackbar(context,
+                                            decodedResponse['message']);
                                       }
 
                                       sequenceNameController.clear();

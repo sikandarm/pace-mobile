@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,20 @@ class DarkTheme {
         // Adjust color as needed
       ),
       brightness: Brightness.dark,
+
+      // snackBarTheme: SnackBarThemeData(
+      //   contentTextStyle: TextStyle(
+      //     color: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light
+      //         ? Colors.black
+      //         : Colors.white,
+      //   ),
+
+      //   backgroundColor:
+      //       AdaptiveTheme.of(context).mode == AdaptiveThemeMode.light
+      //           ? Colors.white
+      //           : Color.fromARGB(
+      //               255, 7, 21, 32), // Change color as per your preference
+      // ),
 
       iconTheme: IconThemeData(color: Colors.white),
       //   primaryColor: Colors.black.withOpacity(0.5),

@@ -297,17 +297,23 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                     //   return;
                     //  } else
                     if (emailController.text.trim().isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Please provide an email!')));
+                      //  ScaffoldMessenger.of(context).showSnackBar(
+                      //    SnackBar(content: Text('Please provide an email!')));
+
+                      showSnackbar(context, 'Please provide an email!');
                       return;
                     } else if (!EmailValidator.validate(
                         emailController.text.trim())) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Please provide a valid email!')));
+                      //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      //       content: Text('Please provide a valid email!')));
+                      showSnackbar(context, 'Please provide a valid email!');
+
                       return;
                     } else if (phone.text.trim().isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Please provide a phone number!')));
+                      //    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      //        content: Text('Please provide a phone number!')));
+
+                      showSnackbar(context, 'Please provide a phone number!');
                       return;
                     }
 
@@ -338,9 +344,10 @@ class _FacebookEmailScreenState extends State<FacebookEmailScreen> {
                     final decodedResponse = jsonDecode(apiResponse.body);
 
 //if(decodedResponse['success']==false){
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(decodedResponse['message'])));
+//                    ScaffoldMessenger.of(context).showSnackBar(
+                    //                      SnackBar(content: Text(decodedResponse['message'])));
 
+                    showSnackbar(context, decodedResponse['message']);
 //}
                     if (decodedResponse['success'] == true) {
                       print('myy token: ' + decodedResponse['data']['token']);

@@ -118,20 +118,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+        //    ScaffoldMessenger.of(context)
+        //        .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
 
+        showSnackbar(context, jsonMap['message']);
         // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, '/login');
       } else {
         // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+        //     ScaffoldMessenger.of(context)
+        //        .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+        showSnackbar(context, jsonMap['message']);
       }
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toString())));
-
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(SnackBar(content: Text(e.toString())));
+      showSnackbar(context, e.toString());
       print("error");
       print(e);
     }

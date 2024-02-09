@@ -166,7 +166,21 @@ InputDecoration textFieldDecoration(
 }
 
 void showSnackbar(BuildContext context, String text) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
+          ? Color.fromARGB(255, 2, 13, 21)
+          : Colors.black.withOpacity(0.9),
+      content: Text(
+        text,
+        style: TextStyle(
+          color: AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark
+              ? Colors.white
+              : Colors.white,
+        ),
+      ),
+    ),
+  );
 }
 
 double calculatePercentage(int numerator, int denominator) {

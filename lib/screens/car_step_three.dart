@@ -91,8 +91,10 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+        //   ScaffoldMessenger.of(context)
+        //     .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+
+        showSnackbar(context, jsonMap['message'].toString());
 
         // ignore: use_build_context_synchronously
 
@@ -111,8 +113,10 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
             (route) => false);
       } else {
         // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+        //    ScaffoldMessenger.of(context)
+        //      .showSnackBar(SnackBar(content: Text(jsonMap['message'])));
+
+        showSnackbar(context, jsonMap['message']);
       }
     } catch (e) {
       print(e);
@@ -334,17 +338,20 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
 
                           if (nameStepThree.text.trim().isEmpty) {
                             ScaffoldMessenger.of(context).clearSnackBars();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Enter a name!')));
+                            //  ScaffoldMessenger.of(context).showSnackBar(
+                            //      const SnackBar(content: Text('Enter a name!')));
+
+                            showSnackbar(context, 'Enter a name!');
                             return;
                           }
 
                           if (companyIsTo.text.trim().isEmpty) {
                             ScaffoldMessenger.of(context).clearSnackBars();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content:
-                                        Text('Enter Company is to field!')));
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //     const SnackBar(
+                            //         content:
+                            //             Text('Enter Company is to field!')));
+                            showSnackbar(context, 'Enter Company is to field!');
                             return;
                           }
 
@@ -352,9 +359,12 @@ class _CARStepThreeScreenState extends State<CARSTepThreeScreen> {
                               stepThreeDate.text.trim() == null.toString() ||
                               stepThreeDate.text.trim().isEmpty) {
                             ScaffoldMessenger.of(context).clearSnackBars();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Select a date!')));
+                            //    ScaffoldMessenger.of(context).showSnackBar(
+                            //       const SnackBar(
+                            //         content: Text('Select a date!')));
+
+                            showSnackbar(context, 'Select a date!');
+
                             return;
                           }
 

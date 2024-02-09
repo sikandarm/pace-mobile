@@ -833,10 +833,12 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                               descOne.text.trim().isEmpty ||
                               descTwo.text.trim().isEmpty) {
                             ScaffoldMessenger.of(context).clearSnackBars();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content:
-                                        Text('Fill all the given fields!')));
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //     const SnackBar(
+                            //         content:
+                            //             Text('Fill all the given fields!')));
+                            showSnackbar(context, 'Fill all the given fields!');
+
                             return;
                           }
 
@@ -844,9 +846,11 @@ class _CARStepOneScreenState extends State<CARSTepOneScreen> {
                               stepOneDate.text.trim() == null.toString() ||
                               stepOneDate.text.trim().isEmpty) {
                             ScaffoldMessenger.of(context).clearSnackBars();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Select a date!')));
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //     const SnackBar(
+                            //         content: Text('Select a date!')));
+
+                            showSnackbar(context, 'Select a date!');
                             return;
                           }
 

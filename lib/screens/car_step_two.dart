@@ -293,17 +293,21 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
 
                           if (name.text.trim().isEmpty) {
                             ScaffoldMessenger.of(context).clearSnackBars();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Enter a name!')));
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //     const SnackBar(content: Text('Enter a name!')));
+                            showSnackbar(context, 'Enter a name!');
                             return;
                           }
                           if (stepTwoDate.text.trim() == '' ||
                               stepTwoDate.text.trim() == null.toString() ||
                               stepTwoDate.text.trim().isEmpty) {
                             ScaffoldMessenger.of(context).clearSnackBars();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Select a date!')));
+                            //   ScaffoldMessenger.of(context).showSnackBar(
+                            //     const SnackBar(
+                            //       content: Text('Select a date!')));
+
+                            showSnackbar(context, 'Select a date!');
+
                             return;
                           }
 
@@ -311,10 +315,14 @@ class _CARStepTwoScreenState extends State<CARSTepTwoScreen> {
                               _rbDispositionTitle.trim() == null.toString() ||
                               _rbDispositionTitle.trim().isEmpty) {
                             ScaffoldMessenger.of(context).clearSnackBars();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content:
-                                        Text('Select a disposition option!')));
+                            //    ScaffoldMessenger.of(context).showSnackBar(
+                            //        const SnackBar(
+                            //            content:
+                            //                Text('Select a disposition option!')));
+
+                            showSnackbar(
+                                context, 'Select a disposition option!');
+
                             return;
                           }
 

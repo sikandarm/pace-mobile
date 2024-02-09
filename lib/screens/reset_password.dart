@@ -121,20 +121,24 @@ class _ResetPassScreenState extends State<ResetPassword> {
                         final RegExp emailRegExp = RegExp(
                             r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
                         if (value!.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Please enter an email address.'),
-                            ),
-                          );
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   SnackBar(
+                          //     content: Text('Please enter an email address.'),
+                          //   ),
+                          // );
+                          showSnackbar(
+                              context, 'Please enter an email address.');
                           return;
                           //     return 'Please enter an email address.';
                         } else if (!emailRegExp.hasMatch(value)) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content:
-                                  Text('Please enter a valid email address.'),
-                            ),
-                          );
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   SnackBar(
+                          //     content:
+                          //         Text('Please enter a valid email address.'),
+                          //   ),
+                          // );
+                          showSnackbar(
+                              context, 'Please enter a valid email address.');
                           return;
                           //   return 'Please enter a valid email address.';
                         }
@@ -190,9 +194,10 @@ class _ResetPassScreenState extends State<ResetPassword> {
                               email: emailText.text.trim());
                           print(response.message);
                           if (response.success != true) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(response.message!)));
+                            //   ScaffoldMessenger.of(context).showSnackBar(
+                            //       SnackBar(content: Text(response.message!)));
 
+                            showSnackbar(context, response.message.toString());
                             return;
                           }
                           Navigator.push(

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:pace_application_fb/utils/constants.dart';
 
 import '../services/update_password.dart';
 import 'login_screen.dart';
@@ -86,11 +87,12 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                         ScaffoldMessenger.of(context).clearSnackBars();
 
                         if (value!.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please enter new password.'),
-                            ),
-                          );
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   const SnackBar(
+                          //     content: Text('Please enter new password.'),
+                          //   ),
+                          // );
+                          showSnackbar(context, 'Please enter new password.');
                           return;
                         }
                         return null;
@@ -135,11 +137,13 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                         //    ScaffoldMessenger.of(context).clearSnackBars();
 
                         if (value!.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please enter confirm password.'),
-                            ),
-                          );
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   const SnackBar(
+                          //     content: Text('Please enter confirm password.'),
+                          //   ),
+                          // );
+                          showSnackbar(
+                              context, 'Please enter confirm password.');
                           return;
                         }
 
@@ -188,10 +192,13 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                           }
                           if (passwordController.text.trim() !=
                               confirmPasswordController.text.trim()) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Password and confirm password do no match!')));
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //     const SnackBar(
+                            //         content: Text(
+                            //             'Password and confirm password do no match!')));
+
+                            showSnackbar(context,
+                                'Password and confirm password do no match!');
                             return;
                           }
 
@@ -200,11 +207,13 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
                               newPassword: passwordController.text.trim());
 
                           if (response.success == false) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(response.message!)));
+                            //  ScaffoldMessenger.of(context).showSnackBar(
+                            //      SnackBar(content: Text(response.message!)));
+                            showSnackbar(context, response.message.toString());
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(response.message!)));
+                            //    ScaffoldMessenger.of(context).showSnackBar(
+                            //      SnackBar(content: Text(response.message!)));
+                            showSnackbar(context, response.message.toString());
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(

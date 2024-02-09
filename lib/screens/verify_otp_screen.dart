@@ -93,6 +93,7 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:pace_application_fb/utils/constants.dart';
 import 'package:pinput/pinput.dart';
 
 import '../services/verify_otp.dart';
@@ -245,8 +246,9 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                       onPressed: () async {
                         ScaffoldMessenger.of(context).clearSnackBars();
                         if (pinController.text.length != 6) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Enter 6 digit otp!')));
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //     SnackBar(content: Text('Enter 6 digit otp!')));
+                          showSnackbar(context, 'Enter 6 digit otp!');
                           return;
                         }
 
@@ -254,13 +256,15 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                             await verifyOtpApi(otp: pinController.text.trim());
 
                         if (response.success != true) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(response.message!)));
+                          //  ScaffoldMessenger.of(context).showSnackBar(
+                          //      SnackBar(content: Text(response.message!)));
+                          showSnackbar(context, response.message.toString());
                           return;
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(response.message.toString())));
+                          //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          //         content: Text(response.message.toString())));
 
+                          showSnackbar(context, (response.message.toString()));
                           Navigator.push(
                               context,
                               MaterialPageRoute(
