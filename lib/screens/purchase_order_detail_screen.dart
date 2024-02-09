@@ -526,15 +526,15 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
                     child: Container(
                       margin: const EdgeInsets.symmetric(horizontal: 23),
                       decoration: BoxDecoration(boxShadow: [
-                        EasyDynamicTheme.of(context).themeMode != ThemeMode.dark
-                            ? BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: const Offset(
-                                    0, 3), // changes position of shadow
-                              )
-                            : BoxShadow(),
+                        // EasyDynamicTheme.of(context).themeMode != ThemeMode.dark
+                        //     ? BoxShadow(
+                        //         color: Colors.grey.withOpacity(0.5),
+                        //         spreadRadius: 2,
+                        //         blurRadius: 5,
+                        //         offset: const Offset(
+                        //             0, 3), // changes position of shadow
+                        //       )
+                        //     : BoxShadow(),
                       ]),
                       child: ElevatedButton(
                         onPressed: () async {
