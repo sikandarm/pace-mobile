@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+//import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../services/user_list_service.dart';
@@ -252,7 +252,8 @@ class UserListItemWidget extends StatefulWidget {
   _UserListItemWidgetState createState() => _UserListItemWidgetState();
 }
 
-class _UserListItemWidgetState extends State<UserListItemWidget> {
+class _UserListItemWidgetState extends State<UserListItemWidget>
+    with AutomaticKeepAliveClientMixin {
   bool isLongPressed = false;
 
   int getPickedUsersCount() {
@@ -308,9 +309,9 @@ class _UserListItemWidgetState extends State<UserListItemWidget> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
           //   color: Colors.white,
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
-              ? Colors.white.withOpacity(0.92)
-              : Colors.white,
+          // color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+          //     ? Colors.white.withOpacity(0.92)
+          //     : Colors.white,
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
@@ -380,4 +381,8 @@ class _UserListItemWidgetState extends State<UserListItemWidget> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

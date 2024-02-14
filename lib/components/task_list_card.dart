@@ -1,4 +1,5 @@
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+//import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -215,8 +216,15 @@ class _TaskWidgetState extends State<TaskWidget> {
               );
             }
           : () async {
-              await Fluttertoast.cancel();
-              showToast('You do not have permissions');
+              //   await Fluttertoast.cancel();
+              //  showToast('You do not have permissions');
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TaskDetail(taskId: widget.taskId),
+                ),
+              );
             },
       child: Container(
         padding: const EdgeInsets.all(16),
@@ -240,13 +248,13 @@ class _TaskWidgetState extends State<TaskWidget> {
                       Text(
                         "Pmk# ${widget.taskName}",
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: isTablet ? 25 : 14.0,
-                          color: EasyDynamicTheme.of(context).themeMode ==
-                                  ThemeMode.dark
-                              ? Colors.black
-                              : Colors.black,
-                        ),
+                            fontWeight: FontWeight.bold,
+                            fontSize: isTablet ? 25 : 14.0,
+                            // color: EasyDynamicTheme.of(context).themeMode ==
+                            //         ThemeMode.dark
+                            //     ? Colors.black
+                            //     : Colors.black,
+                            color: Colors.black),
                       ),
                       Text(
                         widget.startDate == null
@@ -293,8 +301,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                               icon: Icon(
                                 Icons.delete,
                               ),
-                              color: EasyDynamicTheme.of(context).themeMode ==
-                                      ThemeMode.dark
+                              color: AdaptiveTheme.of(context).mode.isDark
                                   ? Colors.redAccent
                                   : Colors.red,
                             ),

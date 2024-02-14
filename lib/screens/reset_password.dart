@@ -1,5 +1,5 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+//import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../services/forgot_password.dart';
@@ -126,9 +126,10 @@ class _ResetPassScreenState extends State<ResetPassword> {
                           //     content: Text('Please enter an email address.'),
                           //   ),
                           // );
+
                           showSnackbar(
                               context, 'Please enter an email address.');
-                          return;
+                          return null;
                           //     return 'Please enter an email address.';
                         } else if (!emailRegExp.hasMatch(value)) {
                           // ScaffoldMessenger.of(context).showSnackBar(
@@ -139,9 +140,10 @@ class _ResetPassScreenState extends State<ResetPassword> {
                           // );
                           showSnackbar(
                               context, 'Please enter a valid email address.');
-                          return;
+                          return null;
                           //   return 'Please enter a valid email address.';
                         }
+
                         return null;
                       },
                       controller: emailText,
@@ -190,6 +192,24 @@ class _ResetPassScreenState extends State<ResetPassword> {
                           if (!formKey.currentState!.validate()) {
                             return;
                           }
+                          if (emailText.text.trim().isEmpty) {
+                            return;
+                          }
+
+                          final RegExp emailRegExp = RegExp(
+                              r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+                          if (!emailRegExp.hasMatch(emailText.text.trim())) {
+                            return;
+                          }
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                          //   SnackBar(
+                          //     content:
+                          //         Text('Please enter a valid email address.'),
+                          //   ),
+                          // );
+                          // showSnackbar(
+                          //     context, 'Please enter a valid email address.');
+
                           final response = await forgotPasswordApi(
                               email: emailText.text.trim());
                           print(response.message);

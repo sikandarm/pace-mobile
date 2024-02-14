@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+//import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -199,6 +199,7 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                 keyboardType: TextInputType.phone,
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(12),
+
                   // Limit input to 12 characters (including mask characters)
                   PhoneNumberFormatter(),
                   // Only allow digits
@@ -287,7 +288,14 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
 
                       showSnackbar(context, 'Please provide a phone number!');
                       return;
+                    } else if (phone.text.trim().length != 12) {
+                      //    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      //        content: Text('Please provide a phone number!')));
+
+                      showSnackbar(context, 'Please provide a valid number!');
+                      return;
                     }
+
                     // _validateFields();
                     // if (nameController.text.trim().isEmpty) {
                     //   ScaffoldMessenger.of(context).showSnackBar(
@@ -426,26 +434,54 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
   }
 }
 
+// class PhoneNumberFormatter extends TextInputFormatter {
+//   @override
+//   TextEditingValue formatEditUpdate(
+//       TextEditingValue oldValue, TextEditingValue newValue) {
+//     final text = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+
+//     if (text.length <= 3) {
+//       return TextEditingValue(
+//           text: text, selection: TextSelection.collapsed(offset: text.length));
+//     } else if (text.length <= 6) {
+//       return TextEditingValue(
+//         text: '${text.substring(0, 3)}-${text.substring(3)}',
+//         selection: TextSelection.collapsed(offset: text.length + 1),
+//       );
+//     } else {
+//       return TextEditingValue(
+//         text:
+//             '${text.substring(0, 3)}-${text.substring(3, 6)}-${text.substring(6)}',
+//         selection: TextSelection.collapsed(offset: text.length + 2),
+//       );
+//     }
+//   }
+// }
+
 class PhoneNumberFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    final text = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final newText = _formatPhoneNumber(newValue.text);
+    return TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newText.length),
+    );
+  }
 
-    if (text.length <= 3) {
-      return TextEditingValue(
-          text: text, selection: TextSelection.collapsed(offset: text.length));
-    } else if (text.length <= 6) {
-      return TextEditingValue(
-        text: '${text.substring(0, 3)}-${text.substring(3)}',
-        selection: TextSelection.collapsed(offset: text.length + 1),
-      );
+  String _formatPhoneNumber(String input) {
+    // Remove non-numeric characters
+    final digits = input.replaceAll(RegExp(r'\D'), '');
+
+    // Apply phone number formatting xxx-xxx-xxxx
+    if (digits.length >= 7) {
+      return '${digits.substring(0, 3)}-${digits.substring(3, 6)}-${digits.substring(6)}';
+    } else if (digits.length >= 4) {
+      return '${digits.substring(0, 3)}-${digits.substring(3)}';
     } else {
-      return TextEditingValue(
-        text:
-            '${text.substring(0, 3)}-${text.substring(3, 6)}-${text.substring(6)}',
-        selection: TextSelection.collapsed(offset: text.length + 2),
-      );
+      return digits;
     }
   }
 }

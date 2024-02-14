@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+//import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -237,9 +237,11 @@ Future<int?> getIntFromSF(String key) async {
 }
 
 Color setCardBorderColor(String value) {
-  if (value == "in_process" || value == "pending" || value == "to_inspect") {
+  if (value == "in_process" || value == "to_inspect") {
     return const Color(0xfff3bd59);
   } else if (value == "rejected") {
+    return const Color(0xFFe86c63);
+  } else if (value == "pending") {
     return const Color(0xFFe86c63);
   } else {
     return const Color(0xFF67c35c);
@@ -261,9 +263,11 @@ String setStatusText(String value) {
 }
 
 Color setCardColor(String value) {
-  if (value == "in_process" || value == "pending" || value == "to_inspect") {
+  if (value == "in_process" || value == "to_inspect") {
     return const Color(0xfffcebcc);
   } else if (value == "rejected") {
+    return const Color(0xFFf8d3d0);
+  } else if (value == "pending") {
     return const Color(0xFFf8d3d0);
   } else {
     return const Color(0xFFd1edcd);

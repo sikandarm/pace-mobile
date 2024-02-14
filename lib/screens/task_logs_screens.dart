@@ -1,4 +1,4 @@
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+//import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pace_application_fb/utils/constants.dart';
@@ -217,7 +217,9 @@ class _TaskLogsScreenState extends State<TaskLogsScreen> {
                                           child: Text(
                                             formatDateTime(
                                               DateTime.parse(
-                                                taskLogsList[i].breakStart!,
+                                                taskLogsListRemovedNullComment[
+                                                        i]
+                                                    .breakStart!,
                                               ),
                                             ),
                                             softWrap: true,
@@ -230,9 +232,7 @@ class _TaskLogsScreenState extends State<TaskLogsScreen> {
                                       DataCell(Container(
                                         width: isTablet ? 250 : 120,
                                         child: Text(
-                                          taskLogsListRemovedNullComment[i]
-                                                      .breakEnd ==
-                                                  null
+                                          taskLogsList[i].breakEnd == null
                                               ? 'waiting for task end!'
                                               : formatDateTime(DateTime.parse(
                                                   taskLogsListRemovedNullComment[

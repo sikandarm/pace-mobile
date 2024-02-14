@@ -1,4 +1,5 @@
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+//import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -85,7 +86,7 @@ class _JobListState extends State<JobList> {
         child: Card(
           // color: Colors.white.withOpacity(0.92),
 
-          color: EasyDynamicTheme.of(context).themeMode == ThemeMode.dark
+          color: AdaptiveTheme.of(context).mode.isDark
               ? Colors.white.withOpacity(0.92)
               : Colors.white,
 
@@ -154,10 +155,11 @@ class _JobListState extends State<JobList> {
                         //  fontSize: 12.0,
                         fontSize: isTablet ? 19 : 12.0,
                         fontWeight: FontWeight.w500,
-                        color: EasyDynamicTheme.of(context).themeMode ==
-                                ThemeMode.dark
-                            ? Colors.black
-                            : Colors.black,
+                        // color: EasyDynamicTheme.of(context).themeMode ==
+                        //         ThemeMode.dark
+                        //     ? Colors.black
+                        //     : Colors.black,
+                        color: Colors.black,
                       ),
                     ),
                   ],

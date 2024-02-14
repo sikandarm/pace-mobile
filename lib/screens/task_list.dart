@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+//import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -231,6 +231,7 @@ class _TaskListState extends State<TaskList> {
   @override
   void didChangeDependencies() {
     checkTablet();
+
     super.didChangeDependencies();
   }
 
@@ -255,6 +256,21 @@ class _TaskListState extends State<TaskList> {
       //   final sharedPrefs = await SharedPreferences.getInstance();
       //   final token = sharedPrefs.getString(BL_USER_TOKEN);
       //   print('token: ' + token.toString());
+      // }),
+
+      /////////////////////////////////////////////////
+      // floatingActionButton: FloatingActionButton(onPressed: () {
+      //   //   if (scrollController.offset == 0) {
+      //   //   return;
+      //   //  }
+      //   _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      //     // scroll up
+      //     scrollController.animateTo(
+      //       scrollController.offset + 200,
+      //       duration: const Duration(milliseconds: 75),
+      //       curve: Curves.linear,
+      //     );
+      //   });
       // }),
       appBar: AppBar(
         backgroundColor: Colors.transparent,

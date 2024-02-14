@@ -8,7 +8,7 @@ import 'dart:typed_data';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:dio/dio.dart';
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+//import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,6 +46,7 @@ bool _blSelfAssignATask = false;
 bool _b1ShowProfile = false;
 bool b1ViewContacts = false;
 bool b1DownloadDiagram = false;
+bool b1MakeCall = false;
 
 bool isStartButtonVisible = true;
 int startButtonTaskId = -1;
@@ -121,6 +122,7 @@ class _TaskDetailState extends State<TaskDetail> {
   void didChangeDependencies() {
     checkTablet();
     getStartButtonVisibility();
+
     super.didChangeDependencies();
   }
 
@@ -153,6 +155,10 @@ class _TaskDetailState extends State<TaskDetail> {
 
     checkPermissionAndUpdateBool("view_contact", (localBool) {
       b1ViewContacts = localBool;
+    });
+
+    checkPermissionAndUpdateBool("make_call", (localBool) {
+      b1MakeCall = localBool;
     });
 
     checkPermissionAndUpdateBool("download_diagram", (localBool) {
@@ -216,6 +222,7 @@ class _TaskDetailState extends State<TaskDetail> {
 
   Future<void> getLocalStartButtonStatus() async {}
 
+  bool startNewButtonVisible = false;
   @override
   Widget build(BuildContext context) {
     return LoaderOverlay(
@@ -575,6 +582,7 @@ class _TaskDetailState extends State<TaskDetail> {
                         final tasks = snapshot.data![index];
 
                         return TaskDetailWidget(
+                          taskIteration: tasks.task_iteration,
                           id: tasks.id,
                           pmkNumber: tasks.pmkNumber,
                           heatNo: tasks.heatNo,
@@ -628,6 +636,7 @@ class TaskDetailWidget extends StatefulWidget {
   final String? welder;
   final String? painter;
   final String? foreman;
+  final int taskIteration;
 
   const TaskDetailWidget({
     Key? key,
@@ -650,6 +659,7 @@ class TaskDetailWidget extends StatefulWidget {
     required this.welder,
     required this.painter,
     required this.foreman,
+    required this.taskIteration,
   }) : super(key: key);
 
   @override
@@ -702,7 +712,19 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
     checkTablet();
     isbtnVisible();
     callMyMethod();
+    showStartButton(widget.status!, loginUserId, widget.userId, taskLogsList);
     super.didChangeDependencies();
+  }
+
+  bool? showingStartButton = false;
+
+  void showStartButton(String status, int loginUserId, int? userId,
+      List<TasklogModel> taskLogsList) async {
+    showingStartButton = (status?.toLowerCase() == 'in_process'.toLowerCase() &&
+        taskLogsList.isEmpty &&
+        (loginUserId == userId) &&
+        (_blSelfAssignATask == true));
+    setState(() {});
   }
 
   int loginUserId = -1;
@@ -1035,6 +1057,8 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
             drawLine(),
             const SizedBox(height: 10),
             buildRolesFields("Foreman", widget.foreman!),
+            //      buildRolesFields("user id", widget.userId.toString()),
+            //  buildRolesFields("Iteration", widget.taskIteration.toString()),
             drawLine(),
             const SizedBox(
               height: 21,
@@ -1045,7 +1069,7 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Visibility(
-                    visible: b1ViewContacts,
+                    visible: b1MakeCall,
                     child: Card(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(33)),
@@ -1133,7 +1157,8 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    //   downloadImage(widget.imageUrl!, "TaskDiagram.png");
+                    //   downloadImage(widget
+                    //.imageUrl!, "TaskDiagram.png");
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -1155,13 +1180,13 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                   child: SizedBox(
                     //   width: 285.0,
                     // height: 145.0,
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    height: MediaQuery.of(context).size.height * 0.3,
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.40,
                     child: CachedNetworkImage(
                       // width: 285.0,
                       // height: 145.0,
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      height: MediaQuery.of(context).size.height * 0.3,
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.40,
 
                       imageUrl: widget.imageUrl!,
                       fit: BoxFit.cover,
@@ -1213,160 +1238,302 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
             //         child: Text('Collaborate')),
             //   ],
             // ),
-
-            const SizedBox(height: 20),
+            SizedBox(
+              height: 15,
+            ),
+/////////////////////////////////////////////////////////////////////////////////
 
             Visibility(
-              // visible: (taskLogsList.isEmpty || taskLogsList.length == 1) &&
-              //     (setButtonText(widget.status!, widget.userId!) !=
-              //         'Pick Task'),
-
-              visible: (taskLogsList.isEmpty || taskLogsList.length == 1) &&
-                  (widget.status == 'Pending' || widget.status == 'in_process'),
-
-              //    visible: isStartEmptyButtonVisible,
-
+              visible:
+                  widget.status?.toLowerCase() == 'Pending'.toLowerCase() &&
+                      (_blSelfAssignATask == true),
+              //  &&
+              // widget.userId == null,
               child: Center(
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.8,
-                  height: 50.0,
+                  height: 48,
                   child: ElevatedButton(
-                    onPressed: () async {
-                      // final startButtonBox =
-                      //     await Hive.openBox('startButtonBox');
-                      // startButtonBox.clear();
+                      style: ButtonStyle(
+                          foregroundColor:
+                              const MaterialStatePropertyAll(Colors.white),
+                          backgroundColor:
+                              const MaterialStatePropertyAll(Colors.blue),
+                          shape: MaterialStatePropertyAll(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(9)))),
+                      onPressed: () async {
+                        final buttonBox = await Hive.openBox('buttonBox');
+                        await buttonBox.put('isPickButtonPressed', true);
 
-                      // setState(() {});
-
-                      commentController.clear();
-                      print('empty resume button pressed');
-
-                      if (taskPayOrPauseStatus != null &&
-                          taskPayOrPauseStatus == true) {
-                        print('empty here in resume button');
-                        //      final dialogResult =
-                        //        await commmentDialog(context);
-
-                        if (true) {
-                          final response = await playAndPauseTaskApi(
-                            taskId: widget.id.toString(),
-                            break_start_as_DateTime: DateTime.now().toString(),
-                            break_end_as_DateTime: null,
-                            comment: '',
-                            //   commnet:'123'; wala ye ara tha pehly
-                          );
-                        }
-
-                        taskPayOrPauseStatus = await getTaskPlayOrPauseStatus(
-                            taskId: widget.id.toString());
-                      }
-
-                      taskLogsList = await getTaskLogs(taskId: widget.id);
-
-                      setState(() {});
-                      return;
-                      setState(() {});
-                    },
-
-                    child: const Text('Start'), //Start Empty
-                    style: ButtonStyle(
-                        backgroundColor:
-                            const MaterialStatePropertyAll(Colors.amber),
-                        foregroundColor:
-                            const MaterialStatePropertyAll(Colors.white),
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)))),
-                  ),
+                        await buttonBox.put(
+                            'isStartNotEmptyButtonPressed', true);
+                        await buttonAction(context, widget.id);
+                      },
+                      child: Text('Pick Task')),
                 ),
               ),
             ),
-            Visibility(
-              visible: (taskLogsList.length >= 2 &&
-                      (taskLogsList.last.iteration !=
-                          taskLogsList[taskLogsList.length - 2].iteration))
-                  ///////////////////////  remove condition below for error if getting any reject btn was visible somehow so in order to hide it this condition is used
-                  &&
-                  setButtonText(widget.status!, widget.userId!) != 'Reject'
-              //                  &&
-              //        widget.status!.toLowerCase() != 'Rejected'.toLowerCase()
 
+            // Visibility(
+            //   visible:
+            //       widget.status?.toLowerCase() == 'Pending'.toLowerCase() &&
+            //           widget.userId != null,
+            //   child: Center(
+            //     child: Container(
+            //       width: MediaQuery.of(context).size.width * 0.8,
+            //       height: 48,
+            //       child: ElevatedButton(
+            //           style: ButtonStyle(
+            //               foregroundColor:
+            //                   const MaterialStatePropertyAll(Colors.white),
+            //               backgroundColor:
+            //                   const MaterialStatePropertyAll(Colors.blue),
+            //               shape: MaterialStatePropertyAll(
+            //                   RoundedRectangleBorder(
+            //                       borderRadius: BorderRadius.circular(9)))),
+            //           onPressed: () async {
+            //             final buttonBox = await Hive.openBox('buttonBox');
+            //             await buttonBox.put('isPickButtonPressed', true);
+
+            //             await buttonBox.put(
+            //                 'isStartNotEmptyButtonPressed', true);
+            //             await buttonAction(context, widget.id);
+            //           },
+            //           child: Text('Pick Task userIdNULL')),
+            //     ),
+            //   ),
+            // ),
+            //////////////////////////////////////////
+
+            Visibility(
+              visible:
+                  (widget.status?.toLowerCase() == 'in_process'.toLowerCase() &&
+                      taskLogsList.isEmpty &&
+                      (loginUserId == widget.userId) &&
+                      (_blSelfAssignATask == true)),
+
+              ///////////////////////////////////////////////////////////////
+              ///
+              ///
+              ///
+              ///
+              ///
+              ///
+              ///
+              //  visible: showingStartButton!,
+              //          ||
+              //    ((widget.status?.toLowerCase() ==
+              //          'in_process'.toLowerCase() &&
+              //    taskLogsList.isEmpty &&
+              //  (loginUserId == widget.userId))),
               //   &&
-
-              // widget.status!.toLowerCase() != 'Approved'.toLowerCase(),
-              ,
+              //  taskPayOrPauseStatus == true,
               child: Center(
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.8,
-                  height: 50.0,
+                  height: 47,
                   child: ElevatedButton(
-                    onPressed: () async {
-                      // final startButtonBox =
-                      //     await Hive.openBox('startButtonBox');
-                      // startButtonBox.clear();
+                      style: ButtonStyle(
+                          foregroundColor:
+                              const MaterialStatePropertyAll(Colors.white),
+                          backgroundColor:
+                              const MaterialStatePropertyAll(Colors.amber),
+                          shape: MaterialStatePropertyAll(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(9)))),
+                      onPressed: () async {
+                        //    final buttonBox = await Hive.openBox('buttonBox');
+                        //    await buttonBox.delete('isPickButtonPressed');
+                        //    await buttonBox.clear();
 
-                      // setState(() {});
-
-                      commentController.clear();
-                      print('resume button pressed');
-
-                      if (taskPayOrPauseStatus != null &&
-                          taskPayOrPauseStatus == true) {
-                        print('here in resume button');
-                        //      final dialogResult =
-                        //        await commmentDialog(context);
-
-                        if (true) {
-                          final response = await playAndPauseTaskApi(
-                            taskId: widget.id.toString(),
-                            break_start_as_DateTime: DateTime.now().toString(),
-                            break_end_as_DateTime: null,
-                            comment: '',
-                            //   commnet:'123'; wala ye ara tha pehly
-                          );
-                        }
-
+                        //////////////////////////////////////////////////
+                        final response1 = await playAndPauseTaskApi(
+                          taskId: widget.id.toString(),
+                          break_start_as_DateTime: DateTime.now().toString(),
+                          break_end_as_DateTime: null,
+                          comment: commentController.text.trim(),
+                          //  comment: '111'
+                        );
                         taskPayOrPauseStatus = await getTaskPlayOrPauseStatus(
                             taskId: widget.id.toString());
-                      }
 
-                      taskLogsList = await getTaskLogs(taskId: widget.id);
-
-                      setState(() {});
-                      return;
-                      setState(() {});
-                      setState(() {});
-                      return;
-                      setState(() {});
-                    },
-                    child: const Text('Start'), // Start Not Empty Logs
-                    style: ButtonStyle(
-                        backgroundColor:
-                            const MaterialStatePropertyAll(Colors.amber),
-                        foregroundColor:
-                            const MaterialStatePropertyAll(Colors.white),
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)))),
-                  ),
+                        //    setState(() {});
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  TaskDetail(taskId: widget.id),
+                            ));
+                      },
+                      child: Text('Start')), //Start Empty
                 ),
               ),
             ),
+
+            // Visibility(
+            //   visible:
+            //       (widget.status?.toLowerCase() == 'in_process'.toLowerCase() &&
+            //           taskLogsList.isEmpty &&
+            //           (loginUserId == widget.userId) &&
+            //           (_blSelfAssignATask == false)),
+            //   //          ||
+            //   //    ((widget.status?.toLowerCase() ==
+            //   //          'in_process'.toLowerCase() &&
+            //   //    taskLogsList.isEmpty &&
+            //   //  (loginUserId == widget.userId))),
+            //   //   &&
+            //   //  taskPayOrPauseStatus == true,
+            //   child: Center(
+            //     child: Container(
+            //       width: MediaQuery.of(context).size.width * 0.8,
+            //       height: 47,
+            //       child: ElevatedButton(
+            //           style: ButtonStyle(
+            //               foregroundColor:
+            //                   const MaterialStatePropertyAll(Colors.white),
+            //               backgroundColor:
+            //                   const MaterialStatePropertyAll(Colors.amber),
+            //               shape: MaterialStatePropertyAll(
+            //                   RoundedRectangleBorder(
+            //                       borderRadius: BorderRadius.circular(9)))),
+            //           onPressed: () async {
+            //             //    final buttonBox = await Hive.openBox('buttonBox');
+            //             //    await buttonBox.delete('isPickButtonPressed');
+            //             //    await buttonBox.clear();
+
+            //             //////////////////////////////////////////////////
+            //             final response1 = await playAndPauseTaskApi(
+            //               taskId: widget.id.toString(),
+            //               break_start_as_DateTime: DateTime.now().toString(),
+            //               break_end_as_DateTime: null,
+            //               comment: commentController.text.trim(),
+            //               //  comment: '111'
+            //             );
+            //             taskPayOrPauseStatus = await getTaskPlayOrPauseStatus(
+            //                 taskId: widget.id.toString());
+
+            //             //    setState(() {});
+            //             Navigator.pop(context);
+            //             Navigator.push(
+            //                 context,
+            //                 MaterialPageRoute(
+            //                   builder: (context) =>
+            //                       TaskDetail(taskId: widget.id),
+            //                 ));
+            //           },
+            //           child: Text('Start')), //Start Empty
+            //     ),
+            //   ),
+            // ),
+
+////////////////////////////////////////////////////////////////
+            // FutureBuilder(
+            //   future: Future<bool?>(() async {
+            //     final buttonBox = await Hive.openBox('buttonBox');
+            //     final toShowButtton =
+            //         await buttonBox.get('isPickButtonPressed');
+            //     //    buttonBox.delete('isPickButtonPressed');
+            //     //  await buttonBox.clear();
+            //     isStartEmptyButtonVisible = toShowButtton;
+            //     return toShowButtton;
+            //     //////////////////////////////////////////////////
+            //   }),
+            //   builder: (context, snapshot) {
+            //     if (snapshot.data == true &&
+            //         widget.status != 'to_inspect' &&
+            //         widget.status?.toLowerCase() != 'pending'.toLowerCase() &&
+            //         taskLogsList.isNotEmpty &&
+            //         taskLogsList.last.breakEnd != null &&
+            //         taskPayOrPauseStatus != false) {
+            //       return ElevatedButton(
+            //           onPressed: () async {
+            //             final buttonBox = await Hive.openBox('buttonBox');
+            //             await buttonBox.delete('isPickButtonPressed');
+            //             await buttonBox.clear();
+
+            //             /////////////////////////////////////////////
+            //             await buttonBox.put(
+            //                 'isStartNotNewButtonPressed', false);
+            //             //////////////////////////////////////////////////
+            //             final response1 = await playAndPauseTaskApi(
+            //               taskId: widget.id.toString(),
+            //               break_start_as_DateTime: DateTime.now().toString(),
+            //               break_end_as_DateTime: null,
+            //               comment: commentController.text.trim(),
+            //               //  comment: '111'
+            //             );
+
+            //             taskPayOrPauseStatus = await getTaskPlayOrPauseStatus(
+            //                 taskId: widget.id.toString());
+
+            //             setState(() {});
+            //           },
+            //           child: Text('Start Not New Empty'));
+            //     }
+            //     return Container(
+            //       child: Text(''), // data was here
+            //     );
+            //   },
+            // ),
+
+            // Visibility(
+            //   visible: widget.status?.toLowerCase() ==
+            //           'in_process'.toLowerCase() &&
+            //       //  taskLogsList.isNotEmpty &&
+            //       ((taskLogsList.length >= 2 &&
+            //               (taskLogsList.last.iteration !=
+            //                   taskLogsList[taskLogsList.length - 2]
+            //                       .iteration)) ==
+            //           true
+            //       // &&
+            //       //   taskLogsList.last.breakEnd != null &&
+            //       //     (taskLogsList.isEmpty || taskLogsList.length == 1) ==
+            //       // false
+            //       ),
+            //   child: ElevatedButton(
+            //       onPressed: () async {
+            //         final response1 = await playAndPauseTaskApi(
+            //           taskId: widget.id.toString(),
+            //           break_start_as_DateTime: DateTime.now().toString(),
+            //           break_end_as_DateTime: null,
+            //           comment: commentController.text.trim(),
+            //           //  comment: '111'
+            //         );
+            //         await getTaskPlayOrPauseStatus(
+            //             taskId: widget.id.toString());
+            //         setState(() {});
+            //       },
+            //       child: Text('Start Not Empty')),
+            // ),
+
+/////////////////////////////////////////////////////////////////////////////////
+            const SizedBox(height: 20),
 
             taskPayOrPauseStatus == false &&
                     setButtonText(widget.status!, widget.userId!) == 'Complete'
                 ? Visibility(
-                    visible: ((taskLogsList.length >= 2 &&
-                                (taskLogsList.last.iteration !=
-                                    taskLogsList[taskLogsList.length - 2]
-                                        .iteration)) ==
-                            false &&
-                        (taskLogsList.isEmpty || taskLogsList.length == 1) ==
-                            false),
+                    visible: loginUserId == widget.userId,
+                    // visible: ((taskLogsList.length >= 2 &&
+                    //             (taskLogsList.last.iteration !=
+                    //                 taskLogsList[taskLogsList.length - 2]
+                    //                     .iteration)) ==
+                    //         false &&
+                    //     (taskLogsList.isEmpty || taskLogsList.length == 1) ==
+                    //         false),
+
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ///////  pause button pressed
                         Visibility(
                           visible: widget.userId == loginUserId,
+                          // &&
+                          // (
+                          //     //  taskLogsList.isNotEmpty &&
+                          //     taskLogsList.last.breakEnd == null &&
+                          //         taskPayOrPauseStatus != true),
                           child: SizedBox(
                             width: 130,
                             height: 50.0,
@@ -1446,174 +1613,28 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                         ),
 
                         ///////////////////  2nd button also here
-                        Visibility(
-                          visible: widget.userId == loginUserId,
-                          child: SizedBox(
-                            width: 130,
-                            height: 50.0,
-                            child: Container(
-                              decoration: BoxDecoration(boxShadow: [
-                                // (EasyDynamicTheme.of(context).themeMode !=
-                                //         ThemeMode.dark)
-                                //     ? BoxShadow(
-                                //         color: Colors.grey.withOpacity(0.5),
-                                //         spreadRadius: 2,
-                                //         blurRadius: 5,
-                                //         offset: const Offset(
-                                //             0, 3), // changes position of shadow
-                                //       )
-                                //     : const BoxShadow(),
-                              ]),
-                              child: _blApprovedTask && _blSelfAssignATask
-                                  ? ElevatedButton(
-                                      onPressed: () =>
-                                          buttonAction(context, widget.id),
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                Colors.blue),
-                                        shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                          ),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        setButtonText(
-                                            widget.status!, widget.userId!),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    )
-                                  : (_blSelfAssignATask &&
-                                          (widget.status == "in_process" ||
-                                              widget.status == "pending"))
-                                      ? ElevatedButton(
-                                          onPressed: () async {
-                                            print('complete button 1 pressed');
-                                            //    final startButtonBox =
-                                            //      await Hive.openBox(
-                                            //        'startButtonBox');
-
-                                            // await startButtonBox.put(
-                                            //     'isStartButtonVisible', true);
-
-                                            // await startButtonBox.put(
-                                            //     'taskId', widget.id);
-                                            //  startButtonBox.clear();
-                                            setState(() {});
-                                            buttonAction(context, widget.id);
-                                          },
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all<
-                                                    Color>(Colors.blue),
-                                            shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                              ),
-                                            ),
-                                          ),
-                                          child: Text(
-                                            setSelfApprovedText(
-                                                widget.status!, widget.userId!),
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        )
-                                      : _blApprovedTask &&
-                                              widget.status == "to_inspect"
-                                          ? ElevatedButton(
-                                              onPressed: () async {
-                                                print(
-                                                    'complete button 2 pressed');
-                                                //   final startButtonBox =
-                                                //      await Hive.openBox(
-                                                //        'startButtonBox');
-
-                                                // await startButtonBox.put(
-                                                //     'isStartButtonVisible', true);
-
-                                                // await startButtonBox.put(
-                                                //     'taskId', widget.id);
-                                                //  startButtonBox.clear();
-                                                setState(() {});
-                                                buttonAction(
-                                                    context, widget.id);
-                                              },
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all<
-                                                        Color>(Colors.blue),
-                                                shape:
-                                                    MaterialStateProperty.all<
-                                                        RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0),
-                                                  ),
-                                                ),
-                                              ),
-                                              child: Text(
-                                                setInspectionText(
-                                                    widget.status!,
-                                                    widget.userId!),
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            )
-                                          : ElevatedButton(
-                                              onPressed: () async {
-                                                print(
-                                                    'complete button 3 pressed');
-                                                //     final startButtonBox =
-                                                //         await Hive.openBox(
-                                                //           'startButtonBox');
-
-                                                // await startButtonBox.put(
-                                                //     'isStartButtonVisible', true);
-
-                                                // await startButtonBox.put(
-                                                //     'taskId', widget.id);
-                                                //   startButtonBox.clear();
-                                                setState(() {});
-                                                buttonAction(
-                                                    context, widget.id);
-                                              },
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all<
-                                                        Color>(Colors.blue),
-                                                shape:
-                                                    MaterialStateProperty.all<
-                                                        RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0),
-                                                  ),
-                                                ),
-                                              ),
-                                              child: Text(
-                                                setSelfApprovedText(
-                                                    widget.status!,
-                                                    widget.userId!),
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                            ),
-                          ),
-                        ),
+                        ///
+                        ///
+                        Container(
+                          width: 127,
+                          height: 48,
+                          child: ElevatedButton(
+                              style: ButtonStyle(
+                                  foregroundColor:
+                                      const MaterialStatePropertyAll(
+                                          Colors.white),
+                                  backgroundColor:
+                                      const MaterialStatePropertyAll(
+                                          Colors.blue),
+                                  shape: MaterialStatePropertyAll(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(9)))),
+                              onPressed: () async {
+                                await buttonAction(context, widget.id);
+                              },
+                              child: Text('Complete')),
+                        )
                       ],
                     ),
                   )
@@ -1621,14 +1642,23 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                         setButtonText(widget.status!, widget.userId!) ==
                             'Complete'
                     ? Visibility(
-                        visible: ((taskLogsList.length >= 2 &&
-                                    (taskLogsList.last.iteration !=
-                                        taskLogsList[taskLogsList.length - 2]
-                                            .iteration)) ==
-                                false &&
-                            (taskLogsList.isEmpty ||
-                                    taskLogsList.length == 1) ==
-                                false),
+                        visible: taskLogsList.isNotEmpty &&
+                            loginUserId == widget.userId,
+                        // &&
+                        //     taskLogsList.last.breakStart == null,
+                        //&&
+                        // (isStartEmptyButtonVisible == false &&
+                        //         taskLogsList.length > 1) ==
+                        //     true,
+
+                        // visible: ((taskLogsList.length >= 2 &&
+                        //             (taskLogsList.last.iteration !=
+                        //                 taskLogsList[taskLogsList.length - 2]
+                        //                     .iteration)) ==
+                        //         false &&
+                        //     (taskLogsList.isEmpty ||
+                        //             taskLogsList.length == 1) ==
+                        //         false),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -1687,667 +1717,191 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
                             ),
 
                             /////////////////////////////////////////////  2nd complete button creating isssue here
-                            Visibility(
-                              visible: widget.userId == loginUserId,
-                              child: SizedBox(
-                                width: 130,
-                                height: 50.0,
-                                child: Container(
-                                  decoration: BoxDecoration(boxShadow: [
-                                    // (EasyDynamicTheme.of(context).themeMode !=
-                                    //         ThemeMode.dark)
-                                    //     ? BoxShadow(
-                                    //         color: Colors.grey.withOpacity(0.5),
-                                    //         spreadRadius: 2,
-                                    //         blurRadius: 5,
-                                    //         offset: const Offset(0,
-                                    //             3), // changes position of shadow
-                                    //       )
-                                    //     : const BoxShadow(),
-                                  ]),
-                                  child: _blApprovedTask && _blSelfAssignATask
-                                      ? ElevatedButton(
-                                          onPressed: () =>
-                                              buttonAction(context, widget.id),
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all<
-                                                    Color>(Colors.blue),
-                                            shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                              ),
-                                            ),
-                                          ),
-                                          child: Text(
-                                            setButtonText(
-                                                widget.status!, widget.userId!),
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        )
-                                      : (_blSelfAssignATask &&
-                                              (widget.status == "in_process" ||
-                                                  widget.status == "pending"))
-                                          ? ElevatedButton(
-                                              onPressed: () => buttonAction(
-                                                  context, widget.id),
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all<
-                                                        Color>(Colors.blue),
-                                                shape:
-                                                    MaterialStateProperty.all<
-                                                        RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0),
-                                                  ),
-                                                ),
-                                              ),
-                                              child: Text(
-                                                setSelfApprovedText(
-                                                    widget.status!,
-                                                    widget.userId!),
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            )
-                                          : _blApprovedTask &&
-                                                  widget.status == "to_inspect"
-                                              ? ElevatedButton(
-                                                  onPressed: () => buttonAction(
-                                                      context, widget.id),
-                                                  style: ButtonStyle(
-                                                    backgroundColor:
-                                                        MaterialStateProperty
-                                                            .all<Color>(
-                                                                Colors.blue),
-                                                    shape: MaterialStateProperty
-                                                        .all<
-                                                            RoundedRectangleBorder>(
-                                                      RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                          10.0,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  child: Text(
-                                                    setInspectionText(
-                                                        widget.status!,
-                                                        widget.userId!),
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                )
-                                              // : SizedBox.shrink(
-                                              //     child: Text('data'),
-                                              //   ),
-                                              : ElevatedButton(
-                                                  onPressed: () => buttonAction(
-                                                      context, widget.id),
-                                                  style: ButtonStyle(
-                                                    backgroundColor:
-                                                        MaterialStateProperty
-                                                            .all<Color>(
-                                                                Colors.blue),
-                                                    shape: MaterialStateProperty
-                                                        .all<
-                                                            RoundedRectangleBorder>(
-                                                      RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  child: Text(
-                                                    setSelfApprovedText(
-                                                        widget.status!,
-                                                        widget.userId!),
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                ),
-                              ),
-                            ),
+                            Container(
+                              width: 127,
+                              height: 48,
+                              child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      foregroundColor:
+                                          const MaterialStatePropertyAll(
+                                              Colors.white),
+                                      backgroundColor:
+                                          const MaterialStatePropertyAll(
+                                              Colors.blue),
+                                      shape: MaterialStatePropertyAll(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(9)))),
+                                  onPressed: () async {
+                                    await buttonAction(context, widget.id);
+                                  },
+                                  child: Text('Complete')),
+                            )
                           ],
                         ),
                       )
-                    : setButtonText(widget.status!, widget.userId!) !=
-                                'Complete' &&
+                    : taskPayOrPauseStatus == true &&
                             setButtonText(widget.status!, widget.userId!) ==
-                                'Pick Task'
-                        ? Center(
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              height: 50.0,
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      // color: Colors.blue,
-                                      boxShadow: [
-                                        // (EasyDynamicTheme.of(context)
-                                        //             .themeMode !=
-                                        //         ThemeMode.dark)
-                                        //     ? BoxShadow(
-                                        //         color: Colors.grey
-                                        //             .withOpacity(0.5),
-                                        //         spreadRadius: 2,
-                                        //         blurRadius: 5,
-                                        //         offset: const Offset(0,
-                                        //             3), // changes position of shadow
-                                        //       )
-                                        //     : const BoxShadow(),
-                                      ]),
-                                  child: _blApprovedTask && _blSelfAssignATask
-                                      ? ElevatedButton(
-                                          onPressed: () async {
-                                            final response1 =
+                                'Complete'
+                        ? Visibility(
+                            visible: taskLogsList.isNotEmpty,
+                            //&&
+                            //  taskLogsList.last.breakStart != null,
+                            //&&
+                            // (isStartEmptyButtonVisible == false &&
+                            //         taskLogsList.length > 1) ==
+                            //     true,
+
+                            // visible: ((taskLogsList.length >= 2 &&
+                            //             (taskLogsList.last.iteration !=
+                            //                 taskLogsList[taskLogsList.length - 2]
+                            //                     .iteration)) ==
+                            //         false &&
+                            //     (taskLogsList.isEmpty ||
+                            //             taskLogsList.length == 1) ==
+                            //         false),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Visibility(
+                                  visible: widget.userId == loginUserId,
+                                  child: SizedBox(
+                                    width: 130,
+                                    height: 50.0,
+                                    child: ElevatedButton(
+                                      style: ButtonStyle(
+                                          foregroundColor:
+                                              const MaterialStatePropertyAll(
+                                                  Colors.white),
+                                          backgroundColor:
+                                              const MaterialStatePropertyAll(
+                                                  Colors.green),
+                                          shape: MaterialStatePropertyAll(
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          9)))),
+                                      onPressed: () async {
+                                        commentController.clear();
+                                        print('resume button pressed');
+
+                                        if (taskPayOrPauseStatus != null &&
+                                            taskPayOrPauseStatus == true) {
+                                          print('here in resume button');
+                                          //      final dialogResult =
+                                          //        await commmentDialog(context);
+
+                                          if (true) {
+                                            final response =
                                                 await playAndPauseTaskApi(
                                               taskId: widget.id.toString(),
                                               break_start_as_DateTime:
                                                   DateTime.now().toString(),
                                               break_end_as_DateTime: null,
-                                              comment: 'null',
-                                              //  comment: '111'
+                                              comment: '123',
                                             );
+                                          }
 
-                                            final response2 =
-                                                await playAndPauseTaskApi(
-                                              taskId: widget.id.toString(),
-                                              break_start_as_DateTime: null,
-                                              break_end_as_DateTime:
-                                                  DateTime.now().toString(),
-                                              comment: 'null',
-                                              //  comment: '111'
-                                            );
+                                          taskPayOrPauseStatus =
+                                              await getTaskPlayOrPauseStatus(
+                                                  taskId: widget.id.toString());
+                                        }
 
-                                            print(
-                                                'purple 1 here is the button');
-                                            // final startButtonBox =
-                                            //     await Hive.openBox(
-                                            //         'startButtonBox');
-                                            //
-                                            // await startButtonBox.put(
-                                            //     'isStartButtonVisible', true);
-                                            //
-                                            // await startButtonBox.put(
-                                            //     'taskId', widget.id);
-
-                                            buttonAction(context, widget.id);
-                                          },
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all<
-                                                    Color>(setButtonText(
-                                                            widget.status!,
-                                                            widget.userId!) ==
-                                                        'Reject'
-                                                    ? Colors.red
-                                                    : setButtonText(
-                                                                widget.status!,
-                                                                widget
-                                                                    .userId!) ==
-                                                            'Approve'
-                                                        ? Colors.green
-                                                        : Colors.blue),
-                                            shape: MaterialStateProperty.all<
-                                                RoundedRectangleBorder>(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                              ),
-                                            ),
-                                          ),
-                                          child: Text(
-                                            setButtonText(
-                                                widget.status!, widget.userId!),
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        )
-                                      : (_blSelfAssignATask &&
-                                              (widget.status == "in_process" ||
-                                                  widget.status == "pending"))
-                                          ? ElevatedButton(
-                                              onPressed: () {
-                                                print('purple 2');
-                                                buttonAction(
-                                                    context, widget.id);
-                                              },
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all<
-                                                        Color>(Colors.blue),
-                                                shape:
-                                                    MaterialStateProperty.all<
-                                                        RoundedRectangleBorder>(
-                                                  RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0),
-                                                  ),
-                                                ),
-                                              ),
-                                              child: Text(
-                                                setSelfApprovedText(
-                                                    widget.status!,
-                                                    widget.userId!),
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            )
-                                          : _blApprovedTask &&
-                                                  widget.status == "to_inspect"
-                                              ? ElevatedButton(
-                                                  onPressed: () {
-                                                    print('purple 3');
-                                                    buttonAction(
-                                                        context, widget.id);
-                                                  },
-                                                  style: ButtonStyle(
-                                                    backgroundColor:
-                                                        MaterialStateProperty
-                                                            .all<Color>(
-                                                                Colors.blue),
-                                                    shape: MaterialStateProperty
-                                                        .all<
-                                                            RoundedRectangleBorder>(
-                                                      RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  child: Text(
-                                                    setInspectionText(
-                                                        widget.status!,
-                                                        widget.userId!),
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                )
-                                              : _blApprovedTask &&
-                                                      widget.status ==
-                                                          "rejected"
-                                                  ? ElevatedButton(
-                                                      onPressed: () {
-                                                        print('purple 4');
-                                                        buttonAction(
-                                                            context, widget.id);
-                                                      },
-                                                      style: ButtonStyle(
-                                                        backgroundColor:
-                                                            MaterialStateProperty.all<
-                                                                Color>(widget
-                                                                        .status!
-                                                                        .toLowerCase() ==
-                                                                    'rejected'
-                                                                ? Colors.blue
-                                                                : Colors.red),
-                                                        shape: MaterialStateProperty
-                                                            .all<
-                                                                RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      child: Text(
-                                                        setInspectionText(
-                                                            widget.status!,
-                                                            widget.userId!),
-                                                        style: const TextStyle(
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    )
-
-                                                  /// this button is now diaplay all the time if not complete button
-                                                  : ElevatedButton(
-                                                      onPressed: () {
-                                                        print('purple 5');
-                                                        buttonAction(
-                                                            context, widget.id);
-                                                      },
-                                                      style: ButtonStyle(
-                                                        backgroundColor:
-                                                            MaterialStateProperty
-                                                                .all<Color>(
-                                                          widget.status!
-                                                                      .toLowerCase() ==
-                                                                  'rejected'
-                                                              ? Colors.blue
-                                                              : Colors.green,
-                                                        ),
-                                                        shape: MaterialStateProperty
-                                                            .all<
-                                                                RoundedRectangleBorder>(
-                                                          RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      child: Text(
-                                                        setButtonText(
-                                                            widget.status!,
-                                                            widget.userId!),
-                                                        style: const TextStyle(
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    )
-                                  //  SizedBox.shrink(
-                                  //     child: Text('111')),
+                                        setState(() {});
+                                        return;
+                                        setState(() {});
+                                      },
+                                      //       child: Text(
+                                      //         taskLogsList.isEmpty ? 'Start' : 'Pause'),
+                                      child: const Text('Resume'),
+                                    ),
                                   ),
+                                ),
+
+                                /////////////////////////////////////////////  2nd complete button creating isssue here
+                                ElevatedButton(
+                                    onPressed: () async {
+                                      await buttonAction(context, widget.id);
+                                    },
+                                    child: Text('Complete'))
+                              ],
                             ),
                           )
-                        : (setButtonText(widget.status!, widget.userId!) !=
-                                        'Complete' &&
-                                    setButtonText(
-                                            widget.status!, widget.userId!) !=
-                                        'Pick Task') &&
-                                (setButtonText(
-                                            widget.status!, widget.userId!) ==
-                                        'Approve' ||
-                                    setButtonText(
-                                            widget.status!, widget.userId!) ==
-                                        'Reject')
+                        // : (setButtonText(widget.status!, widget.userId!) !=
+                        //                 'Complete' &&
+                        //             setButtonText(widget.status!, widget.userId!) !=
+                        //                 'Pick Task') &&
+                        //         (setButtonText(widget.status!, widget.userId!) ==
+                        //                 'Approve' ||
+                        //             setButtonText(widget.status!, widget.userId!) ==
+                        //                 'Reject')
+                        : widget.status == 'to_inspect'
                             ? Visibility(
-                                visible: (myApprovedTask == true ||
-                                    myRejectedTask == true),
+                                visible: myApprovedTask
+                                //   || myRejectedTask
+
+                                ,
                                 child: Center(
-                                  child: SizedBox(
+                                  child: Container(
                                     width:
                                         MediaQuery.of(context).size.width * 0.8,
                                     height: 50.0,
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                            // color: Colors.blue,
-                                            boxShadow: [
-                                              // (EasyDynamicTheme.of(context)
-                                              //             .themeMode !=
-                                              //         ThemeMode.dark)
-                                              //     ? BoxShadow(
-                                              //         color: Colors.grey
-                                              //             .withOpacity(0.5),
-                                              //         spreadRadius: 2,
-                                              //         blurRadius: 5,
-                                              //         offset: const Offset(0,
-                                              //             3), // changes position of shadow
-                                              //       )
-                                              //     : const BoxShadow(),
-                                            ]),
-                                        child: _blApprovedTask &&
-                                                _blSelfAssignATask
-                                            ? ElevatedButton(
-                                                onPressed: () async {
-                                                  final response1 =
-                                                      await playAndPauseTaskApi(
-                                                    taskId:
-                                                        widget.id.toString(),
-                                                    break_start_as_DateTime:
-                                                        DateTime.now()
-                                                            .toString(),
-                                                    break_end_as_DateTime: null,
-                                                    comment: 'null',
-                                                    //  comment: '111'
-                                                  );
-
-                                                  final response2 =
-                                                      await playAndPauseTaskApi(
-                                                    taskId:
-                                                        widget.id.toString(),
-                                                    break_start_as_DateTime:
-                                                        null,
-                                                    break_end_as_DateTime:
-                                                        DateTime.now()
-                                                            .toString(),
-                                                    comment: 'null',
-                                                    //  comment: '111'
-                                                  );
-
-                                                  print(
-                                                      'purple 1 here is the button');
-                                                  // final startButtonBox =
-                                                  //     await Hive.openBox(
-                                                  //         'startButtonBox');
-                                                  //
-                                                  // await startButtonBox.put(
-                                                  //     'isStartButtonVisible', true);
-                                                  //
-                                                  // await startButtonBox.put(
-                                                  //     'taskId', widget.id);
-
-                                                  buttonAction(
-                                                      context, widget.id);
-                                                },
-                                                style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all<
-                                                          Color>(setButtonText(
-                                                                  widget
-                                                                      .status!,
-                                                                  widget
-                                                                      .userId!) ==
-                                                              'Reject'
-                                                          ? Colors.red
-                                                          : setButtonText(
-                                                                      widget
-                                                                          .status!,
-                                                                      widget
-                                                                          .userId!) ==
-                                                                  'Approve'
-                                                              ? Colors.green
-                                                              : Colors.blue),
-                                                  shape:
-                                                      MaterialStateProperty.all<
-                                                          RoundedRectangleBorder>(
-                                                    RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
-                                                    ),
-                                                  ),
-                                                ),
-                                                child: Text(
-                                                  setButtonText(widget.status!,
-                                                      widget.userId!),
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              )
-                                            : (_blSelfAssignATask &&
-                                                    (widget.status ==
-                                                            "in_process" ||
-                                                        widget.status ==
-                                                            "pending"))
-                                                ? ElevatedButton(
-                                                    onPressed: () {
-                                                      print('purple 2');
-                                                      buttonAction(
-                                                          context, widget.id);
-                                                    },
-                                                    style: ButtonStyle(
-                                                      backgroundColor:
-                                                          MaterialStateProperty
-                                                              .all<Color>(
-                                                                  Colors.blue),
-                                                      shape: MaterialStateProperty
-                                                          .all<
-                                                              RoundedRectangleBorder>(
-                                                        RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10.0),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    child: Text(
-                                                      setSelfApprovedText(
-                                                          widget.status!,
-                                                          widget.userId!),
-                                                      style: const TextStyle(
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  )
-                                                : _blApprovedTask &&
-                                                        widget.status ==
-                                                            "to_inspect"
-                                                    ? ElevatedButton(
-                                                        onPressed: () {
-                                                          print('purple 3');
-                                                          buttonAction(context,
-                                                              widget.id);
-                                                        },
-                                                        style: ButtonStyle(
-                                                          backgroundColor:
-                                                              MaterialStateProperty
-                                                                  .all<Color>(
-                                                                      Colors
-                                                                          .blue),
-                                                          shape: MaterialStateProperty
-                                                              .all<
-                                                                  RoundedRectangleBorder>(
-                                                            RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10.0),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        child: Text(
-                                                          setInspectionText(
-                                                              widget.status!,
-                                                              widget.userId!),
-                                                          style:
-                                                              const TextStyle(
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    : _blApprovedTask &&
-                                                            widget.status ==
-                                                                "rejected"
-                                                        ? ElevatedButton(
-                                                            onPressed: () {
-                                                              print('purple 4');
-                                                              buttonAction(
-                                                                  context,
-                                                                  widget.id);
-                                                            },
-                                                            style: ButtonStyle(
-                                                              backgroundColor: MaterialStateProperty.all<
-                                                                  Color>(widget
-                                                                          .status!
-                                                                          .toLowerCase() ==
-                                                                      'rejected'
-                                                                  ? Colors.blue
-                                                                  : Colors.red),
-                                                              shape: MaterialStateProperty
-                                                                  .all<
-                                                                      RoundedRectangleBorder>(
-                                                                RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              10.0),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            child: Text(
-                                                              setInspectionText(
-                                                                  widget
-                                                                      .status!,
-                                                                  widget
-                                                                      .userId!),
-                                                              style:
-                                                                  const TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                            ),
-                                                          )
-
-                                                        /// this button is now diaplay all the time if not complete button
-                                                        : ElevatedButton(
-                                                            onPressed: () {
-                                                              print('purple 5');
-                                                              buttonAction(
-                                                                  context,
-                                                                  widget.id);
-                                                            },
-                                                            style: ButtonStyle(
-                                                              backgroundColor:
-                                                                  MaterialStateProperty
-                                                                      .all<
-                                                                          Color>(
-                                                                widget.status!
-                                                                            .toLowerCase() ==
-                                                                        'rejected'
-                                                                    ? Colors
-                                                                        .blue
-                                                                    : Colors
-                                                                        .green,
-                                                              ),
-                                                              shape: MaterialStateProperty
-                                                                  .all<
-                                                                      RoundedRectangleBorder>(
-                                                                RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              10.0),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            child: Text(
-                                                              setButtonText(
-                                                                  widget
-                                                                      .status!,
-                                                                  widget
-                                                                      .userId!),
-                                                              style:
-                                                                  const TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                            ),
-                                                          )
-                                        //  SizedBox.shrink(
-                                        //     child: Text('111')),
-                                        ),
+                                    child: ElevatedButton(
+                                        style: ButtonStyle(
+                                            foregroundColor:
+                                                const MaterialStatePropertyAll(
+                                                    Colors.white),
+                                            backgroundColor:
+                                                const MaterialStatePropertyAll(
+                                                    Colors.green),
+                                            shape: MaterialStatePropertyAll(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            9)))),
+                                        onPressed: () async {
+                                          await buttonAction(
+                                              context, widget.id);
+                                        },
+                                        child: Text('Approve')),
                                   ),
                                 ),
                               )
-                            : const SizedBox(
-                                child: Text(''),
-                              ),
+                            : widget.status?.toLowerCase() !=
+                                        'Approved'.toLowerCase() &&
+                                    widget.status?.toLowerCase() !=
+                                        'Pending'.toLowerCase()
+                                ? Visibility(
+                                    visible:
+                                        false, // visibility of rej button set to false
+                                    child: Center(
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.8,
+                                        height: 50.0,
+                                        child: ElevatedButton(
+                                            style: ButtonStyle(
+                                                foregroundColor:
+                                                    const MaterialStatePropertyAll(
+                                                        Colors.white),
+                                                backgroundColor:
+                                                    const MaterialStatePropertyAll(
+                                                        Colors.green),
+                                                shape: MaterialStatePropertyAll(
+                                                    RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(9)))),
+                                            onPressed: () async {
+                                              //    await buttonAction(
+                                              //      context, widget.id);
+                                            },
+                                            child: Text('Rej')),
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox(),
           ],
         ),
       ),
@@ -2433,8 +1987,18 @@ class _TaskDetailWidgetState extends State<TaskDetailWidget> {
       if (boolResult == false) {
         //  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         //      content: Text('Task must be paused to proceed for completion!')));
-        showSnackbar(context, 'Task must be paused to proceed for completion!');
-        return;
+        //   showSnackbar(context, 'Task must be paused to proceed for completion!');
+        //   return;
+
+        //  if (taskPayOrPauseStatus!) {
+        final response1 = await playAndPauseTaskApi(
+          taskId: widget.id.toString(),
+          break_start_as_DateTime: null,
+          break_end_as_DateTime: DateTime.now().toString(),
+          comment: 'Task Completed',
+          //  comment: '111'
+        );
+        //  }
       }
 
       // if (taskPayOrPauseStatus!) {

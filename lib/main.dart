@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -128,23 +128,46 @@ void main() async {
 
 // Required for handling messages in the background
   runApp(
-    EasyDynamicThemeWidget(
-      child: const MyApp(),
-    ),
+    const MyApp(),
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool isAppFirstTimeOpened = false;
+
+  Future<void> callMethod() async {
+    final isAppFirstTimeOpenedBox =
+        await Hive.openBox('isAppFirstTimeOpenedBox');
+    // await isAppFirstTimeOpenedBox.put('isAppFirstTimeOpenedBox', value);
+    final val = await isAppFirstTimeOpenedBox.get('isAppFirstTimeOpened');
+    if (val == null || val == false) {
+      await isAppFirstTimeOpenedBox.put('isAppFirstTimeOpened', true);
+    }
+    isAppFirstTimeOpened = true;
+    setState(() {});
+  }
+
+  @override
+  void didChangeDependencies() {
+    callMethod();
+    super.didChangeDependencies();
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return AdaptiveTheme(
       light: ThemeData.light(useMaterial3: true),
-      dark: DarkTheme.themeData(context),
+      dark: isAppFirstTimeOpened == true ? null : DarkTheme.themeData(context),
       //  debugShowFloatingThemeButton: true,
-      initial: AdaptiveThemeMode.dark,
+      initial: AdaptiveThemeMode.light,
       builder: (theme, darkTheme) => MaterialApp(
         title: 'KEFC',
         debugShowCheckedModeBanner: false,
@@ -190,46 +213,4 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-  // );
-  // return MaterialApp(
-  //   title: 'KEFC',
-  //   debugShowCheckedModeBanner: false,
-  //   themeMode: EasyDynamicTheme.of(context).themeMode,
-  //   darkTheme: DarkTheme.themeData(context),
-  //   theme: ThemeData(
-  //     primarySwatch: Colors.blue,
-  //     useMaterial3: true,
-  //     // fontFamily: 'Manrope',
-  //     //  fontFamily: 'Montserrat',
-  //     //  textTheme: GoogleFonts.nunitoSansTextTheme(),
-  //     // textTheme: GoogleFonts.nunitoTextTheme(),
-  //     //  textTheme: GoogleFonts.montserratTextTheme(),
-  //     //    textTheme: GoogleFonts.instrumentSansTextTheme(),  looks somewhat better
-  //     // textTheme: GoogleFonts.merriweatherTextTheme(),     looks somewhat better
-  //     //  textTheme: GoogleFonts.robotoSlabTextTheme(),  looks somewhata better and close to professional
-  //     // textTheme: GoogleFonts.ptSansTextTheme(),  looks somewhata better and close to professional
-  //     // textTheme: GoogleFonts.kanitTextTheme(), looks somewhata better and close to professional
-  //     // textTheme: GoogleFonts.firaSansTextTheme(),
-  //     //  looks MOST better and close to professional
-  //     fontFamily: 'FiraSans',
-  //   ),
-
-  //   //     home: SplashScreen(),
-  //   initialRoute: '/',
-  //   //  home: FacebookEmailScreen(fbID: ''),
-  //   // home: LoginScreen(),
-
-  //   routes: {
-  //     '/': (context) => const SplashScreen(),
-  //     '/login': (context) => const LoginScreen(),
-  //     '/resetpassword': (context) => const ResetPassword(),
-  //     '/midwayscreen': (context) => const MidwayScreen(),
-  //     '/signup': (context) => const SignUpScreen(),
-  //     '/dashboard': (context) => const DashboardScreen(),
-  //     '/notification': (context) => const NotificationsScreen(),
-  //     '/welcomeScreen': (context) => const WelcomeScreen(),
-
-  //     // '/testScreen': (context) => const TestScreen(),
-  //   },
-  // );
 }

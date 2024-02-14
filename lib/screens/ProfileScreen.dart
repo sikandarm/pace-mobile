@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+//import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -503,7 +503,7 @@ class _userProfileWidgetState extends State<userProfileWidget> {
               ),
               inputFormatters: [
                 LengthLimitingTextInputFormatter(
-                    14), // including spaces, '- and ()'
+                    12), // including spaces, '- and ()'
                 PhoneNumberFormatter(),
               ],
               // onChanged: onChanged,
@@ -544,7 +544,9 @@ class _userProfileWidgetState extends State<userProfileWidget> {
                         buildRoleChips(), // Call the function to get the chips
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator(); // Show a loading indicator while waiting
+                        return const Center(
+                            child:
+                                CircularProgressIndicator()); // Show a loading indicator while waiting
                       }
 
                       final List<Widget> roleChips = snapshot.data ?? [];
@@ -599,7 +601,7 @@ class _userProfileWidgetState extends State<userProfileWidget> {
                       String email = emailController.text;
                       String phone = phoneController.text;
 
-                      if (phoneController.text.length != 14) {
+                      if (phoneController.text.length != 12) {
                         //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         //       content: Text('Invalid phone number entered')));
 
@@ -704,10 +706,11 @@ class PhoneNumberFormatter extends TextInputFormatter {
     final digits = input.replaceAll(RegExp(r'\D'), '');
 
     // Apply phone number formatting (XXX) XXX-XXXX
-    if (digits.length >= 6) {
-      return '(${digits.substring(0, 3)}) ${digits.substring(3, 6)}-${digits.substring(6)}';
+    if (digits.length >= 7) {
+      return '${digits.substring(0, 3)}-${digits.substring(3, 6)}-${digits.substring(6)}';
     } else if (digits.length >= 3) {
-      return '(${digits.substring(0, 3)}) ${digits.substring(3)}';
+      // return '(${digits.substring(0, 3)}) ${digits.substring(3)}';
+      return '${digits.substring(0, 3)}-${digits.substring(3)}';
     } else {
       return digits;
     }

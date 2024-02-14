@@ -1,5 +1,6 @@
-import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
+//import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/rejection_reason.dart';
@@ -16,7 +17,8 @@ class RejectedReasonsScreen extends StatefulWidget {
   State<RejectedReasonsScreen> createState() => _RejectedReasonsListState();
 }
 
-class _RejectedReasonsListState extends State<RejectedReasonsScreen> {
+class _RejectedReasonsListState extends State<RejectedReasonsScreen>
+    with AutomaticKeepAliveClientMixin {
   bool blShowProfile = false;
 
   void checkPermissionAndUpdateBool(
@@ -49,15 +51,23 @@ class _RejectedReasonsListState extends State<RejectedReasonsScreen> {
     setState(() {});
   }
 
+  bool isLoading = false;
   Future<void> fetchReasonCategories() async {
+    isLoading = true;
     try {
       final categories = await fetchRejectionReasons();
       setState(() {
         rejectionReasonCategories = categories;
       });
+      isLoading = false;
+      setState(() {});
     } catch (e) {
       print('Error fetching data: $e');
+      isLoading = false;
+      setState(() {});
     }
+    isLoading = false;
+    setState(() {});
   }
 
   bool isTablet = false;
@@ -134,76 +144,85 @@ class _RejectedReasonsListState extends State<RejectedReasonsScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: ListView.builder(
-          itemCount: rejectionReasonCategories.length,
-          itemBuilder: (context, index) {
-            var category = rejectionReasonCategories[index];
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                InkWell(
-                  // onTap: () {
-                  //   print(category.name);
-                  //   // Navigate to the next screen using Navigator
-                  //   // Pass the selected category to the next screen
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //       builder: (context) => const DeptList(),
-                  //     ),
-                  //   );
-                  // },
-                  child: Padding(
-                    // padding: const EdgeInsets.only(left: 5.0, top: 10.0), // old one
-                    padding: const EdgeInsets.only(left: 5.0, top: 13.0),
-                    child: Center(
-                      child: Text(
-                        category.name.toUpperCase(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey,
-                          fontSize: isTablet ? 28 : 19,
+      body: isLoading
+          ? Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: const Center(child: CircularProgressIndicator()))
+          : Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: ListView.builder(
+                itemCount: rejectionReasonCategories.length,
+                itemBuilder: (context, index) {
+                  var category = rejectionReasonCategories[index];
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      InkWell(
+                        // onTap: () {
+                        //   print(category.name);
+                        //   // Navigate to the next screen using Navigator
+                        //   // Pass the selected category to the next screen
+                        //   Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => const DeptList(),
+                        //     ),
+                        //   );
+                        // },
+                        child: Padding(
+                          // padding: const EdgeInsets.only(left: 5.0, top: 10.0), // old one
+                          padding: const EdgeInsets.only(left: 5.0, top: 15.0),
+                          child: Center(
+                            child: Text(
+                              category.name.toUpperCase(),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                                fontSize: isTablet ? 28 : 19,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: category.children.map((reason) {
-                    return InkWell(
-                      onTap: () {
-                        print(reason.name);
-                        saveStringToSP(reason.name, BL_REJECTED_REASON);
-                        // Navigate to the next screen using Navigator
-                        // Pass the selected category and reason to the next screen
-                        Navigator.pop(context);
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => const DeptList(),
-                        //   ),
-                        // );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Text(reason.name,
-                            style: TextStyle(
-                              fontSize: isTablet ? 28 : 14,
-                            )),
+                      const SizedBox(height: 8),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: category.children.map((reason) {
+                          return InkWell(
+                            onTap: () {
+                              print(reason.name);
+                              saveStringToSP(reason.name, BL_REJECTED_REASON);
+                              // Navigate to the next screen using Navigator
+                              // Pass the selected category and reason to the next screen
+                              Navigator.pop(context);
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => const DeptList(),
+                              //   ),
+                              // );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Text(reason.name,
+                                  style: TextStyle(
+                                    fontSize: isTablet ? 28 : 14,
+                                  )),
+                            ),
+                          );
+                        }).toList(),
                       ),
-                    );
-                  }).toList(),
-                ),
-                const Divider(),
-              ],
-            );
-          },
-        ),
-      ),
+                      const Divider(),
+                    ],
+                  );
+                },
+              ),
+            ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
