@@ -114,6 +114,7 @@ void main() async {
           notification.title,
           notification.body,
           NotificationDetails(
+
             android: AndroidNotificationDetails(
               FirebaseApi().channel.id,
               FirebaseApi().channel.name,
