@@ -43,6 +43,7 @@ class _MidwayScreenScreenState extends State<MidwayScreen> {
         child: Column(
           children: [
             SafeArea(
+              // SafeArea
               child: Align(
                 alignment: Alignment.topCenter,
                 child: Stack(
@@ -52,6 +53,7 @@ class _MidwayScreenScreenState extends State<MidwayScreen> {
                       // height: MediaQuery.of(context).size.height / 1.0,
                       //  height: MediaQuery.of(context).size.height,
                       height: MediaQuery.of(context).size.height * 0.95,
+
                       decoration: const BoxDecoration(
                           image: DecorationImage(
                         image:

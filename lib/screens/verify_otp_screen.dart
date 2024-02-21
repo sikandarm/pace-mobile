@@ -92,6 +92,7 @@
 //   }
 // }
 
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:pace_application_fb/utils/constants.dart';
 import 'package:pinput/pinput.dart';
@@ -101,6 +102,7 @@ import 'update_password_screen.dart';
 
 class VerifyOtpScreen extends StatefulWidget {
   const VerifyOtpScreen({super.key, required this.email});
+
   final String email;
 
   @override
@@ -175,6 +177,10 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                   height: 20,
                   child: Image.asset(
                     'assets/images/ic_back.png',
+                    color: AdaptiveTheme.of(context).mode ==
+                            AdaptiveThemeMode.light
+                        ? Colors.black
+                        : Colors.white,
                     width: 20,
                     height: 20,
                   ),
@@ -191,7 +197,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                   width: double.infinity,
                   child: Text("Verify OTP",
                       style: TextStyle(
-                        color: Colors.black,
+                        //   color: Colors.black,
                         fontSize: 30,
                       )),
                 ),
@@ -233,14 +239,14 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                   height: 50.0,
                   child: Container(
                     decoration: BoxDecoration(boxShadow: [
-                      BoxShadow(
-                        color: const Color.fromARGB(255, 218, 162, 162)
-                            .withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
-                      )
+                      // BoxShadow(
+                      //   color: const Color.fromARGB(255, 218, 162, 162)
+                      //       .withOpacity(0.5),
+                      //   spreadRadius: 2,
+                      //   blurRadius: 5,
+                      //   offset:
+                      //       const Offset(0, 3), // changes position of shadow
+                      // )
                     ]),
                     child: ElevatedButton(
                       onPressed: () async {
